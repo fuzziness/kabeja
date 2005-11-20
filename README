@@ -1,0 +1,119 @@
+Kabeja is a small library for parsing DXF-Files and converting
+this to SVG. It is licensed under the LGPL.
+
+
+Limitation:
+-----------
+There are not all Entities of DXF supported yet. Text-Entities generate problems too.
+
+Supported:
+
+ 
+ *Arc
+ *Attrib
+ *Polyline
+ *Circle
+ *Line
+ *Blocks/Insert
+ *Text
+ *MText
+ *LWPolyline
+ *Solid
+ *Trace
+ *Ellipse
+ *Dimension
+ *Image
+ *Leader
+ *XLine
+ *Ray
+ 
+ 
+
+Planned:
+
+ * Hatch
+ * MLine
+ * Tolerance
+
+
+You can use Kabeja from CLI (Command Line Interface) or embed in your application. 
+
+
+
+CLI:
+----
+in the 'dist'-folder try:
+
+  java -jar launcher.jar myfile.dxf result.svg
+  
+  If your files are not in ASCII-encoding (for example you have umlauts) then
+  you can set the encoding like:
+  
+   java -jar launcher.jar -e ISO-8859-1 myumlautfile.dxf result.svg
+  
+  
+GUI-Viewer:
+-----------
+in the 'dist/lib'-folder try:
+
+  java -jar kabeja-svgview.jar
+  
+  
+  
+Cocoon 2.1 (XML-Publishing-Framework http://cocoon.apache.org/2.1):
+-------------------------------------------------------------------
+
+Copy the 'kabeja.jar' and 'kabeja-svg2dxf-cocoon.jar' to your WEB-INF/lib-folder
+of your Cocoon-Webapplication. Then you can use Kabeja as Generator like:
+
+
+in your sitemap/subsitemap:
+
+snippet:
+--------
+
+<map:components>
+     .....   
+ <map:generators default="file">
+    
+  <map:generator name="dxf2svg" src="de.miethxml.kabeja.cocoon.generation.DXF2SVGGenerator"/>
+    
+ </map:generators>
+
+  
+....
+ <map:pipelines>
+   
+   <map:pipeline>
+    
+     <map:match pattern="dxf/*.svg">
+        <map:generate type="dxf2svg" src="dxf/{1}.dxf"/>
+	  ...
+	   <!-- transform things you need -->
+	
+	<map:serialize type="xml"/>
+     </map:match>
+    
+    </map:pipeline>
+   
+   ....
+   
+   
+   </map:pipelines>
+
+Note: DXF-drafts often real large drafts, so the SVGDocument will consume a lot of memory. The Generator is 
+Cacheable so the first run will take more time.
+
+
+
+
+Feedback and Help
+-----------------
+
+Any help and feedback are greatly appreciated.
+
+Mail: simon.mieth@gmx.de
+
+
+
+

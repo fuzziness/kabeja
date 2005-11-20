@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<processing>
+  <configuration>
+    <postprocessors>
+      <postprocessor name="bounds.debugger" class="org.kabeja.tools.BoundsDebugger"/>
+      <postprocessor name="image.filter" class="org.kabeja.tools.ImageFilter"/>
+    </postprocessors>
+    <filters>
+      <filter name="image" class="org.kabeja.batik.tools.ImageBase64Encoder"/>
+      <filter name="xslt" class="org.kabeja.xslt.SAXXSLTFilter">
+        <property name="http://xml.org/sax/features/is-standalone/" value="true"/>
+      </filter>
+    </filters>
+    <serializers>
+      <serializer name="svg" class="org.kabeja.xml.SAXPrettyOutputter"/>
+      <serializer name="jpeg" class="org.kabeja.batik.tools.SAXJPEGSerializer"/>
+      <serializer name="png" class="org.kabeja.batik.tools.SAXPNGSerializer"/>
+      <serializer name="tiff" class="org.kabeja.batik.tools.SAXTIFFSerializer"/>
+      <serializer name="pdf" class="org.kabeja.batik.tools.SAXPDFSerializer"/>
+      <serializer name="xml" class="org.kabeja.xslt.SAXXMLSerializer"/>
+    </serializers>
+  </configuration>
+  <pipelines>
+    <pipeline name="svg">
+      <serialize name="svg"/>
+    </pipeline>
+    <pipeline name="debug">
+      <postprocess name="bounds.debugger"/>
+      <filter name="image"/>
+      <serialize name="svg"/>
+    </pipeline>
+    <pipeline name="jpeg">
+      <postprocess name="bounds.debugger"/>
+      <serialize name="jpeg">
+        <property name="width" value="1024"/>
+        <property name="height" value="768"/>
+      </serialize>
+    </pipeline>
+    <pipeline name="pdf">
+      <serialize name="pdf"/>
+    </pipeline>
+    <pipeline name="font">
+      <filter name="xslt">
+        <property name="stylesheet" value="../tools/xsl/embedfont.xsl"/>
+      </filter>
+      <serialize name="svg"/>
+    </pipeline>
+    <pipeline name="xml">
+      <serialize name="xml"/>
+    </pipeline>
+    <pipeline name="embed">
+      <postprocess name="image.filter"/>
+      <filter name="image"/>
+      <filter name="xslt">
+        <property name="stylesheet" value="../tools/xsl/embedfont.xsl"/>
+        <property name="http://xml.org/sax/features/is-standalone/" value="true"/>
+        <property name="http://xml.org/sax/features/external-general-entities" value="false"/>
+      </filter>
+      <serialize name="svg"/>
+    </pipeline>
+  </pipelines>
+</processing>

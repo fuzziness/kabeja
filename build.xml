@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="kabeja" default="dist" basedir=".">
+	<property name="releasename" value="kabeja" />
+	<property name="releaseversion" value="0.1" />
+	<property name="src" value="src" />
+	<property name="sources" value="java" />
+	<property name="classes" value="classes" />
+	<property name="test" value="test" />
+	<property name="build" value="build" />
+	<property name="dist" value="dist" />
+	<property name="help" value="doc" />
+	<property name="icons" value="icons" />
+	<property name="lang" value="lang" />
+	<property name="conf" value="conf" />
+	<property name="libs" value="lib" />
+	<property name="sample" value="sample" />
+	<property name="legal" value="legal"/>
+	<property name="manifest" value="manifestfile" />
+	<property name="version" value="0.1" />
+	<property name="packages" value="packages" />
+	<property name="samples" value="samples" />
+	<property name="apidocs" value="javadoc" />
+	<property name="docs" value="doc" />
+	<property name="JarClassPath" value="" />
+	<property name="tempdir" value="tmp" />
+	<property name="MainClass" value="org.kabeja.Loader" />
+	<property name="tools" value="tools" />
+	<property file="blocks.properties" />
+	<property file="local.blocks.properties" />
+	<property name="blocks" value="blocks"/>
+
+
+
+
+	<description>
+		This is a small library for parsing DXF and converting to
+		SVG.
+	</description>
+
+	<!-- tools -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="tools/lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${dist}" />
+	        <mkdir dir="${dist}/${libs}" />
+	        <mkdir dir="${dist}/${conf}" />
+		<mkdir dir="${packages}" />
+
+	</target>
+
+	<target name="compile" depends="init" >
+		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<!--<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>  -->
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="config" depends="compile">
+	 <copy todir="${dist}/${conf}">
+			<fileset dir="${conf}">
+				<exclude name="**/*~;**/*manifest*" />
+			</fileset>
+		</copy>
+
+		<copy todir="${dist}/${libs}">
+			<fileset dir="${libs}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+	</target>
+
+
+
+
+	<target name="dist" depends="config,manifest,blocks" description="Build Kabeja (default).">
+		<jar jarfile="${dist}/${libs}/${releasename}.jar" basedir="${build}/${classes}" excludes="org/kabeja/Loader.class" includes="**/*" manifest="${manifest}" />
+		<jar jarfile="${dist}/launcher.jar" basedir="${build}/${classes}" includes="org/kabeja/Loader.class" manifest="${manifest}" />
+		<delete file="${manifest}" />
+	</target>
+
+	<target name="binary-dist" depends="dist" >
+		<delete dir="${tempdir}" />
+		<tstamp />
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}">
+			<fileset file="build.xml" />
+			<fileset file="font.xml" />
+			<fileset file="README" />
+			<fileset file="blocks.properties"/>
+			<fileset file="INSTALL"/>
+		</copy>
+
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${libs}" />
+
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${legal}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${legal}">
+			<fileset dir="${legal}" />
+		</copy>
+		<!-- the samples -->
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${samples}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${samples}">
+			<fileset dir="${samples}" />
+		</copy>
+
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${dist}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${dist}">
+			<fileset dir="${dist}" />
+		</copy>
+
+		<zip zipfile="${packages}/${releasename}-latest.zip">
+			<zipfileset dir="${tempdir}" />
+		</zip>
+		<tar tarfile="${packages}/${releasename}.tar" basedir="${tempdir}" />
+		<gzip zipfile="${packages}/${releasename}-latest.tar.gz" src="${packages}/${releasename}.tar" />
+		<delete file="${packages}/${releasename}.tar" />
+		<delete dir="${tempdir}" />
+
+
+	</target>
+
+
+
+
+
+
+	<target name="source-dist" depends="">
+		<delete dir="${tempdir}" />
+		<tstamp />
+
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}">
+			<fileset file="build.xml" />
+			<fileset file="font.xml" />
+			<fileset file="README" />
+			<fileset file="blocks.properties"/>
+			<fileset file="INSTALL"/>
+		</copy>
+
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${src}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${src}">
+			<fileset dir="${src}" />
+		</copy>
+
+   		<!-- the libs -->
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${libs}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${libs}">
+			<fileset dir="${libs}" />
+		</copy>
+
+		<!-- the blocks -->
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${blocks}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${blocks}">
+			<fileset dir="${blocks}" />
+		</copy>
+
+
+		<!-- the tools -->
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${tools}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${tools}">
+			<fileset dir="${tools}" />
+		</copy>
+
+		<!-- the samples -->
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${samples}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${samples}">
+			<fileset dir="${samples}" />
+		</copy>
+
+		<!-- the legal -->
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${legal}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${legal}">
+			<fileset dir="${legal}" />
+		</copy>
+
+
+
+		<!-- the legal -->
+		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${conf}" />
+		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${conf}">
+			<fileset dir="${conf}" />
+		</copy>
+
+
+
+		<mkdir dir="${packages}" />
+		<tar tarfile="${releasename}-src.tar" basedir="${tempdir}" />
+		<gzip zipfile="${packages}/${releasename}-latest-src.tar.gz" src="${releasename}-src.tar" />
+		<delete file="${releasename}-src.tar" />
+		<zip zipfile="${packages}/${releasename}-latest-src.zip">
+			<zipfileset dir="${tempdir}" />
+		</zip>
+	</target>
+
+	<target name="clean" depends="blocks-clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${packages}" />
+		<delete dir="${tempdir}" />
+	</target>
+
+	<target name="javadoc" description="Generate the Javadocs">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${apidocs}" />
+		<javadoc packagenames="*.*.*" sourcepath="${src}/${sources}" destdir="${build}/${apidocs}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${build}/${sources}" />
+			</classpath>
+		</javadoc>
+	</target>
+
+
+
+
+	<!-- new manifest section here -->
+	<target name="manifest">
+		<fileset dir="${libs}" id="jar.files">
+			<include name="*.jar" />
+		</fileset>
+		<pathconvert pathsep=" " property="jars" refid="jar.files">
+			<map from="${basedir}/" to="" />
+		</pathconvert>
+		<manifest file="${manifest}">
+			<attribute name="Main-Class" value="${MainClass}" />
+			<attribute name="Class-Path" value="${jars}" />
+		</manifest>
+	</target>
+
+
+	<target name="eclipse-project" description="create the project-files for Eclipse">
+		<!-- the project file -->
+		<copy file="tools/template/eclipse-project.xml" tofile="${basedir}${file.separator}.project">
+			<filterset>
+				<filter token="VERSION" value="${releaseversion}" />
+				<filter token="NAME" value="${releasename}" />
+			</filterset>
+		</copy>
+		<!-- the classpath file-->
+		<echo file=".classpath">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;classpath&gt;
+   		&lt;classpathentry kind=&quot;src&quot; path=&quot;src/java&quot; /&gt;
+   		&lt;classpathentry kind=&quot;src&quot; path=&quot;src/test&quot; /&gt;
+   		</echo>
+		<for param="pluginsrc">
+			<path>
+				<dirset dir="plugins" includes="**/src" />
+			</path>
+			<sequential>
+				<echo file=".classpath" append="true">&lt;classpathentry kind=&quot;src&quot; path=&quot;@{pluginsrc}&quot; /&gt;
+				  </echo>
+			</sequential>
+		</for>
+		<echo file=".classpath" append="true">&lt;classpathentry kind=&quot;con&quot; path=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; /&gt;
+   	 	 	</echo>
+
+		<!-- the libs -->
+		<for param="jarfile">
+			<path>
+				<fileset dir="lib" includes="**/*.jar" />
+				<fileset dir="blocks" includes="**/lib/**/*.jar" />
+				<fileset dir="tools" includes="**/*.jar" />
+			</path>
+			<sequential>
+				<echo file=".classpath" append="true">&lt;classpathentry kind=&quot;lib&quot; path=&quot;@{jarfile}&quot; /&gt;
+					</echo>
+			</sequential>
+		</for>
+		<echo file=".classpath" append="true">&lt;classpathentry kind=&quot;output&quot; path=&quot;build/java&quot; /&gt;
+  &lt;/classpath&gt;
+   	    </echo>
+		<!-- filtering to relative pathes -->
+
+		<replace file=".classpath" token="path=&quot;${basedir}${file.separator}" value="path=&quot;" />
+	</target>
+
+	<target name="blocks">
+		<for param="file">
+			<path>
+				<dirset dir="${blocks}" includes="*" />
+			</path>
+			<sequential>
+				<echo message="@{file}" />
+				<ant dir="@{file}">
+					<property name="dxf2svg.home" value="${basedir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="blocks-clean">
+		<for param="file">
+			<path>
+				<dirset dir="blocks" includes="*" />
+			</path>
+			<sequential>
+				<echo message="@{file}" />
+				<ant dir="@{file}" target="clean">
+					<property name="dxf2svg.home" value="${basedir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+</project>
+
