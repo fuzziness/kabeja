@@ -3,7 +3,7 @@
   <map:components>
     
     <map:generators default="file">
-      <map:generator name="dxf2svg" src="de.miethxml.kabeja.cocoon.generation.DXF2SVGGenerator"/>
+      <map:generator name="dxf2svg" src="org.kabeja.cocoon.generation.DXF2SVGGenerator"/>
     </map:generators>
     
     <map:transformers default="xslt">
