@@ -22,7 +22,10 @@ package org.kabeja.parser;
  *
  */
 public class DXFParseException extends Exception {
-    public DXFParseException(String s) {
+   
+	
+
+	public DXFParseException(String s) {
         super(s);
     }
 

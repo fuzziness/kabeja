@@ -6,6 +6,7 @@ package org.kabeja.dxf;
 
 import java.util.Map;
 
+import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
@@ -13,21 +14,27 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-
 /**
  * @author simon
- *
+ * 
  */
 public class DXF3DFace extends DXFSolid {
 
+	 public String getType() {
+	        // TODO Auto-generated method stub
+	        return DXFConstants.ENTITY_TYPE_3DFACE;
+	    }
+	
+	
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
 	 */
-	public void toSAX(ContentHandler handler, Map svgContext) throws SAXException {
+	public void toSAX(ContentHandler handler, Map svgContext)
+			throws SAXException {
 
-		//all edges are visible
+		// all edges are visible
 		if ((doc.getDXFHeader().hasVariable("$SPLFRAME") && doc.getDXFHeader()
 				.getVariable("$SPLFRAME").getIntegerValue("70") == 1)
 				|| getFlags() == 0) {
@@ -35,7 +42,6 @@ public class DXF3DFace extends DXFSolid {
 			AttributesImpl attr = new AttributesImpl();
 
 			StringBuffer points = new StringBuffer();
-
 
 			points.append(point1.getX());
 			points.append(",");
@@ -63,40 +69,39 @@ public class DXF3DFace extends DXFSolid {
 
 			SVGUtils.emptyElement(handler, SVGConstants.SVG_POLYGON, attr);
 
-		}else{
-			//draw only visible edges
-			//bit 0 edge 1->2
-			//bit 1 edge 2->3
-			//bit 2 edge 3->4
-			//bit 3 edge 4->1
+		} else {
+			// draw only visible edges
+			// bit 0 edge 1->2
+			// bit 1 edge 2->3
+			// bit 2 edge 3->4
+			// bit 3 edge 4->1
 			// if a bit is not set, the edge
 			// is visible
 
 			int flag = getFlags();
 
 			if ((flag & 1) == 0) {
-               edgeToSAX(handler,getPoint1(),getPoint2());
+				edgeToSAX(handler, getPoint1(), getPoint2());
 
 			}
 			if ((flag & 2) == 0) {
-				 edgeToSAX(handler,getPoint2(),getPoint3());
+				edgeToSAX(handler, getPoint2(), getPoint3());
 
 			}
 			if ((flag & 4) == 0) {
-				 edgeToSAX(handler,getPoint3(),getPoint4());
+				edgeToSAX(handler, getPoint3(), getPoint4());
 
 			}
 			if ((flag & 8) == 0) {
-				 edgeToSAX(handler,getPoint4(),getPoint1());
+				edgeToSAX(handler, getPoint4(), getPoint1());
 			}
-
-
 
 		}
 
 	}
 
-	protected void edgeToSAX(ContentHandler handler,Point p1,Point p2) throws SAXException{
+	protected void edgeToSAX(ContentHandler handler, Point p1, Point p2)
+			throws SAXException {
 		AttributesImpl attr = new AttributesImpl();
 		// set the attributes
 		SVGUtils.addAttribute(attr, "x1", "" + p1.getX());
@@ -111,6 +116,31 @@ public class DXF3DFace extends DXFSolid {
 		SVGUtils.addAttribute(attr, "y2", "" + value);
 		super.setCommonAttributes(attr);
 		SVGUtils.emptyElement(handler, SVGConstants.SVG_LINE, attr);
+	}
+
+	public double getLength() {
+
+		double length = 0.0;
+		int flag = this.getFlags();
+
+		if ((flag & 1) == 0) {
+			length += MathUtils.distance(this.getPoint1(), this.getPoint2());
+
+		}
+		if ((flag & 2) == 0) {
+			length += MathUtils.distance(this.getPoint2(), this.getPoint3());
+
+		}
+		if ((flag & 4) == 0) {
+			length += MathUtils.distance(this.getPoint3(), this.getPoint4());
+
+		}
+		if ((flag & 8) == 0) {
+			length += MathUtils.distance(this.getPoint4(), this.getPoint1());
+
+		}
+
+		return length;
 	}
 
 }

@@ -15,20 +15,18 @@
 */
 package org.kabeja.dxf;
 
+import java.util.Map;
+
 import org.kabeja.dxf.helpers.DXFTextParser;
 import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.TextDocument;
-
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Map;
 
 
 /**

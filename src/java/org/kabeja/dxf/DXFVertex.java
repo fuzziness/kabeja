@@ -15,10 +15,11 @@
 */
 package org.kabeja.dxf;
 
+import java.util.Map;
+
+import org.kabeja.dxf.helpers.Point;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-
-import java.util.Map;
 
 
 /**
@@ -41,6 +42,10 @@ public class DXFVertex extends DXFPoint {
      */
     public DXFVertex() {
         super();
+    }
+    
+    public DXFVertex(Point p){
+    	super(p);
     }
 
     /**

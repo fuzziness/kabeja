@@ -15,18 +15,16 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.SplinePoint;
-
-import org.kabeja.svg.SVGPathBoundaryElement;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.kabeja.dxf.helpers.SplinePoint;
+import org.kabeja.svg.SVGPathBoundaryElement;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -270,4 +268,11 @@ public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
     public String getSVGPath() {
         return "";
     }
+
+	public double getLength() {
+	
+		return 0;
+	}
+    
+    
 }

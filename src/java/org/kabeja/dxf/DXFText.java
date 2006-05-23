@@ -15,21 +15,18 @@
 */
 package org.kabeja.dxf;
 
+import java.util.Map;
+
 import org.kabeja.dxf.helpers.DXFTextParser;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.TextDocument;
-
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGUtils;
-
 import org.kabeja.tools.FontManager;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Map;
 
 
 /**
@@ -650,13 +647,7 @@ public class DXFText extends DXFEntity {
         }
     }
 
-    private void detectEncoding() {
-        DXFVariable var = doc.getDXFHeader().getVariable("$DWGCODEPAGE");
 
-        if (var != null) {
-            System.out.println("encoding:" + var.getValue("3"));
-        }
-    }
 
     public String getType() {
         return DXFConstants.ENTITY_TYPE_TEXT;
@@ -746,4 +737,11 @@ public class DXFText extends DXFEntity {
     protected boolean isOmitLineType() {
         return true;
     }
+
+	public double getLength() {
+		
+		return 0;
+	}
+    
+    
 }

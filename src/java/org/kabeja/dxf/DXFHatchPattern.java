@@ -15,22 +15,19 @@
  */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.HatchLinePattern;
-import org.kabeja.dxf.helpers.Point;
-
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGGenerator;
-import org.kabeja.svg.SVGUtils;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.kabeja.dxf.helpers.HatchLinePattern;
+import org.kabeja.dxf.helpers.Point;
+import org.kabeja.svg.SVGConstants;
+import org.kabeja.svg.SVGGenerator;
+import org.kabeja.svg.SVGUtils;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth </a>
@@ -96,7 +93,7 @@ public class DXFHatchPattern implements SVGGenerator {
             SVGUtils.endElement(handler, SVGConstants.SVG_TITLE);
 
             // we convert the pattern as one path element
-            StringBuffer buf = new StringBuffer();
+           // StringBuffer buf = new StringBuffer();
             Iterator i = patterns.iterator();
 
             // System.out.println("PATTERN:\nName:" + hatch.getName());

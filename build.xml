@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="kabeja" default="dist" basedir=".">
 	<property name="releasename" value="kabeja" />
-	<property name="releaseversion" value="0.1" />
+	<property name="releaseversion" value="0.2" />
 	<property name="src" value="src" />
 	<property name="sources" value="java" />
 	<property name="classes" value="classes" />
@@ -28,6 +28,7 @@
 	<property file="blocks.properties" />
 	<property file="local.blocks.properties" />
 	<property name="blocks" value="blocks"/>
+	<property name="java.target.version" value="1.3"/>
 
 
 
@@ -56,7 +57,7 @@
 	</target>
 
 	<target name="compile" depends="init" >
-		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}">
+		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}">
 			<classpath>
 				<pathelement path="${classpath}" />
 				<!--<fileset dir="${libs}">
@@ -249,40 +250,51 @@
 				<filter token="VERSION" value="${releaseversion}" />
 				<filter token="NAME" value="${releasename}" />
 			</filterset>
-		</copy>
+	        </copy>
 		<!-- the classpath file-->
-		<echo file=".classpath">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;classpath&gt;
-   		&lt;classpathentry kind=&quot;src&quot; path=&quot;src/java&quot; /&gt;
-   		&lt;classpathentry kind=&quot;src&quot; path=&quot;src/test&quot; /&gt;
-   		</echo>
-		<for param="pluginsrc">
+		<echo file=".classpath">&lt;?xml version="1.0" encoding="UTF-8"?&gt;${line.separator}&lt;classpath&gt;${line.separator}  &lt;classpathentry kind=&quot;src&quot; path=&quot;src/java&quot; /&gt;${line.separator}</echo>
+		<for param="blocksrc">	
 			<path>
-				<dirset dir="plugins" includes="**/src" />
+				<dirset dir="${blocks}" includes="**/src"/>
+				<dirset dir="${blocks}">
+				    <include name="**/src/java"/>
+				    <include name="**/src/test"/>
+				</dirset>
 			</path>
+			
 			<sequential>
-				<echo file=".classpath" append="true">&lt;classpathentry kind=&quot;src&quot; path=&quot;@{pluginsrc}&quot; /&gt;
-				  </echo>
+			
+			<!-- filter out the source path with java folder inside-->
+                                <if>
+				  <bool>
+				    <not>
+				     <available file="@{blocksrc}/java"/>
+				    </not>
+				  </bool>
+				<then>
+			      
+				<echo file=".classpath" append="true">  &lt;classpathentry kind=&quot;src&quot; path=&quot;@{blocksrc}&quot; /&gt;${line.separator}</echo>
+			         </then>
+				 
+				</if>
 			</sequential>
 		</for>
-		<echo file=".classpath" append="true">&lt;classpathentry kind=&quot;con&quot; path=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; /&gt;
-   	 	 	</echo>
+		<echo file=".classpath" append="true">  &lt;classpathentry kind=&quot;con&quot; path=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; /&gt;${line.separator}</echo>
 
 		<!-- the libs -->
 		<for param="jarfile">
 			<path>
-				<fileset dir="lib" includes="**/*.jar" />
-				<fileset dir="blocks" includes="**/lib/**/*.jar" />
-				<fileset dir="tools" includes="**/*.jar" />
+			   <fileset dir="lib" includes="**/*.jar" />
+			   <fileset dir="${blocks}" includes="**/lib/**/*.jar" />
+			   <fileset dir="tools" includes="**/*.jar" />
 			</path>
 			<sequential>
-				<echo file=".classpath" append="true">&lt;classpathentry kind=&quot;lib&quot; path=&quot;@{jarfile}&quot; /&gt;
-					</echo>
+	<echo file=".classpath" append="true">  &lt;classpathentry kind=&quot;lib&quot; path=&quot;@{jarfile}&quot; /&gt;${line.separator}</echo>
 			</sequential>
 		</for>
-		<echo file=".classpath" append="true">&lt;classpathentry kind=&quot;output&quot; path=&quot;build/java&quot; /&gt;
-  &lt;/classpath&gt;
-   	    </echo>
+		
+		
+		<echo file=".classpath" append="true">  &lt;classpathentry kind=&quot;output&quot; path=&quot;build/java&quot; /&gt;${line.separator}&lt;/classpath&gt;${line.separator}</echo>
 		<!-- filtering to relative pathes -->
 
 		<replace file=".classpath" token="path=&quot;${basedir}${file.separator}" value="path=&quot;" />

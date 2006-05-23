@@ -15,7 +15,13 @@
 */
 package org.kabeja.tools;
 
+import org.kabeja.processing.PostProcessor;
+import org.kabeja.processing.PostProcessorConfig;
+import org.kabeja.processing.ProcessPipeline;
+import org.kabeja.processing.ProcessorManager;
+import org.kabeja.xml.AggregatorGenerator;
 import org.kabeja.xml.SAXFilter;
+import org.kabeja.xml.SAXGenerator;
 import org.kabeja.xml.SAXSerializer;
 
 import org.xml.sax.Attributes;
@@ -31,6 +37,10 @@ import java.io.InputStream;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 
 /**
@@ -51,6 +61,9 @@ public class SAXProcessorBuilder implements ContentHandler {
     public static final String ELEMENT_PROPERTY = "property";
     public static final String ELEMENT_POSTPROCESSOR = "postprocessor";
     public static final String ELEMENT_POSTPROCESS = "postprocess";
+    public static final String ELEMENT_AGGREGATE = "aggregate";
+    public static final String ELEMENT_SAXGENERATOR = "generator";
+    public static final String ELEMENT_GENERATE = "generate";
     public static final String ATTRIBUTE_NAME = "name";
     public static final String ATTRIBUTE_CLASS = "class";
     public static final String ATTRIBUTE_VALUE = "value";
@@ -58,11 +71,15 @@ public class SAXProcessorBuilder implements ContentHandler {
     private SAXFilter saxfilter;
     private SAXSerializer saxserializer;
     private PostProcessor postprocessor;
+    private SAXGenerator saxgenerator;
+    private AggregatorGenerator aggregator;
     private Map properties;
     private StringBuffer buf = new StringBuffer();
     private String name;
     private ProcessPipeline pipeline;
     private boolean config = false;
+    private boolean aggregate = false;
+    
 
     /*
      * (non-Javadoc)
@@ -89,31 +106,63 @@ public class SAXProcessorBuilder implements ContentHandler {
      */
     public void endElement(String namespaceURI, String localName, String qName)
         throws SAXException {
+    	
         if (localName.equals(ELEMENT_SAXFILTER) && this.config) {
+        	
             this.saxfilter.setProperties(properties);
             this.manager.addSAXFilter(this.saxfilter, this.name);
+            
         } else if (localName.equals(ELEMENT_SAXSERIALIZER)) {
-            this.saxserializer.setProperties(properties);
+        	
+            this.saxserializer.setProperties(this.properties);
             this.manager.addSAXSerializer(this.saxserializer, this.name);
+            
         } else if (localName.equals(ELEMENT_PIPELINE)) {
+        	
             this.manager.addProcessPipeline(this.pipeline);
+            
         } else if (localName.equals(ELEMENT_SERIALIZE)) {
             this.pipeline.setSAXSerializer(this.manager.getSAXSerializer(
                     this.name));
+            
             this.pipeline.setSerializerProperties(this.properties);
+            
+            
         } else if (localName.equals(ELEMENT_FILTER)) {
+        	
             SAXFilterConfig config = new SAXFilterConfig(this.properties);
             config.setFilterName(this.name);
             this.pipeline.addSAXFilterConfig(config);
+            
         } else if (localName.equals(ELEMENT_POSTPROCESS)) {
+        	
             PostProcessorConfig config = new PostProcessorConfig(this.properties);
             config.setPostProcessorName(this.name);
             this.pipeline.addPostProcessorConfig(config);
+            
         } else if (localName.equals(ELEMENT_POSTPROCESSOR)) {
+        	
             this.postprocessor.setProperties(this.properties);
             this.manager.addPostProcessor(this.postprocessor, this.name);
+            
         } else if (localName.equals(ELEMENT_CONFIGURATION)) {
+        	
             this.config = false;
+            
+        }else if (localName.equals(ELEMENT_GENERATE)) {
+        	if(this.aggregate){
+        	    this.aggregator.addSAXGenerator(this.manager.getSAXGenerator(
+                    this.name));
+        	}else{
+            this.pipeline.setSAXGenerator(this.manager.getSAXGenerator(
+                    this.name));
+                    
+        	}
+        }else if (localName.equals(ELEMENT_SAXGENERATOR)) {
+        	
+            this.saxgenerator.setProperties(this.properties);
+            this.manager.addSAXGenerator(this.saxgenerator, this.name);
+            
         }
     }
 
@@ -177,39 +226,74 @@ public class SAXProcessorBuilder implements ContentHandler {
      */
     public void startElement(String namespaceURI, String localName,
         String qName, Attributes atts) throws SAXException {
-        if (localName.equals(ELEMENT_SAXFILTER) && this.config) {
+   
+    
+    	if (localName.equals(ELEMENT_SAXFILTER) && this.config) {
+        	
             this.properties = new HashMap();
             name = atts.getValue(ATTRIBUTE_NAME);
             saxfilter = (SAXFilter) createInstance(atts.getValue(
                         ATTRIBUTE_CLASS));
+            
         } else if (localName.equals(ELEMENT_SAXSERIALIZER)) {
-            this.properties = new HashMap();
+        	
+        	this.properties = new HashMap();
             name = atts.getValue(ATTRIBUTE_NAME);
             saxserializer = (SAXSerializer) createInstance(atts.getValue(
                         ATTRIBUTE_CLASS));
+            
         } else if (localName.equals(ELEMENT_POSTPROCESSOR)) {
+        	
             this.properties = new HashMap();
             this.name = atts.getValue(ATTRIBUTE_NAME);
-
             String clazz = (atts.getValue(ATTRIBUTE_CLASS));
             postprocessor = (PostProcessor) createInstance(clazz);
+            
         } else if (localName.equals(ELEMENT_PIPELINE)) {
+        	this.aggregate=false;
             this.pipeline = new ProcessPipeline();
             this.pipeline.setName(atts.getValue(ATTRIBUTE_NAME));
+            
         } else if (localName.equals(ELEMENT_SERIALIZE)) {
+        	
             this.properties = new HashMap();
             this.name = atts.getValue(ATTRIBUTE_NAME);
+            
         } else if (localName.equals(ELEMENT_FILTER)) {
+        	
             this.properties = new HashMap();
             name = atts.getValue(ATTRIBUTE_NAME);
+            
         } else if (localName.equals(ELEMENT_PROPERTY)) {
+        	
             this.properties.put(atts.getValue(ATTRIBUTE_NAME),
                 atts.getValue(ATTRIBUTE_VALUE));
+            
         } else if (localName.equals(ELEMENT_POSTPROCESS)) {
+        	
             this.properties = new HashMap();
             name = atts.getValue(ATTRIBUTE_NAME);
+            
         } else if (localName.equals(ELEMENT_CONFIGURATION)) {
+        	
             this.config = true;
+            
+        }else if (localName.equals(ELEMENT_SAXGENERATOR)) {
+        	
+            this.properties = new HashMap();
+            this.name = atts.getValue(ATTRIBUTE_NAME);
+            String clazz = (atts.getValue(ATTRIBUTE_CLASS));
+            this.saxgenerator = (SAXGenerator) createInstance(clazz);
+            
+        }else if (localName.equals(ELEMENT_GENERATE)) {
+        	
+          //  this.properties = new HashMap();
+            this.name = atts.getValue(ATTRIBUTE_NAME);
+            
+        } else if (localName.equals(ELEMENT_AGGREGATE)) {
+        	this.aggregate=true;
+        	this.aggregator = new AggregatorGenerator();
+        	this.pipeline.setSAXGenerator(this.aggregator);
         }
     }
 
@@ -257,12 +341,20 @@ public class SAXProcessorBuilder implements ContentHandler {
         SAXProcessorBuilder builder = new SAXProcessorBuilder();
 
         try {
-            XMLReader saxparser = XMLReaderFactory.createXMLReader(ConfigHelper.getSAXDriver());
+        	
+        	SAXParserFactory factory = SAXParserFactory.newInstance();
+        	factory.setNamespaceAware(true);
+        	XMLReader saxparser = factory.newSAXParser().getXMLReader();
+        	
+        
             saxparser.setContentHandler(builder);
             saxparser.parse(new InputSource(in));
         } catch (SAXException e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         } catch (IOException ioe) {
+        	ioe.printStackTrace();
+        }catch(ParserConfigurationException e){
+        	 e.printStackTrace();
         }
 
         return builder.getManager();

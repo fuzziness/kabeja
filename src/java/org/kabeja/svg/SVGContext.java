@@ -24,4 +24,5 @@ public class SVGContext {
     public static String USER_BOUNDS = "bounds.user";
     public static String DRAFT_BOUNDS = "bounds.draft";
     public static String DOT_LENGTH = "dot.length";
+    public static String STROKE_WIDTH="stroke.width";
 }

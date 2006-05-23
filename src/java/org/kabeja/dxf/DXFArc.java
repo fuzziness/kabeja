@@ -107,6 +107,7 @@ public class DXFArc extends DXFEntity implements SVGPathBoundaryElement {
 	 */
 	public Bounds getBounds() {
 
+		Bounds bounds = new Bounds();
        Point start = getStartPoint();
        Point end = getEndPoint();
 		bounds.addToBounds(start);
@@ -259,12 +260,7 @@ public class DXFArc extends DXFEntity implements SVGPathBoundaryElement {
 		path.append(radius);
 		path.append(" 0");
 
-		double diff = 0;
-		if (end_angle > start_angle) {
-			diff = end_angle - start_angle;
-		} else {
-			diff = 360 + end_angle - start_angle;
-		}
+		double diff = this.getTotalAngle();
 
 
 		// the large-arc-flag
@@ -279,7 +275,9 @@ public class DXFArc extends DXFEntity implements SVGPathBoundaryElement {
 			path.append(" 1 ");
 
 		} else {
-			// sweep flag 0
+			// sweep flag 0 
+			//funny here we would never come
+			//here
 			path.append(" 0 ");
 		}
 
@@ -291,4 +289,24 @@ public class DXFArc extends DXFEntity implements SVGPathBoundaryElement {
 
 		return path.toString();
 	}
+
+	public double getLength() {
+		double alpha = this.getTotalAngle();	
+		return (alpha*Math.PI*this.radius)/180.0;
+	}
+	
+	public double getTotalAngle(){
+		if(this.end_angle<this.start_angle){
+			return (360+this.end_angle)-this.start_angle;
+		}else{
+		 return Math.abs(this.end_angle-this.start_angle);
+		}
+	}
+	
+	
+	public double getChordLength(){
+		double s = 2*this.radius*Math.sin(Math.toRadians(this.getTotalAngle()/2));
+		return s;
+	}
+	
 }

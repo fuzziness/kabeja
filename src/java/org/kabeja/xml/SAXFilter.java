@@ -28,7 +28,8 @@ import java.util.Map;
  *
  */
 public interface SAXFilter extends ContentHandler {
-    public void setProperties(Map properties);
+  
+	public void setProperties(Map properties);
 
     public void setContentHandler(ContentHandler handler);
 }

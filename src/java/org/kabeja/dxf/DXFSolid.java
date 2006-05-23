@@ -15,16 +15,15 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
+import java.util.Map;
 
+import org.kabeja.dxf.helpers.MathUtils;
+import org.kabeja.dxf.helpers.Point;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Map;
 
 
 /**
@@ -160,4 +159,15 @@ public class DXFSolid extends DXFEntity {
     public String getType() {
         return DXFConstants.ENTITY_TYPE_SOLID;
     }
+
+	public double getLength() {
+		double length=0.0;
+		length+=MathUtils.distance(this.point1,this.point2);
+		length+=MathUtils.distance(this.point2,this.point4);
+		length+=MathUtils.distance(this.point4,this.point3);
+		length+=MathUtils.distance(this.point3,this.point1);
+		return length;
+	}
+    
+    
 }

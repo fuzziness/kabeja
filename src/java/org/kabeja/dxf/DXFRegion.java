@@ -15,12 +15,12 @@
 */
 package org.kabeja.dxf;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -66,4 +66,10 @@ public class DXFRegion extends DXFEntity {
     public void appendACISDATA(String data) {
         acisData.add(data);
     }
+
+	public double getLength() {
+		
+		return 0;
+	}
+    
 }

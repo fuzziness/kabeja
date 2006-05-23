@@ -15,6 +15,7 @@
 */
 package org.kabeja.parser.entities;
 
+import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFText;
 
@@ -26,7 +27,6 @@ import org.kabeja.parser.DXFValue;
  *
  */
 public class DXFTextHandler extends AbstractEntityHandler {
-    public static String ENTITY_NAME = "TEXT";
     public static final int TEXT_VALUE = 1;
     public static final int TEXT_HEIGHT = 40;
     public static final int TEXT_SCALEX = 41;
@@ -74,7 +74,7 @@ public class DXFTextHandler extends AbstractEntityHandler {
      * @see org.dxf2svg.parser.entities.EntityHandler#getEntityName()
      */
     public String getDXFEntityName() {
-        return ENTITY_NAME;
+        return DXFConstants.ENTITY_TYPE_TEXT;
     }
 
     /*

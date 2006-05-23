@@ -15,19 +15,17 @@
 */
 package org.kabeja.dxf;
 
+import java.util.Map;
+
 import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.Vector;
-
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Map;
 
 
 /**
@@ -107,4 +105,11 @@ public class DXFRay extends DXFEntity {
     public void setDirection(Vector direction) {
         this.direction = direction;
     }
+
+	public double getLength() {
+		
+		return 0;
+	}
+    
+    
 }

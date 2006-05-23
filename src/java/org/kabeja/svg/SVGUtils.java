@@ -20,7 +20,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
- * Outputs a DXFDocument as stream of SAX events.
+ * 
  *
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *

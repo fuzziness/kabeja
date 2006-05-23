@@ -19,11 +19,11 @@ import org.kabeja.dxf.DXFDocument;
 
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.ParserBuilder;
+import org.kabeja.processing.PostProcessManager;
+import org.kabeja.processing.ProcessorManager;
 
 import org.kabeja.svg.SVGConstants;
 
-import org.kabeja.tools.PostProcessManager;
-import org.kabeja.tools.ProcessorManager;
 import org.kabeja.tools.SAXProcessorBuilder;
 
 import org.kabeja.xml.SAXPrettyOutputter;

@@ -46,7 +46,7 @@
 	</target>
 
 	<target name="compile" depends="init" if="cocoon.libs">
-		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}">
+		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}">
 			<classpath>
 				<pathelement path="${classpath}" />
 				<fileset dir="${libs}">

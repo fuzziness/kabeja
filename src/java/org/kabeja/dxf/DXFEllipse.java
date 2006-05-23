@@ -6,7 +6,6 @@ package org.kabeja.dxf;
 
 import java.util.Map;
 
-import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.Vector;
@@ -19,22 +18,28 @@ import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 
+	public static final double DEFAULT_END_PARAMETER = Math.PI * 2;
+
+	public static final double DEFAULT_START_PARAMETER = 0.0;
+
+	public static final int INTEGRATION_STEPS = 15;
+
 	private double ratio = 1.0;
 
-	private double startParameter = Double.POSITIVE_INFINITY;
+	private double startParameter = DEFAULT_START_PARAMETER;
 
-	private double endParameter = Double.POSITIVE_INFINITY;
+	private double endParameter = DEFAULT_END_PARAMETER;
 
 	private Point center = new Point();
 
 	private Vector majorAxisDirection = new Vector();
 
 	/**
-	 *
+	 * 
 	 */
 	public DXFEllipse() {
 
@@ -44,7 +49,7 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.dxf2svg.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
 	 */
 	public void toSAX(ContentHandler handler, Map svgContext)
@@ -52,32 +57,35 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 
 		AttributesImpl attr = new AttributesImpl();
 		super.setCommonAttributes(attr);
-		if (startParameter == Double.POSITIVE_INFINITY
-				&& endParameter == Double.POSITIVE_INFINITY) {
+		if (startParameter == DEFAULT_START_PARAMETER
+				&& endParameter == DEFAULT_END_PARAMETER) {
 
-			SVGUtils.addAttribute(attr, "cx", "" + center.getX());
-			SVGUtils.addAttribute(attr, "cy", ""
-					+ doc.translateY(center.getY()));
-			double major = DXFUtils.distance(center, majorAxisDirection);
-			double minor = ratio * major;
+			SVGUtils.addAttribute(attr, "cx", "" + this.center.getX());
+			SVGUtils.addAttribute(attr, "cy", "" + this.center.getY());
+			double major = this.getHalfMajorAxisLength();
+			double minor = this.ratio * major;
 			SVGUtils.addAttribute(attr, "rx", "" + major);
 			SVGUtils.addAttribute(attr, "ry", "" + minor);
 			// chek for rotation
 
-			if (majorAxisDirection.getY() != 0.0) {
-				double angle = Math.atan(1 / (majorAxisDirection.getY() / majorAxisDirection.getX()));
+			if (this.majorAxisDirection.getY() != 0.0) {
+				double angle = Math
+						.atan(1 / (this.majorAxisDirection.getY() / this.majorAxisDirection
+								.getX()));
 				SVGUtils.addAttribute(attr, "transform", "rotate(" + angle
-						+ "  " + center.getX() + " " + center.getY() + ")");
+						+ "  " + this.center.getX() + " " + this.center.getY()
+						+ ")");
 			}
+
 			double angle = this.getRotationAngle();
 			if (angle != 0.0) {
 				StringBuffer buf = new StringBuffer();
 				buf.append("rotate(");
 				buf.append((-1.0 * Math.toDegrees(angle)));
 				buf.append(' ');
-				buf.append(center.getX());
+				buf.append(this.center.getX());
 				buf.append(' ');
-				buf.append(center.getY());
+				buf.append(this.center.getY());
 				buf.append(')');
 				SVGUtils.addAttribute(attr, "transform", buf.toString());
 			}
@@ -96,18 +104,46 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.dxf2svg.dxf.DXFEntity#getBounds()
 	 */
 	public Bounds getBounds() {
 		// this are the bounds of a circle with major-radius of the ellipse
 		// TODO change this to the correct bounds
+		double alpha = Math.toRadians(this.getRotationAngle());
+		Bounds bounds = new Bounds();
+		if (this.startParameter == DEFAULT_START_PARAMETER
+				&& this.endParameter == DEFAULT_END_PARAMETER && alpha == 0.0) {
+			double length = this.getHalfMajorAxisLength();
 
-		double length = this.getMajorAxisLength();
+			bounds.addToBounds(center.getX() + length, center.getY() + length);
+			bounds.addToBounds(center.getX() - length, center.getY() - length);
+		} else {
+			int n = 40;
 
-		bounds.addToBounds(center.getX() + length, center.getY() + length);
-		bounds.addToBounds(center.getX() - length, center.getY() - length);
+			// we walking over the the ellipse or elliptical arc
+			double h = (this.endParameter - this.startParameter) / n;
 
+			double start = this.startParameter;
+			double major = this.getHalfMajorAxisLength();
+			double minor = major * this.ratio;
+			for (int i = 0; i <= n; i++) {
+				double x = major * Math.cos(start);
+				double y = minor * Math.sin(start);
+				
+				if (alpha != 0.0) {
+
+					double lx=x;
+					x = lx * Math.cos(alpha) - y * Math.sin(alpha);
+					y = lx * Math.sin(alpha) + y * Math.cos(alpha);
+				}
+				bounds.addToBounds(this.center.getX() + x, this.center.getY()
+						+ y);
+
+				start += h;
+			}
+
+		}
 		return bounds;
 	}
 
@@ -157,47 +193,40 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.kabeja.dxf.helpers.HatchBoundaryEdge#getSVGPath()
 	 */
 	public String getSVGPath() {
 
-		boolean override = false;
-		if (this.startParameter == Double.POSITIVE_INFINITY
-				&& this.endParameter == Double.POSITIVE_INFINITY) {
-			this.startParameter = 0.0;
-			this.endParameter = 2 * Math.PI;
-			override = true;
-		}
+		// TODO test the output
 
 		StringBuffer buf = new StringBuffer();
 
 		Point start = this.getLocalStartPoint();
-		//translate to centerpoint
+		// translate to centerpoint
 		start.setX(start.getX() + this.center.getX());
 		start.setY(start.getY() + this.center.getY());
 
 		Point end = this.getLocalEndPoint();
-		//translate to centerpoint
+		// translate to centerpoint
 		end.setX(end.getX() + this.center.getX());
 		end.setY(end.getY() + this.center.getY());
 
-		//get the angle between x-axis and major-axis
-		double major = majorAxisDirection.getLength();
-		double angle = MathUtils
-				.getAngle(DXFConstants.DEFAULT_X_AXIS_VECTOR, this.majorAxisDirection);
+		// get the angle between x-axis and major-axis
+		double major = this.majorAxisDirection.getLength();
+//		double angle = MathUtils.getAngle(DXFConstants.DEFAULT_X_AXIS_VECTOR,
+//				this.majorAxisDirection);
+//
+//		if (this.majorAxisDirection.getY() > 0) {
+//			angle = -1 * angle;
+//		}
+//
+//		if (angle != 0.0) {
+//			start = MathUtils.rotatePointXY(start, this.center, angle);
+//			end = MathUtils.rotatePointXY(end, this.center, angle);
+//		}
 
-		if(this.majorAxisDirection.getY()>0){
-			angle = -1*angle;
-		}
-
-
-
-		if (angle != 0.0) {
-			start = MathUtils.rotatePointXY(start, this.center, angle);
-			end = MathUtils.rotatePointXY(end, this.center, angle);
-		}
-
+		double angle = this.getRotationAngle();
 		buf.append("M ");
 		buf.append(start.getX());
 		buf.append(' ');
@@ -210,10 +239,8 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 		buf.append(' ');
 
 		// rotation value of the ellipse
-		 buf.append((-1.0*Math.toDegrees(this.getRotationAngle())));
-		 buf.append(' ');
-
-
+		buf.append((-1.0 * Math.toDegrees(angle)));
+		buf.append(' ');
 
 		// the large-arc flag
 		if ((this.endParameter - this.startParameter) > Math.PI) {
@@ -231,47 +258,94 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 		buf.append(' ');
 		buf.append(end.getY());
 
-		if (override) {
-			this.startParameter = Double.POSITIVE_INFINITY;
-			this.endParameter = Double.POSITIVE_INFINITY;
-		}
-
 		return buf.toString();
 	}
 
-	public double getMajorAxisLength() {
+	public double getHalfMajorAxisLength() {
 		return majorAxisDirection.getLength();
 	}
 
 	public Point getLocalStartPoint() {
 		Point p = new Point();
-		double major = getMajorAxisLength();
+		double major = getHalfMajorAxisLength();
 		double minor = major * this.ratio;
-		p.setX(major * Math.cos(this.startParameter));
-		p.setY(minor * Math.sin(this.startParameter));
+		double x = major * Math.cos(this.startParameter);
+		double y = minor * Math.sin(this.startParameter);
+		double alpha = this.getRotationAngle();
+		if (alpha != 0.0) {
+			double lx = x;
+			x = lx * Math.cos(alpha) - y * Math.sin(alpha);
+			y = lx * Math.sin(alpha) + y * Math.cos(alpha);
+		}
+		p.setX(x);
+		p.setY(y);
 		p.setZ(0.0);
 		return p;
 	}
 
 	public Point getLocalEndPoint() {
 		Point p = new Point();
-		double major = getMajorAxisLength();
+		double major = getHalfMajorAxisLength();
 		double minor = major * this.ratio;
-		p.setX(major * Math.cos(this.endParameter));
-		p.setY(minor * Math.sin(this.endParameter));
+		double x = major * Math.cos(this.endParameter);
+		double y = minor * Math.sin(this.endParameter);
+		
+		
+		double alpha = this.getRotationAngle();
+		if (alpha != 0.0) {
+			double lx = x;
+			x = lx * Math.cos(alpha) - y * Math.sin(alpha);
+			y = lx * Math.sin(alpha) + y * Math.cos(alpha);
+		}
+		p.setX(x);
+		p.setY(y);
 		p.setZ(0.0);
 		return p;
 	}
 
 	public double getRotationAngle() {
 
-		double major = majorAxisDirection.getLength();
-		Point end = MathUtils.getPointOfStraightLine(center,majorAxisDirection,major);
-		Vector v = MathUtils
-				.getVector(getCenterPoint(), end);
-		double angle = MathUtils
-				.getAngle(DXFConstants.DEFAULT_X_AXIS_VECTOR, v);
-		return angle;
+//		double major = majorAxisDirection.getLength();
+//		Point end = MathUtils.getPointOfStraightLine(this.center,
+//				majorAxisDirection, major);
+//		Vector v = MathUtils.getVector(this.center, end);
+//		double angle = MathUtils
+//				.getAngle(DXFConstants.DEFAULT_X_AXIS_VECTOR, v);
+//		return angle;
+		return MathUtils.getAngle(DXFConstants.DEFAULT_X_AXIS_VECTOR, majorAxisDirection);
+	}
+
+	public double getLength() {
+
+		int n = INTEGRATION_STEPS;
+		double h = (this.endParameter - this.startParameter) / n;
+
+		double a = this.getHalfMajorAxisLength();
+		double b = a * this.ratio;
+		double start = this.startParameter;
+
+		double end = 0.0;
+		double length = 0.0;
+
+		// length = integral (sqrt((major*sin(t))^2+(minor*cos(t))^2))
+		for (int i = 0; i < n; i++) {
+
+			double center = h / 2 + start;
+			end = start + h;
+
+			double w1 = Math.sqrt(Math.pow(a * Math.sin(start), 2)
+					+ Math.pow(b * Math.cos(start), 2));
+			double w2 = Math.sqrt(Math.pow(a * Math.sin(center), 2)
+					+ Math.pow(b * Math.cos(center), 2));
+			double w3 = Math.sqrt(Math.pow(a * Math.sin(end), 2)
+					+ Math.pow(b * Math.cos(end), 2));
+			// SIMPSON where (h/2)/3 is h/6 here
+			length += (w1 + 4 * w2 + w3) * (h / 6);
+			start = end;
+
+		}
+
+		return length;
 	}
 
 }

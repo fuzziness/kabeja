@@ -169,20 +169,5 @@ public class FontImport {
         return buf.toString();
     }
 
-    private String fixURI(String uri) {
-        StringBuffer buf = new StringBuffer();
-        buf.append("file://");
-
-        char[] c = uri.toCharArray();
-
-        for (int i = 5; i < c.length; i++) {
-            if (Character.isWhitespace(c[i])) {
-                buf.append("%20");
-            } else {
-                buf.append(c[i]);
-            }
-        }
-
-        return buf.toString();
-    }
+ 
 }

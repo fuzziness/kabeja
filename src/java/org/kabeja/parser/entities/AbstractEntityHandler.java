@@ -72,7 +72,7 @@ public abstract class AbstractEntityHandler implements DXFEntityHandler {
             break;
 
         case LAYER_NAME:
-            entity.setLayerID(value.getValue());
+            entity.setLayerName(value.getValue());
 
             break;
 

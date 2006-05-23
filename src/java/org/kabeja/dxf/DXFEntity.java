@@ -15,15 +15,14 @@
 */
 package org.kabeja.dxf;
 
+import java.util.Map;
+
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGFragmentGenerator;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Map;
 
 
 /**
@@ -61,11 +60,22 @@ public abstract class DXFEntity implements SVGFragmentGenerator {
         return this.doc;
     }
 
-    public String getLayerID() {
+    /**
+     * Gives the name of the layer, which containts the entity.
+     * @return the name of the layer
+     */
+    
+    public String getLayerName() {
         return this.layerID;
     }
 
-    public void setLayerID(String id) {
+    
+    /**
+     * Set the name of the layer, which containts the entity.
+     * @return the name of the layer
+     */
+    
+    public void setLayerName(String id) {
         this.layerID = id;
     }
 
@@ -280,4 +290,12 @@ public abstract class DXFEntity implements SVGFragmentGenerator {
     public void setModelSpace(boolean modelSpace) {
         this.modelSpace = modelSpace;
     }
+    
+    /**
+     * Returns the length of the entity or 0 if the entity has no length
+     * @return
+     */
+    
+    
+    public abstract double getLength();
 }

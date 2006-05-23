@@ -15,6 +15,14 @@
 */
 package org.kabeja.dxf.helpers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+import org.kabeja.dxf.DXFArc;
+import org.kabeja.dxf.DXFLine;
+import org.kabeja.dxf.DXFPolyline;
+import org.kabeja.dxf.DXFVertex;
+
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
@@ -76,4 +84,47 @@ public class DXFUtils {
 
         return r;
     }
+    
+    public static void reverseDXFLine(DXFLine line){
+    	Point start = line.getStartPoint();
+    	line.setStartPoint(line.getEndPoint());
+    	line.setEndPoint(start);
+    }
+    
+    public static void reverseDXFPolyline(DXFPolyline pline){
+    	ArrayList list = new ArrayList();
+    	double bulge = 0;
+    	int size = pline.getVertexCount();
+    	for(int i=0;i<size;i++){
+    		DXFVertex v = pline.getVertex(0);
+    		double b = v.getBulge();
+    		if(bulge != 0.0){
+    			v.setBulge(bulge*(-1.0));
+    			bulge = b;
+    		}
+    		list.add(v);
+    		pline.removeVertex(0);
+    	}
+    	
+    	//reverse now
+    	
+    	for(int i=1;i<=size;i++){
+    		pline.addVertex((DXFVertex)list.get(size-i));
+    	}
+    	
+    }
+    
+    
+    public static double getArcRadius(DXFVertex start,DXFVertex end){
+   
+    	double alpha = 4*Math.atan(Math.abs(start.getBulge()));
+    	double l = MathUtils.distance(start.getPoint(), end.getPoint());
+    	double r = l /(2*Math.sin(alpha/2));
+    	return r;
+    }
+  
+    
+    
+    
+    
 }

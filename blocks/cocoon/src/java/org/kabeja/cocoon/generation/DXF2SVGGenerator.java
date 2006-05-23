@@ -173,6 +173,6 @@ public class DXF2SVGGenerator extends AbstractGenerator
 
     protected void initParser(String config) throws Exception {
         // TODO use the sourceresolver
-        parser = SAXParserBuilder.buildFromStream(new FileInputStream(config));
+        this.parser = SAXParserBuilder.buildFromStream(new FileInputStream(config));
     }
 }

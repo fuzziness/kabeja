@@ -106,7 +106,6 @@ public class Loader {
     		if(args[i].equals("-main") && (i+1)<args.length){
     			i++;
     			this.mainClass=args[i];
-    			System.out.println("main;"+mainClass);
     		}else{
                list.add(args[i]);
     		}

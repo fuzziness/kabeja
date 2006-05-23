@@ -58,6 +58,7 @@ public class DXFConstants {
     public final static String ENTITY_TYPE_LEADER = "LEADER";
     public final static String ENTITY_TYPE_TOLERANCE = "TOLERANCE";
     public final static String ENTITY_TYPE_TABLE = "TABLE";
+    public final static String ENTITY_TYPE_DIMENSION = "DIMENSION";
     public final static String OBJECT_TYPE_IMAGEDEF = "IMAGEDEF";
     public final static Vector DEFAULT_X_AXIS_VECTOR = new Vector(1.0, 0.0, 0.0);
     public final static Vector DEFAULT_Y_AXIS_VECTOR = new Vector(0.0, 1.0, 0.0);
@@ -82,4 +83,7 @@ public class DXFConstants {
     public final static String SECTION_ENTITIES = "ENTITIES";
     public final static String SECTION_OBJECTS = "OBJECTS";
     public final static String SECTION_THUMBNAILIMAGE = "THUMBNAILIMAGE";
+    
+    public static double POINT_CONNECTION_RADIUS=0.0001;
+    
 }

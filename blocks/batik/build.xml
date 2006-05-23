@@ -45,7 +45,7 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}/${classes}">
+		<javac srcdir="${src}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}">
 			<classpath>
 				<pathelement path="${classpath}" />
 				<fileset dir="${block.libs}">

@@ -41,6 +41,7 @@ import java.util.Iterator;
  *
  */
 public class LayerSeparator {
+	
     public static void main(String[] args) {
         LayerSeparator split = new LayerSeparator();
 

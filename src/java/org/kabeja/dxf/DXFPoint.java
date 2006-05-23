@@ -15,16 +15,14 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
+import java.util.Map;
 
+import org.kabeja.dxf.helpers.Point;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Map;
 
 
 /**
@@ -32,7 +30,8 @@ import java.util.Map;
  *
  */
 public class DXFPoint extends DXFEntity {
-    protected Point p = new Point();
+  
+	protected Point p = new Point();
 
     public DXFPoint() {
     }
@@ -42,6 +41,11 @@ public class DXFPoint extends DXFEntity {
         this.p.setY(y);
         this.p.setZ(z);
     }
+    
+    public DXFPoint(Point p){
+    	this.p = p;
+    }
+    
 
     /**
      * @return Returns the x.
@@ -126,4 +130,11 @@ public class DXFPoint extends DXFEntity {
     public void setPoint(Point p) {
         this.p = p;
     }
+
+	public double getLength() {
+		// a point has no length
+		return 0;
+	}
+    
+    
 }

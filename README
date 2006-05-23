@@ -1,5 +1,5 @@
 Kabeja is a small library for parsing DXF-Files and converting
-this to SVG. It is licensed under the LGPL.
+this to SVG. It is licensed under the Apache Software License 2.0.
 
 
 Limitation:
@@ -34,7 +34,7 @@ Planned:
  * Hatch
  * MLine
  * Tolerance
-
+ * Spline
 
 You can use Kabeja from CLI (Command Line Interface) or embed in your application. 
 
@@ -76,7 +76,7 @@ snippet:
      .....   
  <map:generators default="file">
     
-  <map:generator name="dxf2svg" src="de.miethxml.kabeja.cocoon.generation.DXF2SVGGenerator"/>
+  <map:generator name="dxf2svg" src="org.kabeja.cocoon.generation.DXF2SVGGenerator"/>
     
  </map:generators>
 

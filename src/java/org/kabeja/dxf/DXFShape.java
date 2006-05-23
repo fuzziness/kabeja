@@ -15,12 +15,11 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
+import java.util.Map;
 
+import org.kabeja.dxf.helpers.Point;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-
-import java.util.Map;
 
 
 /**
@@ -142,4 +141,10 @@ public class DXFShape extends DXFEntity {
     public void setScaleFactor(double scaleFactor) {
         this.scaleFactor = scaleFactor;
     }
+
+	public double getLength() {
+		
+		return 0;
+	}
+    
 }

@@ -15,16 +15,14 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
+import java.util.Map;
 
+import org.kabeja.dxf.helpers.Point;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Map;
 
 
 /**
@@ -118,9 +116,9 @@ public class DXFInsert extends DXFEntity {
             insert.setMaximumY(insert.getMaximumY() - height);
         }
 
-        bounds = insert;
+       
 
-        return bounds;
+        return insert;
     }
 
     /**
@@ -364,4 +362,10 @@ public class DXFInsert extends DXFEntity {
     public String getType() {
         return DXFConstants.ENTITY_TYPE_INSERT;
     }
+
+	public double getLength() {	
+		return this.doc.getDXFBlock(this.blockID).getLength();
+	}
+    
+	
 }

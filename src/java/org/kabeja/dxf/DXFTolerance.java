@@ -15,14 +15,13 @@
 */
 package org.kabeja.dxf;
 
+import java.util.Map;
+
 import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.Vector;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-
-import java.util.Map;
 
 
 /**
@@ -123,4 +122,10 @@ public class DXFTolerance extends DXFEntity {
     public void setXaxisDirection(Vector xaxisDirection) {
         this.xaxisDirection = xaxisDirection;
     }
+
+	public double getLength() {
+		
+		return 0;
+	}
+    
 }

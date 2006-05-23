@@ -15,17 +15,6 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.objects.DXFObject;
-
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGGenerator;
-import org.kabeja.svg.SVGUtils;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -33,6 +22,15 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.kabeja.dxf.objects.DXFObject;
+import org.kabeja.svg.SVGConstants;
+import org.kabeja.svg.SVGContext;
+import org.kabeja.svg.SVGGenerator;
+import org.kabeja.svg.SVGUtils;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -122,7 +120,7 @@ public class DXFDocument implements SVGGenerator {
 
     public void addDXFEntity(DXFEntity entity) {
         entity.setDXFDocument(this);
-        getDXFLayer(entity.getLayerID()).addDXFEntity(entity);
+        getDXFLayer(entity.getLayerName()).addDXFEntity(entity);
     }
 
     public void addDXFBlock(DXFBlock block) {

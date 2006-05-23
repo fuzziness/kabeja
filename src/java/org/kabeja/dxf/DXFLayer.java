@@ -15,20 +15,19 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGGenerator;
-import org.kabeja.svg.SVGUtils;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.kabeja.svg.SVGConstants;
+import org.kabeja.svg.SVGGenerator;
+import org.kabeja.svg.SVGUtils;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -64,6 +63,7 @@ public class DXFLayer implements SVGGenerator {
     }
 
     public void addDXFEntity(DXFEntity entity) {
+    	entity.setDXFDocument(this.doc);
         if (entities.containsKey(entity.getType())) {
             ((ArrayList) entities.get(entity.getType())).add(entity);
         } else {
@@ -74,6 +74,17 @@ public class DXFLayer implements SVGGenerator {
         }
     }
 
+    public void removeDXFEntity(DXFEntity entity){
+    	  if (entities.containsKey(entity.getType())) {
+             ArrayList list = (ArrayList) entities.get(entity.getType());
+             list.remove(entity);
+             if(list.isEmpty()){
+            	 entities.remove(entity.getType());
+             }
+          } 
+    }
+    
+    
     public void setDXFDocument(DXFDocument doc) {
         this.doc = doc;
     }

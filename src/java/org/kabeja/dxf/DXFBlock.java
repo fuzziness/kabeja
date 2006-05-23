@@ -15,19 +15,17 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
-
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGFragmentGenerator;
-import org.kabeja.svg.SVGUtils;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.kabeja.dxf.helpers.Point;
+import org.kabeja.svg.SVGConstants;
+import org.kabeja.svg.SVGFragmentGenerator;
+import org.kabeja.svg.SVGUtils;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -57,7 +55,9 @@ public class DXFBlock implements SVGFragmentGenerator {
 
     public Bounds getBounds() {
         // first set the own point
-        Iterator i = entities.iterator();
+
+    	Bounds bounds = new Bounds();
+    	Iterator i = entities.iterator();
 
         if (i.hasNext()) {
             while (i.hasNext()) {
@@ -189,4 +189,21 @@ public class DXFBlock implements SVGFragmentGenerator {
             entity.setDXFDocument(doc);
         }
     }
+    
+    public double getLength(){
+    	 
+    	 double length=0;
+    	 Iterator i = entities.iterator();
+
+          while (i.hasNext()) {
+              DXFEntity entity = (DXFEntity) i.next();
+              length+=entity.getLength();
+              
+          }
+          
+          return length;
+    }
+    
+    
+    
 }

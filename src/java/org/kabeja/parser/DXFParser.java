@@ -126,9 +126,9 @@ public class DXFParser implements HandlerManager, Handler {
                 currentHandler.endSection();
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        	 throw new DXFParseException(e.toString());
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+           throw new DXFParseException(ioe.toString());
         }
 
     }

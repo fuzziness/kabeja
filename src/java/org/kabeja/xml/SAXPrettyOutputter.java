@@ -55,7 +55,7 @@ public class SAXPrettyOutputter implements SAXSerializer {
     private String encoding;
     private String dtd;
     private int indent = 0;
-    private Attributes attr;
+   
     private boolean parent = false;
     private ArrayList textContentList = new ArrayList();
     protected HashMap rootxmlns = new HashMap();
@@ -64,7 +64,7 @@ public class SAXPrettyOutputter implements SAXSerializer {
 
     public SAXPrettyOutputter(OutputStream output, String encoding) {
         this.encoding = encoding;
-        setOutput(output);
+        this.setOutput(output);
     }
 
     /**
@@ -83,12 +83,12 @@ public class SAXPrettyOutputter implements SAXSerializer {
         try {
             if (length > 0) {
                 if (parent) {
-                    out.write(">");
+                    this.out.write(">");
                     parent = false;
                 }
 
                 char[] enc = encodeXML(new String(ch, 0, length)).toCharArray();
-                out.write(enc, start, enc.length);
+                this.out.write(enc, start, enc.length);
 
                 // textNode in this context
                 textContentList.set(textContentList.size() - 1,
@@ -101,8 +101,8 @@ public class SAXPrettyOutputter implements SAXSerializer {
 
     public void endDocument() throws SAXException {
         try {
-            out.flush();
-            out.close();
+            this.out.flush();
+            this.out.close();
 
             textContentList.clear();
         } catch (IOException e) {
@@ -114,19 +114,19 @@ public class SAXPrettyOutputter implements SAXSerializer {
         throws SAXException {
         try {
             if (parent) {
-                out.write("/>");
+                this.out.write("/>");
             } else {
                 // check for textNodes in this context
                 Boolean b = (Boolean) textContentList.remove(textContentList.size() -
                         1);
 
                 if (b.booleanValue()) {
-                    out.write("</" + qName + ">");
+                    this.out.write("</" + qName + ">");
                 } else {
                     // there was no textNode we can create a new line
-                    out.write('\n');
+                    this.out.write('\n');
                     indentOutput(indent);
-                    out.write("</" + qName + ">");
+                    this.out.write("</" + qName + ">");
                 }
             }
         } catch (IOException e) {
@@ -159,10 +159,10 @@ public class SAXPrettyOutputter implements SAXSerializer {
         indent = 0;
 
         try {
-            out.write("<?xml version=\"1.0\" encoding=\"" + encoding + "\" ?>");
+            this.out.write("<?xml version=\"1.0\" encoding=\"" + encoding + "\" ?>");
 
-            if (dtd != null) {
-                out.write("\n<!DOCTYPE " + dtd + ">");
+            if (this.dtd != null) {
+                this.out.write("\n<!DOCTYPE " + dtd + ">");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -171,32 +171,33 @@ public class SAXPrettyOutputter implements SAXSerializer {
 
     public void startElement(String namespaceURI, String localName,
         String qName, Attributes atts) throws SAXException {
-        if (indent == 0) {
-        }
 
-        indent++;
+
+        this.indent++;
 
         try {
-            if (parent) {
+            if (this.parent) {
                 // we are nested
-                out.write(">");
+                this.out.write(">");
             } else {
-                parent = true;
+                this.parent = true;
             }
 
             // first create a new line
-            out.write('\n');
+            this.out.write('\n');
 
             // indent the line
-            indentOutput(indent);
+            this.indentOutput(indent);
 
             // the element
-            out.write("<" + qName);
+            this.out.write("<" + qName);
 
             int attrCount = atts.getLength();
 
             for (int i = 0; i < attrCount; i++) {
-                indentOutput(1);
+            	//we need a white space between the 
+            	//attributes
+                this.indentOutput(1);
 
                 String uri = atts.getURI(i);
                 String qname = atts.getQName(i);
@@ -207,7 +208,7 @@ public class SAXPrettyOutputter implements SAXSerializer {
                 // .write(" xmlns:" + prefix + "=\"" + uri
                 // + "\" ");
                 // }
-                out.write(qname + "=\"" + atts.getValue(i) + "\"");
+                this.out.write(qname + "=\"" +encodeXML(atts.getValue(i)) + "\"");
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -215,7 +216,7 @@ public class SAXPrettyOutputter implements SAXSerializer {
         }
 
         // no text in this context now
-        textContentList.add(new Boolean(false));
+       this.textContentList.add(Boolean.valueOf(false));
     }
 
     public void startPrefixMapping(String prefix, String uri)
@@ -230,7 +231,7 @@ public class SAXPrettyOutputter implements SAXSerializer {
     private void indentOutput(int indentSize) {
         try {
             for (int i = 0; i < indentSize; i++) {
-                out.write(' ');
+                this.out.write(' ');
             }
         } catch (IOException e) {
             e.printStackTrace();

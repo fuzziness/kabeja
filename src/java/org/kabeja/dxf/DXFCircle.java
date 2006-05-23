@@ -1,98 +1,104 @@
 /*
-   Copyright 2005 Simon Mieth
+ Copyright 2005 Simon Mieth
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+ http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
+import java.util.Map;
 
+import org.kabeja.dxf.helpers.Point;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.util.Map;
-
-
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class DXFCircle extends DXFEntity {
-    private Point center;
-    private double radius;
+	private Point center;
 
-    /**
-     *
-     */
-    public DXFCircle() {
-    }
+	private double radius;
 
-    public double getRadius() {
-        return radius;
-    }
+	/**
+	 * 
+	 */
+	public DXFCircle() {
+	}
 
-    /**
-     * @param radius
-     *            The radius to set.
-     */
-    public void setRadius(double radius) {
-        this.radius = radius;
-    }
+	public double getRadius() {
+		return radius;
+	}
 
-    public void setCenterPoint(Point p) {
-        this.center = p;
-    }
+	/**
+	 * @param radius
+	 *            The radius to set.
+	 */
+	public void setRadius(double radius) {
+		this.radius = radius;
+	}
 
-    public Point getCenterPoint() {
-        return center;
-    }
+	public void setCenterPoint(Point p) {
+		this.center = p;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.dxf.DXFEntity#toSAX(org.xml.sax.ContentHandler)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        AttributesImpl attr = new AttributesImpl();
-        SVGUtils.addAttribute(attr, "cx", "" + this.center.getX());
-        SVGUtils.addAttribute(attr, "cy", "" + this.center.getY());
-        SVGUtils.addAttribute(attr, "r", "" + this.radius);
+	public Point getCenterPoint() {
+		return center;
+	}
 
-        super.setCommonAttributes(attr);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.dxf2svg.dxf.DXFEntity#toSAX(org.xml.sax.ContentHandler)
+	 */
+	public void toSAX(ContentHandler handler, Map svgContext)
+			throws SAXException {
+		AttributesImpl attr = new AttributesImpl();
+		SVGUtils.addAttribute(attr, "cx", "" + this.center.getX());
+		SVGUtils.addAttribute(attr, "cy", "" + this.center.getY());
+		SVGUtils.addAttribute(attr, "r", "" + this.radius);
 
-        SVGUtils.emptyElement(handler, SVGConstants.SVG_CIRCLE, attr);
-    }
+		super.setCommonAttributes(attr);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.dxf.DXFEntity#updateViewPort()
-     */
-    public Bounds getBounds() {
-        bounds.setMaximumX(center.getX() + radius);
-        bounds.setMinimumX(center.getX() - radius);
-        bounds.setMaximumY(center.getY() + radius);
-        bounds.setMinimumY(center.getY() - radius);
+		SVGUtils.emptyElement(handler, SVGConstants.SVG_CIRCLE, attr);
+	}
 
-        return bounds;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.dxf2svg.dxf.DXFEntity#updateViewPort()
+	 */
+	public Bounds getBounds() {
 
-    public String getType() {
-        return DXFConstants.ENTITY_TYPE_CIRCLE;
-    }
+		Bounds bounds = new Bounds();
+		bounds.setMaximumX(center.getX() + radius);
+		bounds.setMinimumX(center.getX() - radius);
+		bounds.setMaximumY(center.getY() + radius);
+		bounds.setMinimumY(center.getY() - radius);
+
+		return bounds;
+	}
+
+	public String getType() {
+		return DXFConstants.ENTITY_TYPE_CIRCLE;
+	}
+
+	public double getLength() {
+
+		return 2 * Math.PI * this.radius;
+	}
+
 }

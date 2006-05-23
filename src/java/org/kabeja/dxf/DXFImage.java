@@ -298,4 +298,11 @@ public class DXFImage extends DXFEntity {
 		this.rectangularClipping = rectangularClipping;
 		this.polygonalClipping = !rectangularClipping;
 	}
+
+	public double getLength() {
+	
+		return 0;
+	}
+	
+
 }

@@ -26,16 +26,18 @@ import org.kabeja.parser.DXFValue;
  *
  */
 public class DXFSolidHandler extends AbstractEntityHandler {
-    public final int POINT2_X = 11;
-    public final int POINT2_Y = 21;
-    public final int POINT2_Z = 31;
-    public final int POINT3_X = 12;
-    public final int POINT3_Y = 22;
-    public final int POINT3_Z = 32;
-    public final int POINT4_X = 13;
-    public final int POINT4_Y = 23;
-    public final int POINT4_Z = 33;
+    public final static int POINT2_X = 11;
+    public final static int POINT2_Y = 21;
+    public final static int POINT2_Z = 31;
+    public final static int POINT3_X = 12;
+    public final static int POINT3_Y = 22;
+    public final static int POINT3_Z = 32;
+    public final static int POINT4_X = 13;
+    public final static int POINT4_Y = 23;
+    public final static int POINT4_Z = 33;
+    
     protected String ENTITY_NAME = "SOLID";
+    
     protected DXFSolid solid;
 
     /*

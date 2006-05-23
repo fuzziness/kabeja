@@ -15,17 +15,16 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
+import java.util.Map;
 
+import org.kabeja.dxf.helpers.MathUtils;
+import org.kabeja.dxf.helpers.Point;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGPathBoundaryElement;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.Map;
 
 
 /**
@@ -121,4 +120,11 @@ public class DXFLine extends DXFEntity implements SVGPathBoundaryElement {
 
         return buf.toString();
     }
+
+	public double getLength() {
+		
+		return MathUtils.distance(this.start,this.end);
+	}
+    
+    
 }

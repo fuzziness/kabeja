@@ -28,8 +28,12 @@ import org.kabeja.dxf.helpers.Point;
 public class Bounds {
     protected double max_x = Double.NEGATIVE_INFINITY;
     protected double min_x = Double.POSITIVE_INFINITY;
+   
     protected double max_y = Double.NEGATIVE_INFINITY;
     protected double min_y = Double.POSITIVE_INFINITY;
+    
+    protected double max_z = Double.NEGATIVE_INFINITY;
+    protected double min_z = Double.POSITIVE_INFINITY;
     protected boolean set = true;
 
     /**
@@ -43,6 +47,13 @@ public class Bounds {
         this.min_x = min_x;
         this.max_y = max_y;
         this.min_y = min_y;
+    }
+    
+    public Bounds(Bounds b){
+    	  this.max_x = b.getMaximumX();
+          this.min_x = b.getMinimumX();
+          this.max_y = b.getMaximumY();
+          this.min_y = b.getMinimumY();
     }
 
     /**

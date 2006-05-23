@@ -15,14 +15,13 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.kabeja.dxf.helpers.Point;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -59,4 +58,11 @@ public class DXFMLine extends DXFEntity {
     public String getType() {
         return DXFConstants.ENTITY_TYPE_MLINE;
     }
+
+	public double getLength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+    
+    
 }

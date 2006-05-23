@@ -15,10 +15,10 @@
 */
 package org.kabeja.dxf;
 
+import java.util.Map;
+
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-
-import java.util.Map;
 
 
 /**
