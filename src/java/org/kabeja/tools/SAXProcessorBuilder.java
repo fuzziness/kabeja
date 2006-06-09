@@ -107,49 +107,49 @@ public class SAXProcessorBuilder implements ContentHandler {
     public void endElement(String namespaceURI, String localName, String qName)
         throws SAXException {
     	
-        if (localName.equals(ELEMENT_SAXFILTER) && this.config) {
+        if (ELEMENT_SAXFILTER.equals( localName ) && this.config) {
         	
             this.saxfilter.setProperties(properties);
             this.manager.addSAXFilter(this.saxfilter, this.name);
             
-        } else if (localName.equals(ELEMENT_SAXSERIALIZER)) {
+        } else if (ELEMENT_SAXSERIALIZER.equals( localName )) {
         	
             this.saxserializer.setProperties(this.properties);
             this.manager.addSAXSerializer(this.saxserializer, this.name);
             
-        } else if (localName.equals(ELEMENT_PIPELINE)) {
+        } else if (ELEMENT_PIPELINE.equals( localName )) {
         	
             this.manager.addProcessPipeline(this.pipeline);
             
-        } else if (localName.equals(ELEMENT_SERIALIZE)) {
+        } else if (ELEMENT_SERIALIZE.equals( localName )) {
             this.pipeline.setSAXSerializer(this.manager.getSAXSerializer(
                     this.name));
             
             this.pipeline.setSerializerProperties(this.properties);
             
             
-        } else if (localName.equals(ELEMENT_FILTER)) {
+        } else if (ELEMENT_FILTER.equals( localName )) {
         	
             SAXFilterConfig config = new SAXFilterConfig(this.properties);
             config.setFilterName(this.name);
             this.pipeline.addSAXFilterConfig(config);
             
-        } else if (localName.equals(ELEMENT_POSTPROCESS)) {
+        } else if (ELEMENT_POSTPROCESS.equals( localName )) {
         	
             PostProcessorConfig config = new PostProcessorConfig(this.properties);
             config.setPostProcessorName(this.name);
             this.pipeline.addPostProcessorConfig(config);
             
-        } else if (localName.equals(ELEMENT_POSTPROCESSOR)) {
+        } else if (ELEMENT_POSTPROCESSOR.equals( localName )) {
         	
             this.postprocessor.setProperties(this.properties);
             this.manager.addPostProcessor(this.postprocessor, this.name);
             
-        } else if (localName.equals(ELEMENT_CONFIGURATION)) {
+        } else if (ELEMENT_CONFIGURATION.equals( localName )) {
         	
             this.config = false;
             
-        }else if (localName.equals(ELEMENT_GENERATE)) {
+        }else if (ELEMENT_GENERATE.equals( localName )) {
         	if(this.aggregate){
         	    this.aggregator.addSAXGenerator(this.manager.getSAXGenerator(
                     this.name));
@@ -158,7 +158,7 @@ public class SAXProcessorBuilder implements ContentHandler {
                     this.name));
                     
         	}
-        }else if (localName.equals(ELEMENT_SAXGENERATOR)) {
+        }else if (ELEMENT_SAXGENERATOR.equals( localName )) {
         	
             this.saxgenerator.setProperties(this.properties);
             this.manager.addSAXGenerator(this.saxgenerator, this.name);
@@ -228,69 +228,69 @@ public class SAXProcessorBuilder implements ContentHandler {
         String qName, Attributes atts) throws SAXException {
    
     
-    	if (localName.equals(ELEMENT_SAXFILTER) && this.config) {
+    	if (ELEMENT_SAXFILTER.equals( localName ) && this.config) {
         	
             this.properties = new HashMap();
             name = atts.getValue(ATTRIBUTE_NAME);
             saxfilter = (SAXFilter) createInstance(atts.getValue(
                         ATTRIBUTE_CLASS));
             
-        } else if (localName.equals(ELEMENT_SAXSERIALIZER)) {
+        } else if (ELEMENT_SAXSERIALIZER.equals( localName )) {
         	
         	this.properties = new HashMap();
             name = atts.getValue(ATTRIBUTE_NAME);
             saxserializer = (SAXSerializer) createInstance(atts.getValue(
                         ATTRIBUTE_CLASS));
             
-        } else if (localName.equals(ELEMENT_POSTPROCESSOR)) {
+        } else if (ELEMENT_POSTPROCESSOR.equals( localName )) {
         	
             this.properties = new HashMap();
             this.name = atts.getValue(ATTRIBUTE_NAME);
             String clazz = (atts.getValue(ATTRIBUTE_CLASS));
             postprocessor = (PostProcessor) createInstance(clazz);
             
-        } else if (localName.equals(ELEMENT_PIPELINE)) {
+        } else if (ELEMENT_PIPELINE.equals( localName )) {
         	this.aggregate=false;
             this.pipeline = new ProcessPipeline();
             this.pipeline.setName(atts.getValue(ATTRIBUTE_NAME));
             
-        } else if (localName.equals(ELEMENT_SERIALIZE)) {
+        } else if (ELEMENT_SERIALIZE.equals( localName )) {
         	
             this.properties = new HashMap();
             this.name = atts.getValue(ATTRIBUTE_NAME);
             
-        } else if (localName.equals(ELEMENT_FILTER)) {
+        } else if (ELEMENT_FILTER.equals( localName )) {
         	
             this.properties = new HashMap();
             name = atts.getValue(ATTRIBUTE_NAME);
             
-        } else if (localName.equals(ELEMENT_PROPERTY)) {
+        } else if (ELEMENT_PROPERTY.equals( localName )) {
         	
             this.properties.put(atts.getValue(ATTRIBUTE_NAME),
                 atts.getValue(ATTRIBUTE_VALUE));
             
-        } else if (localName.equals(ELEMENT_POSTPROCESS)) {
+        } else if (ELEMENT_POSTPROCESS.equals( localName )) {
         	
             this.properties = new HashMap();
             name = atts.getValue(ATTRIBUTE_NAME);
             
-        } else if (localName.equals(ELEMENT_CONFIGURATION)) {
+        } else if (ELEMENT_CONFIGURATION.equals( localName )) {
         	
             this.config = true;
             
-        }else if (localName.equals(ELEMENT_SAXGENERATOR)) {
+        }else if (ELEMENT_SAXGENERATOR.equals( localName )) {
         	
             this.properties = new HashMap();
             this.name = atts.getValue(ATTRIBUTE_NAME);
             String clazz = (atts.getValue(ATTRIBUTE_CLASS));
             this.saxgenerator = (SAXGenerator) createInstance(clazz);
             
-        }else if (localName.equals(ELEMENT_GENERATE)) {
+        }else if (ELEMENT_GENERATE.equals( localName )) {
         	
           //  this.properties = new HashMap();
             this.name = atts.getValue(ATTRIBUTE_NAME);
             
-        } else if (localName.equals(ELEMENT_AGGREGATE)) {
+        } else if (ELEMENT_AGGREGATE.equals( localName )) {
         	this.aggregate=true;
         	this.aggregator = new AggregatorGenerator();
         	this.pipeline.setSAXGenerator(this.aggregator);

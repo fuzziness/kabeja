@@ -132,15 +132,15 @@ public class PolylineQueue {
 			DXFEntity e = (DXFEntity) i.next();
 			
 			
-			if (e.getType().equals(DXFConstants.ENTITY_TYPE_LINE)) {
+			if (DXFConstants.ENTITY_TYPE_LINE.equals( e.getType() )) {
 				
 				DXFLine line = (DXFLine) e;
 				first = new DXFVertex(line.getEndPoint());
 				pline.addVertex(first);
 
 				
-			} else if (e.getType().equals(DXFConstants.ENTITY_TYPE_POLYLINE)
-					|| e.getType().equals(DXFConstants.ENTITY_TYPE_LWPOLYLINE)) {
+			} else if (DXFConstants.ENTITY_TYPE_POLYLINE.equals( e.getType() )
+					|| DXFConstants.ENTITY_TYPE_LWPOLYLINE.equals( e.getType() )) {
 				
 				DXFPolyline pl = (DXFPolyline) e;
 				double bulge = pl.getVertex(0).getBulge();
@@ -153,7 +153,7 @@ public class PolylineQueue {
 				}
 
 				
-			} else if (e.getType().equals(DXFConstants.ENTITY_TYPE_ARC)) {
+			} else if (DXFConstants.ENTITY_TYPE_ARC.equals( e.getType() )) {
 
 				DXFArc arc = (DXFArc) e;
 				if (arc.getTotalAngle() > 0.0) {
@@ -192,12 +192,12 @@ public class PolylineQueue {
 	}
 
 	protected void reverse(DXFEntity entity) {
-		if (entity.getType().equals(DXFConstants.ENTITY_TYPE_LINE)) {
+		if (DXFConstants.ENTITY_TYPE_LINE.equals( entity.getType() )) {
 			DXFUtils.reverseDXFLine((DXFLine) entity);
-		} else if (entity.getType().equals(DXFConstants.ENTITY_TYPE_POLYLINE)
-				|| entity.getType().equals(DXFConstants.ENTITY_TYPE_LWPOLYLINE)) {
+		} else if (DXFConstants.ENTITY_TYPE_POLYLINE.equals( entity.getType() )
+				|| DXFConstants.ENTITY_TYPE_LWPOLYLINE.equals( entity.getType() )) {
 			DXFUtils.reverseDXFPolyline((DXFPolyline) entity);
-		} else if (entity.getType().equals(DXFConstants.ENTITY_TYPE_ARC)) {
+		} else if (DXFConstants.ENTITY_TYPE_ARC.equals( entity.getType() )) {
 			// we cannot reverse a DXF ARC
 		}
 	}

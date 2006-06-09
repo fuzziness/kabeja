@@ -120,15 +120,15 @@ public class DXF2SVGReader extends XMLFilterImpl {
     public boolean getFeature(String name)
         throws SAXNotRecognizedException, SAXNotSupportedException {
         // throw new SAXNotSupportedException("no feature: " + name);
-        if (name.equals(FEATURE_NAMESPACES)) {
+        if (FEATURE_NAMESPACES.equals(name)) {
             return this.namespaces;
-        } else if (name.equals(FEATURE_NAMESPACES_PREFIX)) {
+        } else if (FEATURE_NAMESPACES_PREFIX.equals( name )) {
             return this.namespacesPrefix;
-        } else if (name.equals(FEATURE_VALIDATION)) {
+        } else if (FEATURE_VALIDATION.equals( name )) {
             return this.validation;
-        } else if (name.equals(FEATURE_EXTERNAL_GENERAL_ENTITIES)) {
+        } else if (FEATURE_EXTERNAL_GENERAL_ENTITIES.equals( name )) {
             return this.externalGeneralEntities;
-        } else if (name.equals(FEATURE_EXTERNAL_PARAMETER_ENTITIES)) {
+        } else if (FEATURE_EXTERNAL_PARAMETER_ENTITIES.equals( name )) {
             return this.externalParameterEntities;
         }
 
@@ -142,15 +142,15 @@ public class DXF2SVGReader extends XMLFilterImpl {
      */
     public void setFeature(String name, boolean value)
         throws SAXNotRecognizedException, SAXNotSupportedException {
-        if (name.equals(FEATURE_NAMESPACES)) {
+        if (FEATURE_NAMESPACES.equals( name )) {
             this.namespaces = value;
-        } else if (name.equals(FEATURE_NAMESPACES_PREFIX)) {
+        } else if (FEATURE_NAMESPACES_PREFIX.equals( name )) {
             this.namespacesPrefix = value;
-        } else if (name.equals(FEATURE_VALIDATION)) {
+        } else if (FEATURE_VALIDATION.equals( name )) {
             this.validation = value;
-        } else if (name.equals(FEATURE_EXTERNAL_GENERAL_ENTITIES)) {
+        } else if (FEATURE_EXTERNAL_GENERAL_ENTITIES.equals( name )) {
             this.externalGeneralEntities = value;
-        } else if (name.equals(FEATURE_EXTERNAL_PARAMETER_ENTITIES)) {
+        } else if (FEATURE_EXTERNAL_PARAMETER_ENTITIES.equals( name )) {
             this.externalParameterEntities = value;
         }
     }
@@ -267,12 +267,12 @@ public class DXF2SVGReader extends XMLFilterImpl {
      */
     public Object getProperty(String name)
         throws SAXNotRecognizedException, SAXNotSupportedException {
-        if (name.equals(PROPERTY_DXF_ENCODING)) {
-            return this.encoding;
-        } else if (name.equals(PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM)) {
+        if (PROPERTY_DXF_ENCODING.equals( name )) {
+            return (Object)this.encoding;
+        } else if (PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM.equals( name )) {
             return null;
-        } else if (name.equals(PROPERTY_PARSER_CONFIGURATION_FILENAME)) {
-            return this.configURL;
+        } else if (PROPERTY_PARSER_CONFIGURATION_FILENAME.equals( name )) {
+            return (Object)this.configURL;
         }
 
         // throw new SAXNotSupportedException("no feature: " + name);
@@ -287,12 +287,12 @@ public class DXF2SVGReader extends XMLFilterImpl {
      */
     public void setProperty(String name, Object value)
         throws SAXNotRecognizedException, SAXNotSupportedException {
-        if (name.equals(PROPERTY_DXF_ENCODING)) {
+        if (PROPERTY_DXF_ENCODING.equals( name )) {
             this.encoding = (String) value;
-        } else if (name.equals(PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM)) {
+        } else if (PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM.equals( name )) {
             InputStream in = (InputStream) value;
             parser = ParserBuilder.buildFromXML(in);
-        } else if (name.equals(PROPERTY_PARSER_CONFIGURATION_FILENAME)) {
+        } else if (PROPERTY_PARSER_CONFIGURATION_FILENAME.equals( name )) {
             this.configURL = (String) value;
             parser = ParserBuilder.buildFromXML(this.configURL);
         }

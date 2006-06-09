@@ -81,7 +81,7 @@ public class DXFParser implements HandlerManager, Handler {
         BufferedReader in = null;
 
         try {
-            if (encoding.equals("")) {
+            if ("".equals( encoding )) {
                 BufferedInputStream buf = new BufferedInputStream(input);
                 buf.mark(9000);
 
@@ -154,11 +154,11 @@ public class DXFParser implements HandlerManager, Handler {
             }
 
             if ((keyCode == COMMAND_CODE) &&
-                    value.trim().equals(SECTION_START) && !sectionstarts) {
+                    SECTION_START.equals( value.trim() ) && !sectionstarts) {
                 sectionstarts = true;
             }
 
-            if ((keyCode == COMMAND_CODE) && value.trim().equals(SECTION_END)) {
+            if ((keyCode == COMMAND_CODE) && SECTION_END.equals( value.trim() )) {
                 if (parse) {
                     currentHandler.endSection();
                 }

@@ -114,7 +114,7 @@ public class DXFPolylineHandler extends AbstractEntityHandler {
      */
     public void parseGroup(int groupCode, DXFValue value) {
         if ((groupCode == END_SEQUENCE_CODE)
-                || value.getValue().equals(END_SEQUENCE)) {
+                || END_SEQUENCE.equals( value.getValue() )) {
             polyline.addVertex(vertex);
             follow = false;
 
@@ -124,7 +124,7 @@ public class DXFPolylineHandler extends AbstractEntityHandler {
         switch (groupCode) {
         case DXFEntitiesSectionHandler.ENTITY_START:
 
-            if (value.getValue().equals(ENTITY_VERTEX)) {
+            if (ENTITY_VERTEX.equals( value.getValue() )) {
                 // store the old before
                 if (parse_vertex) {
                     polyline.addVertex(vertex);

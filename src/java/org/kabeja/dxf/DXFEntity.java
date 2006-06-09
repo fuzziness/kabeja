@@ -177,9 +177,9 @@ public abstract class DXFEntity implements SVGFragmentGenerator {
         double gscale = this.doc.getDXFHeader().getLinetypeScale();
 
         if ((this.lineType.length() > 0) &&
-                !this.lineType.equals("CONTINUOUS") &&
-                !this.lineType.equals("BYBLOCK") &&
-                !this.lineType.equals("BYLAYER") && !isOmitLineType()) {
+                !"CONTINUOUS".equals( this.lineType ) &&
+                !"BYBLOCK".equals( this.lineType ) &&
+                !"BYLAYER".equals( this.lineType ) && !isOmitLineType()) {
             DXFLineType ltype = doc.getDXFLineType(this.lineType);
 
             gscale = gscale * this.linetypeScaleFactor;

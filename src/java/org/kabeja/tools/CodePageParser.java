@@ -52,16 +52,16 @@ public class CodePageParser {
                     key = true;
 
                     // we read the first section
-                    if (line.equals(DXFConstants.SECTION_END)) {
+                    if (DXFConstants.SECTION_END.equals(line)) {
                         return encoding;
-                    } else if (line.equals(CODEPAGE_CODE)) {
+                    } else if (CODEPAGE_CODE.equals(line)) {
                         codepage = true;
                     } else if (codepage && currentKey.equals("3")) {
                         // the encoding
                         return translateCodePage(line);
-                    } else if (line.equals(DXFConstants.SECTION_CLASSES) ||
-                            line.equals(DXFConstants.SECTION_BLOCKS) ||
-                            line.equals(DXFConstants.SECTION_ENTITIES)) {
+                    } else if (DXFConstants.SECTION_CLASSES.equals(line) ||
+                            DXFConstants.SECTION_BLOCKS.equals(line)||
+                            DXFConstants.SECTION_ENTITIES.equals(line)) {
                         return encoding;
                     }
                 }

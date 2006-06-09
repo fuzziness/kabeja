@@ -19,7 +19,7 @@ public class LayerMerger implements PostProcessor {
 		Iterator i = doc.getDXFLayerIterator();
 		while (i.hasNext()) {
 			DXFLayer layer = (DXFLayer) i.next();
-			if (!layer.getName().equals(DXFConstants.DEFAULT_LAYER)) {
+			if (!DXFConstants.DEFAULT_LAYER.equals( layer.getName() )) {
 				Iterator types = layer.getDXFEntityTypeIterator();
 				while (types.hasNext()) {
                     String type =(String)types.next();

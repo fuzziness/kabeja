@@ -59,12 +59,12 @@ public class ImageBase64Encoder extends XMLFilterImpl implements SAXFilter {
      */
     public void startElement(String uri, String localName, String qName,
         Attributes atts) throws SAXException {
-        if (localName.equals(ELEMENT_IMAGE)) {
+        if (ELEMENT_IMAGE.equals( localName )) {
             boolean resolved = false;
             AttributesImpl attr = new AttributesImpl(atts);
 
             for (int i = 0; i < attr.getLength(); i++) {
-                if (attr.getLocalName(i).equals(XLINK_ATTRIBUTE_HREF)) {
+                if (XLINK_ATTRIBUTE_HREF.equals( attr.getLocalName(i) )) {
                     String file = attr.getValue(i);
                     String base = encodeBase64(file);
 

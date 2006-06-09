@@ -61,7 +61,7 @@ public class DXFViewportTableHandler extends AbstractTableHandler {
         case GROUPCODE_VPORT_NAME:
             viewport.setName(value.getValue());
 
-            if (value.getValue().toLowerCase().equals("*active")) {
+            if ("*active".equals( value.getValue().toLowerCase() )) {
                 viewport.setActive(true);
             }
 
