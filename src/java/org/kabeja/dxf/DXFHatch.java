@@ -335,39 +335,39 @@ public class DXFHatch extends DXFEntity {
      */
     public void toSAX(ContentHandler handler, Map svgContext)
         throws SAXException {
-        Iterator i = boundaries.iterator();
-
-        StringBuffer buf = new StringBuffer();
-
-        while (i.hasNext()) {
-            HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
-
-            Iterator inner = loop.getBoundaryEdgesIterator();
-
-            while (inner.hasNext()) {
-                DXFEntity entity = (DXFEntity) inner.next();
-
-                SVGPathBoundaryElement part = (SVGPathBoundaryElement) entity;
-                buf.append(' ');
-                buf.append(part.getSVGPath());
-                buf.append(' ');
-            }
-        }
-
-        AttributesImpl attr = new AttributesImpl();
-
-        // super.setCommonAttributes(attr);
-        SVGUtils.addAttribute(attr, "d", buf.toString());
-        SVGUtils.addAttribute(attr, "fill-rule", "evenodd");
-
-        if (isSolid()) {
-            SVGUtils.addAttribute(attr, "fill", "currentColor");
-        } else {
-             SVGUtils.addAttribute(attr, "fill","url(#"+this.getPatternID()+")");
-            // SVGUtils.addAttribute(attr, "fill", "blue");
-        }
-
-        SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
+//        Iterator i = boundaries.iterator();
+//
+//        StringBuffer buf = new StringBuffer();
+//
+//        while (i.hasNext()) {
+//            HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
+//
+//            Iterator inner = loop.getBoundaryEdgesIterator();
+//
+//            while (inner.hasNext()) {
+//                DXFEntity entity = (DXFEntity) inner.next();
+//
+//                SVGPathBoundaryElement part = (SVGPathBoundaryElement) entity;
+//                buf.append(' ');
+//                buf.append(part.getSVGPath());
+//                buf.append(' ');
+//            }
+//        }
+//
+//        AttributesImpl attr = new AttributesImpl();
+//
+//        // super.setCommonAttributes(attr);
+//        SVGUtils.addAttribute(attr, "d", buf.toString());
+//        SVGUtils.addAttribute(attr, "fill-rule", "evenodd");
+//
+//        if (isSolid()) {
+//            SVGUtils.addAttribute(attr, "fill", "currentColor");
+//        } else {
+//             SVGUtils.addAttribute(attr, "fill","url(#"+this.getPatternID()+")");
+//            // SVGUtils.addAttribute(attr, "fill", "blue");
+//        }
+//
+//        SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
     }
 
     /**

@@ -93,7 +93,7 @@ public class DXFArc extends DXFEntity implements SVGPathBoundaryElement {
 
 		AttributesImpl attr = new AttributesImpl();
 
-		SVGUtils.addAttribute(attr, "d", getSVGPath());
+		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_PATH, getSVGPath());
 
 		super.setCommonAttributes(attr);
 		SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);

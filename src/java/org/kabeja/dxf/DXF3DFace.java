@@ -104,16 +104,16 @@ public class DXF3DFace extends DXFSolid {
 			throws SAXException {
 		AttributesImpl attr = new AttributesImpl();
 		// set the attributes
-		SVGUtils.addAttribute(attr, "x1", "" + p1.getX());
+		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_X1, "" + p1.getX());
 
 		double value = doc.translateY(p1.getY());
-		SVGUtils.addAttribute(attr, "y1", "" + value);
+		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_Y1, "" + value);
 
-		SVGUtils.addAttribute(attr, "x2", "" + p2.getX());
+		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_X2, "" + p2.getX());
 
 		value = doc.translateY(p2.getY());
 
-		SVGUtils.addAttribute(attr, "y2", "" + value);
+		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_Y2, "" + value);
 		super.setCommonAttributes(attr);
 		SVGUtils.emptyElement(handler, SVGConstants.SVG_LINE, attr);
 	}

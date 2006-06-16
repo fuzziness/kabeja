@@ -94,19 +94,19 @@ public class DXFHatchPattern implements SVGGenerator {
 
             // we convert the pattern as one path element
            // StringBuffer buf = new StringBuffer();
-            Iterator i = patterns.iterator();
+//            Iterator i = patterns.iterator();
 
             // System.out.println("PATTERN:\nName:" + hatch.getName());
-            while (i.hasNext()) {
-                HatchLinePattern pattern = (HatchLinePattern) i.next();
-
-                attr = new AttributesImpl();
-                SVGUtils.addAttribute(attr, "d", createLineType(bounds,
-                        pattern, dotLength));
-                SVGUtils.addAttribute(attr, "stroke", "red");
-                SVGUtils.addAttribute(attr, "stroke-width", "0.01%");
-                SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
-            }
+//            while (i.hasNext()) {
+//                HatchLinePattern pattern = (HatchLinePattern) i.next();
+//
+//                attr = new AttributesImpl();
+//                SVGUtils.addAttribute(attr, "d", this.createLineType(bounds,
+//                        pattern, dotLength));
+//                SVGUtils.addAttribute(attr, "stroke", "red");
+//                SVGUtils.addAttribute(attr, "stroke-width", "0.01%");
+//                SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
+//            }
             SVGUtils.endElement(handler, SVGConstants.SVG_PATTERN);
         }
     }
@@ -143,13 +143,13 @@ public class DXFHatchPattern implements SVGGenerator {
         StringBuffer buf = new StringBuffer();
         Point base = pattern.getBasePoint();
         Point offset = pattern.getOffsetPoint();
-        b.debug();
-        System.out.println("base:" + base);
-        System.out.println("baseX:" + pattern.getBaseX() + "         baseY:"
-                + pattern.getBaseY());
-        System.out.println("offset:" + offset);
-        System.out.println("offsetX:" + pattern.getOffsetX()
-                + "         offsetY:" + pattern.getOffsetY());
+ //       b.debug();
+//        System.out.println("base:" + base);
+//        System.out.println("baseX:" + pattern.getBaseX() + "         baseY:"
+//                + pattern.getBaseY());
+//        System.out.println("offset:" + offset);
+//        System.out.println("offsetX:" + pattern.getOffsetX()
+//                + "         offsetY:" + pattern.getOffsetY());
 
         double startx = 0;
         if (base.getX() < b.getMinimumX()) {
@@ -179,9 +179,9 @@ public class DXFHatchPattern implements SVGGenerator {
 
         double angle = pattern.getRotationAngle();
 
-        System.out.println("angle:" + pattern.getRotationAngle() + " fix="
-                + angle);
-        System.out.println("startx:" + startx + "    starty:" + starty);
+//        System.out.println("angle:" + pattern.getRotationAngle() + " fix="
+//                + angle);
+//        System.out.println("startx:" + startx + "    starty:" + starty);
         angle = Math.toRadians(angle);
         double y = starty;
         double x = startx;
@@ -255,7 +255,7 @@ public class DXFHatchPattern implements SVGGenerator {
                  startx += Math.abs(offset.getX());
             }
         }
-        System.out.println("pattern length:" + buf.length());
+        //System.out.println("pattern length:" + buf.length());
         return buf.toString();
     }
 }

@@ -45,7 +45,7 @@ public class DXF2SVGGenerator extends AbstractSAXGenerator {
 
 	private double margin;
 
-	private boolean paperspace = false;
+	private boolean paperspace = true;
 
 	private boolean modelspace = true;
 
@@ -229,7 +229,7 @@ public class DXF2SVGGenerator extends AbstractSAXGenerator {
 
 			while (i.hasNext()) {
 				DXFEntity entity = (DXFEntity) i.next();
-				this.entityToSAX(entity, this.paperspace);
+				this.entityToSAX(entity);
 			}
 
 			SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
@@ -240,26 +240,29 @@ public class DXF2SVGGenerator extends AbstractSAXGenerator {
 
 	}
 
-	protected void entityToSAX(DXFEntity entity, boolean onpaperspace) {
+	protected void entityToSAX(DXFEntity entity) {
 		try {
-			if (onpaperspace) {
+			if (this.paperspace) {
 				if (!entity.isModelSpace()) {
-					entity.toSAX(handler, this.properties);
+					entity.toSAX(this.handler, this.properties);
 				}
-			} else if (entity.isModelSpace()) {
-				entity.toSAX(handler, this.properties);
+			}
+			if (this.modelspace) {
+				if (entity.isModelSpace()) {
+					entity.toSAX(this.handler, this.properties);
+				}
 			}
 		} catch (SAXException e) {
-			
+
 			e.printStackTrace();
 		}
 	}
 
 	protected void layerToSAX(DXFLayer layer) {
 		try {
-			layer.toSAX(handler, context);
+			layer.toSAX(this.handler, this.context);
 		} catch (SAXException e) {
-			
+
 			e.printStackTrace();
 		}
 	}

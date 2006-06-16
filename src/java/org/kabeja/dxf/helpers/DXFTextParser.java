@@ -612,11 +612,10 @@ public class DXFTextParser {
                                 buf.append(c);
                                 i += 2;
                             } catch (NumberFormatException e) {
-                                System.out.println("Text:" + text +
-                                    " Character:" + c);
-
-                                // TODO sometimes there are only one
-                                // digit
+    
+                                // TODO sometimes there is only one
+                                // digit, so what should be the 
+                            	//replacement???
                                 buf.append('?');
                                 i++;
                             }

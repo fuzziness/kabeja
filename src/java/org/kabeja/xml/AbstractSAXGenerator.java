@@ -15,6 +15,7 @@
 */
 package org.kabeja.xml;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
@@ -26,12 +27,13 @@ public abstract class AbstractSAXGenerator implements SAXGenerator {
 
 	protected ContentHandler handler;
 
-	protected Map properties;
+	protected Map properties= new HashMap();
 
 	public void generate(DXFDocument doc, ContentHandler handler) {
 		this.doc = doc;
 		this.handler = handler;
 		this.generate();
+		
 	}
 
 	public void setProperties(Map properties) {

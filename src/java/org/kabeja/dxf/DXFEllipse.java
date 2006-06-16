@@ -68,14 +68,14 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 			SVGUtils.addAttribute(attr, "ry", "" + minor);
 			// chek for rotation
 
-			if (this.majorAxisDirection.getY() != 0.0) {
-				double angle = Math
-						.atan(1 / (this.majorAxisDirection.getY() / this.majorAxisDirection
-								.getX()));
-				SVGUtils.addAttribute(attr, "transform", "rotate(" + angle
-						+ "  " + this.center.getX() + " " + this.center.getY()
-						+ ")");
-			}
+//			if (this.majorAxisDirection.getY() != 0.0) {
+//				double angle = Math
+//						.atan(1 / (this.majorAxisDirection.getY() / this.majorAxisDirection
+//								.getX()));
+//				SVGUtils.addAttribute(attr, "transform", "rotate(" + angle
+//						+ "  " + this.center.getX() + " " + this.center.getY()
+//						+ ")");
+//			}
 
 			double angle = this.getRotationAngle();
 			if (angle != 0.0) {

@@ -127,8 +127,6 @@
 		<gzip zipfile="${packages}/${releasename}-latest.tar.gz" src="${packages}/${releasename}.tar" />
 		<delete file="${packages}/${releasename}.tar" />
 		<delete dir="${tempdir}" />
-
-
 	</target>
 
 

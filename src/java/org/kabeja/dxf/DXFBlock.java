@@ -155,7 +155,7 @@ public class DXFBlock implements SVGFragmentGenerator {
     public void toSAX(ContentHandler handler, Map svgContext)
         throws SAXException {
         AttributesImpl attr = new AttributesImpl();
-        SVGUtils.addAttribute(attr, "id", SVGUtils.validateID(getName()));
+        SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils.validateID(getName()));
 
         // SVGUtils.addAttribute(attr,"stroke-width","0.1");
         // String b = bounds.getMinimumX()+"
