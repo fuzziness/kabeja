@@ -51,6 +51,17 @@ in the 'dist'-folder try:
   
    java -jar launcher.jar -e ISO-8859-1 myumlautfile.dxf result.svg
   
+Normally Java uses 64 MB of your memory, to setup more use the following commandline
+switch:  
+
+java -Xmx256m  -jar ..... 
+  
+
+To get a short overview of the commandline switches use:
+
+java -jar launcher.jar 
+
+
   
 GUI-Viewer:
 -----------

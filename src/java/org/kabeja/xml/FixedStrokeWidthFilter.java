@@ -24,9 +24,9 @@ public class FixedStrokeWidthFilter extends AbstractSAXFilter {
 
 	public final static String PERCENT = "%";
 
-	protected int strokeWidth;
+	protected int strokeWidth=1;
 
-	protected double strokeBase;
+	protected double strokeBase=0;
 
 	protected boolean replace = true;
 
@@ -65,6 +65,7 @@ public class FixedStrokeWidthFilter extends AbstractSAXFilter {
 
 	protected void parseViewBox(String viewBox) {
 
+		//parse the viewbox data, white separate list of numbers
 		String[] data = viewBox.split("(\\s+)");
 
 		if (data.length == 4) {

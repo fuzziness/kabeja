@@ -77,6 +77,8 @@
 		<copy todir="${dist}/${libs}">
 			<fileset dir="${libs}">
 				<include name="**/*" />
+				<exclude name="**/cvs/*"/>
+				<exclude name="**/cvs"/>
 			</fileset>
 		</copy>
 
