@@ -15,6 +15,7 @@
 			<filter class="org.kabeja.xslt.SAXXSLTFilter" name="xslt">
 				<property name="http://xml.org/sax/features/is-standalone/" value="true"/>
 			</filter>
+			<filter class="org.kabeja.xml.FixedStrokeWidthFilter" name="fixed-stroke-width"/>
 		</filters>
 		
 		<serializers>
@@ -53,7 +54,6 @@
 		
 		
 		<pipeline name="jpeg">
-			<postprocess name="bounds.debugger"/>
 			<generate name="svg"/>
 			<serialize name="jpeg">
 				<property name="width" value="1024"/>
@@ -61,6 +61,21 @@
 			</serialize>
 		</pipeline>
 		
+		<pipeline name="png">
+			<generate name="svg"/>
+			<serialize name="png">
+				<property name="width" value="1024"/>
+				<property name="height" value="768"/>
+			</serialize>
+		</pipeline>
+
+		<pipeline name="tiff">
+			<generate name="svg"/>
+			<serialize name="tiff">
+				<property name="width" value="1024"/>
+				<property name="height" value="768"/>
+			</serialize>
+		</pipeline>
 		
 		<pipeline name="pdf">
 		  	<generate name="svg"/>
@@ -94,6 +109,16 @@
 			</filter>
 			<serialize name="svg"/>
 		</pipeline>
+			
+	   <pipeline name="mozilla">
+	        <generate name="svg"/>
+	        <!--  Mozilla based browser only render svg with a 
+	              fixed stroke-width, a percent value will cause a
+	              crashing Mozilla -->
+	        <filter name="fixed-stroke-width"/>
+	        <serialize name="svg"/>
+	   </pipeline>
+			
 			
 	</pipelines>
 	

@@ -142,8 +142,7 @@ public class Main {
                         String result = source.substring(0,
                                 source.toLowerCase().lastIndexOf(".dxf")) +
                             extension;
-                        System.out.println("convert file:" + source + " to:" +
-                            result);
+                        System.out.println("convert file:" + source);
                         parseFile(files[i], result);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -180,18 +179,21 @@ public class Main {
 
     private void parseFile(File f, String output) {
         try {
-            parser.parse(new FileInputStream(f), encoding);
+            this.parser.parse(new FileInputStream(f), encoding);
 
             DXFDocument doc = parser.getDocument();
 
-            if (process) {
+            if (this.process) {
                 if (this.directoryMode) {
+                	
                     this.processorManager.process(doc, new HashMap(),
                         this.pipeline, f.getAbsolutePath());
                 } else {
                     // user set name
+                	
                     this.processorManager.process(doc, new HashMap(),
                         this.pipeline, new FileOutputStream(output));
+                    
                 }
             } else {
                 OutputStream out = null;
@@ -208,7 +210,7 @@ public class Main {
                 if (this.outputDTD) {
                     writer.setDTD(SVGConstants.SVG_DTD_1_0);
                 }
-
+            
                 doc.toSAX(writer, null);
             }
         } catch (Exception e) {

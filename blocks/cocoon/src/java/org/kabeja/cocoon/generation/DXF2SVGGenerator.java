@@ -157,7 +157,7 @@ public class DXF2SVGGenerator extends AbstractGenerator
     public void parameterize(Parameters params) throws ParameterException {
         if (params.isParameter(PARAMETER_CONFIG)) {
             try {
-                initParser(params.getParameter(PARAMETER_CONFIG));
+                this.initParser(params.getParameter(PARAMETER_CONFIG));
             } catch (Exception e) {
                 log.error("Configuration failed:" + e.getMessage());
                 throw new ParameterException("DXFParserConfiguration");

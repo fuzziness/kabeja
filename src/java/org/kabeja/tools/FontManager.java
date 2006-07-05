@@ -72,7 +72,7 @@ public class FontManager {
                     }
                 }
             } else {
-                System.out.println("no font.properties");
+               // System.out.println("no font.properties");
             }
         } catch (Exception e) {
             e.printStackTrace();

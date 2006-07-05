@@ -347,9 +347,7 @@ public class DXFTextParser {
     public static TextDocument parseDXFText(DXFText text) {
         TextDocument doc = new TextDocument();
 
-        // initialize
-        boolean overline = false;
-        boolean underline = false;
+ 
         boolean asciicontrol = false;
         StringBuffer buf = new StringBuffer();
 
@@ -398,6 +396,11 @@ public class DXFTextParser {
         int marker = 0;
         char c;
 
+        // initialize
+        boolean overline = false;
+        boolean underline = false;
+        
+        
         for (int i = 0; i < str.length(); i++) {
             c = str.charAt(i);
 
@@ -409,6 +412,7 @@ public class DXFTextParser {
                 } else if (marker == 2) {
                     switch (c) {
                     case 'o':
+                    	overline=true;
                         p.setText(buf.toString());
                         p.setUnderline(underline);
                         p.setOverline(overline);
@@ -421,6 +425,7 @@ public class DXFTextParser {
                         break;
 
                     case 'u':
+                    
                         p.setText(buf.toString());
                         p.setUnderline(underline);
                         p.setOverline(overline);
@@ -428,7 +433,7 @@ public class DXFTextParser {
                         p = createParagraphFromParent(p);
 
                         buf.delete(0, buf.length());
-                        underline = !underline;
+                    	underline = !underline;
                         p.setUnderline(underline);
 
                         break;

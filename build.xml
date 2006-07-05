@@ -87,17 +87,43 @@
 
 
 
-	<target name="dist" depends="config,manifest,blocks" description="Build Kabeja (default).">
+	<target name="dist" depends="config,manifest,blocks" description="Building  Kabeja (default).">
 		<jar jarfile="${dist}/${libs}/${releasename}.jar" basedir="${build}/${classes}" excludes="org/kabeja/Loader.class" includes="**/*" manifest="${manifest}" />
 		<jar jarfile="${dist}/launcher.jar" basedir="${build}/${classes}" includes="org/kabeja/Loader.class" manifest="${manifest}" />
 		<delete file="${manifest}" />
 	</target>
 
-	<target name="binary-dist" depends="dist" >
+	
+	<target name="complete-release" depends="clean">
+		<antcall target="source-release"/>
+		<antcall target="binary-release"/>
+	</target>
+	
+	<target name="complete-snapshot" depends="clean">
+		<antcall target="source-release"/>
+		<antcall target="binary-release"/>
+	</target>
+	
+	
+	<target name="binary-release" description="Creates a full source realease.">
+		<antcall target="binary-dist">
+		  <param name="version-number" value="${releaseversion}"/>
+		</antcall>
+	</target>
+	
+	<target name="binary-snapshot" description="Creates a full source realease.">
+		<tstamp/>
+		<antcall target="binary-dist">
+		  <param name="version-number" value="${DSTAMP}"/>
+		</antcall>	
+	</target>
+	
+	
+	
+	<target name="binary-dist" depends="dist" if="version-number">
 		<delete dir="${tempdir}" />
-		<tstamp />
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}">
 			<fileset file="build.xml" />
 			<fileset file="font.xml" />
 			<fileset file="README" />
@@ -105,43 +131,55 @@
 			<fileset file="INSTALL"/>
 		</copy>
 
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${libs}" />
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${libs}" />
 
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${legal}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${legal}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${legal}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${legal}">
 			<fileset dir="${legal}" />
 		</copy>
 		<!-- the samples -->
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${samples}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${samples}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${samples}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${samples}">
 			<fileset dir="${samples}" />
 		</copy>
 
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${dist}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${dist}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${dist}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${dist}">
 			<fileset dir="${dist}" />
 		</copy>
 
-		<zip zipfile="${packages}/${releasename}-latest.zip">
+		<zip zipfile="${packages}/${releasename}-${version-number}.zip">
 			<zipfileset dir="${tempdir}" />
 		</zip>
 		<tar tarfile="${packages}/${releasename}.tar" basedir="${tempdir}" />
-		<gzip zipfile="${packages}/${releasename}-latest.tar.gz" src="${packages}/${releasename}.tar" />
+		<gzip zipfile="${packages}/${releasename}-${version-number}.tar.gz" src="${packages}/${releasename}.tar" />
 		<delete file="${packages}/${releasename}.tar" />
 		<delete dir="${tempdir}" />
 	</target>
 
 
 
+	<target name="source-release" description="Creates a full source realease.">
+		<antcall target="source-dist">
+		  <param name="version-number" value="${releaseversion}"/>
+		</antcall>
+	</target>
+	
+	<target name="source-snapshot" description="Creates a full source snapshot.">
+		<tstamp/>
+		<antcall target="source-dist">
+		  <param name="version-number" value="${DSTAMP}"/>
+		</antcall>	
+	</target>
+	
 
 
-
-	<target name="source-dist" depends="">
+	<target name="source-dist" depends="" if="version-number">
 		<delete dir="${tempdir}" />
-		<tstamp />
+	
 
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}">
 			<fileset file="build.xml" />
 			<fileset file="font.xml" />
 			<fileset file="README" />
@@ -149,47 +187,47 @@
 			<fileset file="INSTALL"/>
 		</copy>
 
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${src}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${src}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${src}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${src}">
 			<fileset dir="${src}" />
 		</copy>
 
    		<!-- the libs -->
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${libs}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${libs}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${libs}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${libs}">
 			<fileset dir="${libs}" />
 		</copy>
 
 		<!-- the blocks -->
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${blocks}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${blocks}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${blocks}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${blocks}">
 			<fileset dir="${blocks}" />
 		</copy>
 
 
 		<!-- the tools -->
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${tools}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${tools}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${tools}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${tools}">
 			<fileset dir="${tools}" />
 		</copy>
 
 		<!-- the samples -->
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${samples}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${samples}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${samples}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${samples}">
 			<fileset dir="${samples}" />
 		</copy>
 
 		<!-- the legal -->
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${legal}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${legal}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${legal}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${legal}">
 			<fileset dir="${legal}" />
 		</copy>
 
 
 
 		<!-- the legal -->
-		<mkdir dir="${tempdir}/${releasename}-${DSTAMP}/${conf}" />
-		<copy todir="${tempdir}/${releasename}-${DSTAMP}/${conf}">
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${conf}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${conf}">
 			<fileset dir="${conf}" />
 		</copy>
 
@@ -197,9 +235,9 @@
 
 		<mkdir dir="${packages}" />
 		<tar tarfile="${releasename}-src.tar" basedir="${tempdir}" />
-		<gzip zipfile="${packages}/${releasename}-latest-src.tar.gz" src="${releasename}-src.tar" />
+		<gzip zipfile="${packages}/${releasename}-${version-number}-src.tar.gz" src="${releasename}-src.tar" />
 		<delete file="${releasename}-src.tar" />
-		<zip zipfile="${packages}/${releasename}-latest-src.zip">
+		<zip zipfile="${packages}/${releasename}-${version-number}-src.zip">
 			<zipfileset dir="${tempdir}" />
 		</zip>
 	</target>
