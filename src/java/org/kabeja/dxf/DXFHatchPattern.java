@@ -124,8 +124,8 @@ public class DXFHatchPattern implements SVGGenerator {
      *
      * @return Returns the hatch.
      */
-    public DXFHatch getHatch() {
-        return hatch;
+    public DXFHatch getDXFHatch() {
+        return this.hatch;
     }
 
     /**
@@ -138,7 +138,17 @@ public class DXFHatchPattern implements SVGGenerator {
         this.hatch = hatch;
     }
 
-    protected String createLineType(Bounds b, HatchLinePattern pattern,
+    /**
+     * Creates a SVG path of the used line family
+     * and fill the complete given bounds.
+     * 
+     * @param b - The bounds of the DXFHatch
+     * @param pattern the pattern of the line family
+     * @param dotlength 
+     * @return
+     */
+    
+    protected String getSVGPath(Bounds b, HatchLinePattern pattern,
             double dotlength) {
         StringBuffer buf = new StringBuffer();
         Point base = pattern.getBasePoint();

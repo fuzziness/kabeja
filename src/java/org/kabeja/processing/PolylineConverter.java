@@ -32,7 +32,7 @@ import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;
 import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.tools.helpers.PolylineQueue;
+import org.kabeja.processing.helper.PolylineQueue;
 
 public class PolylineConverter implements PostProcessor {
 

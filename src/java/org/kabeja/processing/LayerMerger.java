@@ -38,6 +38,8 @@ public class LayerMerger implements PostProcessor {
                     }
              
 				}
+				//remove the layer
+				i.remove();
 			}
 		}
 	}

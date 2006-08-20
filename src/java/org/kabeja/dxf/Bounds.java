@@ -1,22 +1,21 @@
 /*
-   Copyright 2005 Simon Mieth
+ Copyright 2005 Simon Mieth
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+ http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 package org.kabeja.dxf;
 
 import org.kabeja.dxf.helpers.Point;
-
 
 /**
  * This class is a helper class and reflect a viewport of a entity/layer or
@@ -26,214 +25,224 @@ import org.kabeja.dxf.helpers.Point;
  *
  */
 public class Bounds {
-    protected double max_x = Double.NEGATIVE_INFINITY;
-    protected double min_x = Double.POSITIVE_INFINITY;
-   
-    protected double max_y = Double.NEGATIVE_INFINITY;
-    protected double min_y = Double.POSITIVE_INFINITY;
-    
-    protected double max_z = Double.NEGATIVE_INFINITY;
-    protected double min_z = Double.POSITIVE_INFINITY;
-    protected boolean set = true;
+	protected double max_x = Double.NEGATIVE_INFINITY;
 
-    /**
-     *
-     */
-    public Bounds() {
-    }
+	protected double min_x = Double.POSITIVE_INFINITY;
 
-    public Bounds(double max_x, double min_x, double max_y, double min_y) {
-        this.max_x = max_x;
-        this.min_x = min_x;
-        this.max_y = max_y;
-        this.min_y = min_y;
-    }
-    
-    public Bounds(Bounds b){
-    	  this.max_x = b.getMaximumX();
-          this.min_x = b.getMinimumX();
-          this.max_y = b.getMaximumY();
-          this.min_y = b.getMinimumY();
-    }
+	protected double max_y = Double.NEGATIVE_INFINITY;
 
-    /**
-     * @return Returns the max_x.
-     */
-    public double getMaximumX() {
-        return max_x;
-    }
+	protected double min_y = Double.POSITIVE_INFINITY;
 
-    /**
-     * @param max_x
-     *            The max_x to set.
-     */
-    public void setMaximumX(double max_x) {
-        this.max_x = max_x;
-    }
+	protected double max_z = Double.NEGATIVE_INFINITY;
 
-    /**
-     * @return Returns the max_y.
-     */
-    public double getMaximumY() {
-        return max_y;
-    }
+	protected double min_z = Double.POSITIVE_INFINITY;
 
-    /**
-     * @param max_y
-     *            The max_y to set.
-     */
-    public void setMaximumY(double max_y) {
-        this.max_y = max_y;
-    }
+	protected boolean set = true;
 
-    /**
-     * @return Returns the min_x.
-     */
-    public double getMinimumX() {
-        return min_x;
-    }
+	/**
+	 *
+	 */
+	public Bounds() {
+	}
 
-    /**
-     * @param min_x
-     *            The min_x to set.
-     */
-    public void setMinimumX(double min_x) {
-        this.min_x = min_x;
-    }
+	public Bounds(double max_x, double min_x, double max_y, double min_y) {
+		this.max_x = max_x;
+		this.min_x = min_x;
+		this.max_y = max_y;
+		this.min_y = min_y;
+	}
 
-    /**
-     * @return Returns the min_y.
-     */
-    public double getMinimumY() {
-        return min_y;
-    }
+	public Bounds(Bounds b) {
+		this.max_x = b.getMaximumX();
+		this.min_x = b.getMinimumX();
+		this.max_y = b.getMaximumY();
+		this.min_y = b.getMinimumY();
+	}
 
-    /**
-     * @param min_y
-     *            The min_y to set.
-     */
-    public void setMinimumY(double min_y) {
-        this.min_y = min_y;
-    }
+	/**
+	 * @return Returns the max_x.
+	 */
+	public double getMaximumX() {
+		return max_x;
+	}
 
-    /**
-     * Enlarge the Bounds to the given Bounds if they enlarge the area.
-     *
-     * @param bounds
-     */
-    public void addToBounds(Bounds bounds) {
-        if (bounds.getMaximumX() > this.getMaximumX()) {
-            this.setMaximumX(bounds.getMaximumX());
-        }
+	/**
+	 * @param max_x
+	 *            The max_x to set.
+	 */
+	public void setMaximumX(double max_x) {
+		this.max_x = max_x;
+	}
 
-        if (bounds.getMaximumY() > this.getMaximumY()) {
-            this.setMaximumY(bounds.getMaximumY());
-        }
+	/**
+	 * @return Returns the max_y.
+	 */
+	public double getMaximumY() {
+		return max_y;
+	}
 
-        if (bounds.getMinimumX() < this.getMinimumX()) {
-            this.setMinimumX(bounds.getMinimumX());
-        }
+	/**
+	 * @param max_y
+	 *            The max_y to set.
+	 */
+	public void setMaximumY(double max_y) {
+		this.max_y = max_y;
+	}
 
-        if (bounds.getMinimumY() < this.getMinimumY()) {
-            this.setMinimumY(bounds.getMinimumY());
-        }
-    }
+	/**
+	 * @return Returns the min_x.
+	 */
+	public double getMinimumX() {
+		return min_x;
+	}
 
-    /**
-     * Enlarge the Bounds if the given bounds enlarge the Bounds.
-     *
-     * @param x
-     * @param y
-     */
-    public void addToBounds(double x, double y) {
-        if (x > this.getMaximumX()) {
-            this.setMaximumX(x);
-        }
+	/**
+	 * @param min_x
+	 *            The min_x to set.
+	 */
+	public void setMinimumX(double min_x) {
+		this.min_x = min_x;
+	}
 
-        if (x < this.getMinimumX()) {
-            this.setMinimumX(x);
-        }
+	/**
+	 * @return Returns the min_y.
+	 */
+	public double getMinimumY() {
+		return min_y;
+	}
 
-        if (y > this.getMaximumY()) {
-            this.setMaximumY(y);
-        }
+	/**
+	 * @param min_y
+	 *            The min_y to set.
+	 */
+	public void setMinimumY(double min_y) {
+		this.min_y = min_y;
+	}
 
-        if (y < this.getMinimumY()) {
-            this.setMinimumY(y);
-        }
-    }
+	/**
+	 * Enlarge the Bounds to the given Bounds if they enlarge the area.
+	 *
+	 * @param bounds
+	 */
+	public void addToBounds(Bounds bounds) {
+		if (bounds.getMaximumX() > this.getMaximumX()) {
+			this.setMaximumX(bounds.getMaximumX());
+		}
 
-    public void addToBounds(Point p) {
-        addToBounds(p.getX(), p.getY());
-    }
+		if (bounds.getMaximumY() > this.getMaximumY()) {
+			this.setMaximumY(bounds.getMaximumY());
+		}
 
-    public double getWidth() {
-        return Math.abs(getMaximumX() - getMinimumX());
-    }
+		if (bounds.getMinimumX() < this.getMinimumX()) {
+			this.setMinimumX(bounds.getMinimumX());
+		}
 
-    public double getHeight() {
-        return Math.abs(getMaximumY() - getMinimumY());
-    }
+		if (bounds.getMinimumY() < this.getMinimumY()) {
+			this.setMinimumY(bounds.getMinimumY());
+		}
+	}
 
-    /**
-     * @return Returns the set.
-     */
-    public boolean isValid() {
-        if ((this.max_x == Double.NEGATIVE_INFINITY) ||
-                (this.max_y == Double.NEGATIVE_INFINITY) ||
-                (this.min_x == Double.POSITIVE_INFINITY) ||
-                (this.min_y == Double.POSITIVE_INFINITY)) {
-            return false;
-        }
+	/**
+	 * Enlarge the Bounds if the given bounds enlarge the Bounds.
+	 *
+	 * @param x
+	 * @param y
+	 */
+	public void addToBounds(double x, double y) {
+		if (x > this.getMaximumX()) {
+			this.setMaximumX(x);
+		}
 
-        return set;
-    }
+		if (x < this.getMinimumX()) {
+			this.setMinimumX(x);
+		}
 
-    /**
-     * @param set
-     *            The set to set.
-     */
-    public void setValid(boolean set) {
-        this.set = set;
-    }
+		if (y > this.getMaximumY()) {
+			this.setMaximumY(y);
+		}
 
-    public void debug() {
-        System.out.println("DEBUG Bounds");
-        System.out.println("MAX_x=" + max_x);
-        System.out.println("MAX_y=" + max_y);
-        System.out.println("MIN_x=" + min_x);
-        System.out.println("MIN_y=" + min_y);
-        System.out.println("Width=" + getWidth() + " Height:" + getHeight());
-    }
+		if (y < this.getMinimumY()) {
+			this.setMinimumY(y);
+		}
+	}
 
-    /**
-     * Determines if the given bounding box part or inside the bounds.
-     * @param bounds
-     * @return
-     */
-    public boolean contains(Bounds bounds) {
-        if ((bounds.getMaximumX() <= this.min_x) ||
-                (bounds.getMinimumX() >= max_x)) {
-            //the given bounds are on the left or right side of the bounds
-            return false;
-        }
+	public void addToBounds(Point p) {
+		addToBounds(p.getX(), p.getY());
+	}
 
-        if ((bounds.getMaximumY() <= min_y) || (bounds.getMinimumY() >= max_y)) {
-            //the given bounds are above or below
-            return false;
-        }
+	public double getWidth() {
+		return Math.abs(getMaximumX() - getMinimumX());
+	}
 
-        return true;
-    }
+	public double getHeight() {
+		return Math.abs(getMaximumY() - getMinimumY());
+	}
 
-    public boolean enclose(Bounds bounds) {
-        if (contains(bounds)) {
-            if ((getWidth() >= bounds.getWidth()) ||
-                    (getHeight() >= bounds.getHeight())) {
-                return true;
-            }
-        }
+	/**
+	 * @return Returns the set.
+	 */
+	public boolean isValid() {
+		if ((this.max_x == Double.NEGATIVE_INFINITY)
+				|| (this.max_y == Double.NEGATIVE_INFINITY)
+				|| (this.min_x == Double.POSITIVE_INFINITY)
+				|| (this.min_y == Double.POSITIVE_INFINITY)) {
+			return false;
+		}
 
-        return false;
-    }
+		return set;
+	}
+
+	/**
+	 * @param set
+	 *            The set to set.
+	 */
+	public void setValid(boolean set) {
+		this.set = set;
+	}
+
+	public void debug() {
+		System.out.println("DEBUG Bounds");
+		System.out.println("MAX_x=" + max_x);
+		System.out.println("MAX_y=" + max_y);
+		System.out.println("MIN_x=" + min_x);
+		System.out.println("MIN_y=" + min_y);
+		System.out.println("Width=" + getWidth() + " Height:" + getHeight());
+	}
+
+	/**
+	 * Determines if the given bounding box part or inside the bounds.
+	 *
+	 * @param bounds
+	 * @return
+	 */
+	public boolean contains(Bounds bounds) {
+		if ((bounds.getMaximumX() <= this.min_x)
+				|| (bounds.getMinimumX() >= this.max_x)) {
+			// the given bounds are on the left or right side of the bounds
+			return false;
+		}
+
+		if ((bounds.getMaximumY() <= this.min_y)
+				|| (bounds.getMinimumY() >= this.max_y)) {
+			// the given bounds are above or below
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean enclose(Bounds bounds) {
+		if ((bounds.getMaximumX() <= this.max_x)
+				&& (bounds.getMinimumX() >= this.min_x)) {
+			// the given bounds are on the left or right side of the bounds
+
+			if ((bounds.getMaximumY() <= this.max_y)
+					&& (bounds.getMinimumY() >= this.min_y)) {
+				// the given bounds are above or below
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
