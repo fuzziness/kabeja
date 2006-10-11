@@ -15,6 +15,10 @@
 */
 package org.kabeja.parser;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import org.kabeja.parser.entities.DXF3DFaceHandler;
 import org.kabeja.parser.entities.DXF3DSolidHandler;
 import org.kabeja.parser.entities.DXFArcHandler;
@@ -46,10 +50,6 @@ import org.kabeja.parser.table.DXFStyleTableHandler;
 import org.kabeja.parser.table.DXFViewTableHandler;
 import org.kabeja.parser.table.DXFViewportTableHandler;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
@@ -58,7 +58,7 @@ import java.io.InputStream;
  *
  */
 public class ParserBuilder {
-    public static DXFParser createDefaultParser() {
+    public static Parser createDefaultParser() {
         DXFParser parser = new DXFParser();
 
         Handler handler;
@@ -254,7 +254,7 @@ public class ParserBuilder {
      * @param file
      * @return the DXFParser build from the XML description file
      */
-    public static DXFParser buildFromXML(String file) {
+    public static Parser buildFromXML(String file) {
         try {
             return buildFromXML(new FileInputStream(file));
         } catch (FileNotFoundException e) {
@@ -264,7 +264,7 @@ public class ParserBuilder {
         return null;
     }
 
-    public static DXFParser buildFromXML(InputStream in) {
+    public static Parser buildFromXML(InputStream in) {
         return SAXParserBuilder.buildFromStream(in);
     }
 }

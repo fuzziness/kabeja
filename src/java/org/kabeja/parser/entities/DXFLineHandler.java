@@ -19,7 +19,6 @@ import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFLine;
 import org.kabeja.dxf.helpers.Point;
-
 import org.kabeja.parser.DXFValue;
 
 

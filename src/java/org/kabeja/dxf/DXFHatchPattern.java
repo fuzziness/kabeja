@@ -20,252 +20,198 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.kabeja.dxf.helpers.HatchLinePattern;
+import org.kabeja.dxf.helpers.HatchLineFamily;
+import org.kabeja.dxf.helpers.HatchLineIterator;
+import org.kabeja.dxf.helpers.HatchLineSegment;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGGenerator;
+import org.kabeja.svg.SVGSAXGenerator;
 import org.kabeja.svg.SVGUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 /**
+ * This class represent a single line family of a hatch pattern set.
+ * 
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth </a>
- *
+ * 
  */
-public class DXFHatchPattern implements SVGGenerator {
-    private static int idCount = 0;
+public class DXFHatchPattern implements SVGSAXGenerator {
+	private static int idCount = 0;
 
-    private String id = null;
+	private String id = null;
 
-    private List patterns = new ArrayList();
+	private List patterns = new ArrayList();
 
-    private DXFHatch hatch;
+	private DXFHatch hatch;
 
-    /**
-     * @return Returns the id.
-     */
-    public String getId() {
-        if (this.id == null) {
-            this.id = "HATCH_PATTERN_ID_" + DXFHatchPattern.idCount;
-            DXFHatchPattern.idCount++;
-        }
+	/**
+	 * @return Returns the id.
+	 */
+	public String getID() {
+		if (this.id == null) {
+			this.id = "HATCH_PATTERN_ID_" + DXFHatchPattern.idCount;
+			DXFHatchPattern.idCount++;
+		}
 
-        return id;
-    }
+		return id;
+	}
 
-    /**
-     * @param id
-     *            The id to set.
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
+	/**
+	 * @param id
+	 *            The id to set.
+	 */
+	public void setID(String id) {
+		this.id = id;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler,
-     *      java.util.Map)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-            throws SAXException {
-        if (!this.hatch.isSolid()) {
-            // we have to create a tile with all lines
-            Bounds bounds = this.hatch.getBounds();
-            double dotLength = (bounds.getWidth() + bounds.getHeight()) / 2 * 0.0005;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler,
+	 *      java.util.Map)
+	 */
+	public void toSAX(ContentHandler handler, Map svgContext)
+			throws SAXException {
+		if (!this.hatch.isSolid()) {
+			// we have to create a tile with all lines
 
-            AttributesImpl attr = new AttributesImpl();
-            SVGUtils.addAttribute(attr, SVGConstants.XML_ID, getId());
-            SVGUtils.addAttribute(attr, "x", "" + bounds.getMinimumX());
-            SVGUtils.addAttribute(attr, "y", "" + bounds.getMinimumY());
-            SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_WIDTH, ""
-                    + bounds.getWidth());
-            SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_HEIGHT, ""
-                    + bounds.getHeight());
+			Bounds bounds = this.hatch.getBounds();
+			double dotLength = (bounds.getWidth() + bounds.getHeight()) / 2 * 0.002;
 
-            SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_PATTERN_UNITS, "userSpaceOnUse");
-            SVGUtils.startElement(handler, SVGConstants.SVG_PATTERN, attr);
-            attr = new AttributesImpl();
-            SVGUtils.startElement(handler, SVGConstants.SVG_TITLE, attr);
-            SVGUtils.characters(handler, this.hatch.getName());
-            SVGUtils.endElement(handler, SVGConstants.SVG_TITLE);
+			AttributesImpl attr = new AttributesImpl();
 
-            // we convert the pattern as one path element
-           // StringBuffer buf = new StringBuffer();
-//            Iterator i = patterns.iterator();
+			Iterator i = patterns.iterator();
 
-            // System.out.println("PATTERN:\nName:" + hatch.getName());
-//            while (i.hasNext()) {
-//                HatchLinePattern pattern = (HatchLinePattern) i.next();
-//
-//                attr = new AttributesImpl();
-//                SVGUtils.addAttribute(attr, "d", this.createLineType(bounds,
-//                        pattern, dotLength));
-//                SVGUtils.addAttribute(attr, "stroke", "red");
-//                SVGUtils.addAttribute(attr, "stroke-width", "0.01%");
-//                SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
-//            }
-            SVGUtils.endElement(handler, SVGConstants.SVG_PATTERN);
-        }
-    }
+			while (i.hasNext()) {
+				HatchLineFamily pattern = (HatchLineFamily) i.next();
 
-    public void addLinePattern(HatchLinePattern pattern) {
-        patterns.add(pattern);
-    }
+				attr = new AttributesImpl();
+				SVGUtils.addAttribute(attr, "d", this.getSVGPath(bounds,
+						pattern, dotLength));
 
-    public Iterator getLinePatternIterator() {
-        return patterns.iterator();
-    }
+				SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
 
-    /**
-     * The associated hatch for this pattern.
-     *
-     * @return Returns the hatch.
-     */
-    public DXFHatch getDXFHatch() {
-        return this.hatch;
-    }
+			}
 
-    /**
-     * The associated hatch for this pattern.
-     *
-     * @param hatch
-     *            The hatch to set.
-     */
-    public void setHatch(DXFHatch hatch) {
-        this.hatch = hatch;
-    }
+		}
+	}
 
-    /**
-     * Creates a SVG path of the used line family
-     * and fill the complete given bounds.
-     * 
-     * @param b - The bounds of the DXFHatch
-     * @param pattern the pattern of the line family
-     * @param dotlength 
-     * @return
-     */
-    
-    protected String getSVGPath(Bounds b, HatchLinePattern pattern,
-            double dotlength) {
-        StringBuffer buf = new StringBuffer();
-        Point base = pattern.getBasePoint();
-        Point offset = pattern.getOffsetPoint();
- //       b.debug();
-//        System.out.println("base:" + base);
-//        System.out.println("baseX:" + pattern.getBaseX() + "         baseY:"
-//                + pattern.getBaseY());
-//        System.out.println("offset:" + offset);
-//        System.out.println("offsetX:" + pattern.getOffsetX()
-//                + "         offsetY:" + pattern.getOffsetY());
+	public void addLineFamily(HatchLineFamily pattern) {
+		patterns.add(pattern);
+	}
 
-        double startx = 0;
-        if (base.getX() < b.getMinimumX()) {
-            startx = base.getX()
-                    + Math.abs(offset.getX())
-                    * Math.floor(Math.abs((b.getMinimumX() - base.getX())
-                            / offset.getX()));
-        } else {
-            startx = base.getX()
-                    - Math.abs(offset.getX())
-                    * Math.ceil(Math.abs((b.getMinimumX() - base.getX())
-                            / offset.getX()));
-        }
+	public Iterator getLineFamilyIterator() {
+		return patterns.iterator();
+	}
 
-        double starty = 0;
-        if (base.getY() < b.getMinimumY()) {
-            starty = base.getY()
-                    + Math.abs(offset.getY())
-                    * Math.floor(Math.abs((b.getMinimumY() - base.getY())
-                            / offset.getY()));
-        } else {
-            starty = base.getY()
-                    - Math.abs(offset.getY())
-                    * Math.ceil(Math.abs((b.getMinimumY() - base.getY())
-                            / offset.getY()));
-        }
+	/**
+	 * The associated hatch for this pattern.
+	 * 
+	 * @return Returns the hatch.
+	 */
+	public DXFHatch getDXFHatch() {
+		return this.hatch;
+	}
 
-        double angle = pattern.getRotationAngle();
+	/**
+	 * The associated hatch for this pattern.
+	 * 
+	 * @param hatch
+	 *            The hatch to set.
+	 */
+	public void setHatch(DXFHatch hatch) {
+		this.hatch = hatch;
+	}
 
-//        System.out.println("angle:" + pattern.getRotationAngle() + " fix="
-//                + angle);
-//        System.out.println("startx:" + startx + "    starty:" + starty);
-        angle = Math.toRadians(angle);
-        double y = starty;
-        double x = startx;
-        double[] dashes = pattern.getPattern();
-        if (dashes.length > 0) {
-            while (startx < b.getMaximumX() && angle < 90) {
-                y = starty;
-                x = startx;
+	/**
+	 * Creates a SVG path of the used line family and fill the complete given
+	 * bounds.
+	 * 
+	 * @param b -
+	 *            The bounds of the DXFHatch
+	 * @param pattern
+	 *            the pattern of the line family
+	 * @param dotlength
+	 * @return
+	 */
 
-                buf.append('M');
-                buf.append(' ');
-                buf.append(x);
-                buf.append(' ');
-                buf.append(y);
-                buf.append(' ');
-                while (y < b.getMaximumY() && x < b.getMaximumX()) {
+	protected String getSVGPath(Bounds b, HatchLineFamily pattern,
+			double dotlength) {
+		StringBuffer buf = new StringBuffer();
 
-                    for (int i = 0; i < dashes.length; i++) {
+		Iterator li = new HatchLineIterator(this.hatch, pattern);
 
-                        x += Math.cos(angle) * Math.abs(dashes[i]);
-                        y += Math.sin(angle) * Math.abs(dashes[i]);
-                        if (dashes[i] > 0) {
-                            buf.append('L');
-                            buf.append(' ');
-                            buf.append(x);
-                            buf.append(' ');
-                            buf.append(y);
-                            buf.append(' ');
-                        } else if (dashes[i] < 0) {
-                            buf.append('M');
-                            buf.append(' ');
-                            buf.append(x);
-                            buf.append(' ');
-                            buf.append(y);
-                            buf.append(' ');
-                        } else {
-                            // a dot
-                            buf.append('l');
-                            buf.append(' ');
-                            buf.append(dotlength);
-                            buf.append(' ');
-                            buf.append(dotlength);
-                            buf.append(' ');
-                        }
+		while (li.hasNext()) {
 
-                    }
-                }
+			HatchLineSegment segment = (HatchLineSegment) li.next();
+			// double angle = Math.toRadians(pattern.getRotationAngle());
+			Point startPoint = segment.getStartPoint();
+			double x = startPoint.getX();
+			double y = startPoint.getY();
 
-                startx += Math.abs(offset.getX());
+			// the start Point of the line segment
+			buf.append('M');
+			buf.append(' ');
+			buf.append(SVGUtils.formatNumberAttribute(x));
+			buf.append(' ');
+			buf.append(SVGUtils.formatNumberAttribute(y));
+			buf.append(' ');
 
-            }
-        } else {
-            // draw a solid line
-            while(startx<b.getMaximumX()){
+			if (segment.isSolid()) {
+				Point p = segment.getPointAt(segment.getLength());
+				buf.append('L');
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute(p.getX()));
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute(p.getY()));
+				buf.append(' ');
+			} else {
+				double length = 0;
+				while (segment.hasNext()) {
 
-                buf.append('M');
-                buf.append(' ');
-                buf.append(startx);
-                buf.append(' ');
-                buf.append(starty);
-                buf.append(' ');
+					double l = segment.next();
+					length += Math.abs(l);
+					Point p = segment.getPointAt(length);
+					if (l > 0) {
+						buf.append('L');
+						buf.append(' ');
+						buf.append(SVGUtils.formatNumberAttribute(p.getX()));
+						buf.append(' ');
+						buf.append(SVGUtils.formatNumberAttribute(p.getY()));
+						buf.append(' ');
+					} else if (l < 0) {
+						buf.append('M');
+						buf.append(' ');
+						buf.append(SVGUtils.formatNumberAttribute(p.getX()));
+						buf.append(' ');
+						buf.append(SVGUtils.formatNumberAttribute(p.getY()));
+						buf.append(' ');
+					} else {
+						// a dot
+						buf.append('l');
+						buf.append(' ');
+						buf.append(SVGUtils.formatNumberAttribute(dotlength));
+						buf.append(' ');
+						buf.append(SVGUtils.formatNumberAttribute(dotlength));
+						buf.append(' ');
+					}
 
-                 x =1/Math.tan(angle)*b.getHeight()+startx;
+				}
+			}
 
-                 buf.append('L');
-                 buf.append(' ');
-                 buf.append(x);
-                 buf.append(' ');
-                 buf.append(b.getMaximumY());
-                 buf.append(' ');
-                 startx += Math.abs(offset.getX());
-            }
-        }
-        //System.out.println("pattern length:" + buf.length());
-        return buf.toString();
-    }
+		}
+
+		return buf.toString();
+	}
+
+	/**
+	 * 
+	 * @return the count of the used line families
+	 */
+
+	public int getLineFamilyCount() {
+		return this.patterns.size();
+	}
 }

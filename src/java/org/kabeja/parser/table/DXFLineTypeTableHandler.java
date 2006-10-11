@@ -16,7 +16,6 @@
 package org.kabeja.parser.table;
 
 import org.kabeja.dxf.DXFLineType;
-
 import org.kabeja.parser.DXFValue;
 
 

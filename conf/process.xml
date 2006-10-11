@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<processing>
+<processing xmlns="http://kabeja.org/processing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
 	<!--+
 	    | The processing configuration  
 	    +-->
 	<configuration>
+	  <!--+ 
+	      |not yet implemented, but will follow: the parser configuration
+	      |<xi:include href="parser.xml"/>
+	      +-->
 	
 		<postprocessors>
 			<postprocessor class="org.kabeja.processing.BoundsDebugger" name="bounds.debugger"/>
@@ -28,7 +32,7 @@
 		</serializers>
 		
 		<generators>
-			<generator class="org.kabeja.svg.DXF2SVGGenerator" name="svg"/>
+			<generator class="org.kabeja.svg.SVGGenerator" name="svg"/>
 		</generators>
 		
 	</configuration>

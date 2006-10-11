@@ -17,7 +17,6 @@ package org.kabeja.parser.objects;
 
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.objects.DXFObject;
-
 import org.kabeja.parser.DXFValue;
 
 

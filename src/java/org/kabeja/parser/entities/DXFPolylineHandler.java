@@ -19,7 +19,6 @@ import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;
-
 import org.kabeja.parser.DXFEntitiesSectionHandler;
 import org.kabeja.parser.DXFValue;
 

@@ -15,10 +15,6 @@
 */
 package org.kabeja.parser;
 
-import org.kabeja.dxf.DXFDocument;
-
-import org.kabeja.tools.CodePageParser;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -26,9 +22,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import java.util.Hashtable;
 import java.util.Iterator;
+
+import org.kabeja.dxf.DXFDocument;
+import org.kabeja.tools.CodePageParser;
 
 
 /**
@@ -36,8 +34,10 @@ import java.util.Iterator;
  *
  *
  */
-public class DXFParser implements HandlerManager, Handler {
-    private final static String SECTION_START = "SECTION";
+public class DXFParser implements HandlerManager, Handler, Parser {
+    
+	public final static String EXTENSION="dxf";
+	private final static String SECTION_START = "SECTION";
     private final static String SECTION_END = "ENDSEC";
     private final static String END_STREAM = "EOF";
     private final static int COMMAND_CODE = 0;
@@ -56,10 +56,16 @@ public class DXFParser implements HandlerManager, Handler {
     public DXFParser() {
     }
 
+    /* (non-Javadoc)
+	 * @see org.kabeja.parser.Parser#parse(java.lang.String)
+	 */
     public void parse(String file) throws DXFParseException {
         parse(file, DEFAULT_ENCODING);
     }
 
+    /* (non-Javadoc)
+	 * @see org.kabeja.parser.Parser#parse(java.lang.String, java.lang.String)
+	 */
     public void parse(String file, String encoding) throws DXFParseException {
         try {
             parse(new FileInputStream(file), encoding);
@@ -68,6 +74,9 @@ public class DXFParser implements HandlerManager, Handler {
         }
     }
 
+    /* (non-Javadoc)
+	 * @see org.kabeja.parser.Parser#parse(java.io.InputStream, java.lang.String)
+	 */
     public void parse(InputStream input, String encoding)
         throws DXFParseException {
         String currentKey = "";
@@ -181,6 +190,9 @@ public class DXFParser implements HandlerManager, Handler {
         }
     }
 
+    /* (non-Javadoc)
+	 * @see org.kabeja.parser.Parser#getDocument()
+	 */
     public DXFDocument getDocument() {
         return doc;
     }
@@ -199,6 +211,9 @@ public class DXFParser implements HandlerManager, Handler {
      *
      * @see de.miethxml.kabeja.parser.Handler#releaseDXFDocument()
      */
+    /* (non-Javadoc)
+	 * @see org.kabeja.parser.Parser#releaseDXFDocument()
+	 */
     public void releaseDXFDocument() {
         this.doc = null;
 
@@ -215,7 +230,16 @@ public class DXFParser implements HandlerManager, Handler {
      *
      * @see de.miethxml.kabeja.parser.Handler#setDXFDocument(de.miethxml.kabeja.dxf.DXFDocument)
      */
+    /* (non-Javadoc)
+	 * @see org.kabeja.parser.Parser#setDXFDocument(org.kabeja.dxf.DXFDocument)
+	 */
     public void setDXFDocument(DXFDocument doc) {
         this.doc = doc;
     }
+
+	public boolean supportedExtension(String extension) {
+		return extension.toLowerCase().equals(EXTENSION);	
+	}
+    
+    
 }

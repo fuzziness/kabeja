@@ -15,11 +15,11 @@
 */
 package org.kabeja.dxf.helpers;
 
-import org.kabeja.dxf.DXFMText;
-import org.kabeja.dxf.DXFText;
-
 import java.util.Stack;
 import java.util.StringTokenizer;
+
+import org.kabeja.dxf.DXFMText;
+import org.kabeja.dxf.DXFText;
 
 
 /**

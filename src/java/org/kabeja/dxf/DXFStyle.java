@@ -18,7 +18,7 @@ package org.kabeja.dxf;
 import java.util.Map;
 
 import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGGenerator;
+import org.kabeja.svg.SVGSAXGenerator;
 import org.kabeja.svg.SVGUtils;
 import org.kabeja.tools.FontManager;
 import org.xml.sax.ContentHandler;
@@ -30,7 +30,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public class DXFStyle implements SVGGenerator {
+public class DXFStyle implements SVGSAXGenerator {
     private String name = "";
     private String fontFile = "";
     private String bigFontFile = "";

@@ -15,21 +15,18 @@
 */
 package org.kabeja.processing;
 
-import org.kabeja.dxf.DXFDocument;
-
-import org.kabeja.tools.SAXFilterConfig;
-import org.kabeja.xml.SAXFilter;
-import org.kabeja.xml.SAXSerializer;
-import org.kabeja.xml.SAXGenerator;
-
-import org.xml.sax.ContentHandler;
-
 import java.io.OutputStream;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.kabeja.dxf.DXFDocument;
+import org.kabeja.tools.SAXFilterConfig;
+import org.kabeja.xml.SAXFilter;
+import org.kabeja.xml.SAXGenerator;
+import org.kabeja.xml.SAXSerializer;
+import org.xml.sax.ContentHandler;
 
 
 /**

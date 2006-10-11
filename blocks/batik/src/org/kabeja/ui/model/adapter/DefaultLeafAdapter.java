@@ -4,8 +4,6 @@ import java.util.Enumeration;
 
 import javax.swing.tree.TreeNode;
 
-import org.kabeja.processing.ProcessPipeline;
-
 public class DefaultLeafAdapter implements TreeNode{
 
 	

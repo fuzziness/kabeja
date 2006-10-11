@@ -21,5 +21,5 @@ package org.kabeja.svg;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public interface SVGFragmentGenerator extends SVGGenerator {
+public interface SVGFragmentGenerator extends SVGSAXGenerator {
 }

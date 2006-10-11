@@ -15,36 +15,33 @@
 */
 package org.kabeja.cocoon.generation;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameterizable;
 import org.apache.avalon.framework.parameters.Parameters;
-
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.environment.SourceResolver;
 import org.apache.cocoon.generation.AbstractGenerator;
 import org.apache.cocoon.util.HashUtil;
-
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.validity.TimeStampValidity;
-
 import org.kabeja.dxf.DXFDocument;
-
 import org.kabeja.parser.DXFParseException;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.Handler;
+import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.parser.SAXParserBuilder;
-
+import org.kabeja.xml.SAXGenerator;
 import org.xml.sax.SAXException;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.Serializable;
-
-import java.util.Map;
 
 
 /**
@@ -63,7 +60,7 @@ public class DXF2SVGGenerator extends AbstractGenerator
     protected String config = null;
     protected boolean configured = false;
     protected Logger log;
-    protected DXFParser parser;
+    protected Parser parser;
     protected String encoding;
 
     /*
@@ -106,9 +103,15 @@ public class DXF2SVGGenerator extends AbstractGenerator
 
             DXFDocument doc = parser.getDocument();
 
-            // the xmlConsumer the next component in
-            // the pipeline from parent class
-            doc.toSAX(this.xmlConsumer, null);
+    		// the xmlConsumer the next component in
+			// the pipeline from parent class
+			SAXGenerator generator = new org.kabeja.svg.SVGGenerator();
+			generator.setProperties(new HashMap());
+			generator.generate(doc, this.xmlConsumer);
+
+            
+            
+         
 
             // all is done release the source
             this.resolver.release(this.inputSource);

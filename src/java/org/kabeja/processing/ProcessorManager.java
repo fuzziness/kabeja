@@ -15,20 +15,22 @@
 */
 package org.kabeja.processing;
 
-import org.kabeja.dxf.DXFDocument;
-
-import org.kabeja.xml.SAXFilter;
-import org.kabeja.xml.SAXSerializer;
-import org.kabeja.xml.SAXGenerator;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.kabeja.dxf.DXFDocument;
+import org.kabeja.parser.DXFParseException;
+import org.kabeja.parser.Parser;
+import org.kabeja.xml.SAXFilter;
+import org.kabeja.xml.SAXGenerator;
+import org.kabeja.xml.SAXSerializer;
 
 
 /**
@@ -41,7 +43,9 @@ public class ProcessorManager {
     private Map postprocessors = new HashMap();
     private Map pipelines = new HashMap();
     private Map saxgenerators = new HashMap();
-
+    private List parsers = new ArrayList();
+    
+    
     public void addSAXFilter(SAXFilter filter, String name) {
         this.saxfilters.put(name, filter);
     }
@@ -72,6 +76,27 @@ public class ProcessorManager {
         this.postprocessors.put(name, pp);
     }
 
+    
+    public void addParser(Parser parser){
+    	this.parsers.add(parser);
+    }
+    
+    public List getParsers(){
+    	return this.parsers;
+    }
+    
+    protected Parser getParser(String extension){
+    	Iterator i = this.parsers.iterator();
+    	while(i.hasNext()){
+    		Parser parser = (Parser)i.next();
+    		if(parser.supportedExtension(extension)){
+    			return parser;
+    		}
+    	}
+    	return null;
+    }
+    
+    
     public PostProcessor getPostProcessor(String name) {
         return (PostProcessor) this.postprocessors.get(name);
     }
@@ -95,6 +120,26 @@ public class ProcessorManager {
     public Map getProcessPipelines(){
     	return this.pipelines;
     }
+    
+    
+    public void process(InputStream stream,String extension,Map context,String pipeline,OutputStream out) throws ProcessorException{
+    	Parser parser = this.getParser(extension);
+    	if(parser != null){
+    		try {
+				parser.parse(stream, null);
+				DXFDocument doc = parser.getDocument();
+				this.process(doc, context, pipeline, out);
+				
+			} catch (DXFParseException e) {
+			
+				 throw new ProcessorException(e);
+			}
+    	}
+    }
+    
+    
+    
+    
     
     
     public void process(DXFDocument doc, Map context, String pipeline,

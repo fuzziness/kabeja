@@ -1,0 +1,50 @@
+<project name="@block.name@" default="dist" basedir=".">
+	<property name="blockname" value="@block.name@" />
+	<property name="jar.name" value="@block.name@" />
+	<property name="kabeja.home" value="" />
+	<property name="build" value="build" />
+	<property name="classes" value="classes" />
+
+
+
+
+	<target name="init">
+		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${build}/${blockname}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="src" destdir="${build}/${classes}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<pathelement path="${kabeja.home}/build/java" />
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${kabeja.home}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile">
+		<jar jarfile="${build}/${blockname}/${jar.name}.jar" basedir="${build}/${classes}" includes="**/*" />
+		
+		<copy todir="${kabeja.home}/dist/lib">
+			<fileset dir="${build}/${blockname}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<!-- the libs -->
+		<copy todir="${kabeja.home}/dist/lib">
+			<fileset dir="lib" />
+		</copy>
+	</target>
+	
+
+
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+</project>

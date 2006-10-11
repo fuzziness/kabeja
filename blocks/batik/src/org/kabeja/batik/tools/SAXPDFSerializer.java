@@ -16,7 +16,6 @@
 package org.kabeja.batik.tools;
 
 import org.apache.batik.transcoder.Transcoder;
-
 import org.apache.fop.svg.PDFTranscoder;
 
 

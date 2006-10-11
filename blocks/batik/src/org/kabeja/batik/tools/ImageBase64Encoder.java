@@ -15,23 +15,19 @@
 */
 package org.kabeja.batik.tools;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+
 import org.apache.batik.util.Base64EncoderStream;
-
 import org.kabeja.xml.SAXFilter;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import java.util.Map;
 
 
 /**

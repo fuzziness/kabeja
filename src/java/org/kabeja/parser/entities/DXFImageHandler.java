@@ -19,7 +19,6 @@ import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFImage;
 import org.kabeja.dxf.helpers.Point;
-
 import org.kabeja.parser.DXFValue;
 
 

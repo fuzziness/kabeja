@@ -31,8 +31,7 @@ public class DXFExtrusion {
     protected Vector n = new Vector(0.0, 0.0, 1.0);
     protected Vector x;
     protected Vector y;
-    private double[] ax;
-    private double[] ay;
+   
 
     public double getX() {
         return n.getX();
@@ -59,7 +58,7 @@ public class DXFExtrusion {
     }
 
     public void calculateExtrusion() {
-        ax = new double[3];
+      
 
         if ((Math.abs(n.getX()) < v) && (Math.abs(n.getY()) < v)) {
             x = MathUtils.crossProduct(DXFConstants.DEFAULT_Y_AXIS_VECTOR, n);
@@ -70,8 +69,8 @@ public class DXFExtrusion {
         y = MathUtils.crossProduct(x, n);
     }
 
-    public Point extrusePoint(Point p) {
-        return null;
+    public Point extrudePoint(Point basePoint, double elevation) {
+        return MathUtils.getPointOfStraightLine(basePoint, this.n, elevation);
     }
 
     public Vector getNormal() {

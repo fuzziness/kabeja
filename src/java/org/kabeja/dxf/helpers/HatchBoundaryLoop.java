@@ -15,12 +15,12 @@
 */
 package org.kabeja.dxf.helpers;
 
-import org.kabeja.dxf.Bounds;
-import org.kabeja.dxf.DXFEntity;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.kabeja.dxf.Bounds;
+import org.kabeja.dxf.DXFEntity;
 
 
 /**
@@ -56,7 +56,7 @@ public class HatchBoundaryLoop {
 
     public Bounds getBounds() {
         Bounds bounds = new Bounds();
-
+       // System.out.println("edges="+edges.size());
         if (edges.size() > 0) {
             Iterator i = edges.iterator();
 
@@ -75,5 +75,9 @@ public class HatchBoundaryLoop {
 
             return bounds;
         }
+    }
+    
+    public int getEdgeCount(){
+    	return this.edges.size();
     }
 }

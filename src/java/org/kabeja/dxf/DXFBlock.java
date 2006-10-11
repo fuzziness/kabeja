@@ -40,7 +40,7 @@ public class DXFBlock implements SVGFragmentGenerator {
     private String description = "";
     private ArrayList entities;
     private DXFDocument doc;
-    private Bounds bounds;
+  
 
     /**
      *
@@ -48,9 +48,9 @@ public class DXFBlock implements SVGFragmentGenerator {
     public DXFBlock() {
         super();
 
-        entities = new ArrayList();
+        this.entities = new ArrayList();
         this.referencePoint = new Point();
-        bounds = new Bounds();
+       
     }
 
     public Bounds getBounds() {
@@ -157,15 +157,9 @@ public class DXFBlock implements SVGFragmentGenerator {
         AttributesImpl attr = new AttributesImpl();
         SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils.validateID(getName()));
 
-        // SVGUtils.addAttribute(attr,"stroke-width","0.1");
-        // String b = bounds.getMinimumX()+"
-        // "+doc.translateY(bounds.getMinimumY())+" "+bounds.getWidth()+"
-        // "+bounds.getHeight();
-        // the viewBox is needed otherwise the block is not visible
-        // SVGUtils.addAttribute(attr,"viewBox",b);
         SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 
-        Iterator i = entities.iterator();
+        Iterator i = this.entities.iterator();
 
         while (i.hasNext()) {
             DXFEntity entity = (DXFEntity) i.next();
@@ -190,6 +184,19 @@ public class DXFBlock implements SVGFragmentGenerator {
         }
     }
     
+    /**
+     * 
+     * @return the parent document
+     */
+    
+    
+    public DXFDocument getDXFDocument(){
+    	return this.doc;
+    }
+    
+    
+    
+    
     public double getLength(){
     	 
     	 double length=0;
@@ -203,6 +210,7 @@ public class DXFBlock implements SVGFragmentGenerator {
           
           return length;
     }
+    
     
     
     

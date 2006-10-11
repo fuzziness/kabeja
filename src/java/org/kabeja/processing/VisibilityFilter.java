@@ -15,13 +15,13 @@
 */
 package org.kabeja.processing;
 
-import org.kabeja.dxf.DXFDocument;
-import org.kabeja.dxf.DXFEntity;
-import org.kabeja.dxf.DXFLayer;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.kabeja.dxf.DXFDocument;
+import org.kabeja.dxf.DXFEntity;
+import org.kabeja.dxf.DXFLayer;
 
 
 /**

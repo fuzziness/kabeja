@@ -17,7 +17,6 @@ package org.kabeja.parser.entities;
 
 import org.kabeja.dxf.DXFEllipse;
 import org.kabeja.dxf.DXFEntity;
-
 import org.kabeja.parser.DXFValue;
 
 

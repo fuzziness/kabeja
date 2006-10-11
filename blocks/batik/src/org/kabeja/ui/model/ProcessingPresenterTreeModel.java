@@ -3,11 +3,8 @@ package org.kabeja.ui.model;
 import java.util.ArrayList;
 
 import javax.swing.event.TreeModelListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-
 
 import org.kabeja.processing.ProcessorManager;
 public class ProcessingPresenterTreeModel implements TreeModel{

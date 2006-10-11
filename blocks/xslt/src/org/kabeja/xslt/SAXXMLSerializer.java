@@ -15,18 +15,16 @@
 */
 package org.kabeja.xslt;
 
-import org.kabeja.xml.SAXSerializer;
-
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.XMLFilterImpl;
-
 import java.io.OutputStream;
-
 import java.util.Map;
 
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
+
+import org.kabeja.xml.SAXSerializer;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 
 /**

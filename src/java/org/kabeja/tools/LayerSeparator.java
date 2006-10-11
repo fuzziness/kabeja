@@ -15,25 +15,22 @@
 */
 package org.kabeja.tools;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.kabeja.dxf.Bounds;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFHeader;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFVariable;
-
 import org.kabeja.parser.DXFParser;
+import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
-
 import org.kabeja.svg.SVGConstants;
-
 import org.kabeja.xml.SAXPrettyOutputter;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 
 /**
@@ -58,7 +55,7 @@ public class LayerSeparator {
                     source.toLowerCase().lastIndexOf(".dxf"));
         }
 
-        DXFParser parser = ParserBuilder.createDefaultParser();
+        Parser parser = ParserBuilder.createDefaultParser();
 
         try {
             parser.parse(new FileInputStream(source), DXFParser.DEFAULT_ENCODING);

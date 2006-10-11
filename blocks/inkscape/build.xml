@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="dxf2svg" default="dist" basedir=".">
+	<property name="homepath" value="" />
+	<property name="block.releasename" value="dxf2svg" />
+	<property name="releaseversion" value="0.2" />
+	<property name="src" value="src" />
+	<property name="sources" value="java" />
+	<property name="classes" value="classes" />
+	<property name="test" value="test" />
+	<property name="build" value="build" />
+	<property name="dist" value="dist" />
+	<property name="help" value="doc" />
+	<property name="icons" value="icons" />
+	<property name="lang" value="lang" />
+	<property name="conf" value="conf" />
+	<property name="libs" value="lib" />
+	<property name="sample" value="sample" />
+	<property name="manifest" value="manifestfile" />
+	<property name="version" value="0.1" />
+	<property name="packages" value="packages" />
+	<property name="samples" value="samples" />
+	<property name="apidocs" value="javadoc" />
+	<property name="docs" value="doc" />
+	<property name="JarClassPath" value="" />
+	<property name="tempdir" value="tmp" />
+	<property name="tools" value="tools" />
+	<property name="kabeja.home" value="../.." />
+	<property name="gcj.props" value=" -findirect-dispatch -Wl,-Bsymbolic -O3" />
+	<property name="main.class" value="org.kabeja.inkscape.DXFImportFilter" />
+	<property name="name.binary" value="kabeja-dxf2svg" />
+	<property name="inkscape.importfilter.install.path" value="${kabeja.home}/dist" />
+	<property name="install.dir" value="${user.home}/.inkscape/extensions" />
+
+	<description>
+	</description>
+
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/${libs}" />
+
+	</target>
+
+	<target name="compile" depends="init">
+		<javac debug="yes" includeJavaRuntime="no" compiler="gcj">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<dirset dir="${kabeja.home}/${build}/${classes}" />
+			</classpath>
+
+			<src path="${src}" />
+			<src path="${kabeja.home}/src/java/" />
+
+			<include name="**/*.java" />
+			<exclude name="**/CVS/*" />
+			<compilerarg line="${gcj.props} --main=${main.class}   -o ${dist}/${name.binary}" />
+		</javac>
+	</target>
+
+
+
+
+	<target name="dist" depends="compile" if="inkscape.importfilter">
+		<copy file="${dist}/${name.binary}" tofile="${inkscape.importfilter.install.path}/${name.binary}" />
+		<chmod file="${inkscape.importfilter.install.path}/${name.binary}" perm="+rx" />
+	</target>
+
+
+	<target name="install" depends="compile">
+		<chmod file="${dist}/${name.binary}" perm="+rx" />
+		<copy file="${dist}/${name.binary}" todir="${install.dir}" />
+		<copy file="${conf}/kabeja.inx" todir="${install.dir}" />
+	</target>
+
+
+	<target name="remove">
+		<delete file="${install.dir}/${name.binary}" />
+		<delete file="${install.dir}/kabeja.inx" />
+	</target>
+
+
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${packages}" />
+		<delete dir="${tempdir}" />
+	</target>
+
+
+	<target name="javadoc">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${apidocs}" />
+		<javadoc packagenames="*.*.*" sourcepath="${src}/${sources}" destdir="${kabeja.home}/${build}/${apidocs}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${build}/${classes}" />
+			</classpath>
+		</javadoc>
+	</target>
+
+
+
+
+</project>
+

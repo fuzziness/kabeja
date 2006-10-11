@@ -15,14 +15,14 @@
 */
 package org.kabeja.processing;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import org.kabeja.dxf.Bounds;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFViewport;
-
-import java.util.Iterator;
-import java.util.Map;
 
 
 /**

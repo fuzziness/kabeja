@@ -49,6 +49,7 @@ public class SVGConstants {
     public static final String SVG_FONT_FACE_URI = "font-face-uri";
     public static final String SVG_ATTRIBUTE_PATH = "d";
     public static final String SVG_ATTRIBUTE_STROKE_DASHARRAY = "stroke-dasharray";
+    public static final String SVG_ATTRIBUTE_OVERFLOW="overflow";
     public static final String SVG_ATTRIBUTE_STROKE_WITDH = "stroke-width";
     public static final String SVG_ATTRIBUTE_TEXT_DECORATION = "text-decoration";
     public static final String SVG_ATTRIBUTE_TEXT_ALIGNMENT_BASELINE = "alignment-baseline";
@@ -72,6 +73,8 @@ public class SVGConstants {
     public static final String SVG_ATTRIBUTE_Y1="y1";
     public static final String SVG_ATTRIBUTE_Y2="y2";
     public static final String SVG_ATTRIBUTE_VIEWBOX="viewBox";
+    public static final String SVG_ATTRIBUTE_VERSION="version";
+    public static final String SVG_ATTRIBUTEVALUE_VISIBLE="visible";
     public static final String XML_ID = "id";
     public static final double DEFAULT_STROKE_WIDTH_PERCENT = 0.02;
 }

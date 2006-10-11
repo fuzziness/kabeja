@@ -26,7 +26,7 @@ import java.util.Map;
 import org.kabeja.dxf.objects.DXFObject;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGGenerator;
+import org.kabeja.svg.SVGSAXGenerator;
 import org.kabeja.svg.SVGUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -38,7 +38,7 @@ import org.xml.sax.helpers.AttributesImpl;
  *
  *
  */
-public class DXFDocument implements SVGGenerator {
+public class DXFDocument implements SVGSAXGenerator {
     public static String PROPERTY_ENCODING = "encoding";
     public static final double DEFAULT_MARGIN = 5;
     private Hashtable layers = new Hashtable();
@@ -234,12 +234,12 @@ public class DXFDocument implements SVGGenerator {
                 style.toSAX(handler, context);
             }
 
-            i = getDXFHatchPatternIterator();
-
-            while (i.hasNext()) {
-                DXFHatchPattern pattern = (DXFHatchPattern) i.next();
-                pattern.toSAX(handler, context);
-            }
+//            i = getDXFHatchPatternIterator();
+//
+//            while (i.hasNext()) {
+//                DXFHatchPattern pattern = (DXFHatchPattern) i.next();
+//                pattern.toSAX(handler, context);
+//            }
 
             SVGUtils.endElement(handler, SVGConstants.SVG_DEFS);
 
@@ -383,17 +383,38 @@ public class DXFDocument implements SVGGenerator {
         return list;
     }
 
+    
     public DXFObject getDXFObject(String type, String id) {
         HashMap objecttypes = (HashMap) objects.get(type);
-
         return (DXFObject) objecttypes.get(id);
     }
 
+    
+    /**
+     * Adds a DXFHatchPattern to the document.
+     * @param pattern
+     */
+    
     public void addDXFHatchPattern(DXFHatchPattern pattern) {
-        this.patterns.put(pattern.getId(), pattern);
+        this.patterns.put(pattern.getID(), pattern);
     }
 
+    /**
+     * 
+     * @return java.util.Iterator over all DXFHatchPattern
+     * of the document
+     */
+    
     public Iterator getDXFHatchPatternIterator() {
         return patterns.values().iterator();
+    }
+    
+    /**
+     * 
+     * @param ID of the pattern (also called pattern name)
+     * @return the DXFHatchPattern or null
+     */
+    public DXFHatchPattern getDXFHatchPattern(String id){
+    	return (DXFHatchPattern)this.patterns.get(id);
     }
 }

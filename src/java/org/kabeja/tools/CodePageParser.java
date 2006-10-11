@@ -15,10 +15,10 @@
 */
 package org.kabeja.tools;
 
-import org.kabeja.dxf.DXFConstants;
-
 import java.io.BufferedReader;
 import java.io.IOException;
+
+import org.kabeja.dxf.DXFConstants;
 
 
 /**

@@ -15,14 +15,7 @@
 */
 package org.kabeja.xslt;
 
-import org.kabeja.xml.AbstractSAXFilter;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 import java.io.FileReader;
-
 import java.util.Iterator;
 
 import javax.xml.transform.Transformer;
@@ -30,6 +23,11 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
+
+import org.kabeja.xml.AbstractSAXFilter;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 
 /**

@@ -15,13 +15,12 @@
 */
 package org.kabeja.parser;
 
-import org.kabeja.dxf.DXFDocument;
-import org.kabeja.dxf.DXFEntity;
-
-import org.kabeja.parser.entities.DXFEntityHandler;
-
 import java.util.Hashtable;
 import java.util.Iterator;
+
+import org.kabeja.dxf.DXFDocument;
+import org.kabeja.dxf.DXFEntity;
+import org.kabeja.parser.entities.DXFEntityHandler;
 
 
 /**

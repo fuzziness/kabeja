@@ -15,9 +15,9 @@
 */
 package org.kabeja.processing;
 
-import org.kabeja.dxf.DXFDocument;
-
 import java.util.Map;
+
+import org.kabeja.dxf.DXFDocument;
 
 
 /**

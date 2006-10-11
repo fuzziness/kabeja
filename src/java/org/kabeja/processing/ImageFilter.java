@@ -17,12 +17,10 @@ package org.kabeja.processing;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFImage;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.objects.DXFImageDefObject;

@@ -15,10 +15,10 @@
 */
 package org.kabeja.parser;
 
-import org.kabeja.parser.table.DXFTableHandler;
-
 import java.util.Hashtable;
 import java.util.Iterator;
+
+import org.kabeja.parser.table.DXFTableHandler;
 
 
 /**

@@ -20,7 +20,7 @@ package org.kabeja.dxf.helpers;
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public class HatchLinePattern {
+public class HatchLineFamily {
     private double rotationAngle;
     private double baseX;
     private double baseY;
@@ -122,6 +122,7 @@ public class HatchLinePattern {
     }
 
     public double getLength() {
+    
         if (length <= 0.0) {
             for (int i = 0; i < pattern.length; i++) {
                 this.length += Math.abs(pattern[i]);

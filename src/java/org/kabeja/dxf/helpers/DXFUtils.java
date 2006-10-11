@@ -16,9 +16,7 @@
 package org.kabeja.dxf.helpers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import org.kabeja.dxf.DXFArc;
 import org.kabeja.dxf.DXFLine;
 import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;

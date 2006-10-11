@@ -18,10 +18,8 @@ package org.kabeja.svg.dimension;
 import org.kabeja.dxf.DXFDimension;
 import org.kabeja.dxf.DXFDimensionStyle;
 import org.kabeja.dxf.DXFVariable;
-
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
-
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;

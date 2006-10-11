@@ -15,12 +15,9 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.Bounds;
-import org.kabeja.dxf.DXFPolyline;
-import org.kabeja.dxf.DXFVertex;
-import org.kabeja.dxf.helpers.Point;
-
 import junit.framework.TestCase;
+
+import org.kabeja.dxf.helpers.Point;
 
 public class DXFPolylineTest extends TestCase{
 

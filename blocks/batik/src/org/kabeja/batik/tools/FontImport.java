@@ -15,16 +15,15 @@
 */
 package org.kabeja.batik.tools;
 
-import org.apache.batik.svggen.font.SVGFont;
-
-import org.kabeja.svg.SVGUtils;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+
+import org.apache.batik.svggen.font.SVGFont;
+import org.kabeja.svg.SVGUtils;
 
 
 /**

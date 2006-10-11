@@ -26,12 +26,13 @@ Supported:
  *Leader
  *XLine
  *Ray
+ *Hatch
  
  
 
 Planned:
 
- * Hatch
+
  * MLine
  * Tolerance
  * Spline

@@ -17,7 +17,6 @@ package org.kabeja.parser.table;
 
 import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFLayer;
-
 import org.kabeja.parser.DXFValue;
 
 

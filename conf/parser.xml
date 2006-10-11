@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<parser>
+<parser class="org.kabeja.parser.DXFParser" xmlns="http://kabeja.org/parser/1.0">
    <handler class="org.kabeja.parser.DXFHeaderSectionHandler"/>
    <handler class="org.kabeja.parser.DXFTableSectionHandler">
      <handlers>
@@ -30,7 +30,7 @@
          <handler class="org.kabeja.parser.entities.DXFSolidHandler"/>
          <handler class="org.kabeja.parser.entities.DXFTextHandler"/>
          <handler class="org.kabeja.parser.entities.DXFAttribHandler"/>
-	 <handler class="org.kabeja.parser.entities.DXFMTextHandler"/>
+		 <handler class="org.kabeja.parser.entities.DXFMTextHandler"/>
          <handler class="org.kabeja.parser.entities.DXFTraceHandler"/>
          <handler class="org.kabeja.parser.entities.DXFDimensionHandler"/>
          <handler class="org.kabeja.parser.entities.DXFImageHandler"/>
@@ -58,11 +58,11 @@
         <handler class="org.kabeja.parser.entities.DXFInsertHandler"/>
         <handler class="org.kabeja.parser.entities.DXFLineHandler"/>
         <handler class="org.kabeja.parser.entities.DXFPolylineHandler"/>
-	<handler class="org.kabeja.parser.entities.DXFLWPolylineHandler"/>
+		<handler class="org.kabeja.parser.entities.DXFLWPolylineHandler"/>
         <handler class="org.kabeja.parser.entities.DXFSolidHandler"/>
         <handler class="org.kabeja.parser.entities.DXFTextHandler"/>
-	<handler class="org.kabeja.parser.entities.DXFAttribHandler"/>
-	<handler class="org.kabeja.parser.entities.DXFMTextHandler"/>
+		<handler class="org.kabeja.parser.entities.DXFAttribHandler"/>
+		<handler class="org.kabeja.parser.entities.DXFMTextHandler"/>
         <handler class="org.kabeja.parser.entities.DXFTraceHandler"/>
         <handler class="org.kabeja.parser.entities.DXFDimensionHandler"/>
         <handler class="org.kabeja.parser.entities.DXFImageHandler"/>

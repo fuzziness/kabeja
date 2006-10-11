@@ -50,7 +50,7 @@
 				<fileset dir="${block.libs}">
 					<include name="**/*.jar" />
 				</fileset>
-				<dirset dir="${dxf2svg.home}/${build}/${classes}"/>
+				<dirset dir="${kabeja.home}/${build}/${classes}"/>
 
 			</classpath>
 		</javac>
@@ -60,12 +60,12 @@
 
 
 	<target name="dist" depends="compile, manifest">
-		<copy todir="${dxf2svg.home}/${dist}/${libs}">
+		<copy todir="${kabeja.home}/${dist}/${libs}">
 			<fileset dir="${libs}">
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<jar jarfile="${dxf2svg.home}/${dist}/${libs}/${block.releasename}.jar" basedir="${build}/${classes}" includes="**/*" manifest="${block.manifest}"/>
+		<jar jarfile="${kabeja.home}/${dist}/${libs}/${block.releasename}.jar" basedir="${build}/${classes}" includes="**/*" manifest="${block.manifest}"/>
 	</target>
 
 

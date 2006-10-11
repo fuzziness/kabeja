@@ -15,9 +15,9 @@
 */
 package org.kabeja.parser;
 
-import org.kabeja.parser.objects.DXFObjectHandler;
-
 import java.util.HashMap;
+
+import org.kabeja.parser.objects.DXFObjectHandler;
 
 
 /**

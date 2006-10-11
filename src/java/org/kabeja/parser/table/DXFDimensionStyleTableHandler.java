@@ -16,7 +16,6 @@
 package org.kabeja.parser.table;
 
 import org.kabeja.dxf.DXFDimensionStyle;
-
 import org.kabeja.parser.DXFValue;
 import org.kabeja.parser.entities.AbstractEntityHandler;
 

@@ -7,7 +7,7 @@
  <xsl:include href="header.xsl"/>
   <xsl:template match="/">
     <html>
-       <body style="margin:0px">
+       <body style="margin:0px;background-color:#ffffff;">
         <xsl:call-template name="header"/>
 	 <div style="margin-left:20%;margin-right:10%;margin-top:50px">
 	    <h2 style="border-bottom:thin solid #cccccc">Explore DXF-Files</h2>

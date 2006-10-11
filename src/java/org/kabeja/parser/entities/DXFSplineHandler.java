@@ -19,7 +19,6 @@ import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFSpline;
 import org.kabeja.dxf.helpers.SplinePoint;
-
 import org.kabeja.parser.DXFValue;
 
 

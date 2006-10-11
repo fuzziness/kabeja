@@ -15,11 +15,10 @@
 */
 package org.kabeja.xml;
 
-import org.xml.sax.ContentHandler;
-
 import java.io.OutputStream;
-
 import java.util.Map;
+
+import org.xml.sax.ContentHandler;
 
 
 /**

@@ -15,9 +15,9 @@
 */
 package org.kabeja.xml;
 
-import org.xml.sax.helpers.XMLFilterImpl;
-
 import java.util.Map;
+
+import org.xml.sax.helpers.XMLFilterImpl;
 
 
 /**

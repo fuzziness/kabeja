@@ -15,22 +15,18 @@
 */
 package org.kabeja.batik.tools;
 
+import java.io.OutputStream;
+import java.util.Map;
+
 import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
 import org.apache.batik.transcoder.Transcoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
-
 import org.kabeja.tools.ConfigHelper;
-
 import org.kabeja.xml.SAXSerializer;
-
 import org.xml.sax.SAXException;
-
-import java.io.OutputStream;
-
-import java.util.Map;
 
 
 /**

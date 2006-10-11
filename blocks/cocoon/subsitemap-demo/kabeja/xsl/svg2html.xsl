@@ -9,7 +9,7 @@
  
   <xsl:template match="/">
     <html>
-       <body style="margin:0px">
+       <body style="margin:0px;background-color:white;">
         <xsl:call-template name="header"/>
          <div style="margin-left:2%;margin-right:10%;margin-top:50px">
           <xsl:apply-templates/>
@@ -18,8 +18,8 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="svg">
-    <a style="display:block;text-align:center" href="../../../sample.html">back</a>
+  <xsl:template match="svg:svg">
+    <a style="display:block;text-align:center" href="../../../sample.html">Return to samples</a>
     <br/>
     <table>
       <tr>
@@ -27,14 +27,14 @@
         <td valign="top">
           <table>
             <tr>
-              <th  style="valign:top">Layers</th>
+              <th  style="valign:top">Draft Layers</th>
             </tr>
-            <xsl:for-each select="g/g">
+            <xsl:for-each select="svg:g[@id='draft']/svg:g">
               <xsl:choose>
                 <xsl:when test="position() = $highlight">
-                  <tr>
+                  <tr style="background-color:lightgray;">
                     <td><i><xsl:value-of select="@id"/></i></td>
-                    <td><span style="color:green"> selected </span></td>
+                    <td><span style="color:black;"> selected </span></td>
                   </tr>
                 </xsl:when>
                 <xsl:otherwise>

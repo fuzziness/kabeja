@@ -16,7 +16,6 @@
 package org.kabeja.processing;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +28,6 @@ import org.kabeja.dxf.DXFLWPolyline;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFLine;
 import org.kabeja.dxf.DXFPolyline;
-import org.kabeja.dxf.DXFVertex;
-import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.processing.helper.PolylineQueue;
 
@@ -94,7 +91,7 @@ public class PolylineConverter implements PostProcessor {
 			List l = layer.getDXFEntities(DXFConstants.ENTITY_TYPE_LWPOLYLINE);
 			Iterator i = l.iterator();
 			while (i.hasNext()) {
-				System.out.println("lwpolyline");
+				
 				DXFLWPolyline pl = (DXFLWPolyline) i.next();
 				if (!pl.isClosed() && !pl.is3DPolygonMesh()
 						&& !pl.isClosedMeshMDirection()

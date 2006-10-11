@@ -18,7 +18,6 @@ package org.kabeja.parser.entities;
 import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFShape;
-
 import org.kabeja.parser.DXFValue;
 
 

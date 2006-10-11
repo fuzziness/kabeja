@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGGenerator;
+import org.kabeja.svg.SVGSAXGenerator;
 import org.kabeja.svg.SVGUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -35,7 +35,7 @@ import org.xml.sax.helpers.AttributesImpl;
  *
  *
  */
-public class DXFLayer implements SVGGenerator {
+public class DXFLayer implements SVGSAXGenerator {
     private Hashtable entities = new Hashtable();
     private String name = "";
     private int color = 6;

@@ -450,7 +450,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 
 		Iterator i = vertices.iterator();
 		first = last = (DXFVertex) i.next();
-		d.append("M " + last.getX() + " " + doc.translateY(last.getY()) + " ");
+		d.append("M " + last.getX() + " " + last.getY() + " ");
 
 		while (i.hasNext()) {
 			DXFVertex end = (DXFVertex) i.next();

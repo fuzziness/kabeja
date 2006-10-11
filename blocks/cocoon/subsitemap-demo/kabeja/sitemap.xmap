@@ -10,6 +10,9 @@
       <map:transformer name="write-source" src="org.apache.cocoon.transformation.SourceWritingTransformer" logger="sitemap.transformer.filewriter">
         <serializer>myxml</serializer>
       </map:transformer>
+       <map:transformer name="mozilla" src="org.kabeja.cocoon.transformation.SAXFilter2TransformerAdapter" logger="sitemap.transformer.kabeja.filter">
+             <parameter name="filter.class" value="org.kabeja.xml.FixedStrokeWidthFilter"/>
+      </map:transformer>
     </map:transformers>
     
     
@@ -52,6 +55,11 @@
 
     <map:match pattern="demo/*.svg">
          <map:generate type="dxf2svg" src="dxf/{1}.dxf"/>
+       <!--  <map:select type="browser">
+            <map:when test="netscape">
+               <map:transform type="mozilla"/>
+            </map:when>       
+         </map:select>  -->
          <map:serialize type="svgxml"/>
     </map:match>
 

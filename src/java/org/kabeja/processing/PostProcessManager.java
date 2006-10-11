@@ -15,11 +15,11 @@
 */
 package org.kabeja.processing;
 
-import org.kabeja.dxf.DXFDocument;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.kabeja.dxf.DXFDocument;
 
 
 /**

@@ -18,12 +18,11 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-
 /**
  * 
- *
+ * 
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
- *
+ * 
  */
 public class SVGUtils {
 
@@ -36,7 +35,8 @@ public class SVGUtils {
 
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
 		symbols.setDecimalSeparator('.');
-		format = new DecimalFormat("###.###################################", symbols);
+		format = new DecimalFormat("###.###################################",
+				symbols);
 
 	}
 
@@ -46,7 +46,9 @@ public class SVGUtils {
 		// .startElement(SVGConstants.SVG_NAMESPACE,
 		// element,SVGConstants.SVG_PREFIX+":"+element,
 		// attr);
-		handler.startElement(SVGConstants.SVG_NAMESPACE, element, element, attr);
+		handler
+				.startElement(SVGConstants.SVG_NAMESPACE, element, element,
+						attr);
 	}
 
 	public static void endElement(ContentHandler handler, String element)
@@ -110,17 +112,14 @@ public class SVGUtils {
 		}
 	}
 
-
-
 	/**
 	 * SVG is XML and needs valid id attributes look at <a
 	 * href="http://www.w3.org/TR/2000/REC-xml-20001006#sec-common-syn">XML-Recommandation
 	 * </a>.
-	 *
+	 * 
 	 * @param id
 	 * @return a id which should be valid, but may be not unique.
 	 */
-
 	public static String validateID(String id) {
 		if (id.length() > 0) {
 			StringBuffer buf = new StringBuffer();
@@ -139,15 +138,80 @@ public class SVGUtils {
 					// normally we have to check all id to garante it will be a
 					// unique,
 					// but we convert the current char to a int with "_"-prefix
-					buf.append('_');
+					buf.append("_#");
 					buf.append((int) c);
 					buf.append('_');
+
 				}
 			}
 			return buf.toString();
 		} else {
 			return id;
 		}
+	}
+
+	/**
+	 * This will reverse a validated ID back to DXF id.
+	 * 
+	 * @param id
+	 * @return
+	 */
+
+	public static String reverseID(String id) {
+
+		if (id.length() > 0) {
+			StringBuffer buf = new StringBuffer();
+			boolean marker = false;
+			boolean start = false;
+			StringBuffer number = new StringBuffer();
+
+			for (int i = 0; i < id.length(); i++) {
+				char c = id.charAt(i);
+				if (c == '_') {
+					if (marker) {
+						if (number.length() > 0) {
+							int x = Integer.parseInt(number.toString());
+							buf.append((char) x);
+
+							start = false;
+							number.delete(0, number.length());
+						} else {
+							buf.append('_');
+							buf.append(c);
+						}
+						marker = false;
+					} else {
+						marker = true;
+					}
+				} else if (marker) {
+					if (Character.isDigit(c) && start) {
+						number.append(c);
+					} else if (c != '#') {
+						marker = false;
+						buf.append('_');
+						buf.append(c);
+					} else {
+						// is #
+						start = true;
+					}
+				} else {
+					buf.append(c);
+				}
+
+			}
+			if (marker) {
+				// we forgot a last single '_'
+				buf.append('_');
+			}
+			if (buf.toString().startsWith(DEFAULT_ID_NAME_PREFIX)) {
+				buf.delete(0, DEFAULT_ID_NAME_PREFIX.length());
+			}
+
+			return buf.toString();
+		} else {
+			return id;
+		}
+
 	}
 
 	public static void textDocumentToSAX(ContentHandler handler,
@@ -160,7 +224,7 @@ public class SVGUtils {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param handler
 	 * @param para
 	 *            the StyledTextParagraph^
@@ -204,20 +268,21 @@ public class SVGUtils {
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_TEXT_LENGTH,
 					"" + para.getWidth());
 		}
-		if(para.isBold()){
+		if (para.isBold()) {
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_WEIGHT,
 					"bold");
 		}
-		if(para.isItalic()){
+		if (para.isItalic()) {
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_STYLE,
-			"italic");
+					"italic");
 		}
-		if(para.getFont().length()>0){
+		if (para.getFont().length() > 0) {
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_FAMILY,
-			para.getFont());
+					para.getFont());
 		}
-		if(para.getFontHeight()>0){
-			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_SIZE,""+formatNumberAttribute(para.getFontHeight()));
+		if (para.getFontHeight() > 0) {
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_SIZE,
+					"" + formatNumberAttribute(para.getFontHeight()));
 		}
 
 		SVGUtils.startElement(handler, SVGConstants.SVG_TSPAN, atts);
@@ -256,7 +321,7 @@ public class SVGUtils {
 		char[] c = path.toCharArray();
 		if (c.length > 0) {
 			buf.append("file://");
-			if(c[0] != '/'){
+			if (c[0] != '/') {
 				buf.append('/');
 			}
 			for (int i = 0; i < c.length; i++) {
@@ -268,8 +333,11 @@ public class SVGUtils {
 					buf.append(c[i]);
 				}
 			}
+
 		}
 		return buf.toString();
 	}
+
+	
 
 }

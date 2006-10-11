@@ -15,20 +15,6 @@
 */
 package org.kabeja.ui.viewer;
 
-import de.miethxml.toolkit.ui.SmallShadowBorder;
-
-import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
-import org.apache.batik.swing.JSVGCanvas;
-import org.apache.batik.swing.JSVGScrollPane;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.batik.transcoder.image.JPEGTranscoder;
-import org.apache.batik.util.XMLResourceDescriptor;
-
-import org.w3c.dom.svg.SVGDocument;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -36,7 +22,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,6 +38,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
+import org.apache.batik.swing.JSVGCanvas;
+import org.apache.batik.swing.JSVGScrollPane;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
+import org.apache.batik.util.XMLResourceDescriptor;
+import org.w3c.dom.svg.SVGDocument;
+
+import de.miethxml.toolkit.ui.SmallShadowBorder;
 
 
 /**

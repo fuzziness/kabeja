@@ -18,7 +18,6 @@ package org.kabeja.parser.objects;
 import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.objects.DXFImageDefObject;
 import org.kabeja.dxf.objects.DXFObject;
-
 import org.kabeja.parser.DXFValue;
 
 

@@ -1,7 +1,18 @@
 /*
- * Created on 19.10.2005
- *
- */
+   Copyright 2005 Simon Mieth
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
 package org.kabeja.dxf.helpers;
 
 /**
@@ -121,6 +132,8 @@ public class MathUtils {
 		return v;
 	}
 
+	
+	
 	public static Point getIntersection(Point a, Vector u, Point b, Vector v) {
 
 		//u = normalize(u);
@@ -222,5 +235,60 @@ public class MathUtils {
 
 
 	}
+	/**
+	 * Returns the qaudrant for the given angle:<br/>
+	 * 0,1,2 or 3
+	 * @param angle in degree
+	 * @return the quadrant
+	 */
 
+	
+	public static int getQuadrant(double angle){
+		
+		if(angle>360){
+			angle = angle - Math.floor(angle/360)*360;
+		}
+		if(angle>=0 && angle < 90){
+			return 0;
+		}else if(angle>=90 && angle<180){
+			return 1;
+		}else if(angle>=180 && angle<270 ){
+			return 2;
+		}else{
+			return 3;
+		}
+		
+	
+	}
+	
+	/**
+	 * Returns the angle of the vector again the x-axis
+	 * @param v the vector
+	 * @return the angle in degree
+	 */
+	
+	public static double getDirectionAngle(Vector v){
+		double l = absoluteValue(v);
+		if(v.getX()<0 && v.getY()<0){
+        	return (Math.toDegrees(Math.acos(Math.abs(v.getX()/l)))+180);
+        }else if(v.getX()==0.0 || v.getY()<0){
+        	return Math.toDegrees(Math.asin(v.getY()/l));
+        }else{
+        	return Math.toDegrees(Math.acos(v.getX()/l));
+        }
+	}
+
+	/**
+	 * Invert the direction of the given vector
+	 * @param the vector to invert
+	 * @return new inverted vector
+	 */
+	
+	public static Vector invertDirection(Vector v){
+		return scaleVector(v,-1);
+	}
+	
+	
+
+	
 }
