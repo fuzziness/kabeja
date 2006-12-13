@@ -42,6 +42,12 @@ import javax.swing.SwingUtilities;
 import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
 import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.swing.JSVGScrollPane;
+import org.apache.batik.swing.gvt.GVTTreeRendererAdapter;
+import org.apache.batik.swing.gvt.GVTTreeRendererEvent;
+import org.apache.batik.swing.svg.GVTTreeBuilderAdapter;
+import org.apache.batik.swing.svg.GVTTreeBuilderEvent;
+import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
+import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -84,8 +90,10 @@ public class SVGViewer {
 
         // the uri-panel
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 3));
+        panel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
         panel.add(new JLabel("Url:"));
         uriField = new JTextField(30);
+       
         uriField.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Runnable r = new Runnable() {
@@ -111,13 +119,13 @@ public class SVGViewer {
 
                         Runnable r = new Runnable() {
                                 public void run() {
-                                    infoLabel.setText("Parsing and Rendering");
+                                    infoLabel.setText("Starting ......");
                                     cards.show(parentPanel, "info");
 
                                     File file = fc.getSelectedFile();
                                     uriField.setText(file.getAbsolutePath());
                                     load(file);
-                                    cards.show(parentPanel, "view");
+                                    
                                 }
                             };
 
@@ -126,6 +134,9 @@ public class SVGViewer {
                     }
                 }
             });
+        
+ 
+        
         panel.add(button);
 
         button = new JButton("Zoom in");
@@ -190,6 +201,35 @@ public class SVGViewer {
 
         svgCanvas = new JSVGCanvas();
 
+        svgCanvas.addSVGDocumentLoaderListener(new SVGDocumentLoaderAdapter() {
+            public void documentLoadingStarted(SVGDocumentLoaderEvent e) {
+            	infoLabel.setText("Loading Draft...");
+            }
+            public void documentLoadingCompleted(SVGDocumentLoaderEvent e) {
+            	infoLabel.setText("Draft Loaded.");
+            }
+        });
+
+        svgCanvas.addGVTTreeBuilderListener(new GVTTreeBuilderAdapter() {
+            public void gvtBuildStarted(GVTTreeBuilderEvent e) {
+            	infoLabel.setText("Building...");
+            }
+            public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
+               infoLabel.setText("Build Done.");
+              
+            }
+        });
+
+        svgCanvas.addGVTTreeRendererListener(new GVTTreeRendererAdapter() {
+            public void gvtRenderingPrepare(GVTTreeRendererEvent e) {
+            	infoLabel.setText("Rendering Draft...");
+            }
+            public void gvtRenderingCompleted(GVTTreeRendererEvent e) {
+            	infoLabel.setText("");
+            	cards.show(parentPanel, "view");
+            }
+        });
+        
         JSVGScrollPane sp = new JSVGScrollPane(svgCanvas);
         sp.setBorder(new SmallShadowBorder());
 
@@ -205,20 +245,20 @@ public class SVGViewer {
     }
 
     public void load(File file) {
-        try {
+      //  try {
             if (file.exists()) {
-                FileInputStream in = new FileInputStream(file);
+                //FileInputStream in = new FileInputStream(file);
 
-                load(file.toURI().toASCIIString(), in);
+                load(file.toURI().toASCIIString());
             } else {
                 System.out.println("no file:" + file);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
-    public void load(String uri, InputStream in) {
+    public void load(String uri) {
         try {
             System.gc();
 
@@ -227,23 +267,11 @@ public class SVGViewer {
             if (uri.toLowerCase().endsWith(".dxf")) {
                 f = factory;
             } else {
-                // check for version 1.4 and above
-                String ver = System.getProperty("java.version");
 
-                if (ver.startsWith("1.2") || ver.startsWith("1.3")) {
-                    String parser = XMLResourceDescriptor.getXMLParserClassName();
-                    f = new SAXSVGDocumentFactory(parser);
-                } else if (ver.startsWith("1.4")) {
-                    // jdk 1.4 uses crimson
-                    f = new SAXSVGDocumentFactory(
-                            "org.apache.crimson.parser.XMLReaderImpl");
-                } else if (ver.startsWith("1.5")) {
-                    f = new SAXSVGDocumentFactory(
-                            "com.sun.org.apache.xerces.internal.parsers.SAXParser");
-                }
+            	f = new SAXSVGDocumentFactory(null);
             }
 
-            SVGDocument doc = f.createSVGDocument(uri, in);
+            SVGDocument doc = f.createSVGDocument(uri);
             this.svgCanvas.setDocumentState(JSVGCanvas.ALWAYS_DYNAMIC);
 
             // add a script to doc here by adding the script element
@@ -252,11 +280,14 @@ public class SVGViewer {
         	e.printStackTrace();
             JOptionPane.showMessageDialog(frame, e.getMessage(), "Error",
                 JOptionPane.ERROR_MESSAGE);
+            infoLabel.setText("Error:"+e.getLocalizedMessage());
 
         } catch (Error e) {
+        	  e.printStackTrace();
             JOptionPane.showMessageDialog(frame, e.getMessage(), "Error",
                 JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+          
+            infoLabel.setText("Error:"+e.getLocalizedMessage());
         }
     }
 

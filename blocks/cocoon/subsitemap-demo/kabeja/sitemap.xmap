@@ -10,7 +10,7 @@
       <map:transformer name="write-source" src="org.apache.cocoon.transformation.SourceWritingTransformer" logger="sitemap.transformer.filewriter">
         <serializer>myxml</serializer>
       </map:transformer>
-       <map:transformer name="mozilla" src="org.kabeja.cocoon.transformation.SAXFilter2TransformerAdapter" logger="sitemap.transformer.kabeja.filter">
+       <map:transformer name="firefox_fix" src="org.kabeja.cocoon.transformation.SAXFilter2TransformerAdapter" logger="sitemap.transformer.kabeja.filter">
              <parameter name="filter.class" value="org.kabeja.xml.FixedStrokeWidthFilter"/>
       </map:transformer>
     </map:transformers>
@@ -23,6 +23,26 @@
       <map:serializer mine-type="application/msexel" name="xls" src="org.apache.cocoon.serialization.HSSFSerializer"/>
     </map:serializers>
 
+    <map:selectors>
+  		<map:selector name="browser" src="org.apache.cocoon.selection.BrowserSelector" logger="sitemap.selector.browser">
+	      <browser name="explorer" useragent="MSIE"/>
+	      <browser name="pocketexplorer" useragent="MSPIE"/>
+      	  <browser name="handweb" useragent="HandHTTP"/>
+      	  <browser name="avantgo" useragent="AvantGo"/>
+	      <browser name="imode" useragent="DoCoMo"/>
+    	  <browser name="opera" useragent="Opera"/>
+	      <browser name="lynx" useragent="Lynx"/>
+	      <browser name="java" useragent="Java"/>
+          <browser name="wap" useragent="Nokia"/>
+          <browser name="wap" useragent="UP"/>
+          <browser name="wap" useragent="Wapalizer"/>
+          <browser name="firefox1" useragent="Firefox/1."/>
+          <browser name="mozilla5" useragent="Mozilla/5"/>
+          <browser name="mozilla5" useragent="Netscape6/"/>
+          <browser name="netscape" useragent="Mozilla"/>
+      </map:selector>
+    
+  </map:selectors>
   </map:components>
 
   
@@ -55,11 +75,11 @@
 
     <map:match pattern="demo/*.svg">
          <map:generate type="dxf2svg" src="dxf/{1}.dxf"/>
-       <!--  <map:select type="browser">
-            <map:when test="netscape">
-               <map:transform type="mozilla"/>
+         <map:select type="browser">
+            <map:when test="firefox1">
+               <map:transform type="firefox_fix"/>
             </map:when>       
-         </map:select>  -->
+         </map:select>
          <map:serialize type="svgxml"/>
     </map:match>
 

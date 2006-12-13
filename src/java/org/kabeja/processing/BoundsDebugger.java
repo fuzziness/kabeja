@@ -77,7 +77,7 @@ public class BoundsDebugger implements PostProcessor {
             DXFLayer l = (DXFLayer) i.next();
 
             //set color to gray
-            l.setColor(9);
+            l.setColor(8);
 
             Iterator ti = l.getDXFEntityTypeIterator();
 
@@ -89,7 +89,7 @@ public class BoundsDebugger implements PostProcessor {
                     DXFEntity entity = (DXFEntity) ei.next();
 
                     //set to gray
-                    entity.setColor(9);
+                    entity.setColor(8);
 
                     Bounds currentBounds = entity.getBounds();
 
@@ -119,24 +119,30 @@ public class BoundsDebugger implements PostProcessor {
         }
 
         //left -> red
-        left.setColor(1);
-        addBounds(lBounds, doc, 1, left);
+        left.setColor(0);
+        addBounds(lBounds, doc, 0, left.getType()+"="+left.getID());
 
         //right -> green
-        right.setColor(3);
-        addBounds(rBounds, doc, 3, right);
+        right.setColor(2);
+        addBounds(rBounds, doc, 2, right.getType()+"="+right.getID());
 
         //bottom blue
-        bottom.setColor(5);
-        addBounds(bBounds, doc, 5, bottom);
+        bottom.setColor(4);
+        addBounds(bBounds, doc, 4, bottom.getType()+"="+bottom.getID());
 
         //top color -> magenta
-        top.setColor(6);
-        addBounds(tBounds, doc, 6, top);
+        top.setColor(5);
+        addBounds(tBounds, doc, 5, top.getType()+"="+top.getID());
+        
+        
+        
+        //the  color -> magenta
+        top.setColor(5);
+        addBounds(b, doc, 6, "ALL");
     }
 
     protected void addBounds(Bounds bounds, DXFDocument doc, int color,
-        DXFEntity entity) {
+        String type) {
         DXF3DFace face = new DXF3DFace();
         face.getPoint1().setX(bounds.getMinimumX());
         face.getPoint1().setY(bounds.getMinimumY());
@@ -157,7 +163,7 @@ public class BoundsDebugger implements PostProcessor {
 
         DXFText t = new DXFText();
         t.setDXFDocument(doc);
-        t.setText("DEBUG-" + entity.getType());
+        t.setText("DEBUG-" +type);
         t.getInsertPoint().setX(bounds.getMinimumX());
         t.getInsertPoint().setY(bounds.getMaximumY());
         t.setColor(color);

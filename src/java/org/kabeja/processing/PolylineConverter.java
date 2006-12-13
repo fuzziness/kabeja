@@ -33,7 +33,10 @@ import org.kabeja.processing.helper.PolylineQueue;
 
 public class PolylineConverter implements PostProcessor {
 
+	
+	public final static String PROPERTY_POINT_DISTANCE="point.distance";
 	private List queues;
+	private double radius = DXFConstants.POINT_CONNECTION_RADIUS;
 
 	public void process(DXFDocument doc, Map context) {
 
@@ -48,7 +51,9 @@ public class PolylineConverter implements PostProcessor {
 	}
 
 	public void setProperties(Map properties) {
-
+         if(properties.containsKey(PROPERTY_POINT_DISTANCE)){
+        	 this.radius=Double.parseDouble((String)properties.get(PROPERTY_POINT_DISTANCE));
+         }
 	}
 
 	protected void processLayer(DXFLayer layer) {
@@ -143,7 +148,7 @@ public class PolylineConverter implements PostProcessor {
 		}
 
 		// nothing found create a new queue
-		PolylineQueue queue = new PolylineQueue(e, start, end);
+		PolylineQueue queue = new PolylineQueue(e, start, end,this.radius);
 
 		this.queues.add(queue);
 

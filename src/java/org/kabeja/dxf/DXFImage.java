@@ -98,8 +98,8 @@ public class DXFImage extends DXFEntity {
 		// convert the file to uri
 
 
-		attr.addAttribute("", "", "xmlns:xlink", "CDATA",
-				SVGConstants.XLINK_NAMESPACE);
+		attr.addAttribute(SVGConstants.XMLNS_NAMESPACE, "xlink", "xmlns:xlink", "CDATA",
+                SVGConstants.XLINK_NAMESPACE);
 		attr.addAttribute(SVGConstants.XLINK_NAMESPACE, "href", "xlink:href",
 				"CDATA", SVGUtils.pathToURI(imageDef.getFilename()));
 

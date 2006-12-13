@@ -14,7 +14,7 @@
 	<property name="block.libs" value="lib" />
 	<property name="sample" value="sample" />
 	<property name="block.manifest" value="manifestfile" />
-	<property name="version" value="0.1" />
+	<property name="version" value="0.3" />
 	<property name="packages" value="packages" />
 	<property name="samples" value="samples" />
 	<property name="apidocs" value="javadoc" />
@@ -88,7 +88,7 @@
 	<target name="clean">
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
-
+       <delete file="${block.manifest}"/>
 		<delete dir="${tempdir}" />
 	</target>
 
@@ -148,11 +148,17 @@
 			<include name="*.jar" />
 		</fileset>
 		<pathconvert pathsep=" " property="block.jars" refid="jar.files">
-			<map from="${basedir}/${block.libs}/" to="" />
+			<map from="${basedir}${file.separator}${block.libs}${file.separator}" to="" />
+		</pathconvert>
+		<fileset dir="${kabeja.home}/${dist}/${libs}" id="core-jar.files">
+				<include name="*.jar" />
+		</fileset>
+		<pathconvert pathsep=" " property="core.jars" refid="core-jar.files">
+				<map from="${kabeja.home}${file.separator}${dist}${file.separator}${libs}${file.separator}" to="" />
 		</pathconvert>
 		<manifest file="${block.manifest}">
 			<attribute name="Main-Class" value="${block.mainclass}" />
-			<attribute name="Class-Path" value="${block.jars} ${releasename}.jar" />
+			<attribute name="Class-Path" value="${block.jars} ${core.jars} " />
 		</manifest>
 	</target>
 

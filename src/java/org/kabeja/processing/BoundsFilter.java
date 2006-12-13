@@ -22,8 +22,8 @@ public class BoundsFilter extends AbstractPostProcessor {
 
 	public void process(DXFDocument doc, Map context) {
 		if (this.properties.containsKey(PROPERTY_PROCESS)
-				&& Boolean.parseBoolean((String) this.properties
-						.get(PROPERTY_PROCESS))) {
+				&& Boolean.valueOf((String) this.properties
+						.get(PROPERTY_PROCESS)).booleanValue()) {
 
 			Bounds bounds = new Bounds();
 			if (this.properties.containsKey(PROPERTY_X)) {

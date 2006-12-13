@@ -142,7 +142,7 @@ public class FixedStrokeWidthFilter extends AbstractSAXFilter {
 		
 		super.setProperties(properties);
 		if(this.properties.containsKey(PROPERTY_FIXED_FONTSIZE)){
-			this.fixFontsize=Boolean.parseBoolean((String)this.properties.get(PROPERTY_FIXED_FONTSIZE));
+			this.fixFontsize=Boolean.valueOf((String)this.properties.get(PROPERTY_FIXED_FONTSIZE)).booleanValue();
 		}
 	}
 	

@@ -18,6 +18,7 @@ package org.kabeja.svg;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.kabeja.dxf.Bounds;
 import org.kabeja.dxf.DXFBlock;
@@ -38,17 +39,18 @@ public class SVGGenerator extends AbstractSAXGenerator {
 	public final static String PROPERTY_MODELSPACE = "modelspace";
 
 	public final static String PROPERTY_STROKE_WIDTH = "stroke-width";
-	
-	public final static String PROPERTY_WIDTH="width";
-	
-	public final static String PROPERTY_HEIGHT="height";
-	
-	public final static String PROPERTY_OVERFLOW="svg.overflow";
 
-	public static final double DEFAULT_MARGIN = 5;
-	
-	public final static String SUPPORTED_SVG_VERSION="1.0";
-	
+	public final static String PROPERTY_DOCUMENTBOUNDS = "useBounds";
+
+	public final static String PROPERTY_WIDTH = "width";
+
+	public final static String PROPERTY_HEIGHT = "height";
+
+	public final static String PROPERTY_OVERFLOW = "svg.overflow";
+
+	public static final double DEFAULT_MARGIN_PERCENT = 1.0;
+
+	public final static String SUPPORTED_SVG_VERSION = "1.0";
 
 	private double margin;
 
@@ -57,8 +59,12 @@ public class SVGGenerator extends AbstractSAXGenerator {
 	private boolean modelspace = true;
 
 	private Map context;
-	
-	private boolean overflow=true;
+
+	private boolean overflow = true;
+
+	private boolean useBounds = true;
+
+	private String marginSettings;
 
 	protected void generate() {
 		// TODO here should be the insert point for the
@@ -70,16 +76,15 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 	protected void setupProperties() {
 
-		this.context = new HashMap();
+		if (this.context == null) {
+			this.context = new HashMap();
+		}
 
 		// setup the properties
 
 		// the margin
 		if (this.properties.containsKey(PROPERTY_MARGIN)) {
-			this.margin = Double.parseDouble((String) this.properties
-					.get(PROPERTY_MARGIN));
-		} else {
-			this.margin = DEFAULT_MARGIN;
+			this.marginSettings = (String) this.properties.get(PROPERTY_MARGIN);
 		}
 
 		// use paperspace
@@ -95,16 +100,30 @@ public class SVGGenerator extends AbstractSAXGenerator {
 					.booleanValue();
 		}
 
-		
-		if(this.properties.containsKey(PROPERTY_OVERFLOW)){
-			this.overflow = Boolean.valueOf((String)this.properties.get(PROPERTY_OVERFLOW)).booleanValue();
+		if (this.properties.containsKey(PROPERTY_OVERFLOW)) {
+			this.overflow = Boolean.valueOf(
+					(String) this.properties.get(PROPERTY_OVERFLOW))
+					.booleanValue();
+		}
+
+		if (this.properties.containsKey(PROPERTY_DOCUMENTBOUNDS)) {
+			this.useBounds = Boolean.valueOf(
+					(String) this.properties.get(PROPERTY_DOCUMENTBOUNDS))
+					.booleanValue();
 		}
 	}
 
 	private void generateSAX() {
 		try {
+			
+		
+			
 			this.handler.startDocument();
 
+			
+			
+			
+			
 			AttributesImpl attr = new AttributesImpl();
 
 			// add the viewport
@@ -113,11 +132,14 @@ public class SVGGenerator extends AbstractSAXGenerator {
 			// the SVG-Viewer will not show the content
 			String viewport = "";
 			Bounds bounds = this.doc.getBounds();
-			double width=0.0;
-			double height=0.0;
+			double width = 0.0;
+			double height = 0.0;
+
+			// TODO this should be configurable
 
 			if (this.doc.getDXFHeader().hasVariable("$PEXTMAX")
-					&& this.doc.getDXFHeader().hasVariable("$PEXTMMIN")) {
+					&& this.doc.getDXFHeader().hasVariable("$PEXTMMIN")
+					&& !this.useBounds) {
 				DXFVariable min = this.doc.getDXFHeader().getVariable(
 						"$PEXTMIN");
 				DXFVariable max = this.doc.getDXFHeader().getVariable(
@@ -128,48 +150,46 @@ public class SVGGenerator extends AbstractSAXGenerator {
 				width = max.getDoubleValue("10") - x;
 				height = max_y - y;
 
-				double boundsWidth = bounds.getWidth();
+				viewport = "" + x + " " + ((-1.0) * max_y) + " "
+						+ Math.abs(width) + " " + Math.abs(height);
 
-				// we set a limit here and use the bounds instead
-				if ((width <= (boundsWidth * 2)) && (width > 0)) {
-					viewport = "" + x + " " + ((-1.0) * max_y) + " "
-							+ Math.abs(width) + " " + Math.abs(height);
-				}
-			}
+			} else {
 
-			if (viewport.length() == 0) {
-				width = bounds.getWidth() + (2 * this.margin);
-				height = bounds.getHeight() + (2 * this.margin);
-				
-				viewport = "" + (bounds.getMinimumX() - this.margin) + " "
-						+ ((-1 * bounds.getMaximumY()) - this.margin) + "  "
+				double[] margin = this.getMargin(bounds);
+				width = bounds.getWidth() + (margin[1] + margin[3]);
+				height = bounds.getHeight() + (margin[0] + margin[2]);
+
+				viewport = "" + (bounds.getMinimumX() - margin[3]) + " "
+						+ ((-1 * bounds.getMaximumY()) - margin[0]) + "  "
 						+ SVGUtils.formatNumberAttribute(width) + " "
-						+ SVGUtils.formatNumberAttribute(width);
+						+ SVGUtils.formatNumberAttribute(height);
 			}
 
 			SVGUtils.addAttribute(attr, "viewBox", viewport);
 
-			if(this.properties.containsKey(PROPERTY_WIDTH)){
-				SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_WIDTH,(String) this.properties.get(PROPERTY_WIDTH));
+			if (this.properties.containsKey(PROPERTY_WIDTH)) {
+				SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_WIDTH,
+						(String) this.properties.get(PROPERTY_WIDTH));
 			}
-			
-			if(this.properties.containsKey(PROPERTY_HEIGHT)){
-				SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_HEIGHT,(String) this.properties.get(PROPERTY_HEIGHT));
+
+			if (this.properties.containsKey(PROPERTY_HEIGHT)) {
+				SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_HEIGHT,
+						(String) this.properties.get(PROPERTY_HEIGHT));
 			}
-			
+
 			// set the default namespace
 			SVGUtils.addAttribute(attr, "xmlns", SVGConstants.SVG_NAMESPACE);
-			
-			
-//			 the version of SVG we generate now
-			SVGUtils.addAttribute(attr,SVGConstants.SVG_ATTRIBUTE_VERSION, SUPPORTED_SVG_VERSION);
-			
-			//the overflow 
-			if(this.overflow){
-				SVGUtils.addAttribute(attr,SVGConstants.SVG_ATTRIBUTE_OVERFLOW, SVGConstants.SVG_ATTRIBUTEVALUE_VISIBLE);
+
+			// the version of SVG we generate now
+			SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_VERSION,
+					SUPPORTED_SVG_VERSION);
+
+			// the overflow
+			if (this.overflow) {
+				SVGUtils.addAttribute(attr,
+						SVGConstants.SVG_ATTRIBUTE_OVERFLOW,
+						SVGConstants.SVG_ATTRIBUTEVALUE_VISIBLE);
 			}
-			
-			
 
 			SVGUtils.startElement(this.handler, SVGConstants.SVG_ROOT, attr);
 
@@ -208,12 +228,12 @@ public class SVGGenerator extends AbstractSAXGenerator {
 				style.toSAX(handler, context);
 			}
 
-//			i = this.doc.getDXFHatchPatternIterator();
-//
-//			while (i.hasNext()) {
-//				DXFHatchPattern pattern = (DXFHatchPattern) i.next();
-//				pattern.toSAX(handler, context);
-//			}
+			// i = this.doc.getDXFHatchPatternIterator();
+			//
+			// while (i.hasNext()) {
+			// DXFHatchPattern pattern = (DXFHatchPattern) i.next();
+			// pattern.toSAX(handler, context);
+			// }
 
 			SVGUtils.endElement(handler, SVGConstants.SVG_DEFS);
 
@@ -304,4 +324,64 @@ public class SVGGenerator extends AbstractSAXGenerator {
 		}
 	}
 
+	/**
+	 * Returns the margin-array where:
+	 * <ul>
+	 * <li>0 ->top margin</li>
+	 * <li>1 ->right margin</li>
+	 * <li>2 ->bottom margin</li>
+	 * <li>3 ->left margin</li>
+	 * </ul>
+	 * 
+	 * @param bounds
+	 * @return
+	 */
+
+	protected double[] getMargin(Bounds bounds) {
+		double[] margin = new double[4];
+		if (this.marginSettings != null) {
+		
+			StringTokenizer st = new StringTokenizer(this.marginSettings);
+			int count = st.countTokens();
+			switch (count) {
+			case 4:
+				for (int i = 0; i < count; i++) {
+					String m = st.nextToken().trim();
+				
+					if (m.endsWith("%")) {
+                           m = m.substring(0,m.length()-1);
+                         
+						if (i == 0 && i == 2) {
+
+							margin[i] = (Double.parseDouble(m)/100)
+									* bounds.getHeight();
+
+						} else {
+							margin[i] = (Double.parseDouble(m)/100)
+									* bounds.getWidth();
+						}
+
+					} else {
+						margin[i] = Double.parseDouble(m);
+					}
+				}
+				return margin;
+			case 1:
+				String m = st.nextToken().trim();
+				if (m.endsWith("%")) {
+                    m = m.substring(0,m.length()-1);
+				}
+				margin[0] = Double.parseDouble(m);
+				margin[1] = margin[2] = margin[3] = margin[0];
+				return margin;
+
+			}
+		}
+		margin[0] = bounds.getHeight() * (DEFAULT_MARGIN_PERCENT/100);
+		margin[2] = margin[0];
+		margin[1] = bounds.getWidth() * (DEFAULT_MARGIN_PERCENT/100);
+		margin[3] = margin[1];
+
+		return margin;
+	}
 }

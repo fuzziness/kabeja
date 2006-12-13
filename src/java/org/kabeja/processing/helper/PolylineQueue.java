@@ -33,16 +33,20 @@ public class PolylineQueue {
 
 	private List elements = new ArrayList();
 
-	private Point start;
+	private Point startPoint;
 
-	private Point end;
+	private Point endPoint;
+	
+	private double radius = DXFConstants.POINT_CONNECTION_RADIUS;
 
-	public PolylineQueue(DXFEntity e, Point start, Point end) {
+	
+	public PolylineQueue(DXFEntity e, Point start, Point end,double radius) {
 		this.elements.add(e);
-		this.start = start;
-		this.end = end;
+		this.startPoint = start;
+		this.endPoint = end;
+		this.radius=radius;
 	}
-
+	
 	public int size() {
 		return this.elements.size();
 	}
@@ -58,27 +62,27 @@ public class PolylineQueue {
 
 	public boolean connectDXFEntity(DXFEntity e, Point start, Point end) {
 
-		if (this.start.equals(end)) {
+		if (DXFUtils.equals(this.startPoint,end,radius)) {
 
-			this.start = start;
+			this.startPoint = start;
 			this.elements.add(0, e);
 			return true;
-		} else if (this.end.equals(start)) {
+		} else if (DXFUtils.equals(this.endPoint,start,radius)) {
 
-			this.end = end;
+			this.endPoint = end;
 			this.elements.add(e);
 			return true;
-		} else if (this.start.equals(start)) {
+		} else if (DXFUtils.equals(this.startPoint,start,radius)) {
 
 			// we need to reverse then the entity
-			this.start = end;
+			this.startPoint = end;
 			reverse(e);
 			this.elements.add(0, e);
 			return true;
-		} else if (this.end.equals(end)) {
+		} else if (DXFUtils.equals(this.endPoint,end,radius)) {
 
 			// we need to reverse then the entity
-			this.end = start;
+			this.endPoint = start;
 			reverse(e);
 			this.elements.add(e);
 			return true;
@@ -87,11 +91,11 @@ public class PolylineQueue {
 	}
 
 	public Point getStartPoint() {
-		return this.start;
+		return this.startPoint;
 	}
 
 	public Point getEndPoint() {
-		return this.end;
+		return this.endPoint;
 	}
 
 	public Iterator getElementIterator() {
@@ -99,21 +103,21 @@ public class PolylineQueue {
 	}
 
 	public boolean connect(PolylineQueue queue) {
-		if (queue.getStartPoint().equals(this.end)) {
+		if (DXFUtils.equals(queue.getStartPoint(),this.endPoint,radius)) {
 			// add to the end
 			add(queue);
 
 			return true;
-		} else if (queue.getEndPoint().equals(this.start)) {
+		} else if (DXFUtils.equals(queue.getEndPoint(),this.startPoint,radius)) {
 			// insert before
 			insertBefore(queue);
 			return true;
-		} else if (queue.getStartPoint().equals(this.start)) {
+		} else if (DXFUtils.equals(queue.getStartPoint(),this.startPoint,radius)) {
 			queue.reverse();
 			insertBefore(queue);
 			return true;
 
-		} else if (queue.getEndPoint().equals(this.end)) {
+		} else if (DXFUtils.equals(queue.getEndPoint(),this.endPoint,radius)) {
 			queue.reverse();
 			add(queue);
 			return true;
@@ -125,7 +129,7 @@ public class PolylineQueue {
 
 		// create the polyline and remove the entity
 		DXFPolyline pline = new DXFPolyline();
-		DXFVertex first = new DXFVertex(this.start);
+		DXFVertex first = new DXFVertex(this.startPoint);
 		pline.addVertex(first);
 		Iterator i = this.elements.iterator();
 		while (i.hasNext()) {
@@ -162,7 +166,7 @@ public class PolylineQueue {
 							* (1 - Math.cos(Math
 									.toRadians(arc.getTotalAngle() / 2)));
 					 double  chordLength= arc.getChordLength();
-					if (arc.getStartPoint().equals(first.getPoint())) {
+					if (DXFUtils.equals(arc.getStartPoint(),first.getPoint(),radius)) {
 
 						// the last point is our start point,
 						// which is always set
@@ -203,9 +207,9 @@ public class PolylineQueue {
 	}
 
 	protected void reverse() {
-		Point p = this.end;
-		this.end = this.start;
-		this.start = p;
+		Point p = this.endPoint;
+		this.endPoint = this.startPoint;
+		this.startPoint = p;
 
 		// reverse the list and all entities
 		int last = this.elements.size() - 1;
@@ -228,7 +232,7 @@ public class PolylineQueue {
 	 */
 
 	public void insertBefore(PolylineQueue queue) {
-		this.start = queue.getStartPoint();
+		this.startPoint = queue.getStartPoint();
 		Iterator i = queue.getElementIterator();
 		int x = 0;
 		while (i.hasNext()) {
@@ -245,7 +249,7 @@ public class PolylineQueue {
 	 */
 
 	public void add(PolylineQueue queue) {
-		this.end = queue.getEndPoint();
+		this.endPoint = queue.getEndPoint();
 		Iterator i = queue.getElementIterator();
 		while (i.hasNext()) {
 			DXFEntity e = (DXFEntity) i.next();

@@ -63,6 +63,9 @@ public class DXF2SVGReader extends XMLFilterImpl {
 
 	public static final String PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM = "config-inputstream";
 
+	
+	public static final String PROPERTY_SAX_XML_DOCUMENT_VERSION="http://xml.org/sax/properties/document-xml-version";
+	
 	public static final String FEATURE_NAMESPACES = "http://xml.org/sax/features/namespaces";
 
 	public static final String FEATURE_NAMESPACES_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
@@ -77,7 +80,7 @@ public class DXF2SVGReader extends XMLFilterImpl {
 
 	protected DTDHandler dtdhandler;
 
-	protected ContentHandler contenthandler;
+	//protected ContentHandler contenthandler;
 
 	protected EntityResolver resolver;
 
@@ -127,7 +130,7 @@ public class DXF2SVGReader extends XMLFilterImpl {
 			// the pipeline from parent class
 			SAXGenerator generator = new SVGGenerator();
 			generator.setProperties(new HashMap());
-			generator.generate(doc, this.contenthandler);
+			generator.generate(doc, this.getContentHandler());
 
 			// a little help for the GC
 			parser.releaseDXFDocument();
@@ -195,6 +198,7 @@ public class DXF2SVGReader extends XMLFilterImpl {
 	 * @see org.xml.sax.XMLReader#setContentHandler(org.xml.sax.ContentHandler)
 	 */
 	public void setContentHandler(ContentHandler handler) {
+		
 		super.setContentHandler(handler);
 	}
 
@@ -277,7 +281,7 @@ public class DXF2SVGReader extends XMLFilterImpl {
 			// the pipeline from parent class
 			SAXGenerator generator = new SVGGenerator();
 			generator.setProperties(new HashMap());
-			generator.generate(doc, this.contenthandler);
+			generator.generate(doc, this.getContentHandler());
 
 			// a little help for the GC
 			parser.releaseDXFDocument();
@@ -304,10 +308,12 @@ public class DXF2SVGReader extends XMLFilterImpl {
 			return null;
 		} else if (PROPERTY_PARSER_CONFIGURATION_FILENAME.equals(name)) {
 			return (Object) this.configURL;
+		} else if(PROPERTY_SAX_XML_DOCUMENT_VERSION.equals(name)){
+			return "1.0";
 		}
 
-		// throw new SAXNotSupportedException("no feature: " + name);
-		return null;
+		throw new SAXNotSupportedException("no feature: " + name);
+		//return null;
 	}
 
 	/*

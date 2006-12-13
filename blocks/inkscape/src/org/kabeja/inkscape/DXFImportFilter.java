@@ -59,7 +59,7 @@ public class DXFImportFilter {
 			// fix problems width percent width values
 			SAXFilter filter1 = new FixedStrokeWidthFilter();
 			Map properties = new HashMap();
-			properties.put(FixedStrokeWidthFilter.PROPERTY_FIXED_FONTSIZE,"no");
+			properties.put(FixedStrokeWidthFilter.PROPERTY_FIXED_FONTSIZE,"false");
 			filter1.setProperties(properties);
 
 			

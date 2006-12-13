@@ -1,19 +1,32 @@
-package org.kabeja.xml;
+/*
+   Copyright 2006 Simon Mieth
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/package org.kabeja.xml;
 
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
 import org.xml.sax.ContentHandler;
 /**
- * This interface descripes a generator component,which emit convert the
+ * This interface describes a generator component, which emit convert the
  * DXFDocument to SAX-Event.
- * &lt;p&gt;
- * Lifecycle
- * &lt;/p&gt;
- * &lt;ol&gt;
- * &lt;li&gt;setProperties&lt;/li&gt;
- * &lt;li&gt;generate(DXFDocument doc,ConentHandler handler)&lt;/li&gt;
- * &lt;/ol&gt;
+ * <h3>Lifecycle</h3>
+ * 
+ * <ol>
+ * <li>setProperties</li>
+ * <li>generate(DXFDocument doc,ConentHandler handler)</li>
+ * </ol>
  *
  * @author simon.mieth
  *

@@ -53,6 +53,7 @@ public class SAXFilter2TransformerAdapter extends AbstractTransformer implements
            
 				if(clazz != null){
 					this.filter =(SAXFilter) ClassUtils.newInstance(clazz);
+					
 				}else{
 					throw new ParameterException("Missing filter.class parameter");
 				}
@@ -128,6 +129,7 @@ public class SAXFilter2TransformerAdapter extends AbstractTransformer implements
 	}
 
 	public void startDocument() throws SAXException {
+		 this.filter.setContentHandler(this.xmlConsumer);	
 		this.filter.startDocument();
 	}
 	

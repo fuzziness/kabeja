@@ -1,5 +1,5 @@
 /*
-   Copyright 2005 Simon Mieth
+   Copyright 2006 Simon Mieth
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,37 +12,28 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
-package org.kabeja.xml;
+*/package org.kabeja.io;
 
 import java.io.OutputStream;
 import java.util.Map;
 
-import org.xml.sax.ContentHandler;
-
-
+import org.kabeja.dxf.DXFDocument;
 /**
- *This interface describes a Serializer, which will serialize the SAX-Events 
- *to the given stream.
+ * 
+ * This interface describes a Generator, which will generate  output  the given stream.
  *<h3>Lifecycle</h3>
  * 
  * <ol>
  * <li>setProperties</li>
  * <li>getSuffix()</li>
  * <li>getMimeType()</li>
- * <li>setOutput()</li>
- * <li>startDocument and all other methods from org.xml.sax.ContentHandler </li>
+ * <li>generate()</li>
  * </ol>
- * 
- * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
- *
+ *@author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  */
-public interface SAXSerializer extends ContentHandler {
-    public void setProperties(Map properties);
-
-    public String getSuffix();
-
-    public String getMimeType();
-
-    public void setOutput(OutputStream out);
+public interface StreamGenerator {
+	public void setProperties(Map properties);
+	public String getSuffix();
+	public String getMimeType();
+	public void generate(DXFDocument doc,OutputStream out);
 }

@@ -237,9 +237,11 @@ public class SVGUtils {
 		String decoration = "";
 		if (para.isUnderline()) {
 			decoration += "underline ";
+			
 		}
 		if (para.isOverline()) {
 			decoration += "overline ";
+			
 		}
 		if (decoration.length() > 0) {
 			SVGUtils.addAttribute(atts,
