@@ -370,6 +370,10 @@ public class SVGGenerator extends AbstractSAXGenerator {
 				String m = st.nextToken().trim();
 				if (m.endsWith("%")) {
                     m = m.substring(0,m.length()-1);
+                    margin[0] =  (Double.parseDouble(m)/100)
+					* ((bounds.getWidth()+bounds.getHeight())/2);
+				}else{
+					margin[0] = Double.parseDouble(m);
 				}
 				margin[0] = Double.parseDouble(m);
 				margin[1] = margin[2] = margin[3] = margin[0];

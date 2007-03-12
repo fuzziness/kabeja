@@ -38,7 +38,7 @@ import org.xml.sax.helpers.AttributesImpl;
 public class DXFLayer implements SVGSAXGenerator {
     private Hashtable entities = new Hashtable();
     private String name = "";
-    private int color = 6;
+    private int color = 7;
     private DXFDocument doc;
     private Bounds bounds = new Bounds();
     private String ltype = "";
@@ -178,7 +178,7 @@ public class DXFLayer implements SVGSAXGenerator {
     }
 
     public int getColor() {
-        return color;
+        return this.color;
     }
 
     public void setColor(int color) {

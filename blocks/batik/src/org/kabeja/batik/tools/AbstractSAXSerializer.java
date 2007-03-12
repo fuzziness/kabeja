@@ -15,6 +15,7 @@ import org.apache.batik.transcoder.Transcoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.kabeja.xml.AbstractSAXFilter;
 import org.kabeja.xml.SAXSerializer;
@@ -39,11 +40,40 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter implements
 
 	public static final String MIME_TYPE_PDF = "application/pdf";
 
+	
+	/**
+	 * Allows you to setup a width in px,inch,mm,cm,pt. This property overrides the PAPER_PROPERTY.
+	 */
 	public static final String PROPERTY_WIDTH = "width";
-
+	/**
+	 * Allows you to setup a height in px,inch,mm,cm,pt. This property overrides the PAPER_PROPERTY.
+	 */
+	
 	public static final String PROPERTY_HEIGHT = "height";
-
+/**
+ * Allows you to setup the dpi
+ */
+	public static final String PROPERTY_DPI = "dpi";
+	
 	public static final String PROPERTY_QUALITY = "quality";
+
+	/**
+	 * You can choose A0-A6 papers and Letter.
+	 */
+	public static final String PROPERTY_PAPER = "paper";
+	/**
+	 * Lets you choose the orientation of a paper (landscape). 
+	 */
+	public static final String PROPERTY_ORIENTATION = "orientation";
+	
+	
+	
+	public int DPI = 96;
+
+	public static final float INCH_TO_MM = 25.4f;
+	public static final float PT_TO_MM = 0.3527777777777f;
+
+	public float PIXEL_UNIT_TO_MM = INCH_TO_MM / DPI;
 
 	protected OutputStream out;
 
@@ -55,6 +85,8 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter implements
 
 	protected Transcoder transcoder;
 
+	protected boolean scaleToFit=true;
+	
 	protected abstract Transcoder createTranscoder();
 
 	protected Document document;
@@ -65,20 +97,47 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter implements
 	 * @see org.kabeja.xml.SAXSerializer#setProperties(java.util.Map)
 	 */
 	public void setProperties(Map properties) {
-		if (properties.containsKey(PROPERTY_WIDTH)) {
-			this.width = Float.parseFloat((String) properties
-					.get(PROPERTY_WIDTH));
+		
+		
+		if (properties.containsKey(PROPERTY_DPI)) {
+			this.DPI = Integer.parseInt((String) properties.get(PROPERTY_DPI));
+			this.PIXEL_UNIT_TO_MM = INCH_TO_MM / this.DPI;
 		}
-
-		if (properties.containsKey(PROPERTY_HEIGHT)) {
-			this.height = Float.parseFloat((String) properties
-					.get(PROPERTY_HEIGHT));
+		
+		if (properties.containsKey(PROPERTY_PAPER)) {
+			this.parsePaper(((String)properties.get(PROPERTY_PAPER)).toLowerCase());
 		}
-
+		
 		if (properties.containsKey(PROPERTY_QUALITY)) {
 			this.quality = Double.parseDouble((String) properties
 					.get(PROPERTY_QUALITY));
 		}
+
+			
+		if (properties.containsKey(PROPERTY_WIDTH)) {
+			this.width =  unitsToPixel( ((String)properties
+					.get(PROPERTY_WIDTH)).trim());
+		}
+
+		if (properties.containsKey(PROPERTY_HEIGHT)) {
+			this.height = unitsToPixel( ((String)properties
+					.get(PROPERTY_HEIGHT)).trim());
+		}
+
+
+
+		if (properties.containsKey(PROPERTY_ORIENTATION)) {
+			String orientation= ((String)properties.get(PROPERTY_ORIENTATION)).toLowerCase();
+			if(orientation.equals("landscape")){
+				float w = this.width;
+				this.width=this.height;
+				this.height=w;
+			}
+		
+			
+		}
+	
+	
 	}
 
 	/*
@@ -98,26 +157,39 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter implements
 	public void endDocument() throws SAXException {
 		super.endDocument();
 
-
 		try {
 			transcoder = createTranscoder();
+			  setupTranscoder(transcoder);
 			TranscoderInput transInput = new TranscoderInput(this.document);
 
 			// Buffering is done by the pipeline (See shouldSetContentLength)
 			TranscoderOutput transOutput = new TranscoderOutput(this.out);
-
-			if ((this.width > 0.0) && (this.height > 0.0)) {
-				transcoder.addTranscodingHint(JPEGTranscoder.KEY_WIDTH,
-						new Float(this.width));
-
-				transcoder.addTranscodingHint(JPEGTranscoder.KEY_HEIGHT,
-						new Float(this.height));
-			}
-
+			setupTranscoder(transcoder);
+          
 			transcode(transInput, transOutput);
 		} catch (TranscoderException e) {
 			throw new SAXException(e);
 		}
+	}
+	
+	/**
+	 * Override this if your Transcoder support more 
+	 * options.
+	 * @param t
+	 */
+	protected void setupTranscoder(Transcoder t){
+		transcoder.addTranscodingHint(ImageTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER,
+				new Float(this.PIXEL_UNIT_TO_MM));
+	
+		if (this.width > 0.0) {
+			transcoder.addTranscodingHint(ImageTranscoder.KEY_WIDTH,
+					new Float(this.width));
+		}
+		if(this.height > 0.0){
+			transcoder.addTranscodingHint(ImageTranscoder.KEY_HEIGHT,
+					new Float(this.height));
+		}
+		
 	}
 
 	/*
@@ -156,4 +228,68 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter implements
 		transcoder.transcode(input, output);
 	}
 
+	protected  float unitsToPixel(String size){
+		if (size.endsWith("px")) {
+			return Float.parseFloat(size.substring(0,size.length()-2));
+		} else if (size.endsWith("in")) {
+			return
+				Float.parseFloat(size.substring(0, size.length() - 2))*INCH_TO_MM/PIXEL_UNIT_TO_MM;
+			
+		} else if (size.endsWith("pt")) {
+			return
+				Float.parseFloat(size.substring(0, size.length() - 2))*PT_TO_MM/PIXEL_UNIT_TO_MM;
+			
+		} else if (size.endsWith("cm")) {
+			float units =
+				Float.parseFloat(size.substring(0, size.length() - 2));
+			float pixel = (float) (units *100/ PIXEL_UNIT_TO_MM);
+			return pixel;
+		} else if (size.endsWith("mm")) {
+			float units =
+				Float.parseFloat(size.substring(0, size.length() - 2));
+			float pixel = (float) (units /PIXEL_UNIT_TO_MM );
+			return pixel;
+			
+		} else if (size.endsWith("m")) {
+			float units =
+				Float.parseFloat(size.substring(0, size.length() - 1));
+			float pixel = (float) (units * 1000/ PIXEL_UNIT_TO_MM);
+			return pixel;
+		} else {
+			
+			return  Float.parseFloat(size);
+		}
+	}
+	
+	
+	protected void parsePaper(String paper){
+		if(paper.equals("a0")){
+			this.width = 841 / PIXEL_UNIT_TO_MM;
+			this.height= 1189 /PIXEL_UNIT_TO_MM;	
+		}else if(paper.equals("a1")){
+			this.width = 594 /PIXEL_UNIT_TO_MM;
+			this.height= 841 /PIXEL_UNIT_TO_MM;	
+		}else if(paper.equals("a2")){
+			this.width = 420 / PIXEL_UNIT_TO_MM;
+			this.height= 594 /PIXEL_UNIT_TO_MM;	
+		}else if(paper.equals("a3")){
+			this.width = 297 / PIXEL_UNIT_TO_MM;
+			this.height= 420 /PIXEL_UNIT_TO_MM;	
+		}else if(paper.equals("a4")){
+			this.width = 210 / PIXEL_UNIT_TO_MM;
+			this.height= 297 /PIXEL_UNIT_TO_MM;	
+		}else if(paper.equals("a5")){
+			this.width = 148 / PIXEL_UNIT_TO_MM;
+			this.height= 210 /PIXEL_UNIT_TO_MM;	
+		}else if(paper.equals("a6")){
+			this.width = 105 / PIXEL_UNIT_TO_MM;
+			this.height= 148 /PIXEL_UNIT_TO_MM;	
+		}else if(paper.equals("letter")){
+			this.width = 216 / PIXEL_UNIT_TO_MM;
+			this.height= 279 /PIXEL_UNIT_TO_MM;	
+		}
+		
+		//add more papers here
+	}
+	
 }
