@@ -27,6 +27,7 @@ import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
 import org.kabeja.xml.SAXSerializer;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -76,7 +77,12 @@ public class ProcessPipeline {
 
         //invoke the filter and serialier
         this.serializer.setOutput(out);
-        this.generator.generate(doc, handler);
+        try {
+			this.generator.generate(doc, handler);
+		} catch (SAXException e) {
+			throw new ProcessorException(e);
+			
+		}
        // doc.toSAX(handler, context);
     }
 

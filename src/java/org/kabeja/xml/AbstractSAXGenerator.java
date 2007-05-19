@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 public abstract class AbstractSAXGenerator implements SAXGenerator {
 
@@ -29,7 +30,7 @@ public abstract class AbstractSAXGenerator implements SAXGenerator {
 
 	protected Map properties= new HashMap();
 
-	public void generate(DXFDocument doc, ContentHandler handler) {
+	public void generate(DXFDocument doc, ContentHandler handler) throws SAXException{
 		this.doc = doc;
 		this.handler = handler;
 		this.generate();
@@ -48,6 +49,6 @@ public abstract class AbstractSAXGenerator implements SAXGenerator {
 	 * 
 	 */
 
-	protected abstract void generate();
+	protected abstract void generate() throws SAXException;
 
 }

@@ -42,17 +42,39 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 	public final static String PROPERTY_DOCUMENTBOUNDS = "useBounds";
 
+	/**
+	 * This property defines the way of calculation/setup the bounds of the
+	 * Document. Possible values are:
+	 * <ul>
+	 * <li>kabeja: Bounds calculate on the geometries. (default)</li>
+	 * <li>paperspace: extracts the values of the limits from paperspace</li>
+	 * <li>modelspace: extracts the values of the limits from modelspace</li>
+	 * </ul>
+	 */
+
+	public final static int PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA = 1;
+
+	public final static int PROPERTY_DOCUMENTBOUNDS_RULE_PAPERSPACE = 2;
+
+	public final static int PROPERTY_DOCUMENTBOUNDS_RULE_MODELSPACE = 3;
+
+	public final static String PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA_VALUE = "kabeja";
+
+	public final static String PROPERTY_DOCUMENTBOUNDS_RULE_PAPERSPACE_VALUE = "paperspace";
+
+	public final static String PROPERTY_DOCUMENTBOUNDS_RULE_MODELSPACE_VALUE = "modelspace";
+
+	public final static String PROPERTY_DOCUMENTBOUNDS_RULE = "bounds-rule";
+
 	public final static String PROPERTY_WIDTH = "width";
 
 	public final static String PROPERTY_HEIGHT = "height";
 
 	public final static String PROPERTY_OVERFLOW = "svg.overflow";
 
-	public static final double DEFAULT_MARGIN_PERCENT = 1.0;
+	public static final double DEFAULT_MARGIN_PERCENT = 0.0;
 
 	public final static String SUPPORTED_SVG_VERSION = "1.0";
-
-	private double margin;
 
 	private boolean paperspace = true;
 
@@ -64,9 +86,11 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 	private boolean useBounds = true;
 
+	private int boundsRule = PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA;
+
 	private String marginSettings;
 
-	protected void generate() {
+	protected void generate() throws SAXException {
 		// TODO here should be the insert point for the
 		// converstion in a later release
 		// create for every DXF class a converter class
@@ -75,7 +99,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 	}
 
 	protected void setupProperties() {
-
+		System.out.println("setup props=" + this.properties.size());
 		if (this.context == null) {
 			this.context = new HashMap();
 		}
@@ -111,19 +135,28 @@ public class SVGGenerator extends AbstractSAXGenerator {
 					(String) this.properties.get(PROPERTY_DOCUMENTBOUNDS))
 					.booleanValue();
 		}
+		if (this.properties.containsKey(PROPERTY_DOCUMENTBOUNDS_RULE)) {
+
+			String value = ((String) this.properties
+					.get(PROPERTY_DOCUMENTBOUNDS_RULE)).trim().toLowerCase();
+			System.out.println("setup_rule=" + value);
+			if (value.equals(PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA_VALUE)) {
+				this.boundsRule = PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA;
+			} else if (value
+					.equals(PROPERTY_DOCUMENTBOUNDS_RULE_PAPERSPACE_VALUE)) {
+				this.boundsRule = PROPERTY_DOCUMENTBOUNDS_RULE_PAPERSPACE;
+			} else if (value
+					.equals(PROPERTY_DOCUMENTBOUNDS_RULE_MODELSPACE_VALUE)) {
+				this.boundsRule = PROPERTY_DOCUMENTBOUNDS_RULE_MODELSPACE;
+			}
+		}
 	}
 
-	private void generateSAX() {
+	private void generateSAX() throws SAXException {
 		try {
-			
-		
-			
+
 			this.handler.startDocument();
 
-			
-			
-			
-			
 			AttributesImpl attr = new AttributesImpl();
 
 			// add the viewport
@@ -131,39 +164,14 @@ public class SVGGenerator extends AbstractSAXGenerator {
 			// this is important otherwise in most cases
 			// the SVG-Viewer will not show the content
 			String viewport = "";
-			Bounds bounds = this.doc.getBounds();
-			double width = 0.0;
-			double height = 0.0;
+			Bounds bounds = this.getBounds();
 
-			// TODO this should be configurable
-
-			if (this.doc.getDXFHeader().hasVariable("$PEXTMAX")
-					&& this.doc.getDXFHeader().hasVariable("$PEXTMMIN")
-					&& !this.useBounds) {
-				DXFVariable min = this.doc.getDXFHeader().getVariable(
-						"$PEXTMIN");
-				DXFVariable max = this.doc.getDXFHeader().getVariable(
-						"$PEXTMAX");
-				double x = min.getDoubleValue("10");
-				double y = min.getDoubleValue("20");
-				double max_y = max.getDoubleValue("20");
-				width = max.getDoubleValue("10") - x;
-				height = max_y - y;
-
-				viewport = "" + x + " " + ((-1.0) * max_y) + " "
-						+ Math.abs(width) + " " + Math.abs(height);
-
-			} else {
-
-				double[] margin = this.getMargin(bounds);
-				width = bounds.getWidth() + (margin[1] + margin[3]);
-				height = bounds.getHeight() + (margin[0] + margin[2]);
-
-				viewport = "" + (bounds.getMinimumX() - margin[3]) + " "
-						+ ((-1 * bounds.getMaximumY()) - margin[0]) + "  "
-						+ SVGUtils.formatNumberAttribute(width) + " "
-						+ SVGUtils.formatNumberAttribute(height);
-			}
+			viewport = SVGUtils.formatNumberAttribute(bounds.getMinimumX())
+					+ " "
+					+ SVGUtils
+							.formatNumberAttribute((-1 * bounds.getMaximumY()))
+					+ "  " + SVGUtils.formatNumberAttribute(bounds.getWidth())
+					+ " " + SVGUtils.formatNumberAttribute(bounds.getHeight());
 
 			SVGUtils.addAttribute(attr, "viewBox", viewport);
 
@@ -228,13 +236,6 @@ public class SVGGenerator extends AbstractSAXGenerator {
 				style.toSAX(handler, context);
 			}
 
-			// i = this.doc.getDXFHatchPatternIterator();
-			//
-			// while (i.hasNext()) {
-			// DXFHatchPattern pattern = (DXFHatchPattern) i.next();
-			// pattern.toSAX(handler, context);
-			// }
-
 			SVGUtils.endElement(handler, SVGConstants.SVG_DEFS);
 
 			// the draft
@@ -274,54 +275,43 @@ public class SVGGenerator extends AbstractSAXGenerator {
 		}
 	}
 
-	protected void blockToSAX(DXFBlock block) {
-		try {
-			AttributesImpl attr = new AttributesImpl();
-			SVGUtils.addAttribute(attr, "id", SVGUtils.validateID(block
-					.getName()));
+	protected void blockToSAX(DXFBlock block) throws SAXException {
 
-			SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
+		AttributesImpl attr = new AttributesImpl();
+		SVGUtils.addAttribute(attr, "id", SVGUtils.validateID(block.getName()));
 
-			Iterator i = block.getDXFEntitiesIterator();
+		SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 
-			while (i.hasNext()) {
-				DXFEntity entity = (DXFEntity) i.next();
-				this.entityToSAX(entity);
+		Iterator i = block.getDXFEntitiesIterator();
+
+		while (i.hasNext()) {
+			DXFEntity entity = (DXFEntity) i.next();
+			this.entityToSAX(entity);
+		}
+
+		SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
+
+	}
+
+	protected void entityToSAX(DXFEntity entity) throws SAXException {
+
+		if (this.paperspace) {
+			if (!entity.isModelSpace()) {
+				entity.toSAX(this.handler, this.properties);
 			}
-
-			SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		if (this.modelspace) {
+			if (entity.isModelSpace()) {
+				entity.toSAX(this.handler, this.properties);
+			}
 		}
 
 	}
 
-	protected void entityToSAX(DXFEntity entity) {
-		try {
-			if (this.paperspace) {
-				if (!entity.isModelSpace()) {
-					entity.toSAX(this.handler, this.properties);
-				}
-			}
-			if (this.modelspace) {
-				if (entity.isModelSpace()) {
-					entity.toSAX(this.handler, this.properties);
-				}
-			}
-		} catch (SAXException e) {
+	protected void layerToSAX(DXFLayer layer) throws SAXException {
 
-			e.printStackTrace();
-		}
-	}
+		layer.toSAX(this.handler, this.context);
 
-	protected void layerToSAX(DXFLayer layer) {
-		try {
-			layer.toSAX(this.handler, this.context);
-		} catch (SAXException e) {
-
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -340,24 +330,24 @@ public class SVGGenerator extends AbstractSAXGenerator {
 	protected double[] getMargin(Bounds bounds) {
 		double[] margin = new double[4];
 		if (this.marginSettings != null) {
-		
+
 			StringTokenizer st = new StringTokenizer(this.marginSettings);
 			int count = st.countTokens();
 			switch (count) {
 			case 4:
 				for (int i = 0; i < count; i++) {
 					String m = st.nextToken().trim();
-				
+
 					if (m.endsWith("%")) {
-                           m = m.substring(0,m.length()-1);
-                         
+						m = m.substring(0, m.length() - 1);
+
 						if (i == 0 && i == 2) {
 
-							margin[i] = (Double.parseDouble(m)/100)
+							margin[i] = (Double.parseDouble(m) / 100)
 									* bounds.getHeight();
 
 						} else {
-							margin[i] = (Double.parseDouble(m)/100)
+							margin[i] = (Double.parseDouble(m) / 100)
 									* bounds.getWidth();
 						}
 
@@ -369,11 +359,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 			case 1:
 				String m = st.nextToken().trim();
 				if (m.endsWith("%")) {
-                    m = m.substring(0,m.length()-1);
-                    margin[0] =  (Double.parseDouble(m)/100)
-					* ((bounds.getWidth()+bounds.getHeight())/2);
-				}else{
-					margin[0] = Double.parseDouble(m);
+					m = m.substring(0, m.length() - 1);
 				}
 				margin[0] = Double.parseDouble(m);
 				margin[1] = margin[2] = margin[3] = margin[0];
@@ -381,11 +367,96 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 			}
 		}
-		margin[0] = bounds.getHeight() * (DEFAULT_MARGIN_PERCENT/100);
+
+		margin[0] = bounds.getHeight() * (DEFAULT_MARGIN_PERCENT / 100);
 		margin[2] = margin[0];
-		margin[1] = bounds.getWidth() * (DEFAULT_MARGIN_PERCENT/100);
+		margin[1] = bounds.getWidth() * (DEFAULT_MARGIN_PERCENT / 100);
 		margin[3] = margin[1];
 
 		return margin;
+	}
+
+	protected Bounds getBounds() {
+
+		Bounds bounds = null;
+
+		if (this.boundsRule == PROPERTY_DOCUMENTBOUNDS_RULE_PAPERSPACE) {
+			// first the user based limits of the paperspace
+
+			bounds = new Bounds();
+			if (this.doc.getDXFHeader().hasVariable("$PEXTMAX")
+					&& this.doc.getDXFHeader().hasVariable("$PEXTMIN")) {
+				DXFVariable min = this.doc.getDXFHeader().getVariable(
+						"$PEXTMIN");
+				DXFVariable max = this.doc.getDXFHeader().getVariable(
+						"$PEXTMAX");
+
+				bounds.setMinimumX(min.getDoubleValue("10"));
+				bounds.setMinimumY(min.getDoubleValue("20"));
+				bounds.setMaximumX(max.getDoubleValue("10"));
+				bounds.setMaximumY(max.getDoubleValue("20"));
+
+			}
+			if (bounds.getWidth() == 0.0 || bounds.getHeight() == 0.0) {
+				DXFVariable min = this.doc.getDXFHeader().getVariable(
+						"$PLIMMIN");
+				DXFVariable max = this.doc.getDXFHeader().getVariable(
+						"$PLIMMAX");
+				bounds = new Bounds();
+				bounds.setMinimumX(min.getDoubleValue("10"));
+				bounds.setMinimumY(min.getDoubleValue("20"));
+				bounds.setMaximumX(max.getDoubleValue("10"));
+				bounds.setMaximumY(max.getDoubleValue("20"));
+
+			}
+
+		} else if (this.boundsRule == PROPERTY_DOCUMENTBOUNDS_RULE_MODELSPACE) {
+			// first the user based limits of the modelspace
+			bounds = new Bounds();
+
+			if (this.doc.getDXFHeader().hasVariable("$EXTMAX")
+
+			&& this.doc.getDXFHeader().hasVariable("$EXTMIN")) {
+				DXFVariable min = this.doc.getDXFHeader()
+						.getVariable("$EXTMIN");
+				DXFVariable max = this.doc.getDXFHeader()
+						.getVariable("$EXTMAX");
+				bounds = new Bounds();
+				bounds.setMinimumX(min.getDoubleValue("10"));
+				bounds.setMinimumY(min.getDoubleValue("20"));
+				bounds.setMaximumX(max.getDoubleValue("10"));
+				bounds.setMaximumY(max.getDoubleValue("20"));
+
+			}
+			if (bounds.getWidth() == 0.0 || bounds.getHeight() == 0.0) {
+				DXFVariable min = this.doc.getDXFHeader()
+						.getVariable("$LIMMIN");
+				DXFVariable max = this.doc.getDXFHeader()
+						.getVariable("$LIMMAX");
+
+				bounds.setMinimumX(min.getDoubleValue("10"));
+				bounds.setMinimumY(min.getDoubleValue("20"));
+				bounds.setMaximumX(max.getDoubleValue("10"));
+				bounds.setMaximumY(max.getDoubleValue("20"));
+
+			}
+		} else if (this.boundsRule == PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA) {
+			bounds = this.doc.getBounds();
+
+		}
+		if (bounds == null || bounds.getWidth() == 0.0
+				|| bounds.getHeight() == 0.0) {
+			bounds = this.doc.getBounds();
+
+		}
+
+		// set a margin
+		double[] margin = this.getMargin(bounds);
+		bounds.setMinimumX(bounds.getMinimumX() - margin[3]);
+		bounds.setMaximumX(bounds.getMaximumX() + margin[1]);
+		bounds.setMinimumY(bounds.getMinimumY() - margin[2]);
+		bounds.setMaximumY(bounds.getMaximumY() + margin[0]);
+
+		return bounds;
 	}
 }

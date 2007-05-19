@@ -82,7 +82,7 @@ public class DXFImportFilter {
 			filter2.setContentHandler(serializer);
 			generator.generate(doc, filter1);
 
-		} catch (DXFParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

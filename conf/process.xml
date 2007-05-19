@@ -40,7 +40,9 @@
 		</serializers>
 		
 		<generators>
-			<generator class="org.kabeja.svg.SVGGenerator" name="svg"/>
+			<generator class="org.kabeja.svg.SVGGenerator" name="svg">
+                            <property name="bounds-rule" value="kabeja"/>
+                         </generator>
 		</generators>
 		
 	</configuration>
@@ -130,7 +132,8 @@
 	        <filter name="fixed-stroke-width"/>
 	        <serialize name="svg"/>
 	   </pipeline>
-			
+
+	
 			
 	</pipelines>
 	

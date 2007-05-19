@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 /**
  * This interface describes a generator component, which emit convert the
  * DXFDocument to SAX-Event.
@@ -35,6 +36,6 @@ public interface SAXGenerator {
 
 	public void setProperties(Map properties);
 
-	public void generate(DXFDocument doc,ContentHandler handler);
+	public void generate(DXFDocument doc,ContentHandler handler) throws SAXException;
 
 }
