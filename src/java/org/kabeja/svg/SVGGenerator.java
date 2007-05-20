@@ -51,6 +51,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 	 * <li>modelspace: extracts the values of the limits from modelspace</li>
 	 * </ul>
 	 */
+	public final static String PROPERTY_DOCUMENTBOUNDS_RULE = "bounds-rule";
 
 	public final static int PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA = 1;
 
@@ -64,7 +65,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 	public final static String PROPERTY_DOCUMENTBOUNDS_RULE_MODELSPACE_VALUE = "modelspace";
 
-	public final static String PROPERTY_DOCUMENTBOUNDS_RULE = "bounds-rule";
+
 
 	public final static String PROPERTY_WIDTH = "width";
 
@@ -99,7 +100,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 	}
 
 	protected void setupProperties() {
-		System.out.println("setup props=" + this.properties.size());
+		
 		if (this.context == null) {
 			this.context = new HashMap();
 		}
@@ -139,7 +140,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 			String value = ((String) this.properties
 					.get(PROPERTY_DOCUMENTBOUNDS_RULE)).trim().toLowerCase();
-			System.out.println("setup_rule=" + value);
+		
 			if (value.equals(PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA_VALUE)) {
 				this.boundsRule = PROPERTY_DOCUMENTBOUNDS_RULE_KABEJA;
 			} else if (value

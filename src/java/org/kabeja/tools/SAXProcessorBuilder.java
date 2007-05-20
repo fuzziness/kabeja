@@ -157,7 +157,7 @@ public class SAXProcessorBuilder implements ContentHandler {
 				this.pipeline.setSAXSerializer(this.manager
 						.getSAXSerializer(this.name));
 
-				this.pipeline.setSerializerProperties(this.properties);
+				this.pipeline.setSAXSerializerProperties(this.properties);
 
 			} else if (ELEMENT_FILTER.equals(localName)) {
 
@@ -186,6 +186,7 @@ public class SAXProcessorBuilder implements ContentHandler {
 					this.aggregator.addSAXGenerator(this.manager
 							.getSAXGenerator(this.name));
 				} else {
+					this.pipeline.setSAXGeneratorProperties(this.properties);
 					this.pipeline.setSAXGenerator(this.manager
 							.getSAXGenerator(this.name));
 
@@ -333,7 +334,7 @@ public class SAXProcessorBuilder implements ContentHandler {
 
 			} else if (ELEMENT_GENERATE.equals(localName)) {
 
-				// this.properties = new HashMap();
+			    this.properties = new HashMap();
 				this.name = atts.getValue(ATTRIBUTE_NAME);
 
 			} else if (ELEMENT_AGGREGATE.equals(localName)) {

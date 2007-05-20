@@ -40,6 +40,7 @@ public class ProcessPipeline {
     private List filters = new ArrayList();
     private SAXGenerator generator;
     private Map serializerProperties;
+    private Map generatorProperties;
     private SAXSerializer serializer;
     private String name;
 
@@ -83,7 +84,7 @@ public class ProcessPipeline {
 			throw new ProcessorException(e);
 			
 		}
-       // doc.toSAX(handler, context);
+      
     }
 
     /**
@@ -166,8 +167,16 @@ public class ProcessPipeline {
     /**
      * @param serializerProperties The serializerProperties to set.
      */
-    public void setSerializerProperties(Map serializerProperties) {
+    public void setSAXSerializerProperties(Map serializerProperties) {
         this.serializerProperties = serializerProperties;
+    }
+    
+    public void setSAXGeneratorProperties(Map generatorProperties){
+    	this.generatorProperties=generatorProperties;
+    }
+    
+    public Map getSAXGeneratorProperties(Map generatorProperties){
+    	return this.generatorProperties;
     }
     
     
