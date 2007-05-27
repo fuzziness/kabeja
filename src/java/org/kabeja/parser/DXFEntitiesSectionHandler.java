@@ -62,6 +62,7 @@ public class DXFEntitiesSectionHandler extends AbstractSectionHandler
 
                     return;
                 } else {
+                	
                     endEntity();
                 }
             }
@@ -111,7 +112,6 @@ public class DXFEntitiesSectionHandler extends AbstractSectionHandler
     protected void endEntity() {
         if (parseEntity) {
             handler.endDXFEntity();
-
             DXFEntity entity = handler.getDXFEntity();
             doc.addDXFEntity(entity);
         }

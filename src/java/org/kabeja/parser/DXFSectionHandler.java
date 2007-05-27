@@ -16,6 +16,7 @@
 package org.kabeja.parser;
 
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.parser.dxf.DXFHandler;
 
 
 /**
@@ -32,10 +33,8 @@ import org.kabeja.dxf.DXFDocument;
  *
  *
  */
-public interface DXFSectionHandler extends Handler {
+public interface DXFSectionHandler extends Handler,DXFHandler {
     public String getSectionKey();
-
-    public void parseGroup(int groupCode, DXFValue value);
 
     public void setDXFDocument(DXFDocument doc);
 
