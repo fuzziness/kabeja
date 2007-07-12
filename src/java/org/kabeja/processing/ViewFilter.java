@@ -37,7 +37,7 @@ public class ViewFilter implements PostProcessor {
      *
      * @see de.miethxml.kabeja.tools.PostProcessor#process(de.miethxml.kabeja.dxf.DXFDocument)
      */
-    public void process(DXFDocument doc, Map context) {
+    public void process(DXFDocument doc, Map context) throws ProcessorException {
         // get the active viewport
         DXFView view = null;
         Iterator i = doc.getDXFViewIterator();

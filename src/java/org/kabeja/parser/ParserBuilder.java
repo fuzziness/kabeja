@@ -42,7 +42,10 @@ import org.kabeja.parser.entities.DXFTextHandler;
 import org.kabeja.parser.entities.DXFToleranceHandler;
 import org.kabeja.parser.entities.DXFTraceHandler;
 import org.kabeja.parser.entities.DXFXLineHandler;
+import org.kabeja.parser.objects.DXFDictionaryHandler;
 import org.kabeja.parser.objects.DXFImageDefHandler;
+import org.kabeja.parser.objects.DXFLayoutHandler;
+import org.kabeja.parser.objects.DXFPlotsettingsHandler;
 import org.kabeja.parser.table.DXFDimensionStyleTableHandler;
 import org.kabeja.parser.table.DXFLayerTableHandler;
 import org.kabeja.parser.table.DXFLineTypeTableHandler;
@@ -241,9 +244,23 @@ public class ParserBuilder {
 
         h = new DXFImageDefHandler();
         handlerManager.addHandler(h);
+     
 
+        h = new DXFDictionaryHandler();
+        handlerManager.addHandler(h);
+     
+        
+        h = new DXFPlotsettingsHandler();
+        handlerManager.addHandler(h);
+      
+     
+        h = new DXFLayoutHandler();
+        handlerManager.addHandler(h);
+
+        
+        //add the HandlerManager as Handler to the parser
         parser.addHandler(handlerManager);
-
+        
         return parser;
     }
 

@@ -34,7 +34,7 @@ public class VisibilityFilter implements PostProcessor {
     /* (non-Javadoc)
      * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument)
      */
-    public void process(DXFDocument doc, Map context) {
+    public void process(DXFDocument doc, Map context) throws ProcessorException {
         Iterator i = doc.getDXFLayerIterator();
 
         while (i.hasNext()) {

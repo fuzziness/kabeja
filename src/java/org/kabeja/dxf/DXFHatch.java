@@ -364,7 +364,7 @@ public class DXFHatch extends DXFEntity {
 			// the id
 
 			if (isSolid()) {
-				super.setCommonAttributes(attr);
+				super.setCommonAttributes(attr, svgContext);
 
 				SVGUtils.addAttribute(attr, "fill", "currentColor");
 				SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);

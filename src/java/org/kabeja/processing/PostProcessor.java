@@ -40,6 +40,7 @@ public interface PostProcessor {
      * Postprocess the given DXFDocument
      * @param doc
      * @param context
+     * @throws ProcessorException TODO
      */
-    public void process(DXFDocument doc, Map context);
+    public void process(DXFDocument doc, Map context) throws ProcessorException;
 }

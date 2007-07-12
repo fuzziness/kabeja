@@ -18,6 +18,7 @@ package org.kabeja.dxf;
 import java.util.Map;
 
 import org.kabeja.svg.SVGConstants;
+import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGFragmentGenerator;
 import org.kabeja.svg.SVGUtils;
 import org.xml.sax.ContentHandler;
@@ -43,7 +44,7 @@ public abstract class DXFEntity implements SVGFragmentGenerator {
     protected double linetypeScaleFactor = 1.0;
     protected int color = 0;
     protected byte[] colorRGB;
-    protected double lineWeight;
+    protected int lineWeight;
     protected double transparency;
     protected double thickness = 0.0;
     protected DXFExtrusion extrusion = new DXFExtrusion();
@@ -153,27 +154,32 @@ public abstract class DXFEntity implements SVGFragmentGenerator {
         this.linetypeScaleFactor = linetypeScaleFactor;
     }
 
-    protected void setCommonAttributes(AttributesImpl atts) {
-        // a negative color indicates the layer is off
+    protected void setCommonAttributes(AttributesImpl atts, Map context) {
+    
+    	// a negative color indicates the layer is off
         if (!isVisibile()) {
             // we calculate the bounds self so they must not
             // rendered from the SVG-Renderer.
             // If they should be in the rendering-tree change
             // this to visible=hidden
-            SVGUtils.addAttribute(atts, "display", "none");
+            SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_DISPLAY, SVGConstants.SVG_ATTRIBUTE_DISPLAY_VALUE_NONE);
         }
 
         // color 256 indicates color by layer
         if ((this.color != 0) && (this.color != 256)) {
-            SVGUtils.addAttribute(atts, "color",
+            SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_COLOR,
                 "rgb(" + DXFColor.getRGBString(getColor()) + ")");
-            SVGUtils.addAttribute(atts, "stroke", "currentColor");
+            SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE, SVGConstants.SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR);
         }
 
         if (this.getID().length() > 0) {
-            SVGUtils.addAttribute(atts, "id", SVGUtils.validateID(this.getID()));
+            SVGUtils.addAttribute(atts, SVGConstants.XML_ID, SVGUtils.validateID(this.getID()));
         }
 
+        if(this.lineWeight>0 && !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)){
+        	SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWeightToStrokeWidth(this.lineWeight));
+        }
+        
         double gscale = this.doc.getDXFHeader().getLinetypeScale();
 
         if ((this.lineType.length() > 0) &&
@@ -217,11 +223,11 @@ public abstract class DXFEntity implements SVGFragmentGenerator {
         this.colorRGB = colorRGB;
     }
 
-    public double getLineWeight() {
+    public int getLineWeight() {
         return lineWeight;
     }
 
-    public void setLineWeight(double lineWeight) {
+    public void setLineWeight(int lineWeight) {
         this.lineWeight = lineWeight;
     }
 

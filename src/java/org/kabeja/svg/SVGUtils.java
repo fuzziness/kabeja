@@ -342,4 +342,10 @@ public class SVGUtils {
 
 	
 
+	public static String lineWeightToStrokeWidth(int lineWeight){
+		
+		double w = (double)lineWeight/100.0;
+		return ""+w+"mm";
+	}
+	
 }

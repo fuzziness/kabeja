@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kabeja.dxf.objects.DXFDictionary;
 import org.kabeja.dxf.objects.DXFObject;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
@@ -71,13 +72,24 @@ public class DXFDocument implements SVGSAXGenerator {
 
 	private List views = new ArrayList();
 
+	private DXFDictionary rootDictionary = new DXFDictionary();
+	
+	
+
 	public DXFDocument() {
 		// the defalut layer
 		DXFLayer defaultLayer = new DXFLayer();
 		defaultLayer.setDXFDocument(this);
 		defaultLayer.setName(DXFConstants.DEFAULT_LAYER);
-		layers.put(DXFConstants.DEFAULT_LAYER, defaultLayer);
-		margin = DEFAULT_MARGIN;
+		this.layers.put(DXFConstants.DEFAULT_LAYER, defaultLayer);
+
+		// setup the margin
+		this.margin = DEFAULT_MARGIN;
+
+		// setup the root Dictionary
+		this.rootDictionary = new DXFDictionary();
+		this.rootDictionary.setDXFDocument(this);
+
 	}
 
 	public void addDXFLayer(DXFLayer layer) {
@@ -109,16 +121,17 @@ public class DXFDocument implements SVGSAXGenerator {
 		}
 	}
 
-	
 	/**
 	 * Returns true if the document contains the specified layer.
-	 * @param layerName the layer name
+	 * 
+	 * @param layerName
+	 *            the layer name
 	 * @return true - if the document contains the layer, otherwise false
 	 */
-	public boolean containsDXFLayer(String layerName){
+	public boolean containsDXFLayer(String layerName) {
 		return this.layers.containsKey(layerName);
 	}
-	
+
 	/**
 	 * 
 	 * @return the iterator over all DXFLayer of this document
@@ -143,9 +156,6 @@ public class DXFDocument implements SVGSAXGenerator {
 		return lineTypes.values().iterator();
 	}
 
-	
-	
-	
 	public void toSAX(ContentHandler handler, Map svgContext) {
 		if (null == svgContext) {
 			svgContext = new HashMap();
@@ -154,8 +164,6 @@ public class DXFDocument implements SVGSAXGenerator {
 		generateSAX(handler, svgContext);
 	}
 
-	
-	
 	public void addDXFEntity(DXFEntity entity) {
 		entity.setDXFDocument(this);
 		DXFLayer layer = this.getDXFLayer(entity.getLayerName());
@@ -195,13 +203,12 @@ public class DXFDocument implements SVGSAXGenerator {
 		return this.properties.containsKey(key);
 	}
 
-	
 	/**
-	 * @deprecated use 	
+	 * @deprecated use
 	 * @param handler
 	 * @param context
 	 */
-	
+
 	private void generateSAX(ContentHandler handler, Map context) {
 		try {
 			handler.startDocument();
@@ -319,13 +326,12 @@ public class DXFDocument implements SVGSAXGenerator {
 		}
 	}
 
-	
 	/**
 	 * @deprecated
 	 * @param value
 	 * @return
 	 */
-	
+
 	public double translateX(double value) {
 		return value;
 	}
@@ -335,8 +341,7 @@ public class DXFDocument implements SVGSAXGenerator {
 	 * @param value
 	 * @return
 	 */
-	
-	
+
 	public double translateY(double value) {
 		// return bounds.getMaximumY() - value;
 		return value;
@@ -344,11 +349,12 @@ public class DXFDocument implements SVGSAXGenerator {
 
 	/**
 	 * Returns the bounds of this document
+	 * 
 	 * @return
 	 */
 	public Bounds getBounds() {
 		this.bounds = new Bounds();
-		
+
 		Enumeration e = layers.elements();
 
 		while (e.hasMoreElements()) {
@@ -356,7 +362,7 @@ public class DXFDocument implements SVGSAXGenerator {
 			Bounds b = layer.getBounds();
 
 			if (b.isValid()) {
-				bounds.addToBounds(b);
+				this.bounds.addToBounds(b);
 			}
 		}
 
@@ -364,15 +370,15 @@ public class DXFDocument implements SVGSAXGenerator {
 	}
 
 	public double getHeight() {
-		return bounds.getHeight();
+		return this.bounds.getHeight();
 	}
 
 	public double getWidth() {
-		return bounds.getWidth();
+		return this.bounds.getWidth();
 	}
 
 	public DXFHeader getDXFHeader() {
-		return header;
+		return this.header;
 	}
 
 	public void setDXFHeader(DXFHeader header) {
@@ -380,47 +386,47 @@ public class DXFDocument implements SVGSAXGenerator {
 	}
 
 	public void addDXFDimensionStyle(DXFDimensionStyle style) {
-		dimensionStyles.put(style.getName(), style);
+		this.dimensionStyles.put(style.getName(), style);
 	}
 
 	public DXFDimensionStyle getDXFDimensionStyle(String name) {
-		return (DXFDimensionStyle) dimensionStyles.get(name);
+		return (DXFDimensionStyle) this.dimensionStyles.get(name);
 	}
 
 	public Iterator getDXFDimensionStyleIterator() {
-		return dimensionStyles.values().iterator();
+		return this.dimensionStyles.values().iterator();
 	}
 
 	public void addDXStyle(DXFStyle style) {
-		textStyles.put(style.getName(), style);
+		this.textStyles.put(style.getName(), style);
 	}
 
 	public DXFStyle getDXFStyle(String name) {
-		return (DXFStyle) textStyles.get(name);
+		return (DXFStyle) this.textStyles.get(name);
 	}
 
 	public Iterator getDXFStyleIterator() {
-		return textStyles.values().iterator();
+		return this.textStyles.values().iterator();
 	}
 
 	public void removeDXFLayer(String id) {
-		layers.remove(id);
+		this.layers.remove(id);
 	}
 
 	public void addDXFViewport(DXFViewport viewport) {
-		viewports.add(viewport);
+		this.viewports.add(viewport);
 	}
 
 	public Iterator getDXFViewportIterator() {
-		return viewports.iterator();
+		return this.viewports.iterator();
 	}
 
 	public void removeDXFViewport(DXFViewport viewport) {
-		viewports.remove(viewport);
+		this.viewports.remove(viewport);
 	}
 
 	public void removeDXFViewport(int index) {
-		viewports.remove(index);
+		this.viewports.remove(index);
 	}
 
 	public void addDXFView(DXFView view) {
@@ -432,17 +438,45 @@ public class DXFDocument implements SVGSAXGenerator {
 	}
 
 	public void addDXFObject(DXFObject obj) {
-		HashMap type = null;
 
-		if (this.objects.containsKey(obj.getObjectType())) {
-			type = (HashMap) objects.get(obj.getObjectType());
+		
+		
+		
+		// look if the object goes in a dictionary
+		DXFDictionary d = this.rootDictionary
+				.getDXFDictionaryForID(obj.getID());
+		
+		if (d != null) {
+			d.putDXFObject(obj);
 		} else {
-			type = new HashMap();
-			this.objects.put(obj.getObjectType(), type);
-		}
+			// is not bound to a dictionary
+			HashMap type = null;
 
-		type.put(obj.getHandleID(), obj);
+			if (this.objects.containsKey(obj.getObjectType())) {
+				type = (HashMap) objects.get(obj.getObjectType());
+			} else {
+				type = new HashMap();
+				this.objects.put(obj.getObjectType(), type);
+			}
+
+			type.put(obj.getID(), obj);
+		}
 	}
+
+	/**
+	 * Returns the root dictionary.
+	 * 
+	 * @return the root DXFDictionray
+	 */
+
+	public DXFDictionary getRootDXFDictionary() {
+		return this.rootDictionary;
+	}
+	
+	public void setRootDXFDictionary(DXFDictionary  root) {
+		this.rootDictionary=root;
+	}
+	
 
 	public List getDXFObjectsByType(String type) {
 		HashMap objecttypes = (HashMap) this.objects.get(type);
@@ -451,9 +485,20 @@ public class DXFDocument implements SVGSAXGenerator {
 		return list;
 	}
 
-	public DXFObject getDXFObject(String type, String id) {
-		HashMap objecttypes = (HashMap) this.objects.get(type);
-		return (DXFObject) objecttypes.get(id);
+	public DXFObject getDXFObject(String id) {
+
+		Iterator i = this.objects.entrySet().iterator();
+		while (i.hasNext()) {
+			HashMap map = (HashMap) i.next();
+			Object obj;
+			if ((obj = map.get(id)) != null) {
+				return (DXFObject) obj;
+			}
+		}
+
+		// Nothing found --> search in the dictionaries
+		return this.rootDictionary.getDXFObjectByID(id);
+
 	}
 
 	/**

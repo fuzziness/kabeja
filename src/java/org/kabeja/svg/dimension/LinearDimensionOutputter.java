@@ -15,6 +15,8 @@
 */
 package org.kabeja.svg.dimension;
 
+import java.util.Map;
+
 import org.kabeja.dxf.DXFDimension;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
@@ -32,7 +34,7 @@ public class LinearDimensionOutputter extends AbstractDimensionOutputter {
         super(dim);
     }
 
-    public void output(ContentHandler handler) throws SAXException {
+    public void output(ContentHandler handler, Map svgContext) throws SAXException {
         if (dim.getDimensionBlock().length() > 0) {
             AttributesImpl attr = new AttributesImpl();
             StringBuffer buf = new StringBuffer();
@@ -45,7 +47,7 @@ public class LinearDimensionOutputter extends AbstractDimensionOutputter {
 
             SVGUtils.addAttribute(attr, "transform", buf.toString());
 
-            dim.setAttributes(attr);
+            dim.setAttributes(attr, svgContext);
 
             SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
             attr = new AttributesImpl();

@@ -122,7 +122,7 @@ public abstract class AbstractEntityHandler implements DXFEntityHandler {
             break;
 
         case LINE_WEIGHT:
-            entity.setLineWeight(value.getDoubleValue());
+            entity.setLineWeight(value.getIntegerValue());
 
             break;
 

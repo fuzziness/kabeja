@@ -40,7 +40,7 @@
 		<mkdir dir="${dist}/${lang}" />
 		<mkdir dir="${dist}/${libs}" />
 		<mkdir dir="${dist}/${conf}" />
-		<mkdir dir="${packages}" />
+		
 	</target>
 
 	<target name="compile" depends="init">

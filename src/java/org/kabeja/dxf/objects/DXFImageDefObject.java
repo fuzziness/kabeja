@@ -23,8 +23,6 @@ import org.kabeja.dxf.DXFConstants;
  *
  */
 public class DXFImageDefObject extends DXFObject {
-    protected String softID;
-    protected String hardID;
     protected String filename;
 
     /* (non-Javadoc)

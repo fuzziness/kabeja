@@ -38,7 +38,7 @@ public class PolylineConverter implements PostProcessor {
 	private List queues;
 	private double radius = DXFConstants.POINT_CONNECTION_RADIUS;
 
-	public void process(DXFDocument doc, Map context) {
+	public void process(DXFDocument doc, Map context) throws ProcessorException {
 
 		Iterator i = doc.getDXFLayerIterator();
 		while (i.hasNext()) {

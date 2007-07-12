@@ -84,7 +84,7 @@ public class DXFLine extends DXFEntity implements SVGPathBoundaryElement {
         SVGUtils.addAttribute(attr, "y1", "" + this.getStartPoint().getY());
         SVGUtils.addAttribute(attr, "x2", "" + this.getEndPoint().getX());
         SVGUtils.addAttribute(attr, "y2", "" + this.getEndPoint().getY());
-        super.setCommonAttributes(attr);
+        super.setCommonAttributes(attr, svgContext);
         SVGUtils.emptyElement(handler, SVGConstants.SVG_LINE, attr);
     }
 

@@ -27,7 +27,7 @@ import org.kabeja.parser.DXFValue;
 public abstract class AbstractDXFObjectHandler implements DXFObjectHandler {
     public final static int GROUPCODE_SOFTPOINTER_ID = 330;
     public final static int GROUPCODE_HARDOWNER_ID = 360;
-    public final static int GROUPCODE_HANDLE_REFENCE = 5;
+    public final static int GROUPCODE_HANDLE_ID = 5;
     protected DXFDocument doc;
 
     /*
@@ -51,8 +51,8 @@ public abstract class AbstractDXFObjectHandler implements DXFObjectHandler {
     protected void parseCommonGroupCode(int groupCode, DXFValue value,
         DXFObject obj) {
         switch (groupCode) {
-        case GROUPCODE_HANDLE_REFENCE:
-            obj.setHandleID(value.getValue());
+        case GROUPCODE_HANDLE_ID:
+            obj.setID(value.getValue());
 
             break;
 

@@ -73,7 +73,7 @@ public class DXFRay extends DXFEntity {
         SVGUtils.addAttribute(atts, "y1", "" + basePoint.getY());
         SVGUtils.addAttribute(atts, "x2", "" + end.getX());
         SVGUtils.addAttribute(atts, "y2", "" + end.getY());
-        super.setCommonAttributes(atts);
+        super.setCommonAttributes(atts, svgContext);
 
         SVGUtils.emptyElement(handler, SVGConstants.SVG_LINE, atts);
     }

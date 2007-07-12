@@ -61,7 +61,7 @@ public class DXFXLine extends DXFRay{
 		SVGUtils.addAttribute(atts,"y1",""+start.getY());
 		SVGUtils.addAttribute(atts,"x2",""+end.getX());
 		SVGUtils.addAttribute(atts,"y2",""+end.getY());
-        super.setCommonAttributes(atts);
+        super.setCommonAttributes(atts, svgContext);
 
         SVGUtils.emptyElement(handler,SVGConstants.SVG_LINE,atts);
 

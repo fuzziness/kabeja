@@ -20,7 +20,7 @@ public class BoundsFilter extends AbstractPostProcessor {
 
 	public final static String PROPERTY_PROCESS = "boundsfilter.process";
 
-	public void process(DXFDocument doc, Map context) {
+	public void process(DXFDocument doc, Map context) throws ProcessorException {
 		if (this.properties.containsKey(PROPERTY_PROCESS)
 				&& Boolean.valueOf((String) this.properties
 						.get(PROPERTY_PROCESS)).booleanValue()) {

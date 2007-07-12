@@ -43,7 +43,7 @@ public class LayerFilter extends AbstractPostProcessor {
 
 	}
 
-	public void process(DXFDocument doc, Map context) {
+	public void process(DXFDocument doc, Map context) throws ProcessorException {
 		DXFLayer mergeLayer = null;
 		
 		if (this.merge) {

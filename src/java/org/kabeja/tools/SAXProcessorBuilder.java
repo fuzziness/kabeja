@@ -51,6 +51,8 @@ public class SAXProcessorBuilder implements ContentHandler {
 
 	public static final String ELEMENT_PARSER = "parser";
 
+	public static final String ELEMENT_PARSERS = "parsers";
+
 	public static final String ELEMENT_SAXSERIALIZER = "serializer";
 
 	public static final String ELEMENT_SAXSERIALIZERS = "serializers";
@@ -195,17 +197,17 @@ public class SAXProcessorBuilder implements ContentHandler {
 
 				this.saxgenerator.setProperties(this.properties);
 				this.manager.addSAXGenerator(this.saxgenerator, this.name);
-
+				
 			}
 		} else if (namespaceURI.equals(SAXParserBuilder.XMLNS_KABEJA_PARSER)) {
 
 			this.parserBuilder.endElement(namespaceURI, localName, qName);
-			System.out.println("END parser="+localName);
+		
 			if (localName.equals(ELEMENT_PARSER)) {
+				//finish up the ParserBuilder and
+				//add the parse to ProcessManager
 				this.parserBuilder.endDocument();
-				System.out.println("end parers");
-				Parser p = this.parserBuilder.getParser();
-				System.out.println("end parers="+p);
+				Parser p = this.parserBuilder.getParser();			
 				this.manager.addParser(p);
 			}
 
@@ -344,13 +346,10 @@ public class SAXProcessorBuilder implements ContentHandler {
 			}
 
 		} else if (namespaceURI.equals(SAXParserBuilder.XMLNS_KABEJA_PARSER)) {
-			System.out.println("parser="+localName);
 			if (localName.equals(ELEMENT_PARSER)) {
 				this.parserBuilder = new SAXParserBuilder();
-				this.parserBuilder.startDocument();
-				System.out.println("starting parser");
+				this.parserBuilder.startDocument();			
 			}
-
 			this.parserBuilder.startElement(namespaceURI, localName, qName,
 					atts);
 
@@ -379,13 +378,13 @@ public class SAXProcessorBuilder implements ContentHandler {
 
 			return obj;
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -405,6 +404,7 @@ public class SAXProcessorBuilder implements ContentHandler {
 
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setNamespaceAware(true);
+			factory.setXIncludeAware(true);
 			XMLReader saxparser = factory.newSAXParser().getXMLReader();
 
 			saxparser.setContentHandler(builder);

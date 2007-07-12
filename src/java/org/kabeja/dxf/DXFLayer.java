@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kabeja.svg.SVGConstants;
+import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGSAXGenerator;
 import org.kabeja.svg.SVGUtils;
 import org.xml.sax.ContentHandler;
@@ -43,6 +44,9 @@ public class DXFLayer implements SVGSAXGenerator {
     private Bounds bounds = new Bounds();
     private String ltype = "";
     private int flags = 0;
+    private int lineWeight=0;
+    private String plotStyle="";
+    
 
     public DXFLayer() {
     }
@@ -93,17 +97,19 @@ public class DXFLayer implements SVGSAXGenerator {
         throws SAXException {
         AttributesImpl attr = new AttributesImpl();
 
-        // TODO change the color and other attributes here
-        SVGUtils.addAttribute(attr, "id", SVGUtils.validateID(getName()));
+        
+        SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils.validateID(this.getName()));
+     
 
-        //SVGUtils.addAttribute(attr, "id", "ID" + getName());
-        SVGUtils.addAttribute(attr, "color",
+     
+        SVGUtils.addAttribute(attr,SVGConstants.SVG_ATTRIBUTE_COLOR,
             "rgb(" + DXFColor.getRGBString(Math.abs(getColor())) + ")");
-        SVGUtils.addAttribute(attr, "stroke", "currentColor");
-        SVGUtils.addAttribute(attr, "fill", "none");
+        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE, SVGConstants.SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR);
+        
+        SVGUtils.addAttribute(attr,  SVGConstants.SVG_ATTRIBUTE_FILL, SVGConstants.SVG_ATTRIBUTE_FILL_VALUE_NONE);
 
         if (!isVisible()) {
-            SVGUtils.addAttribute(attr, "visibility", "hidden");
+            SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_VISIBILITY,SVGConstants.SVG_ATTRIBUTE_VISIBILITY_VALUE_HIDDEN);
         }
 
         if (ltype.length() > 0) {
@@ -111,6 +117,12 @@ public class DXFLayer implements SVGSAXGenerator {
             SVGUtils.addStrokeDashArrayAttribute(attr, ltype);
         }
 
+        
+        //the stroke-width
+        if(this.lineWeight>0 && !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)){
+        	SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWeightToStrokeWidth(this.lineWeight));
+        }
+        
         SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 
         Enumeration e = entities.keys();
@@ -214,4 +226,20 @@ public class DXFLayer implements SVGSAXGenerator {
     public boolean isFrozen() {
         return ((this.flags & 1) == 1);
     }
+
+	public int getLineWeight() {
+		return lineWeight;
+	}
+
+	public void setLineWeight(int lineWeight) {
+		this.lineWeight = lineWeight;
+	}
+
+	public String getPlotStyle() {
+		return plotStyle;
+	}
+
+	public void setPlotStyle(String plotStyle) {
+		this.plotStyle = plotStyle;
+	}
 }

@@ -115,7 +115,7 @@ public class DXFLeader extends DXFEntity {
 
 
             AttributesImpl attr = new AttributesImpl();
-            super.setCommonAttributes(attr);
+            super.setCommonAttributes(attr, svgContext);
             SVGUtils.addAttribute(attr, "d", buf.toString());
             SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
 

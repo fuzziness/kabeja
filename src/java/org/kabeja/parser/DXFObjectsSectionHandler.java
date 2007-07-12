@@ -38,7 +38,7 @@ public class DXFObjectsSectionHandler extends AbstractSectionHandler
      * @see de.miethxml.kabeja.parser.DXFSectionHandler#endSection()
      */
     public void endSection() {
-        endObject();
+    	this.endObject();
     }
 
     /*
@@ -58,18 +58,18 @@ public class DXFObjectsSectionHandler extends AbstractSectionHandler
      */
     public void parseGroup(int groupCode, DXFValue value) {
         if (groupCode == OBJECT_START) {
-            endObject();
-
-            if (handlers.containsKey(value.getValue())) {
-                parseObject = true;
-                handler = (DXFObjectHandler) handlers.get(value.getValue());
-                handler.setDXFDocument(this.doc);
-                handler.startObject();
+        	this.endObject();
+            
+            if (this.handlers.containsKey(value.getValue())) {
+                this.parseObject = true;
+                this.handler = (DXFObjectHandler) handlers.get(value.getValue());
+                this.handler.setDXFDocument(this.doc);
+                this.handler.startObject();
             } else {
-                parseObject = false;
+            	this.parseObject = false;
             }
-        } else if (parseObject) {
-            handler.parseGroup(groupCode, value);
+        } else if (this.parseObject) {
+        	this.handler.parseGroup(groupCode, value);
         }
     }
 
@@ -79,7 +79,7 @@ public class DXFObjectsSectionHandler extends AbstractSectionHandler
      * @see de.miethxml.kabeja.parser.DXFSectionHandler#startSection()
      */
     public void startSection() {
-        parseObject = false;
+        this.parseObject = false;
     }
 
     /*
@@ -88,7 +88,7 @@ public class DXFObjectsSectionHandler extends AbstractSectionHandler
      * @see de.miethxml.kabeja.parser.Handler#releaseDXFDocument()
      */
     public void releaseDXFDocument() {
-        // TODO Auto-generated method stub
+       this.doc=null;
     }
 
     /* (non-Javadoc)
@@ -97,14 +97,14 @@ public class DXFObjectsSectionHandler extends AbstractSectionHandler
     public void addHandler(Handler handler) {
         DXFObjectHandler h = (DXFObjectHandler) handler;
         h.setDXFDocument(this.doc);
-        handlers.put(h.getObjectType(), h);
+        this.handlers.put(h.getObjectType(), h);
     }
 
     protected void endObject() {
-        if (parseObject) {
+        if (this.parseObject) {
             //finish the old parsing object
-            handler.endObject();
-            doc.addDXFObject(handler.getDXFObject());
+            this.handler.endObject();
+            this.doc.addDXFObject(handler.getDXFObject());
         }
     }
 }

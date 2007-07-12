@@ -34,7 +34,7 @@ public class ImageFilter implements PostProcessor {
     /* (non-Javadoc)
      * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument, java.util.Map)
      */
-    public void process(DXFDocument doc, Map context) {
+    public void process(DXFDocument doc, Map context) throws ProcessorException {
         Iterator i = doc.getDXFLayerIterator();
 
         while (i.hasNext()) {
@@ -46,7 +46,7 @@ public class ImageFilter implements PostProcessor {
                 while (in.hasNext()) {
                      DXFImage img = (DXFImage) in.next();
                      String imgDef = img.getImageDefObjectID();
-                     DXFImageDefObject def = (DXFImageDefObject)doc.getDXFObject(DXFConstants.OBJECT_TYPE_IMAGEDEF,imgDef);
+                     DXFImageDefObject def = (DXFImageDefObject)doc.getDXFObject(imgDef);
                      File f = new File(def.getFilename());
                      if(!f.exists()){
                          in.remove();

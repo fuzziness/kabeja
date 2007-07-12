@@ -36,7 +36,7 @@ public class ViewportFilter implements PostProcessor {
      * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument,
      *      java.util.Map)
      */
-    public void process(DXFDocument doc, Map context) {
+    public void process(DXFDocument doc, Map context) throws ProcessorException {
         DXFViewport viewport = null;
         Iterator i = doc.getDXFViewportIterator();
 

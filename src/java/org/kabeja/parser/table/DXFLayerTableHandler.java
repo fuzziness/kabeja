@@ -31,7 +31,7 @@ public class DXFLayerTableHandler extends AbstractTableHandler {
     public final static int GROUPCODE_LAYER_COLORNUMBER = 62;
     public final static int GROUPCODE_LAYER_PLOTTINGFLAG = 290;
     public final static int GROUPCODE_LAYER_LINEWEIGHT = 370;
-    public final static int GROUPCODE_LAYER_HARDPOINTERID = 390;
+    public final static int GROUPCODE_LAYER_PLOTSTYLENAME = 390;
     private DXFLayer layer;
 
     /*
@@ -50,26 +50,31 @@ public class DXFLayerTableHandler extends AbstractTableHandler {
      *      java.lang.String)
      */
     public void parseGroup(int groupCode, DXFValue value) {
-        switch (groupCode) {
+        
+    	switch (groupCode) {
         case GROUPCODE_LAYER_NAME:
             layer.setName(value.getValue());
-
             break;
 
         case GROUPCODE_LAYER_COLORNUMBER:
             layer.setColor(value.getIntegerValue());
-
             break;
 
         case GROUPCODE_LAYER_LINETYPE:
             layer.setLineType(value.getValue());
-
             break;
 
         case DXFConstants.GROUPCODE_STANDARD_FLAGS:
             layer.setFlags(value.getIntegerValue());
-
             break;
+            
+        case GROUPCODE_LAYER_LINEWEIGHT:
+        	layer.setLineWeight(value.getIntegerValue());
+        	break;
+        	
+        case GROUPCODE_LAYER_PLOTSTYLENAME:
+        	layer.setPlotStyle(value.getValue());
+        	break;
         }
     }
 

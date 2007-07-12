@@ -67,9 +67,9 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 
 		if (this.vertices.size() > 0) {
 			if (is3DPolygonMesh()) {
-				meshToSAX(handler);
+				meshToSAX(handler, svgContext);
 			} else if (isPolyfaceMesh()) {
-				polyfaceToSAX(handler);
+				polyfaceToSAX(handler, svgContext);
 			} else if (isCurveFitVerticesAdded()) {
 				// splineFitToSAX(handler, svgContext);
 			} else if (isSplineFitVerticesAdded()) {
@@ -224,7 +224,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		this.startWidth = startWidth;
 	}
 
-	protected void meshToSAX(ContentHandler handler) throws SAXException {
+	protected void meshToSAX(ContentHandler handler, Map svgContext) throws SAXException {
 
 		// TODO check first the points and put the output together
 
@@ -337,7 +337,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		}
 		AttributesImpl attr = new AttributesImpl();
 		SVGUtils.addAttribute(attr, "d", d.toString());
-		super.setCommonAttributes(attr);
+		super.setCommonAttributes(attr, svgContext);
 		SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
 
 	}
@@ -477,7 +477,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		if (this.startWidth != this.endWidth || !constantWidth) {
 
 			// handle the different width
-			polylinePartToSAX(handler);
+			polylinePartToSAX(handler, svgContext);
 
 		} else {
 			StringBuffer d = new StringBuffer();
@@ -501,14 +501,15 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 			}
 
 			SVGUtils.addAttribute(attr, "d", d.toString());
-
+			super.setCommonAttributes(attr, svgContext);
+			
 			if (startWidth > 0.0) {
 				SVGUtils.addAttribute(attr,
 						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, ""
 								+ startWidth);
 			}
 
-			super.setCommonAttributes(attr);
+			
 			SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
 		}
 
@@ -525,13 +526,13 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		}
 	}
 
-	protected void polylinePartToSAX(ContentHandler handler)
+	protected void polylinePartToSAX(ContentHandler handler, Map svgContext)
 			throws SAXException {
 
 		// output as group
 
 		AttributesImpl attr = new AttributesImpl();
-		super.setCommonAttributes(attr);
+		super.setCommonAttributes(attr, svgContext);
 		SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 
 		String oldID = this.id;
@@ -661,7 +662,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 			// output
 			attr = new AttributesImpl();
 			this.id = this.id + "__" + i;
-			super.setCommonAttributes(attr);
+			super.setCommonAttributes(attr, svgContext);
 			if (doc.getDXFHeader().isFillMode()) {
 				SVGUtils.addAttribute(attr, "fill", "currentColor");
 			}
@@ -723,7 +724,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		}
 
 		AttributesImpl attr = new AttributesImpl();
-		super.setCommonAttributes(attr);
+		super.setCommonAttributes(attr, svgContext);
 
 		SVGUtils.addAttribute(attr, "d", d.toString());
 
@@ -733,10 +734,10 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 	}
 
 	protected void singleEdgeToSAX(ContentHandler handler, DXFVertex start,
-			DXFVertex end) throws SAXException {
+			DXFVertex end, Map svgContext) throws SAXException {
 
 		AttributesImpl attr = new AttributesImpl();
-		super.setCommonAttributes(attr);
+		super.setCommonAttributes(attr, svgContext);
 
 		StringBuffer d = new StringBuffer();
 		d.append("M ");
@@ -885,7 +886,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 
 	}
 
-	protected void polyfaceToSAX(ContentHandler handler) throws SAXException {
+	protected void polyfaceToSAX(ContentHandler handler, Map svgContext) throws SAXException {
 
 		Iterator i = this.vertices.iterator();
 		StringBuffer buf = new StringBuffer();
@@ -919,7 +920,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 				if (buf.length() > 0) {
 					AttributesImpl attr = new AttributesImpl();
 					SVGUtils.addAttribute(attr, "d", buf.toString());
-					v.setCommonAttributes(attr);
+					v.setCommonAttributes(attr, svgContext);
 					// fillmode ????????
 					SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
 					buf.delete(0, buf.length());
@@ -930,7 +931,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		if (buf.length() > 0) {
 			AttributesImpl attr = new AttributesImpl();
 			SVGUtils.addAttribute(attr, "d", buf.toString());
-			super.setCommonAttributes(attr);
+			super.setCommonAttributes(attr, svgContext);
 			SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
 		}
 

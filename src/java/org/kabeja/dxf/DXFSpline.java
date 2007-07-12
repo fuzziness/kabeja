@@ -80,7 +80,7 @@ public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
         throws SAXException {
         if (points.size() > 0) {
             AttributesImpl attr = new AttributesImpl();
-            super.setCommonAttributes(attr);
+            super.setCommonAttributes(attr, svgContext);
 
             StringBuffer d = new StringBuffer();
             Iterator i = points.iterator();

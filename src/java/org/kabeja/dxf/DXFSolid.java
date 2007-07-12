@@ -86,7 +86,7 @@ public class DXFSolid extends DXFEntity {
 
         SVGUtils.addAttribute(attr, "points", points.toString());
 
-        super.setCommonAttributes(attr);
+        super.setCommonAttributes(attr, svgContext);
 
         // if the fillmode attribute is non-zero the solid is filled
         if (doc.getDXFHeader().isFillMode()) {

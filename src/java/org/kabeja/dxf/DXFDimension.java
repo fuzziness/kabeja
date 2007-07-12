@@ -382,7 +382,7 @@ public class DXFDimension extends DXFEntity {
 
 			SVGUtils.addAttribute(attr, "transform", buf.toString());
 
-			super.setCommonAttributes(attr);
+			super.setCommonAttributes(attr, svgContext);
 
 			SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 			attr = new AttributesImpl();
@@ -405,8 +405,8 @@ public class DXFDimension extends DXFEntity {
 
 	}
 
-	public void setAttributes(AttributesImpl attrs) {
-		super.setCommonAttributes(attrs);
+	public void setAttributes(AttributesImpl attrs, Map svgContext) {
+		super.setCommonAttributes(attrs, svgContext);
 	}
 
 	public DXFDimensionStyle getDXFDimensionStyle() {

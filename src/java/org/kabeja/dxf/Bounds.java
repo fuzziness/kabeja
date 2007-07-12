@@ -20,9 +20,9 @@ import org.kabeja.dxf.helpers.Point;
 /**
  * This class is a helper class and reflect a viewport of a entity/layer or
  * document
- *
+ * 
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class Bounds {
 	protected double max_x = Double.NEGATIVE_INFINITY;
@@ -40,9 +40,19 @@ public class Bounds {
 	protected boolean set = true;
 
 	/**
-	 *
+	 * 
 	 */
 	public Bounds() {
+	}
+
+	public Bounds(double max_x, double min_x, double max_y, double min_y,
+			double max_z, double min_z) {
+		this.max_x = max_x;
+		this.min_x = min_x;
+		this.max_y = max_y;
+		this.min_y = min_y;
+		this.max_z = max_z;
+		this.min_z = min_z;
 	}
 
 	public Bounds(double max_x, double min_x, double max_y, double min_y) {
@@ -57,6 +67,9 @@ public class Bounds {
 		this.min_x = b.getMinimumX();
 		this.max_y = b.getMaximumY();
 		this.min_y = b.getMinimumY();
+		this.max_z = b.getMaximumZ();
+		this.min_z = b.getMinimumZ();
+
 	}
 
 	/**
@@ -119,9 +132,25 @@ public class Bounds {
 		this.min_y = min_y;
 	}
 
+	public double getMinimumZ() {
+		return this.min_z;
+	}
+
+	public void setMinimumZ(double min_z) {
+		this.min_z = min_z;
+	}
+
+	public double getMaximumZ() {
+		return this.max_z;
+	}
+
+	public void setMaximumZ(double max_z) {
+		this.max_z = max_z;
+	}
+
 	/**
 	 * Enlarge the Bounds to the given Bounds if they enlarge the area.
-	 *
+	 * 
 	 * @param bounds
 	 */
 	public void addToBounds(Bounds bounds) {
@@ -132,6 +161,9 @@ public class Bounds {
 		if (bounds.getMaximumY() > this.getMaximumY()) {
 			this.setMaximumY(bounds.getMaximumY());
 		}
+		if (bounds.getMaximumZ() > this.getMaximumZ()) {
+			this.setMaximumZ(bounds.getMaximumZ());
+		}
 
 		if (bounds.getMinimumX() < this.getMinimumX()) {
 			this.setMinimumX(bounds.getMinimumX());
@@ -140,34 +172,61 @@ public class Bounds {
 		if (bounds.getMinimumY() < this.getMinimumY()) {
 			this.setMinimumY(bounds.getMinimumY());
 		}
+		if (bounds.getMinimumZ() < this.getMinimumZ()) {
+			this.setMinimumZ(bounds.getMinimumZ());
+		}
+
 	}
 
 	/**
-	 * Enlarge the Bounds if the given bounds enlarge the Bounds.
-	 *
+	 * Enlarge the Bounds if the given bounds enlarge the coordinates
+	 * 
 	 * @param x
 	 * @param y
+	 * @param z
 	 */
-	public void addToBounds(double x, double y) {
+	public void addToBounds(double x, double y, double z) {
 		if (x > this.getMaximumX()) {
 			this.setMaximumX(x);
-		}
-
-		if (x < this.getMinimumX()) {
+		} else if (x < this.getMinimumX()) {
 			this.setMinimumX(x);
 		}
 
 		if (y > this.getMaximumY()) {
 			this.setMaximumY(y);
+		} else if (y < this.getMinimumY()) {
+			this.setMinimumY(y);
+		}
+		if (z < this.getMinimumZ()) {
+			this.setMinimumZ(z);
+		} else if (z > this.getMaximumZ()) {
+			this.setMaximumZ(z);
+		}
+	}
+
+	/**
+	 * Enlarge the Bounds if the given bounds enlarge the coordinates
+	 * 
+	 * @param x
+	 * @param y
+	 * 
+	 */
+	public void addToBounds(double x, double y) {
+		if (x > this.getMaximumX()) {
+			this.setMaximumX(x);
+		} else if (x < this.getMinimumX()) {
+			this.setMinimumX(x);
 		}
 
-		if (y < this.getMinimumY()) {
+		if (y > this.getMaximumY()) {
+			this.setMaximumY(y);
+		} else if (y < this.getMinimumY()) {
 			this.setMinimumY(y);
 		}
 	}
 
 	public void addToBounds(Point p) {
-		addToBounds(p.getX(), p.getY());
+		addToBounds(p.getX(), p.getY(), p.getZ());
 	}
 
 	public double getWidth() {
@@ -178,17 +237,31 @@ public class Bounds {
 		return Math.abs(getMaximumY() - getMinimumY());
 	}
 
+	public double getDepth() {
+		return Math.abs(getMaximumZ() - getMinimumZ());
+	}
+
 	/**
 	 * @return Returns the set.
 	 */
 	public boolean isValid() {
+		
+		//later 3D bounds
+//		if ((this.max_x == Double.NEGATIVE_INFINITY)
+//				|| (this.max_y == Double.NEGATIVE_INFINITY)
+//				|| (this.min_x == Double.POSITIVE_INFINITY)
+//				|| (this.min_y == Double.POSITIVE_INFINITY)
+//				|| (this.max_z == Double.NEGATIVE_INFINITY)
+//				|| (this.min_z == Double.POSITIVE_INFINITY)) {
+//			return false;
+//		}
+
 		if ((this.max_x == Double.NEGATIVE_INFINITY)
 				|| (this.max_y == Double.NEGATIVE_INFINITY)
 				|| (this.min_x == Double.POSITIVE_INFINITY)
 				|| (this.min_y == Double.POSITIVE_INFINITY)) {
 			return false;
 		}
-
 		return set;
 	}
 
@@ -211,7 +284,7 @@ public class Bounds {
 
 	/**
 	 * Determines if the given bounding box part or inside the bounds.
-	 *
+	 * 
 	 * @param bounds
 	 * @return
 	 */

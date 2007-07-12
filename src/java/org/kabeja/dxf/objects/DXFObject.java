@@ -53,14 +53,14 @@ public abstract class DXFObject {
     /**
      * @return Returns the handleID.
      */
-    public String getHandleID() {
+    public String getID() {
         return handleID;
     }
 
     /**
      * @param handleID The handleID to set.
      */
-    public void setHandleID(String handleID) {
+    public void setID(String handleID) {
         this.handleID = handleID;
     }
 }

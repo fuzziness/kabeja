@@ -82,7 +82,7 @@ public class DXFImage extends DXFEntity {
 		// TODO add clipping here with clipPath
 
 		AttributesImpl attr = new AttributesImpl();
-		super.setCommonAttributes(attr);
+		super.setCommonAttributes(attr, svgContext);
 
 		SVGUtils.addAttribute(attr, "x", "" + insertPoint.getX());
 		SVGUtils.addAttribute(attr, "y", "" + insertPoint.getY());
@@ -92,8 +92,7 @@ public class DXFImage extends DXFEntity {
 				+ imageSizeAlongV);
 
 		// get the image path from the referenced IMAGEDEF object
-		DXFImageDefObject imageDef = (DXFImageDefObject) doc.getDXFObject(
-				DXFConstants.OBJECT_TYPE_IMAGEDEF, imageDefID);
+		DXFImageDefObject imageDef = (DXFImageDefObject) doc.getDXFObject(imageDefID);
 
 		// convert the file to uri
 
@@ -109,7 +108,7 @@ public class DXFImage extends DXFEntity {
 
 		StringBuffer transform = new StringBuffer();
 		transform.append("rotate(180 ");
-		transform.append((insertPoint.getX() + imageSizeAlongU / 2));
+		transform.append((insertPoint.getX()+ imageSizeAlongU / 2));
 		transform.append(" ");
 		transform.append((insertPoint.getY() + imageSizeAlongV / 2));
 		transform.append(")");

@@ -71,7 +71,7 @@ public class DXFCircle extends DXFEntity {
 		SVGUtils.addAttribute(attr, "cy", "" + this.center.getY());
 		SVGUtils.addAttribute(attr, "r", "" + this.radius);
 
-		super.setCommonAttributes(attr);
+		super.setCommonAttributes(attr, svgContext);
 
 		SVGUtils.emptyElement(handler, SVGConstants.SVG_CIRCLE, attr);
 	}

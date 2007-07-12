@@ -240,7 +240,7 @@ public class DXFMText extends DXFText {
 
 
         SVGUtils.addAttribute(attr, "fill", "currentColor");
-        super.setCommonAttributes(attr);
+        super.setCommonAttributes(attr, svgContext);
         SVGUtils.startElement(handler, SVGConstants.SVG_TEXT, attr);
         SVGUtils.textDocumentToSAX(handler, getTextDocument());
         SVGUtils.endElement(handler, SVGConstants.SVG_TEXT);

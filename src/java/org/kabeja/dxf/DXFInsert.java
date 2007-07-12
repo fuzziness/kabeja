@@ -322,7 +322,7 @@ public class DXFInsert extends DXFEntity {
                 SVGUtils.addAttribute(attr, "transform", buf.toString());
 
                 // add common attributes
-                super.setCommonAttributes(attr);
+                super.setCommonAttributes(attr, svgContext);
 
                 // fix the scale of stroke-width
                 if ((this.scale_x + this.scale_y) > 0) {

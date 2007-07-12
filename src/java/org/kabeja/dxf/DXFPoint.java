@@ -104,7 +104,7 @@ public class DXFPoint extends DXFEntity {
         SVGUtils.addAttribute(attr, "cx", "" + getX());
         SVGUtils.addAttribute(attr, "cy", "" + doc.translateY(getY()));
         SVGUtils.addAttribute(attr, "r", "" + 0.001);
-        super.setCommonAttributes(attr);
+        super.setCommonAttributes(attr, svgContext);
         SVGUtils.emptyElement(handler, SVGConstants.SVG_CIRCLE, attr);
     }
 

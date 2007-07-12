@@ -56,7 +56,7 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 			throws SAXException {
 
 		AttributesImpl attr = new AttributesImpl();
-		super.setCommonAttributes(attr);
+		super.setCommonAttributes(attr, svgContext);
 		if (startParameter == DEFAULT_START_PARAMETER
 				&& endParameter == DEFAULT_END_PARAMETER) {
 

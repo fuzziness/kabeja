@@ -65,7 +65,7 @@ public class DXF3DFace extends DXFSolid {
 
 			SVGUtils.addAttribute(attr, "points", points.toString());
 
-			super.setCommonAttributes(attr);
+			super.setCommonAttributes(attr, svgContext);
 
 			SVGUtils.emptyElement(handler, SVGConstants.SVG_POLYGON, attr);
 
@@ -81,40 +81,40 @@ public class DXF3DFace extends DXFSolid {
 			int flag = getFlags();
 
 			if ((flag & 1) == 0) {
-				edgeToSAX(handler, getPoint1(), getPoint2());
+				edgeToSAX(handler, getPoint1(), getPoint2(), svgContext);
 
 			}
 			if ((flag & 2) == 0) {
-				edgeToSAX(handler, getPoint2(), getPoint3());
+				edgeToSAX(handler, getPoint2(), getPoint3(), svgContext);
 
 			}
 			if ((flag & 4) == 0) {
-				edgeToSAX(handler, getPoint3(), getPoint4());
+				edgeToSAX(handler, getPoint3(), getPoint4(), svgContext);
 
 			}
 			if ((flag & 8) == 0) {
-				edgeToSAX(handler, getPoint4(), getPoint1());
+				edgeToSAX(handler, getPoint4(), getPoint1(), svgContext);
 			}
 
 		}
 
 	}
 
-	protected void edgeToSAX(ContentHandler handler, Point p1, Point p2)
+	protected void edgeToSAX(ContentHandler handler, Point p1, Point p2, Map svgContext)
 			throws SAXException {
 		AttributesImpl attr = new AttributesImpl();
 		// set the attributes
 		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_X1, "" + p1.getX());
 
-		double value = doc.translateY(p1.getY());
+		double value = p1.getY();
 		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_Y1, "" + value);
 
 		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_X2, "" + p2.getX());
 
-		value = doc.translateY(p2.getY());
+		value = p2.getY();
 
 		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_Y2, "" + value);
-		super.setCommonAttributes(attr);
+		super.setCommonAttributes(attr, svgContext);
 		SVGUtils.emptyElement(handler, SVGConstants.SVG_LINE, attr);
 	}
 
