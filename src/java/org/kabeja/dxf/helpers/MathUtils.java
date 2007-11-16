@@ -289,6 +289,38 @@ public class MathUtils {
 	}
 	
 	
-
+	public static double[][] multiplyMatrixByMatrix(double[][] a,double[][] b)throws IllegalArgumentException
+	{
+		if(a[0].length != b.length){
+			throw new IllegalArgumentException("Cannot multiply a with b, columns of a != rows of b. ");
+		}
+	
+		double[][] c = new double[a.length][b[0].length];
+		
+		for(int i=0;i<a.length;i++){
+			for(int x=0;x<b[0].length;x++){
+				for(int y=0;y<b.length;y++){
+					c[i][x] +=a[i][y]*b[x][y];
+				}
+				
+			}
+		}
+		
+		return c;
+	}
+	
+	public static double[] multiplyMatrixByVector(double[][] a,double[] v)throws IllegalArgumentException{
+		if(a[0].length != v.length){
+			throw new IllegalArgumentException("Cannot multiply a with v, columns of a != rows of v. ");
+		}
+		double[] r = new double[a.length];
+		for(int i=0;i<a.length;i++){
+			for(int x=0;x<v.length;x++){
+				r[i] += a[i][x]*v[x];
+			}
+		}
+		
+		return r;
+	}
 	
 }

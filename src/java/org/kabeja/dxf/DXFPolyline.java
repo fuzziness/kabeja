@@ -43,8 +43,9 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 	protected int rows = 0;
 
 	protected int columns = 0;
-	
-	protected static final double QUARTER_CIRCLE_ANGLE = Math.tan(0.39269908169872414D);
+
+	protected static final double QUARTER_CIRCLE_ANGLE = Math
+			.tan(0.39269908169872414D);
 
 	/**
 	 * 
@@ -89,7 +90,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 	 */
 	public Bounds getBounds() {
 		Bounds bounds = new Bounds();
-		
+
 		Iterator i = vertices.iterator();
 		if (i.hasNext()) {
 			DXFVertex last, first, v = null;
@@ -224,7 +225,8 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		this.startWidth = startWidth;
 	}
 
-	protected void meshToSAX(ContentHandler handler, Map svgContext) throws SAXException {
+	protected void meshToSAX(ContentHandler handler, Map svgContext)
+			throws SAXException {
 
 		// TODO check first the points and put the output together
 
@@ -404,7 +406,11 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 				double h = start.getBulge() * l / 2;
 
 				// converting to an elipse with the same rx=ry
-				d.append("A " + r + " " + r + " 0");
+				d.append("A ");
+				d.append(SVGUtils.formatNumberAttribute(r));
+				d.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
+				d.append(SVGUtils.formatNumberAttribute(r));
+				d.append(" 0");
 				if (Math.abs(start.getBulge()) > 1.0) {
 					// large Arc-flag
 					d.append(" 1 ");
@@ -421,15 +427,19 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 				} else {
 					d.append(" 1 ");
 				}
-				d.append(end.getX() + " ");
-				d.append(doc.translateY(end.getY()) + " ");
+				d.append(end.getX());
+				d.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
+				d.append(end.getY());
+				d.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
 
 			}
 
 		} else {
-			d.append("L " + end.getX() + " ");
-
-			d.append(doc.translateY(end.getY()) + " ");
+			d.append("L ");
+			d.append(SVGUtils.formatNumberAttribute(end.getX()));
+			d.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
+			d.append(SVGUtils.formatNumberAttribute(end.getY()));
+			d.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
 
 		}
 
@@ -450,8 +460,11 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 
 		Iterator i = vertices.iterator();
 		first = last = (DXFVertex) i.next();
-		d.append("M " + last.getX() + " " + last.getY() + " ");
-
+		d.append("M ");
+		d.append(last.getX());
+		d.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
+		d.append(last.getY());
+		d.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
 		while (i.hasNext()) {
 			DXFVertex end = (DXFVertex) i.next();
 			d.append(getVertexPath(last, end));
@@ -502,14 +515,13 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 
 			SVGUtils.addAttribute(attr, "d", d.toString());
 			super.setCommonAttributes(attr, svgContext);
-			
+
 			if (startWidth > 0.0) {
 				SVGUtils.addAttribute(attr,
 						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, ""
 								+ startWidth);
 			}
 
-			
 			SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
 		}
 
@@ -537,7 +549,7 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 
 		String oldID = this.id;
 		PolylineSegment segment = null;
-		//boolean bulged = false;
+		// boolean bulged = false;
 		boolean process = true;
 		DXFVertex start = (DXFVertex) vertices.get(0);
 		DXFVertex end = (DXFVertex) vertices.get(1);
@@ -705,8 +717,6 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		// and later take e deeper look at SVG-bezier curves /DXF b-splines
 		StringBuffer d = new StringBuffer();
 
-		
-
 		Iterator i = vertices.iterator();
 		DXFVertex last = (DXFVertex) i.next();
 		d.append("M " + last.getX() + " " + last.getY() + " ");
@@ -790,63 +800,68 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 	}
 
 	protected void addToBounds(DXFVertex start, DXFVertex end, Bounds bounds) {
-		
+
 		if (start.getBulge() != 0) {
 			// calculte the height
 			double l = MathUtils.distance(start.getPoint(), end.getPoint());
 			// double h = Math.abs(last.getBulge()) * l / 2;
 			double r = this.getRadius(start.getBulge(), l);
-           
-			
+
 			double s = l / 2;
 			Vector edgeDirection = MathUtils.getVector(start.getPoint(), end
 					.getPoint());
 			edgeDirection = MathUtils.normalize(edgeDirection);
-			Point centerPoint = MathUtils.getPointOfStraightLine(start.getPoint(),
-					edgeDirection, s);
+			Point centerPoint = MathUtils.getPointOfStraightLine(start
+					.getPoint(), edgeDirection, s);
 
-			
-			Vector centerPointDirection = MathUtils.crossProduct(edgeDirection, this.getExtrusion().getNormal());
+			Vector centerPointDirection = MathUtils.crossProduct(edgeDirection,
+					this.getExtrusion().getNormal());
 			centerPointDirection = MathUtils.normalize(centerPointDirection);
 
-			//double t = Math.sqrt(Math.pow(r, 2) - Math.pow(s, 2));
-//			double t = 0;
-			double h = Math.abs(start.getBulge()*l)/2;
-//			if(Math.abs(start.getBulge())>=1.0){
-//				 t = h-r;
-//			}else{
-//				//t = Math.sqrt(Math.pow(r, 2) - Math.pow(s, 2));
-//				t=r-h;
-//			}
+			// double t = Math.sqrt(Math.pow(r, 2) - Math.pow(s, 2));
+			// double t = 0;
+			double h = Math.abs(start.getBulge() * l) / 2;
+			// if(Math.abs(start.getBulge())>=1.0){
+			// t = h-r;
+			// }else{
+			// //t = Math.sqrt(Math.pow(r, 2) - Math.pow(s, 2));
+			// t=r-h;
+			// }
 			// the center point of the arc
 			int startQ = 0;
 			int endQ = 0;
 
-	        double bulge = start.getBulge();
+			double bulge = start.getBulge();
 			if (bulge > 0) {
-								
-		    	//the arc goes over the right side, but where is the center point?
-			    if(bulge>1.0){
-			    	double t = h-r;
-			    	centerPoint = MathUtils.getPointOfStraightLine(centerPoint, centerPointDirection,t);
-			    }else{
-			    	double t = r-h;
-			    	centerPoint = MathUtils.getPointOfStraightLine(centerPoint, centerPointDirection,(-1*t));
-			    }
-					
+
+				// the arc goes over the right side, but where is the center
+				// point?
+				if (bulge > 1.0) {
+					double t = h - r;
+					centerPoint = MathUtils.getPointOfStraightLine(centerPoint,
+							centerPointDirection, t);
+				} else {
+					double t = r - h;
+					centerPoint = MathUtils.getPointOfStraightLine(centerPoint,
+							centerPointDirection, (-1 * t));
+				}
+
 				endQ = MathUtils.getQuadrant(end.getPoint(), centerPoint);
 				startQ = MathUtils.getQuadrant(start.getPoint(), centerPoint);
 
 			} else {
-//				the arc goes over the left side, but where is the center point?
-				if(bulge<-1.0){
-					double t = h-r;
-					centerPoint = MathUtils.getPointOfStraightLine(centerPoint, centerPointDirection, (-1*t));
-				}else{
-					double t = r-h;
-					centerPoint = MathUtils.getPointOfStraightLine(centerPoint, centerPointDirection, t);
+				// the arc goes over the left side, but where is the center
+				// point?
+				if (bulge < -1.0) {
+					double t = h - r;
+					centerPoint = MathUtils.getPointOfStraightLine(centerPoint,
+							centerPointDirection, (-1 * t));
+				} else {
+					double t = r - h;
+					centerPoint = MathUtils.getPointOfStraightLine(centerPoint,
+							centerPointDirection, t);
 				}
-				
+
 				startQ = MathUtils.getQuadrant(end.getPoint(), centerPoint);
 				endQ = MathUtils.getQuadrant(start.getPoint(), centerPoint);
 
@@ -854,23 +869,28 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 
 			if (endQ < startQ) {
 				endQ += 4;
-			}else if(endQ==startQ &&Math.abs(start.getBulge())>QUARTER_CIRCLE_ANGLE){
-				endQ+=4;
+			} else if (endQ == startQ
+					&& Math.abs(start.getBulge()) > QUARTER_CIRCLE_ANGLE) {
+				endQ += 4;
 			}
 
 			while (endQ > startQ) {
 				switch (startQ) {
 				case 0:
-					bounds.addToBounds(centerPoint.getX(), centerPoint.getY() + r);
+					bounds.addToBounds(centerPoint.getX(), centerPoint.getY()
+							+ r);
 					break;
 				case 1:
-					bounds.addToBounds(centerPoint.getX() - r, centerPoint.getY());
+					bounds.addToBounds(centerPoint.getX() - r, centerPoint
+							.getY());
 					break;
 				case 2:
-					bounds.addToBounds(centerPoint.getX(), centerPoint.getY() - r);
+					bounds.addToBounds(centerPoint.getX(), centerPoint.getY()
+							- r);
 					break;
 				case 3:
-					bounds.addToBounds(centerPoint.getX() + r, centerPoint.getY());
+					bounds.addToBounds(centerPoint.getX() + r, centerPoint
+							.getY());
 					endQ -= 4;
 					startQ -= 4;
 					break;
@@ -882,11 +902,11 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 		}
 		bounds.addToBounds(start.getPoint());
 		bounds.addToBounds(end.getPoint());
-		
 
 	}
 
-	protected void polyfaceToSAX(ContentHandler handler, Map svgContext) throws SAXException {
+	protected void polyfaceToSAX(ContentHandler handler, Map svgContext)
+			throws SAXException {
 
 		Iterator i = this.vertices.iterator();
 		StringBuffer buf = new StringBuffer();
@@ -1025,26 +1045,25 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 	public double getLength() {
 
 		double length = 0.0;
-		
-		
+
 		if (isCubicSpline() || isQuadSpline()) {
 			return getSplineApproximationLength();
 		} else if (isPolyfaceMesh()) {
-			
+
 			return getPolyfaceLength();
 
-		} else if (is3DPolygonMesh() || isBezierSurefaceMesh() ||isCubicSurefaceMesh()) {
-              
+		} else if (is3DPolygonMesh() || isBezierSurefaceMesh()
+				|| isCubicSurefaceMesh()) {
+
 			return getMeshLength();
-			 
+
 		} else {
 
-			
-			//a normal polyline with or without bulges 
+			// a normal polyline with or without bulges
 			Iterator i = this.vertices.iterator();
 			DXFVertex first, last = first = (DXFVertex) i.next();
 			while (i.hasNext()) {
-		
+
 				DXFVertex v = (DXFVertex) i.next();
 				length += this.getSegmentLength(last, v);
 				last = v;
@@ -1059,15 +1078,15 @@ public class DXFPolyline extends DXFEntity implements SVGPathBoundaryElement {
 
 	protected double getSegmentLength(DXFVertex start, DXFVertex end) {
 
-		double l =  MathUtils.distance(start.getPoint(), end.getPoint());
-		
+		double l = MathUtils.distance(start.getPoint(), end.getPoint());
+
 		if (start.getBulge() == 0.0) {
 			return l;
 		} else {
 			double alpha = 4 * Math.atan(Math.abs(start.getBulge()));
-			
+
 			double r = l / (2 * Math.sin(alpha / 2));
-            double d = (Math.PI * Math.toDegrees(alpha) * r) / 180;
+			double d = (Math.PI * Math.toDegrees(alpha) * r) / 180;
 			return d;
 		}
 	}

@@ -12,7 +12,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 package org.kabeja.dxf.objects;
 
 import java.util.ArrayList;
@@ -41,16 +41,16 @@ public class DXFDictionary extends DXFObject {
 	}
 
 	public DXFObject getDXFObjectByID(String id) {
-		return findByID(id).getDXFObject();
+		return this.findByID(id).getDXFObject();
 	}
 
 	public DXFObject getDXFObjectByName(String name) {
- 
+
 		DXFDictionaryRecord record = findByName(name);
-		if(record != null){
+		if (record != null) {
 			return record.getDXFObject();
-		}	
-		
+		}
+
 		return null;
 	}
 
@@ -79,9 +79,11 @@ public class DXFDictionary extends DXFObject {
 	}
 
 	protected DXFDictionaryRecord findByID(String id) {
+
 		for (int i = 0; i < this.records.size(); i++) {
 			DXFDictionaryRecord record = (DXFDictionaryRecord) records.get(i);
 			if (record.getID().equals(id)) {
+
 				return record;
 			}
 		}
@@ -96,11 +98,13 @@ public class DXFDictionary extends DXFObject {
 	 */
 
 	public DXFDictionary getDXFDictionaryForID(String id) {
+
 		Set dictionaries = new HashSet();
 		DXFObject obj = null;
 		for (int i = 0; i < this.records.size(); i++) {
 			DXFDictionaryRecord record = (DXFDictionaryRecord) records.get(i);
 			if (record.getID().equals(id)) {
+
 				return this;
 			} else if ((obj = record.getDXFObject()) != null
 					&& obj.getObjectType().equals(

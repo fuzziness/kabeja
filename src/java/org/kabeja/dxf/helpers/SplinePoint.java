@@ -55,7 +55,21 @@ public class SplinePoint extends Point {
         return this.type == TYPE_STARTTANGENT;
     }
 
+    /**
+     * Sets the type of the point 
+     * @param type
+     */
+    
     public void setType(int type) {
         this.type = type;
+    }
+    
+    /**
+     * gets the type of the point 
+     * @return
+     */
+    
+    public int getType(){
+    	return this.type;
     }
 }

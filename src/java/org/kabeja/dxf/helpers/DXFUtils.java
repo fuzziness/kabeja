@@ -95,10 +95,15 @@ public class DXFUtils {
 		for (int i = 0; i < size; i++) {
 			DXFVertex v = pline.getVertex(0);
 			double b = v.getBulge();
+			if (b != 0) {
+				v.setBulge(0);
+			}
+			//the predecessor becomes the reversed bulge
 			if (bulge != 0.0) {
 				v.setBulge(bulge * (-1.0));
-				bulge = b;
 			}
+			bulge = b;
+
 			list.add(v);
 			pline.removeVertex(0);
 		}
@@ -118,10 +123,11 @@ public class DXFUtils {
 		double r = l / (2 * Math.sin(alpha / 2));
 		return r;
 	}
-	
+
 	/**
-	 * Tests if the two points are the same for a given radius. In other words the distance between the 
-	 * two points is lower then the radius.
+	 * Tests if the two points are the same for a given radius. In other words
+	 * the distance between the two points is lower then the radius.
+	 * 
 	 * @param p1
 	 * @param p2
 	 * @param radius
@@ -130,14 +136,13 @@ public class DXFUtils {
 
 	public static boolean equals(Point p1, Point p2, double radius) {
 
-		return distance(p1,p2)<radius;
-		
-		
-//		if (Math.abs(p1.getX() - p2.getX()) <= radius
-//				&& Math.abs(p1.getY() - p2.getY()) <= radius)
-//			return Math.abs(p1.getZ() - p2.getZ()) <= radius;
+		return distance(p1, p2) < radius;
 
-//		return false;
+		// if (Math.abs(p1.getX() - p2.getX()) <= radius
+		// && Math.abs(p1.getY() - p2.getY()) <= radius)
+		// return Math.abs(p1.getZ() - p2.getZ()) <= radius;
+
+		// return false;
 	}
 
 }

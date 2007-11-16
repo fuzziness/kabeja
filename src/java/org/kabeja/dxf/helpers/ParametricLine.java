@@ -11,11 +11,17 @@ public class ParametricLine {
 		this.direction = direction;
 	}
 
+	
+	
 	public ParametricLine(Point start, Point end) {
 		this.startPoint = start;
 		this.direction = MathUtils.getVector(start, end);
 	}
 
+	public ParametricLine(){
+		this(new Point(),new Point());
+	}
+	
 	public double getIntersectionParameter(ParametricLine line) {
 
 		Vector n = MathUtils.crossProduct(this.direction, line
