@@ -15,12 +15,6 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -149,59 +143,6 @@ public abstract class DXFEntity {
 
     public void setLinetypeScaleFactor(double linetypeScaleFactor) {
         this.linetypeScaleFactor = linetypeScaleFactor;
-    }
-
-    protected void setCommonAttributes(AttributesImpl atts, Map context) {
-    
-    	// a negative color indicates the layer is off
-        if (!isVisibile()) {
-            // we calculate the bounds self so they must not
-            // rendered from the SVG-Renderer.
-            // If they should be in the rendering-tree change
-            // this to visible=hidden
-            SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_DISPLAY, SVGConstants.SVG_ATTRIBUTE_DISPLAY_VALUE_NONE);
-        }
-
-        // color 256 indicates color by layer
-        if ((this.color != 0) && (this.color != 256)) {
-            SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_COLOR,
-                "rgb(" + DXFColor.getRGBString(getColor()) + ")");
-            SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE, SVGConstants.SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR);
-        }
-
-        if (this.getID().length() > 0) {
-            SVGUtils.addAttribute(atts, SVGConstants.XML_ID, SVGUtils.validateID(this.getID()));
-        }
-
-        if(this.lineWeight>0 && !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)){
-        	SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWeightToStrokeWidth(this.lineWeight));
-        }
-        
-        double gscale = this.doc.getDXFHeader().getLinetypeScale();
-
-        if ((this.lineType.length() > 0) &&
-                !"CONTINUOUS".equals( this.lineType ) &&
-                !"BYBLOCK".equals( this.lineType ) &&
-                !"BYLAYER".equals( this.lineType ) && !isOmitLineType()) {
-            DXFLineType ltype = doc.getDXFLineType(this.lineType);
-
-            gscale = gscale * this.linetypeScaleFactor;
-
-            SVGUtils.addStrokeDashArrayAttribute(atts, ltype, gscale);
-        } else if (!isOmitLineType()) {
-            // get the linetype from layer
-            DXFLineType ltype = doc.getDXFLineType(doc.getDXFLayer(this.layerID)
-                                                      .getLineType());
-
-            if (ltype != null) {
-                gscale = gscale * this.linetypeScaleFactor;
-                SVGUtils.addStrokeDashArrayAttribute(atts, ltype,
-                    (this.linetypeScaleFactor * gscale));
-            } else if (isOmitLineType()) {
-                SVGUtils.addAttribute(atts,
-                    SVGConstants.SVG_ATTRIBUTE_STROKE_DASHARRAY, "");
-            }
-        }
     }
 
     public int getColor() {

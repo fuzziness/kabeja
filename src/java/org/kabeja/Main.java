@@ -32,10 +32,7 @@ import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.processing.PostProcessManager;
 import org.kabeja.processing.ProcessorManager;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGGenerator;
 import org.kabeja.tools.SAXProcessorBuilder;
-import org.kabeja.xml.SAXGenerator;
 import org.kabeja.xml.SAXPrettyOutputter;
 
 /**
@@ -220,12 +217,12 @@ public class Main {
 				SAXPrettyOutputter writer = new SAXPrettyOutputter(out,
 						SAXPrettyOutputter.DEFAULT_ENCODING);
 
-				if (this.outputDTD) {
-					writer.setDTD(SVGConstants.SVG_DTD_1_0);
-				}
-				SAXGenerator gen = new SVGGenerator();
-				gen.setProperties(new HashMap());
-				gen.generate(doc, writer);
+				// if (this.outputDTD) {
+				// writer.setDTD(SVGConstants.SVG_DTD_1_0);
+				//				}
+				// SAXGenerator gen = new SVGGenerator();
+				// gen.setProperties(new HashMap());
+				// gen.generate(doc, writer);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

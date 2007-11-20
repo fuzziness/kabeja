@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="dxf2svg" default="dist" basedir=".">
 	<property name="homepath" value="" />
-	<property name="block.releasename" value="kabeja-svgview" />
+	<property name="block.releasename" value="kabeja-svg" />
 	<property name="releaseversion" value="0.1" />
 	<property name="src" value="src" />
 	<property name="sources" value="java" />
@@ -14,7 +14,7 @@
 	<property name="block.libs" value="lib" />
 	<property name="sample" value="sample" />
 	<property name="block.manifest" value="manifestfile" />
-	<property name="version" value="0.3" />
+	<property name="version" value="0.4" />
 	<property name="packages" value="packages" />
 	<property name="samples" value="samples" />
 	<property name="apidocs" value="javadoc" />

@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGFragmentGenerator;
 
 
 /**

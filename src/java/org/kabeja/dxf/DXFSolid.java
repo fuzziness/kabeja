@@ -15,16 +15,8 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
 import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.math.TransformContext;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -51,52 +43,7 @@ public class DXFSolid extends DXFEntity {
         return bounds;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext)
-        throws SAXException {
-        // output as polygon
-        AttributesImpl attr = new AttributesImpl();
-
-        StringBuffer points = new StringBuffer();
-
-        // the sequence p1->p2->p4->p3 is defined
-        // by the DXF specs
-        points.append(point1.getX());
-        points.append(",");
-        points.append(point1.getY());
-        points.append(" ");
-
-        points.append(point2.getX());
-        points.append(",");
-        points.append(point2.getY());
-        points.append(" ");
-
-        points.append(point4.getX());
-        points.append(",");
-        points.append(point4.getY());
-        points.append(" ");
-
-        points.append(point3.getX());
-        points.append(",");
-        points.append(point3.getY());
-        points.append(" ");
-
-        SVGUtils.addAttribute(attr, "points", points.toString());
-
-        super.setCommonAttributes(attr, svgContext);
-
-        // if the fillmode attribute is non-zero the solid is filled
-        if (doc.getDXFHeader().isFillMode()) {
-            SVGUtils.addAttribute(attr, "fill", "currentColor");
-        }
-
-        SVGUtils.emptyElement(handler, SVGConstants.SVG_POLYGON, attr);
-    }
-
+   
     /**
      * @return Returns the point1.
      */

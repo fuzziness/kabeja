@@ -1,16 +1,11 @@
 package org.kabeja.parser.dxf.filter;
 
-import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.ParserBuilder;
-import org.kabeja.svg.SVGGenerator;
-import org.kabeja.xml.SAXGenerator;
-import org.kabeja.xml.SAXPrettyOutputter;
-import org.kabeja.xml.SAXSerializer;
 
 public class FilterExample {
 
@@ -30,12 +25,10 @@ public class FilterExample {
 			parser.addDXFStreamFilter(filter);
 			parser.parse(args[1]);
 			DXFDocument doc = parser.getDocument();		
-			SAXGenerator gen = new SVGGenerator();
-			SAXSerializer out = new SAXPrettyOutputter();
-			out.setOutput(new FileOutputStream(args[2]));
-			gen.generate(doc, out);
+			//do something with the doc
+			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

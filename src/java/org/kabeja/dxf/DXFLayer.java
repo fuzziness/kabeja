@@ -20,16 +20,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import org.kabeja.math.TransformContext;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGSAXGenerator;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -37,7 +27,7 @@ import org.xml.sax.helpers.AttributesImpl;
  *
  *
  */
-public class DXFLayer implements SVGSAXGenerator {
+public class DXFLayer  {
     private Hashtable entities = new Hashtable();
     private String name = "";
     private int color = 7;
@@ -94,54 +84,7 @@ public class DXFLayer implements SVGSAXGenerator {
         this.doc = doc;
     }
 
-    public void toSAX(ContentHandler handler, Map context, DXFEntity ent, TransformContext transformContext)
-        throws SAXException {
-        AttributesImpl attr = new AttributesImpl();
 
-        
-        SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils.validateID(this.getName()));
-     
-
-     
-        SVGUtils.addAttribute(attr,SVGConstants.SVG_ATTRIBUTE_COLOR,
-            "rgb(" + DXFColor.getRGBString(Math.abs(getColor())) + ")");
-        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE, SVGConstants.SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR);
-        
-        SVGUtils.addAttribute(attr,  SVGConstants.SVG_ATTRIBUTE_FILL, SVGConstants.SVG_ATTRIBUTE_FILL_VALUE_NONE);
-
-        if (!isVisible()) {
-            SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_VISIBILITY,SVGConstants.SVG_ATTRIBUTE_VISIBILITY_VALUE_HIDDEN);
-        }
-
-        if (ltype.length() > 0) {
-            DXFLineType ltype = doc.getDXFLineType(this.ltype);
-            SVGUtils.addStrokeDashArrayAttribute(attr, ltype);
-        }
-
-        
-        //the stroke-width
-        if(this.lineWeight>0 && !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)){
-        	SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWeightToStrokeWidth(this.lineWeight));
-        }
-        
-        SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-
-        Enumeration e = entities.keys();
-
-        while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
-            ArrayList list = (ArrayList) entities.get(key);
-
-            Iterator i = list.iterator();
-
-            while (i.hasNext()) {
-                DXFEntity entity = (DXFEntity) i.next();
-                entity.toSAX(handler, context, null, null);
-            }
-        }
-
-        SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-    }
 
     public Bounds getBounds() {
         Enumeration e = entities.elements();

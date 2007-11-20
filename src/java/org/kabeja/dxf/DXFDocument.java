@@ -21,25 +21,16 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.kabeja.dxf.objects.DXFDictionary;
 import org.kabeja.dxf.objects.DXFObject;
-import org.kabeja.math.TransformContext;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGSAXGenerator;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  * 
  * 
  */
-public class DXFDocument implements SVGSAXGenerator {
+public class DXFDocument {
 	public static String PROPERTY_ENCODING = "encoding";
 
 	public static final double DEFAULT_MARGIN = 5;
@@ -157,13 +148,6 @@ public class DXFDocument implements SVGSAXGenerator {
 		return lineTypes.values().iterator();
 	}
 
-	public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext) {
-		if (null == svgContext) {
-			svgContext = new HashMap();
-		}
-
-		generateSAX(handler, svgContext);
-	}
 
 	public void addDXFEntity(DXFEntity entity) {
 		entity.setDXFDocument(this);
@@ -204,149 +188,6 @@ public class DXFDocument implements SVGSAXGenerator {
 		return this.properties.containsKey(key);
 	}
 
-	/**
-	 * @deprecated use
-	 * @param handler
-	 * @param context
-	 */
-
-	private void generateSAX(ContentHandler handler, Map context) {
-		try {
-			handler.startDocument();
-
-			AttributesImpl attr = new AttributesImpl();
-
-			// add the viewport
-			// with margin
-			// this is important otherwise in most cases
-			// the SVG-Viewer will not show the content
-			String viewport = "";
-			Bounds bounds = getBounds();
-
-			if (header.hasVariable("$PEXTMAX")
-					&& header.hasVariable("$PEXTMMIN")) {
-				DXFVariable min = header.getVariable("$PEXTMIN");
-				DXFVariable max = header.getVariable("$PEXTMAX");
-				double x = min.getDoubleValue("10");
-				double y = min.getDoubleValue("20");
-				double max_y = max.getDoubleValue("20");
-				double width = max.getDoubleValue("10") - x;
-				double height = max_y - y;
-
-				double boundsWidth = bounds.getWidth();
-
-				// we set a limit here and use the bounds instead
-				if ((width <= (boundsWidth * 2)) && (width > 0)) {
-					viewport = "" + x + " " + ((-1.0) * max_y) + " "
-							+ Math.abs(width) + " " + Math.abs(height);
-				}
-			}
-
-			if (viewport.length() == 0) {
-				viewport = "" + (bounds.getMinimumX() - margin) + " "
-						+ ((-1 * bounds.getMaximumY()) - margin) + "  "
-						+ (bounds.getWidth() + (2 * margin)) + " "
-						+ (bounds.getHeight() + (2 * margin));
-			}
-
-			SVGUtils.addAttribute(attr, "viewBox", viewport);
-
-			// set the default namespace
-			SVGUtils.addAttribute(attr, "xmlns", SVGConstants.SVG_NAMESPACE);
-
-			SVGUtils.startElement(handler, SVGConstants.SVG_ROOT, attr);
-
-			// the blocks as symbol in the defs-section of SVG
-			attr = new AttributesImpl();
-			SVGUtils.startElement(handler, SVGConstants.SVG_DEFS, attr);
-
-			// set the context
-			context.put(SVGContext.DRAFT_BOUNDS, bounds);
-
-			double dotLength = 0.0;
-
-			if (bounds.getWidth() > bounds.getHeight()) {
-				dotLength = bounds.getHeight()
-						* SVGConstants.DEFAULT_STROKE_WIDTH_PERCENT;
-			} else {
-				dotLength = bounds.getWidth()
-						* SVGConstants.DEFAULT_STROKE_WIDTH_PERCENT;
-			}
-
-			context.put(SVGContext.DOT_LENGTH, new Double(dotLength));
-
-			Enumeration e = blocks.elements();
-
-			while (e.hasMoreElements()) {
-				DXFBlock block = (DXFBlock) e.nextElement();
-				block.toSAX(handler, context, null, null);
-			}
-
-			// maybe there is a fontdescription available from DXFStyle
-			Iterator i = getDXFStyleIterator();
-
-			while (i.hasNext()) {
-				DXFStyle style = (DXFStyle) i.next();
-				style.toSAX(handler, context, null, null);
-			}
-
-			// i = getDXFHatchPatternIterator();
-			//
-			// while (i.hasNext()) {
-			// DXFHatchPattern pattern = (DXFHatchPattern) i.next();
-			// pattern.toSAX(handler, context);
-			// }
-
-			SVGUtils.endElement(handler, SVGConstants.SVG_DEFS);
-
-			// the draft
-			attr = new AttributesImpl();
-			SVGUtils.addAttribute(attr, "id", "draft");
-
-			// the globale coordinate system transformation
-			// note: DXF has the y-axis positiv from bottom to top
-			// SVG has the y-axis positiv from top to bottom
-			SVGUtils.addAttribute(attr, "transform", "matrix(1 0 0 -1 0 0)");
-			SVGUtils.addAttribute(attr, "stroke-width", ""
-					+ SVGConstants.DEFAULT_STROKE_WIDTH_PERCENT + '%');
-			SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-
-			// the layers as container g-elements
-			e = layers.elements();
-
-			while (e.hasMoreElements()) {
-				DXFLayer layer = (DXFLayer) e.nextElement();
-				layer.toSAX(handler, context, null, null);
-			}
-
-			SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-			SVGUtils.endElement(handler, SVGConstants.SVG_ROOT);
-			handler.endDocument();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * @deprecated
-	 * @param value
-	 * @return
-	 */
-
-	public double translateX(double value) {
-		return value;
-	}
-
-	/**
-	 * @deprecated
-	 * @param value
-	 * @return
-	 */
-
-	public double translateY(double value) {
-		// return bounds.getMaximumY() - value;
-		return value;
-	}
 
 	/**
 	 * Returns the bounds of this document

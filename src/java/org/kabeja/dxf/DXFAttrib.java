@@ -15,11 +15,6 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
-import org.kabeja.math.TransformContext;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -30,29 +25,6 @@ public class DXFAttrib extends DXFText {
     public DXFAttrib() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext)
-        throws SAXException {
-        switch (getFlags()) {
-        case 1:
-            setVisibile(false);
-
-            break;
-
-        case 4:
-
-            // userinput
-            setVisibile(false);
-
-            break;
-        }
-
-        super.toSAX(handler, svgContext, entity, transformContext);
-    }
 
     /* (non-Javadoc)
      * @see de.miethxml.kabeja.dxf.DXFEntity#getType()
