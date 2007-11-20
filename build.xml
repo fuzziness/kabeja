@@ -27,6 +27,7 @@
 	<property name="tools" value="tools" />
 	<property name="blocks" value="blocks" />
 	<property name="java.target.version" value="1.3" />
+	<property name="debug" value="true"/>
 
     <!-- first the local settings -->
 	<property file="local.blocks.properties" />
@@ -56,7 +57,7 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}">
+		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}" debug="${debug}" debuglevel="lines,var,source">
 			<classpath>
 				<pathelement path="${classpath}" />
 				<!--<fileset dir="${libs}">

@@ -115,8 +115,6 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 	protected SVGSAXGeneratorManager manager;
 
-	
-
 	protected void generate() throws SAXException {
 		// TODO here should be the insert point for the
 		// converstion in a later release
@@ -335,7 +333,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 			// maybe there is a fontdescription available from DXFStyle
 			i = this.doc.getDXFStyleIterator();
-             
+
 			while (i.hasNext()) {
 				DXFStyle style = (DXFStyle) i.next();
 				SVGStyleGenerator.toSAX(handler, context, style);
@@ -353,18 +351,24 @@ public class SVGGenerator extends AbstractSAXGenerator {
 			SVGUtils.addAttribute(attr, "transform", "matrix(1 0 0 -1 0 0)");
 
 			// the stroke-width
+
 			if (this.context.containsKey(SVGContext.STROKE_WIDTH)) {
+				// the user has setup a stroke-width
 				SVGUtils.addAttribute(attr,
 						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, ""
 								+ this.context.get(SVGContext.STROKE_WIDTH));
 			} else {
+				double sw = (bounds.getWidth() + bounds.getHeight()) / 2
+						* SVGConstants.DEFAULT_STROKE_WIDTH_PERCENT;
+				double defaultSW = ((double) DXFConstants.ENVIRONMENT_VARIABLE_LWDEFAULT) / 100.0;
+				if (sw > defaultSW) {
+					sw = defaultSW;
+				}
+				SVGUtils.addAttribute(attr,
+						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
+								.formatNumberAttribute(sw));
+				this.context.put(SVGContext.STROKE_WIDTH, new Double(sw));
 
-				SVGUtils
-						.addAttribute(
-								attr,
-								SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
-								SVGUtils
-										.lineWeightToStrokeWidth(DXFConstants.ENVIRONMENT_VARIABLE_LWDEFAULT));
 			}
 
 			SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
@@ -411,20 +415,20 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 	}
 
-//	protected void entityToSAX(DXFEntity entity) throws SAXException {
-//
-//		if (this.paperspace) {
-//			if (!entity.isModelSpace()) {
-//				entity.toSAX(this.handler, this.context, null, null);
-//			}
-//		}
-//		if (this.modelspace) {
-//			if (entity.isModelSpace()) {
-//				entity.toSAX(this.handler, this.context, null, null);
-//			}
-//		}
-//
-//	}
+	// protected void entityToSAX(DXFEntity entity) throws SAXException {
+	//
+	// if (this.paperspace) {
+	// if (!entity.isModelSpace()) {
+	// entity.toSAX(this.handler, this.context, null, null);
+	// }
+	// }
+	// if (this.modelspace) {
+	// if (entity.isModelSpace()) {
+	// entity.toSAX(this.handler, this.context, null, null);
+	// }
+	// }
+	//
+	// }
 
 	protected void layerToSAX(DXFLayer layer) throws SAXException {
 
@@ -454,12 +458,22 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 		// the stroke-width
 		int lineWeight = layer.getLineWeight();
+
+		// the stroke-width
+		Double lw = null;
 		if (lineWeight > 0
 				&& !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)) {
+			lw = new Double(SVGUtils.lineWeightToStrokeWidth(lineWeight));
 			SVGUtils.addAttribute(attr,
 					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
 							.lineWeightToStrokeWidth(lineWeight));
+		} else {
+			lw = (Double) context.get(SVGContext.STROKE_WIDTH);
+			SVGUtils.addAttribute(attr,
+					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
+							.formatNumberAttribute(lw.doubleValue()));
 		}
+		context.put(SVGContext.LAYER_STROKE_WIDTH, lw);
 
 		SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 
@@ -480,10 +494,10 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
 				e.printStackTrace();
 				// TODO move all SVGGeneration to SVG block
-//				while (i.hasNext()) {
-//					DXFEntity entity = (DXFEntity) i.next();
-//					entity.toSAX(handler, context, null, null);
-//				}
+				// while (i.hasNext()) {
+				// DXFEntity entity = (DXFEntity) i.next();
+				// entity.toSAX(handler, context, null, null);
+				// }
 			}
 
 		}

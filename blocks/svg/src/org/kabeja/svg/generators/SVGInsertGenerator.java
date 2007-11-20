@@ -8,6 +8,7 @@ import org.kabeja.dxf.DXFInsert;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
+import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -76,10 +77,15 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator{
                 super.setCommonAttributes(attr, svgContext,insert);
 
                 // fix the scale of stroke-width
-                if ((scale_x + scale_y) > 0) {
-                    double width = 0.04 / (scale_x +scale_y);
-                    SVGUtils.addAttribute(attr, "stroke-width",
-                         SVGUtils.formatNumberAttribute(width) + "%");
+
+                if ((scale_x + scale_y) > 0 && svgContext.containsKey(SVGContext.LAYER_STROKE_WIDTH)) {
+                	Double lw = (Double)svgContext.get(SVGContext.LAYER_STROKE_WIDTH);
+                    double width =lw.doubleValue()*2 / (scale_x + scale_y);
+                    SVGUtils
+        			.addAttribute(
+        					attr,
+        					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
+        					SVGUtils.formatNumberAttribute(width));
                 }
 
                 // SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);

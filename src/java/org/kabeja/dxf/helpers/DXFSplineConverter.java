@@ -11,11 +11,9 @@ import org.kabeja.math.NURBSFixedNTELSPointIterator;
 
 public class DXFSplineConverter {
 
-
-
 	public static DXFPolyline toDXFPolyline(DXFSpline spline) {
 		DXFPolyline p = new DXFPolyline();
-
+		p.setDXFDocument(spline.getDXFDocument());
 		if (spline.getDegree() > 0 && spline.getKnots().length > 0) {
 
 			Iterator pi = new NURBSFixedNTELSPointIterator(toNurbs(spline), 30);
@@ -26,7 +24,7 @@ public class DXFSplineConverter {
 
 			// the curve is the controlpoint polygon
 			Iterator i = spline.getSplinePointIterator();
-			ArrayList list = new ArrayList();
+
 			while (i.hasNext()) {
 				SplinePoint sp = (SplinePoint) i.next();
 
@@ -34,8 +32,6 @@ public class DXFSplineConverter {
 					p.addVertex(new DXFVertex(sp));
 				}
 			}
-			
-			
 
 		}
 

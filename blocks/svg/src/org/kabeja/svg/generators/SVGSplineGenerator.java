@@ -3,6 +3,7 @@ package org.kabeja.svg.generators;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFSpline;
@@ -30,7 +31,7 @@ public class SVGSplineGenerator extends AbstractSVGSAXGenerator implements
 		SVGSAXGeneratorManager manager = (SVGSAXGeneratorManager) svgContext
 				.get(SVGContext.SVGSAXGENERATOR_MANAGER);
 		try {
-			SVGSAXGenerator gen = manager.getSVGGenerator(DXFPolyline.TYPE);
+			SVGSAXGenerator gen = manager.getSVGGenerator(DXFConstants.ENTITY_TYPE_POLYLINE);
 			gen.toSAX(handler, svgContext, pline, transformContext);
 		} catch (SVGGenerationException e) {
 			throw new SAXException(e);

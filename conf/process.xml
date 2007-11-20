@@ -31,7 +31,7 @@
 			<filter class="org.kabeja.xslt.SAXXSLTFilter" name="xslt">
 				<property name="http://xml.org/sax/features/is-standalone/" value="true"/>
 			</filter>
-			<filter class="org.kabeja.xml.FixedStrokeWidthFilter" name="fixed-stroke-width"/>
+			<filter class="org.kabeja.svg.FixedStrokeWidthFilter" name="fixed-stroke-width"/>
 		</filters>
 		
 		<serializers>

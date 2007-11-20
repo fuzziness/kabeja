@@ -23,7 +23,7 @@ package org.kabeja.dxf;
  *
  */
 public abstract class DXFEntity {
-    public static String TYPE = "";
+   
     protected DXFDocument doc;
     protected String id = "";
     protected String layerID = "";
