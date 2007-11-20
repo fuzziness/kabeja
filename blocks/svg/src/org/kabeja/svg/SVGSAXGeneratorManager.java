@@ -36,6 +36,11 @@ public class SVGSAXGeneratorManager {
 	protected Map generators = new HashMap();
 
 	protected Map pathBoundaryGenerator = new HashMap();
+	
+	
+	public SVGSAXGeneratorManager(){
+		this.initialize();
+	}
 
 	public SVGSAXGenerator getSVGGenerator(String entityType)
 			throws SVGGenerationException {
