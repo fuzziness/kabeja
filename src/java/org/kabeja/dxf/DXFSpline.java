@@ -18,22 +18,15 @@ package org.kabeja.dxf;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.dxf.helpers.DXFSplineConverter;
 import org.kabeja.dxf.helpers.SplinePoint;
-import org.kabeja.math.NURBS;
-import org.kabeja.math.NURBSFixedNTELSPointIterator;
-import org.kabeja.svg.SVGPathBoundaryElement;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  * 
  */
-public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
+public class DXFSpline extends DXFEntity{
 	protected int degree;
 
 	protected int nodePointsSize;
@@ -64,7 +57,7 @@ public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
 	 * @see de.miethxml.kabeja.dxf.DXFEntity#getBounds()
 	 */
 	public Bounds getBounds() {
-		// simple the conex hull of the spline
+		// simple the convex hull of the spline
 		// Iterator i = points.iterator();
 		//
 		// while (i.hasNext()) {
@@ -74,6 +67,7 @@ public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
 		//
 		// return bounds;
 
+		//more correct bounds
 		if (this.polyline == null) {
 			this.polyline = toDXFPolyline();
 		}
@@ -90,25 +84,10 @@ public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
 		return DXFConstants.ENTITY_TYPE_SPLINE;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler,
-	 *      java.util.Map)
-	 */
-	public void toSAX(ContentHandler handler, Map svgContext)
-			throws SAXException {
-
-		if (polyline == null) {
-			polyline = toDXFPolyline();
-		}
-
-		polyline.toSAX(handler, svgContext);
-
-	}
 
 	public void addSplinePoint(SplinePoint p) {
 		this.points.add(p);
+		this.polyline=null;
 	}
 
 	public Iterator getSplinePointIterator() {
@@ -208,6 +187,7 @@ public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
 	 */
 	public void setKnots(double[] knots) {
 		this.knots = knots;
+		this.polyline=null;
 	}
 
 	/**
@@ -270,17 +250,7 @@ public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
 		this.knotsTolerance = knotsTolerance;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kabeja.svg.SVGPathBoundaryElement#getSVGPath()
-	 */
-	public String getSVGPath() {
-		if (this.polyline == null) {
-			this.polyline = toDXFPolyline();
-		}
-		return this.polyline.getSVGPath();
-	}
+
 
 	public double getLength() {
 		if (this.polyline == null) {
@@ -289,52 +259,11 @@ public class DXFSpline extends DXFEntity implements SVGPathBoundaryElement {
 		return this.polyline.getLength();
 	}
 
-	protected DXFPolyline toDXFPolyline() {
-
-		DXFPolyline p = new DXFPolyline();
-		p.setDXFDocument(this.doc);
-		Iterator pi = null;
-		if (this.degree > 0 && this.knots.length > 0) {
-			NURBS n = toNURBS();
-			pi = new NURBSFixedNTELSPointIterator(n, 30);
-		} else {
-
-			// the curve is the controlpoint polygon
-			Iterator i = points.iterator();
-			ArrayList list = new ArrayList();
-			while (i.hasNext()) {
-				SplinePoint sp = (SplinePoint) i.next();
-
-				if (sp.isControlPoint()) {
-					list.add((Point) sp);
-				}
-			}
-			pi = list.iterator();
-		}
-		while (pi.hasNext()) {
-			p.addVertex(new DXFVertex((Point) pi.next()));
-		}
-		p.setID(this.getID());
-
-		if (this.isClosed()) {
-			p.setFlags(1);
-		}
-
-		return p;
+	
+	protected DXFPolyline toDXFPolyline(){	
+		return DXFSplineConverter.toDXFPolyline(this);
 	}
+	
 
-	public NURBS toNURBS() {
-		Iterator i = points.iterator();
-		ArrayList list = new ArrayList();
-		while (i.hasNext()) {
-			SplinePoint sp = (SplinePoint) i.next();
 
-			if (sp.isControlPoint()) {
-				list.add((Point) sp);
-			}
-		}
-		NURBS n = new NURBS((Point[]) list.toArray(new Point[list.size()]),
-				knots, weights, degree);
-		return n;
-	}
 }

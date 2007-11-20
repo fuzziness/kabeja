@@ -2,12 +2,9 @@ package org.kabeja.parser.dxf.filter;
 
 import java.io.FileOutputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.dxf.DXFLayer;
-import org.kabeja.parser.DXFParseException;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.svg.SVGGenerator;

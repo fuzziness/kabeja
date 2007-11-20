@@ -1,8 +1,5 @@
 package org.kabeja.math;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.kabeja.dxf.helpers.Point;
 
 public class NURBS {
@@ -14,7 +11,7 @@ public class NURBS {
 
 	protected int degree;
 
-	
+	protected boolean closed=false;
 	
 	public NURBS(Point[] controlPoints, double[] knots, double[] weights,
 			int degree) {
@@ -137,6 +134,14 @@ public class NURBS {
 
 	public void setDegree(int degree) {
 		this.degree = degree;
+	}
+
+	public boolean isClosed() {
+		return closed;
+	}
+
+	public void setClosed(boolean closed) {
+		this.closed = closed;
 	}
 
 	

@@ -5,14 +5,7 @@
  */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth </a>
@@ -366,48 +359,9 @@ public class DXFDimension extends DXFEntity {
 
 	}
 
-	public void toSAX(ContentHandler handler, Map svgContext)
-			throws SAXException {
 
-		if (this.doc.getDXFBlock(this.dimensionBlock) != null) {
 
-			AttributesImpl attr = new AttributesImpl();
-			StringBuffer buf = new StringBuffer();
 
-			buf.append("translate(");
-			buf.append((getInsertPoint().getX()));
-			buf.append(" ");
-			buf.append((getInsertPoint().getY()));
-			buf.append(")");
-
-			SVGUtils.addAttribute(attr, "transform", buf.toString());
-
-			super.setCommonAttributes(attr, svgContext);
-
-			SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-			attr = new AttributesImpl();
-	
-			attr.addAttribute(SVGConstants.XMLNS_NAMESPACE, "xlink", "xmlns:xlink", "CDATA",
-	                    SVGConstants.XLINK_NAMESPACE);
-			attr.addAttribute(SVGConstants.XLINK_NAMESPACE, "href",
-					"xlink:href", "CDATA", "#"
-							+ SVGUtils.validateID(getDimensionBlock()));
-
-			SVGUtils.emptyElement(handler, SVGConstants.SVG_USE, attr);
-
-			SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-		}
-		// else if (dimType == TYPE_LINEAR || dimType == 32 || dimType == 160) {
-		// LinearDimensionOutputter out = new LinearDimensionOutputter(
-		// this);
-		// out.output(handler);
-		// }
-
-	}
-
-	public void setAttributes(AttributesImpl attrs, Map svgContext) {
-		super.setCommonAttributes(attrs, svgContext);
-	}
 
 	public DXFDimensionStyle getDXFDimensionStyle() {
 		return doc.getDXFDimensionStyle(getDimensionStyleID());

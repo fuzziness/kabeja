@@ -113,7 +113,7 @@ public class LayerSeparator {
             SAXPrettyOutputter writer = new SAXPrettyOutputter(new FileOutputStream(
                         file), SAXPrettyOutputter.DEFAULT_ENCODING);
             writer.setDTD(SVGConstants.SVG_DTD_1_0);
-            doc.toSAX(writer, null);
+            doc.toSAX(writer, null, null, null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -15,14 +15,7 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -271,82 +264,7 @@ public class DXFInsert extends DXFEntity {
         this.scale_z = scale_z;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        DXFBlock block = doc.getDXFBlock(getBlockID());
-
-        StringBuffer buf = new StringBuffer();
-
-        Point bp = block.getReferencePoint();
-
-        // translate to the insert point all the rows and columns
-        for (int column = 0; column < columns; column++) {
-            for (int row = 0; row < rows; row++) {
-                // translate to the insert point
-                buf.append("translate(");
-                buf.append((p.getX() - (column_spacing * column)));
-                buf.append(" ");
-                buf.append((p.getY() - (row_spacing * row)));
-                buf.append(")");
-
-                // then rotate
-                if (rotate != 0) {
-                    buf.append(" rotate(");
-                    buf.append(rotate);
-                    buf.append(")");
-                }
-
-                // then scale
-                if ((scale_x != 1.0) || (scale_y != 1.0)) {
-                    buf.append(" scale(");
-                    buf.append(scale_x);
-                    buf.append(" ");
-                    buf.append(scale_y);
-                    buf.append(")");
-                }
-
-                if ((bp.getX() != 0.0) || (bp.getY() != 0.0)) {
-                    buf.append(" translate(");
-                    buf.append(bp.getX());
-                    buf.append(" ");
-                    buf.append(bp.getY());
-                    buf.append(")");
-                }
-
-                AttributesImpl attr = new AttributesImpl();
-                SVGUtils.addAttribute(attr, "transform", buf.toString());
-
-                // add common attributes
-                super.setCommonAttributes(attr, svgContext);
-
-                // fix the scale of stroke-width
-                if ((this.scale_x + this.scale_y) > 0) {
-                    double width = 0.04 / (this.scale_x + this.scale_y);
-                    SVGUtils.addAttribute(attr, "stroke-width",
-                        "" + SVGUtils.formatNumberAttribute(width) + "%");
-                }
-
-                // SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-                // attr = new AttributesImpl();
-                attr.addAttribute(SVGConstants.XMLNS_NAMESPACE, "xlink", "xmlns:xlink", "CDATA",
-                    SVGConstants.XLINK_NAMESPACE);
-
-                attr.addAttribute(SVGConstants.XLINK_NAMESPACE, "href",
-                    "xlink:href", "CDATA",
-                    "#" + SVGUtils.validateID(getBlockID()));
-
-                SVGUtils.emptyElement(handler, SVGConstants.SVG_USE, attr);
-
-                // SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-                buf.delete(0, buf.length());
-            }
-        }
-    }
+  
 
     private Point rotatePoint(double x, double y) {
         double phi = Math.toRadians(rotate);

@@ -15,13 +15,8 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
-import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.Vector;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -51,21 +46,6 @@ public class DXFTolerance extends DXFEntity {
         return DXFConstants.ENTITY_TYPE_TOLERANCE;
     }
 
-    /* (non-Javadoc)
-     * @see org.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler, java.util.Map)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        //the used DIMSTYLE
-        DXFDimensionStyle style = this.doc.getDXFDimensionStyle(this.styleNameID);
-        double angle = MathUtils.getAngle(this.xaxisDirection,
-                DXFConstants.DEFAULT_X_AXIS_VECTOR);
-
-        double textHeight = style.getDoubleProperty(DXFDimensionStyle.PROPERTY_DIMTXT);
-        double scale = style.getDoubleProperty(DXFDimensionStyle.PROPERTY_DIMSCALE,
-                1.0);
-        textHeight *= scale;
-    }
 
     /**
      * @return Returns the insertionPoint.
@@ -82,16 +62,16 @@ public class DXFTolerance extends DXFEntity {
     }
 
     /**
-     * @return Returns the styleNameID.
+     * @return Returns the styleID.
      */
-    public String getStyleNameID() {
+    public String getStyleID() {
         return styleNameID;
     }
 
     /**
-     * @param styleNameID The styleNameID to set.
+     * @param styleNameID The styleID to set.
      */
-    public void setStyleNameID(String styleNameID) {
+    public void setStyleID(String styleNameID) {
         this.styleNameID = styleNameID;
     }
 

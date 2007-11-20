@@ -15,18 +15,9 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
 import org.kabeja.dxf.helpers.DXFTextParser;
 import org.kabeja.dxf.helpers.DXFUtils;
-import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.TextDocument;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -73,193 +64,13 @@ public class DXFMText extends DXFText {
         return this.refheight;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        AttributesImpl attr = new AttributesImpl();
+  
 
-        Point alignmentPoint = new Point(p.getX(), p.getY(), p.getZ());
-
-        boolean notUpsideDown = true;
-        DXFStyle style = null;
-
-        if ((textStyle.length() > 0) &&
-                ((style = doc.getDXFStyle(this.textStyle)) != null)) {
-            if (style.isBackward()) {
-                SVGUtils.addAttribute(attr, "writing-mode", "rl");
-            } else {
-                SVGUtils.addAttribute(attr, "writing-mode", "lr-tb");
-            }
-
-            if (style.isUpsideDown()) {
-                notUpsideDown = false;
-            }
-        } else {
-            SVGUtils.addAttribute(attr, "writing-mode", "lr-tb");
-        }
-
-        if (notUpsideDown) {
-            switch (attachmentpoint) {
-            case ATTACHMENT_TOP:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "start");
-                top = true;
-
-                break;
-
-            case ATTACHMENT_TOP_CENTER:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "middle");
-                top = true;
-
-                break;
-
-            case ATTACHMENT_TOP_RIGHT:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "end");
-                top = true;
-
-                break;
-
-            case ATTACHMENT_MIDDLE_LEFT:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "start");
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ALIGNMENT_BASELINE, "middle");
-
-                break;
-
-            case ATTACHMENT_MIDDLE_CENTER:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "middle");
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ALIGNMENT_BASELINE, "middle");
-
-                break;
-
-            case ATTACHMENT_MIDDLE_RIGHT:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "end");
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ALIGNMENT_BASELINE, "middle");
-
-                break;
-
-            case ATTACHMENT_BOTTOM_LEFT:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "start");
-                bottom = true;
-
-                break;
-
-            case ATTACHMENT_BOTTOM_CENTER:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "middle");
-
-                break;
-
-            case ATTACHMENT_BOTTOM_RIGHT:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "end");
-
-                break;
-
-            default:
-                SVGUtils.addAttribute(attr,
-                    SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "start");
-
-                break;
-            }
-        }
-
-        SVGUtils.addAttribute(attr, "x", "" + alignmentPoint.getX());
-        SVGUtils.addAttribute(attr, "y",
-            "" + doc.translateY(alignmentPoint.getY()));
-
-        // given text-entity-height
-        double height = getHeight();
-
-        if (height >= Double.MAX_VALUE) {
-            height = ((Bounds) svgContext.get(SVGContext.DRAFT_BOUNDS)).getHeight() * 0.005;
-        }
-
-        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_FONT_SIZE,
-            SVGUtils.formatNumberAttribute(height));
-
-        // in order to get the right text-view
-        StringBuffer transform = new StringBuffer();
-
-
-
-
-        if (!isUpsideDown()) {
-            transform.append("matrix(1 0 0 -1 0 ");
-            transform.append(2 * alignmentPoint.getY());
-            transform.append(')');
-        }
-
-
-
-
-
-        // rotation
-        double angle = getRotation();
-
-        if (angle != 0.0) {
-            transform.append(" rotate(");
-            transform.append((-1 * angle));
-            transform.append(' ');
-            transform.append(alignmentPoint.getX());
-            transform.append(' ');
-            transform.append(alignmentPoint.getY());
-            transform.append(" )");
-        }
-
-        if (this.oblique_angle != 0.0) {
-            transform.append(" skewX(");
-            transform.append(-1*this.oblique_angle);
-            transform.append(')');
-
-            transform.append(" translate( ");
-            transform.append(alignmentPoint.getY()*Math.tan(Math.toRadians(1*this.oblique_angle)));
-            transform.append(')');
-         }
-
-
-        SVGUtils.addAttribute(attr, "transform", transform.toString());
-
-        if (refwidth > 0.0) {
-            SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_TEXT_LENGTH,
-                "" + refwidth);
-        }
-
-
-
-        SVGUtils.addAttribute(attr, "fill", "currentColor");
-        super.setCommonAttributes(attr, svgContext);
-        SVGUtils.startElement(handler, SVGConstants.SVG_TEXT, attr);
-        SVGUtils.textDocumentToSAX(handler, getTextDocument());
-        SVGUtils.endElement(handler, SVGConstants.SVG_TEXT);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.miethxml.kabeja.dxf.DXFEntity#getType()
-     */
     public String getType() {
         return DXFConstants.ENTITY_TYPE_MTEXT;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.miethxml.kabeja.dxf.DXFText#getRotation()
-     */
+ 
     public double getRotation() {
         if (rotation != 0.0) {
             return rotation;
@@ -292,7 +103,7 @@ public class DXFMText extends DXFText {
         return attachmentpoint;
     }
 
-    protected boolean isOmitLineType() {
+    public boolean isOmitLineType() {
         return true;
     }
 

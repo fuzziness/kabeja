@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.kabeja.math.TransformContext;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -50,7 +51,7 @@ public class DXFRegion extends DXFEntity {
     /* (non-Javadoc)
      * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler, java.util.Map)
      */
-    public void toSAX(ContentHandler handler, Map svgContext)
+    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext)
         throws SAXException {
         // no output
     }

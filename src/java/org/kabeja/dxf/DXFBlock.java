@@ -17,22 +17,16 @@ package org.kabeja.dxf;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGFragmentGenerator;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public class DXFBlock implements SVGFragmentGenerator {
+public class DXFBlock {
     public static String TYPE = "BLOCK";
     private Point referencePoint;
     private String layerID = DXFConstants.DEFAULT_LAYER;
@@ -147,27 +141,6 @@ public class DXFBlock implements SVGFragmentGenerator {
         this.name = name;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        AttributesImpl attr = new AttributesImpl();
-        SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils.validateID(getName()));
-
-        SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-
-        Iterator i = this.entities.iterator();
-
-        while (i.hasNext()) {
-            DXFEntity entity = (DXFEntity) i.next();
-            entity.toSAX(handler, svgContext);
-        }
-
-        SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-    }
 
     /**
      * @param doc

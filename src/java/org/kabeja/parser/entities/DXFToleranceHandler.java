@@ -110,7 +110,7 @@ public class DXFToleranceHandler extends AbstractEntityHandler {
             break;
 
         case GROUPCODE_STYLENAME:
-            tolerance.setStyleNameID(value.getValue());
+            tolerance.setStyleID(value.getValue());
 
             break;
 

@@ -15,14 +15,7 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -92,27 +85,8 @@ public class DXFPoint extends DXFEntity {
         this.p.setZ(z);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.dxf.DXFEntity#toSAX(org.xml.sax.ContentHandler)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        // nothing todo
-        AttributesImpl attr = new AttributesImpl();
-        SVGUtils.addAttribute(attr, "cx", "" + getX());
-        SVGUtils.addAttribute(attr, "cy", "" + doc.translateY(getY()));
-        SVGUtils.addAttribute(attr, "r", "" + 0.001);
-        super.setCommonAttributes(attr, svgContext);
-        SVGUtils.emptyElement(handler, SVGConstants.SVG_CIRCLE, attr);
-    }
+   
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.dxf.DXFEntity#updateViewPort()
-     */
     public Bounds getBounds() {
         bounds.addToBounds(p);
 

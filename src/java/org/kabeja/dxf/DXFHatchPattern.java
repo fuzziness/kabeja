@@ -18,18 +18,8 @@ package org.kabeja.dxf;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.kabeja.dxf.helpers.HatchLineFamily;
-import org.kabeja.dxf.helpers.HatchLineIterator;
-import org.kabeja.dxf.helpers.HatchLineSegment;
-import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGSAXGenerator;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * This class represent a single line family of a hatch pattern set.
@@ -37,7 +27,8 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth </a>
  * 
  */
-public class DXFHatchPattern implements SVGSAXGenerator {
+public class DXFHatchPattern {
+
 	private static int idCount = 0;
 
 	private String id = null;
@@ -66,37 +57,6 @@ public class DXFHatchPattern implements SVGSAXGenerator {
 		this.id = id;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler,
-	 *      java.util.Map)
-	 */
-	public void toSAX(ContentHandler handler, Map svgContext)
-			throws SAXException {
-		if (!this.hatch.isSolid()) {
-			// we have to create a tile with all lines
-
-			Bounds bounds = this.hatch.getBounds();
-			double dotLength = (bounds.getWidth() + bounds.getHeight()) / 2 * 0.002;
-
-			AttributesImpl attr = new AttributesImpl();
-
-			Iterator i = patterns.iterator();
-
-			while (i.hasNext()) {
-				HatchLineFamily pattern = (HatchLineFamily) i.next();
-
-				attr = new AttributesImpl();
-				SVGUtils.addAttribute(attr, "d", this.getSVGPath(bounds,
-						pattern, dotLength));
-
-				SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
-
-			}
-
-		}
-	}
 
 	public void addLineFamily(HatchLineFamily pattern) {
 		patterns.add(pattern);
@@ -125,86 +85,7 @@ public class DXFHatchPattern implements SVGSAXGenerator {
 		this.hatch = hatch;
 	}
 
-	/**
-	 * Creates a SVG path of the used line family and fill the complete given
-	 * bounds.
-	 * 
-	 * @param b -
-	 *            The bounds of the DXFHatch
-	 * @param pattern
-	 *            the pattern of the line family
-	 * @param dotlength
-	 * @return
-	 */
 
-	protected String getSVGPath(Bounds b, HatchLineFamily pattern,
-			double dotlength) {
-		StringBuffer buf = new StringBuffer();
-
-		Iterator li = new HatchLineIterator(this.hatch, pattern);
-
-		while (li.hasNext()) {
-
-			HatchLineSegment segment = (HatchLineSegment) li.next();
-			// double angle = Math.toRadians(pattern.getRotationAngle());
-			Point startPoint = segment.getStartPoint();
-			double x = startPoint.getX();
-			double y = startPoint.getY();
-
-			// the start Point of the line segment
-			buf.append('M');
-			buf.append(' ');
-			buf.append(SVGUtils.formatNumberAttribute(x));
-			buf.append(' ');
-			buf.append(SVGUtils.formatNumberAttribute(y));
-			buf.append(' ');
-
-			if (segment.isSolid()) {
-				Point p = segment.getPointAt(segment.getLength());
-				buf.append('L');
-				buf.append(' ');
-				buf.append(SVGUtils.formatNumberAttribute(p.getX()));
-				buf.append(' ');
-				buf.append(SVGUtils.formatNumberAttribute(p.getY()));
-				buf.append(' ');
-			} else {
-				double length = 0;
-				while (segment.hasNext()) {
-
-					double l = segment.next();
-					length += Math.abs(l);
-					Point p = segment.getPointAt(length);
-					if (l > 0) {
-						buf.append('L');
-						buf.append(' ');
-						buf.append(SVGUtils.formatNumberAttribute(p.getX()));
-						buf.append(' ');
-						buf.append(SVGUtils.formatNumberAttribute(p.getY()));
-						buf.append(' ');
-					} else if (l < 0) {
-						buf.append('M');
-						buf.append(' ');
-						buf.append(SVGUtils.formatNumberAttribute(p.getX()));
-						buf.append(' ');
-						buf.append(SVGUtils.formatNumberAttribute(p.getY()));
-						buf.append(' ');
-					} else {
-						// a dot
-						buf.append('l');
-						buf.append(' ');
-						buf.append(SVGUtils.formatNumberAttribute(dotlength));
-						buf.append(' ');
-						buf.append(SVGUtils.formatNumberAttribute(dotlength));
-						buf.append(' ');
-					}
-
-				}
-			}
-
-		}
-
-		return buf.toString();
-	}
 
 	/**
 	 * 

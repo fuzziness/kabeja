@@ -18,6 +18,7 @@ package org.kabeja.dxf;
 import java.util.Map;
 
 import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.TransformContext;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -37,9 +38,9 @@ public class DXFShape extends DXFEntity {
     /* (non-Javadoc)
      * @see org.kabeja.dxf.DXFEntity#toSAX(org.xml.sax.ContentHandler, java.util.Map)
      */
-    public void toSAX(ContentHandler handler, Map svgContext)
+    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext)
         throws SAXException {
-        // TODO Auto-generated method stub
+        
     }
 
     /* (non-Javadoc)

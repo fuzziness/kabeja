@@ -27,15 +27,15 @@ Supported:
  *XLine
  *Ray
  *Hatch
- 
- 
+ *Spline
+ *MLine
 
 Planned:
 
 
- * MLine
+ 
  * Tolerance
- * Spline
+
 
 You can use Kabeja from CLI (Command Line Interface) or embed in your application. 
 

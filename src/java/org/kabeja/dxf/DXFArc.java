@@ -4,22 +4,15 @@
  */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
 import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGPathBoundaryElement;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
+
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public class DXFArc extends DXFEntity implements SVGPathBoundaryElement {
+public class DXFArc extends DXFEntity {
 
 	private Point center;
 
@@ -80,25 +73,7 @@ public class DXFArc extends DXFEntity implements SVGPathBoundaryElement {
 		this.start_angle = start_angle;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.dxf2svg.dxf.DXFEntity#toSAX(org.xml.sax.ContentHandler)
-	 */
-	public void toSAX(ContentHandler handler, Map svgContext)
-			throws SAXException {
 
-		// model as a Path with a ellipse-arc element
-		// calulate the startpoint
-
-		AttributesImpl attr = new AttributesImpl();
-
-		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_PATH, getSVGPath());
-
-		super.setCommonAttributes(attr, svgContext);
-		SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
-
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -238,57 +213,7 @@ public class DXFArc extends DXFEntity implements SVGPathBoundaryElement {
 		return DXFConstants.ENTITY_TYPE_ARC;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.kabeja.dxf.helpers.HatchBoundaryEdge#getSVGPath()
-	 */
-	public String getSVGPath() {
-		Point p;
 
-		StringBuffer path = new StringBuffer();
-
-		p = this.getStartPoint();
-
-		path.append("M ");
-		path.append(p.getX());
-		path.append(' ');
-		path.append(p.getY());
-		path.append(" A ");
-		path.append(radius);
-		path.append(' ');
-		path.append(radius);
-		path.append(" 0");
-
-		double diff = this.getTotalAngle();
-
-
-		// the large-arc-flag
-		if (diff > 180) {
-			path.append(" 1 ");
-		} else {
-			path.append(" 0 ");
-		}
-
-		if (Math.abs(diff) > 0) {
-			// the sweep-flag
-			path.append(" 1 ");
-
-		} else {
-			// sweep flag 0 
-			//funny here we would never come
-			//here
-			path.append(" 0 ");
-		}
-
-		p = this.getEndPoint();
-		path.append(' ');
-		path.append(p.getX());
-		path.append(' ');
-		path.append(p.getY());
-
-		return path.toString();
-	}
 
 	public double getLength() {
 		double alpha = this.getTotalAngle();	

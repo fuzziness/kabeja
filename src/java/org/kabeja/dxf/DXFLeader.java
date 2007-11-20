@@ -18,15 +18,8 @@ package org.kabeja.dxf;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -86,89 +79,7 @@ public class DXFLeader extends DXFEntity {
         return DXFConstants.ENTITY_TYPE_LEADER;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler,
-     *      java.util.Map)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        // TODO handle spline
-        if (!isSplinePath()) {
-            Iterator i = this.coordinates.iterator();
-            StringBuffer buf = new StringBuffer();
-            buf.append('M');
-
-            while (i.hasNext()) {
-                buf.append(' ');
-
-                Point p = (Point) i.next();
-                buf.append(p.getX());
-                buf.append(' ');
-                buf.append(p.getY());
-
-                if (i.hasNext()) {
-                    buf.append(" L");
-                }
-            }
-
-
-            AttributesImpl attr = new AttributesImpl();
-            super.setCommonAttributes(attr, svgContext);
-            SVGUtils.addAttribute(attr, "d", buf.toString());
-            SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
-
-
-            //the used DIMSTYLE
-            DXFDimensionStyle style = this.doc.getDXFDimensionStyle(this.styleName);
-
-            if (isArrowEnabled() && style != null) {
-                //the arrow
-                if (style.hasProperty(DXFDimensionStyle.PROPERTY_DIMLDRBLK)) {
-                    String blockID = style.getProperty(DXFDimensionStyle.PROPERTY_DIMLDRBLK);
-
-                    if (this.coordinates.size() > 1) {
-                        Point p1 = (Point) this.coordinates.get(0);
-                        Point p2 = (Point) this.coordinates.get(0);
-                        double length = MathUtils.distance(p1, p2);
-                        double arrowLength = style.getDoubleProperty(DXFDimensionStyle.PROPERTY_DIMASZ,
-                                0.0) * style.getDoubleProperty(DXFDimensionStyle.PROPERTY_DIMSCALE,
-                                1.0);
-
-                        if (length > (2 * arrowLength)) {
-                            double angle = Math.toDegrees(MathUtils.getAngle(
-                                        MathUtils.getVector(p1, p2),
-                                        DXFConstants.DEFAULT_X_AXIS_VECTOR));
-
-                            attr = new AttributesImpl();
-
-                            if (angle != 0.0) {
-                                SVGUtils.addAttribute(attr, "transform",
-                                    "rotate(" + angle + ")");
-                            }
-
-                            SVGUtils.startElement(handler,
-                                SVGConstants.SVG_GROUP, attr);
-                            attr = new AttributesImpl();
-                        	attr.addAttribute(SVGConstants.XMLNS_NAMESPACE, "xlink", "xmlns:xlink", "CDATA",
-            	                    SVGConstants.XLINK_NAMESPACE);
-
-                            attr.addAttribute(SVGConstants.XLINK_NAMESPACE,
-                                "href", "xlink:href", "CDATA",
-                                "#" + SVGUtils.validateID(blockID));
-
-                            SVGUtils.emptyElement(handler,
-                                SVGConstants.SVG_USE, attr);
-
-                            SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+ 
     /**
      * @return Returns the arrowHeadSize.
      */
@@ -367,7 +278,19 @@ public class DXFLeader extends DXFEntity {
     public void addCoordinate(Point vertex) {
         coordinates.add(vertex);
     }
+    
+    public int getCoordinateCount(){
+    	return this.coordinates.size();
+    }
+    
+    public Point getCoordinateAt(int index){
+    	return (Point)this.coordinates.get(index);
+    }
 
+    
+    public Iterator getCoordinateIterator(){
+    	return this.coordinates.iterator();
+    }
     /**
      * @return Returns the arrowEnabled.
      */

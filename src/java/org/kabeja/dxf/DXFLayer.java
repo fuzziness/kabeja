@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGSAXGenerator;
@@ -93,7 +94,7 @@ public class DXFLayer implements SVGSAXGenerator {
         this.doc = doc;
     }
 
-    public void toSAX(ContentHandler handler, Map context)
+    public void toSAX(ContentHandler handler, Map context, DXFEntity ent, TransformContext transformContext)
         throws SAXException {
         AttributesImpl attr = new AttributesImpl();
 
@@ -135,7 +136,7 @@ public class DXFLayer implements SVGSAXGenerator {
 
             while (i.hasNext()) {
                 DXFEntity entity = (DXFEntity) i.next();
-                entity.toSAX(handler, context);
+                entity.toSAX(handler, context, null, null);
             }
         }
 

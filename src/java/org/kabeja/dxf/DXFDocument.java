@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.kabeja.dxf.objects.DXFDictionary;
 import org.kabeja.dxf.objects.DXFObject;
+import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGSAXGenerator;
@@ -156,7 +157,7 @@ public class DXFDocument implements SVGSAXGenerator {
 		return lineTypes.values().iterator();
 	}
 
-	public void toSAX(ContentHandler handler, Map svgContext) {
+	public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext) {
 		if (null == svgContext) {
 			svgContext = new HashMap();
 		}
@@ -278,7 +279,7 @@ public class DXFDocument implements SVGSAXGenerator {
 
 			while (e.hasMoreElements()) {
 				DXFBlock block = (DXFBlock) e.nextElement();
-				block.toSAX(handler, context);
+				block.toSAX(handler, context, null, null);
 			}
 
 			// maybe there is a fontdescription available from DXFStyle
@@ -286,7 +287,7 @@ public class DXFDocument implements SVGSAXGenerator {
 
 			while (i.hasNext()) {
 				DXFStyle style = (DXFStyle) i.next();
-				style.toSAX(handler, context);
+				style.toSAX(handler, context, null, null);
 			}
 
 			// i = getDXFHatchPatternIterator();
@@ -315,7 +316,7 @@ public class DXFDocument implements SVGSAXGenerator {
 
 			while (e.hasMoreElements()) {
 				DXFLayer layer = (DXFLayer) e.nextElement();
-				layer.toSAX(handler, context);
+				layer.toSAX(handler, context, null, null);
 			}
 
 			SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);

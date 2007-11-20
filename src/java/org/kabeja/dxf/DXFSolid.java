@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
 import org.xml.sax.ContentHandler;
@@ -55,7 +56,7 @@ public class DXFSolid extends DXFEntity {
      *
      * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
      */
-    public void toSAX(ContentHandler handler, Map svgContext)
+    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext)
         throws SAXException {
         // output as polygon
         AttributesImpl attr = new AttributesImpl();

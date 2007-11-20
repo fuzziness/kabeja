@@ -18,16 +18,9 @@ package org.kabeja.dxf;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.kabeja.dxf.helpers.HatchBoundaryLoop;
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGPathBoundaryElement;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
@@ -320,11 +313,11 @@ public class DXFHatch extends DXFEntity {
 	}
 
 	public void addBoundaryLoop(HatchBoundaryLoop loop) {
-		boundaries.add(loop);
+		this.boundaries.add(loop);
 	}
 
 	public Iterator getBoundaryLoops() {
-		return boundaries.iterator();
+		return this.boundaries.iterator();
 	}
 
 	/*
@@ -334,13 +327,13 @@ public class DXFHatch extends DXFEntity {
 	 */
 	public Bounds getBounds() {
 		Bounds bounds = new Bounds();
-		Iterator i = boundaries.iterator();
+		Iterator i = this.boundaries.iterator();
 
 		while (i.hasNext()) {
-			// System.out.println("next loop");
+			
 			HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
 			Bounds b = loop.getBounds();
-			// b.debug();
+			
 			if (b.isValid()) {
 				bounds.addToBounds(b);
 			}
@@ -349,189 +342,7 @@ public class DXFHatch extends DXFEntity {
 		return bounds;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-	 */
-	public void toSAX(ContentHandler handler, Map svgContext)
-			throws SAXException {
 
-		Bounds hatchBounds = this.getBounds();
-
-		if (hatchBounds.isValid()) {
-			AttributesImpl attr = new AttributesImpl();
-			// the id
-
-			if (isSolid()) {
-				super.setCommonAttributes(attr, svgContext);
-
-				SVGUtils.addAttribute(attr, "fill", "currentColor");
-				SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-
-				Iterator i = this.boundaries.iterator();
-
-				
-
-				while (i.hasNext()) {
-					HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
-				    this.loopToSVGPath(handler, loop);
-				}
-
-				SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-
-			} else {
-
-				// we will draw a rectangle with the pattern and use then the
-				// boundary path as clip-path
-
-				attr = new AttributesImpl();
-				SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
-						.validateID(this.getID()));
-				boolean clipClipPath = false;
-				if (this.hatchStyle < 2) {
-					this.islandToClipPath(handler);
-					clipClipPath = true;
-					SVGUtils.addAttribute(attr,
-							SVGConstants.SVG_ATTRIBUTE_CLIP_PATH, "url(#"
-									+ SVGUtils.validateID(this.getID())
-									+ "_clip)");
-				}
-
-				SVGUtils.startElement(handler, SVGConstants.SVG_CLIPPING_PATH,
-						attr);
-
-				if (clipClipPath) {
-					this.outermostToSVGPath(handler);
-				} else {
-					Iterator i = this.boundaries.iterator();
-
-					while (i.hasNext()) {
-						HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
-						this.loopToSVGPath(handler, loop);
-					}
-				}
-
-				SVGUtils.endElement(handler, SVGConstants.SVG_CLIPPING_PATH);
-				DXFHatchPattern pattern = this.doc.getDXFHatchPattern(this
-						.getDXFHatchPatternID());
-
-				attr = new AttributesImpl();
-				SVGUtils.addAttribute(attr,
-						SVGConstants.SVG_ATTRIBUTE_CLIP_PATH, "url(#"
-								+ SVGUtils.validateID(this.getID()) + ")");
-				SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-				SVGUtils.startElement(handler, SVGConstants.SVG_TITLE,
-						new AttributesImpl());
-				SVGUtils.characters(handler, this.getName());
-				SVGUtils.endElement(handler, SVGConstants.SVG_TITLE);
-				pattern.toSAX(handler, svgContext);
-				SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
-			}
-		}
-	}
-
-	protected void islandToClipPath(ContentHandler handler) throws SAXException {
-		AttributesImpl attr = new AttributesImpl();
-		SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
-				.validateID(this.getID() + "_clip"));
-		SVGUtils.startElement(handler, SVGConstants.SVG_CLIPPING_PATH, attr);
-
-		// we will draw a rectangle with the pattern and use then the
-		// boundary path as clip-path
-
-		// first the clip-path
-		Iterator i = this.boundaries.iterator();
-
-		while (i.hasNext()) {
-			HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
-
-			if (!loop.isOutermost()) {
-				loopToSVGPath(handler, loop);
-
-			}
-		}
-		SVGUtils.endElement(handler, SVGConstants.SVG_CLIPPING_PATH);
-
-	}
-
-	protected void outermostToSVGPath(ContentHandler handler)
-			throws SAXException {
-		Iterator i = this.boundaries.iterator();
-
-		while (i.hasNext()) {
-			HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
-			if (loop.isOutermost()) {
-				loopToSVGPath(handler, loop);
-
-			}
-		}
-
-	}
-
-	protected void loopToSVGPath(ContentHandler handler, HatchBoundaryLoop loop)
-			throws SAXException {
-
-		StringBuffer buf = new StringBuffer();
-		Iterator inner = loop.getBoundaryEdgesIterator();
-		if (inner.hasNext()) {
-			DXFEntity entity = (DXFEntity) inner.next();
-			buf.append(' ');
-			String d = ((SVGPathBoundaryElement) entity).getSVGPath();
-			if(d.length()==0){
-				return;
-			}
-			buf.append(d);
-			buf.append(' ');
-			while (inner.hasNext()) {
-				entity = (DXFEntity) inner.next();
-
-				SVGPathBoundaryElement part = (SVGPathBoundaryElement) entity;
-
-				buf.append(' ');
-				d = removeStartPoint(part.getSVGPath().trim());
-				
-				buf.append(d);
-				buf.append(' ');
-			}
-
-			// every loop as single path
-			
-			if (d.length() > 0) {
-				AttributesImpl attr = new AttributesImpl();
-				SVGUtils.addAttribute(attr, "d", buf.toString());
-				SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
-			}
-		}
-
-	}
-
-	protected String removeStartPoint(String svgPath) {
-       
-		if (svgPath.length() > 0 && svgPath.charAt(0) == 'M') {
-			boolean separator = false;
-			int delemiterCount = 0;
-			for (int i = 1; i < svgPath.length(); i++) {
-				char c = svgPath.charAt(i);
-				if (Character.isWhitespace(c) || c == ',') {
-					separator = true;
-				} else {
-					if (separator && delemiterCount == 2) {
-						return svgPath.substring(i - 1);
-						
-					} else if(separator) {
-						delemiterCount++;
-						separator = false;
-					}
-
-				}
-			}
-
-		}
-		 
-		return svgPath;
-
-	}
 
 	/**
 	 * @return Returns the elevationPoint.

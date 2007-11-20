@@ -4,10 +4,6 @@
  */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -47,20 +43,7 @@ public class DXFLWPolyline extends DXFPolyline {
 		this.elevation = elevation;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-	 */
-	public void toSAX(ContentHandler handler, Map svgContext) throws SAXException {
 
-		// the lwpolyine will emit as a svg:path
-		// note the dxf polyline has more
-		// option as the svg:polygon
-
-
-		super.toSAX(handler,svgContext);
-	}
 
 
 

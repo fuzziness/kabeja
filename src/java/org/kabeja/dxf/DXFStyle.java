@@ -15,22 +15,13 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGSAXGenerator;
-import org.kabeja.svg.SVGUtils;
-import org.kabeja.tools.FontManager;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public class DXFStyle implements SVGSAXGenerator {
+public class DXFStyle{
     private String name = "";
     private String fontFile = "";
     private String bigFontFile = "";
@@ -176,50 +167,7 @@ public class DXFStyle implements SVGSAXGenerator {
         this.flags = flags;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        FontManager manager = FontManager.getInstance();
-
-        if (manager.hasFontDescription(getBigFontFile())) {
-            generateSAXFontDescription(handler, getBigFontFile());
-        } else if (manager.hasFontDescription(getFontFile())) {
-            generateSAXFontDescription(handler, getFontFile());
-        }
-    }
-
-    protected void generateSAXFontDescription(ContentHandler handler,
-        String font) throws SAXException {
-        font = font.toLowerCase();
-
-        if (font.endsWith(".shx")) {
-            font = font.substring(0, font.indexOf(".shx"));
-        }
-
-        AttributesImpl attr = new AttributesImpl();
-        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_FONT_FAMILY, font);
-
-        SVGUtils.startElement(handler, SVGConstants.SVG_FONT_FACE, attr);
-        attr = new AttributesImpl();
-        SVGUtils.startElement(handler, SVGConstants.SVG_FONT_FACE_SRC, attr);
-
-        attr = new AttributesImpl();
-
-        String url = FontManager.getInstance().getFontDescription(font) + "#" +
-            font;
-        attr.addAttribute("", "", "xmlns:xlink", "CDATA",
-            SVGConstants.XLINK_NAMESPACE);
-        attr.addAttribute(SVGConstants.XLINK_NAMESPACE, "href", "xlink:href",
-            "CDATA", url);
-        SVGUtils.emptyElement(handler, SVGConstants.SVG_FONT_FACE_URI, attr);
-        SVGUtils.endElement(handler, SVGConstants.SVG_FONT_FACE_SRC);
-        SVGUtils.endElement(handler, SVGConstants.SVG_FONT_FACE);
-    }
-
+   
     public boolean isBackward() {
         return this.textGenerationFlag == 2;
     }

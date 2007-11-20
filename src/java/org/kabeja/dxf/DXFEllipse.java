@@ -4,23 +4,15 @@
  */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
 import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.Vector;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGPathBoundaryElement;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  * 
  */
-public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
+public class DXFEllipse extends DXFEntity {
 
 	public static final double DEFAULT_END_PARAMETER = Math.PI * 2;
 
@@ -47,57 +39,8 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dxf2svg.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-	 */
-	public void toSAX(ContentHandler handler, Map svgContext)
-			throws SAXException {
 
-		AttributesImpl attr = new AttributesImpl();
-		super.setCommonAttributes(attr, svgContext);
-		if (startParameter == DEFAULT_START_PARAMETER
-				&& endParameter == DEFAULT_END_PARAMETER) {
 
-			SVGUtils.addAttribute(attr, "cx", SVGUtils.formatNumberAttribute( this.center.getX()));
-			SVGUtils.addAttribute(attr, "cy", SVGUtils.formatNumberAttribute( this.center.getY()));
-			double major = this.getHalfMajorAxisLength();
-			double minor = this.ratio * major;
-			SVGUtils.addAttribute(attr, "rx", SVGUtils.formatNumberAttribute( major));
-			SVGUtils.addAttribute(attr, "ry", SVGUtils.formatNumberAttribute( minor));
-			// chek for rotation
-
-			double angle = this.getRotationAngle();
-			if (angle != 0.0) {
-				StringBuffer buf = new StringBuffer();
-				buf.append("rotate(");
-				buf.append(SVGUtils.formatNumberAttribute( Math.toDegrees(angle)));
-				buf.append(' ');
-				buf.append(SVGUtils.formatNumberAttribute(this.center.getX()));
-				buf.append(' ');
-				buf.append(SVGUtils.formatNumberAttribute(this.center.getY()));
-				buf.append(')');
-				SVGUtils.addAttribute(attr, "transform", buf.toString());
-			}
-
-			//SVGUtils.addAttribute(attr, "fill", "none");
-			SVGUtils.emptyElement(handler, SVGConstants.SVG_ELLIPSE, attr);
-
-		} else {
-
-			SVGUtils.addAttribute(attr, "d", getSVGPath());
-			SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
-
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dxf2svg.dxf.DXFEntity#getBounds()
-	 */
 	public Bounds getBounds() {
 		// this are the bounds of a circle with major-radius of the ellipse
 		// TODO change this to the correct bounds
@@ -182,111 +125,6 @@ public class DXFEllipse extends DXFEntity implements SVGPathBoundaryElement {
 		return DXFConstants.ENTITY_TYPE_ELLIPSE;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kabeja.dxf.helpers.HatchBoundaryEdge#getSVGPath()
-	 */
-	public String getSVGPath() {
-
-		// TODO test the output
-
-		StringBuffer buf = new StringBuffer();
-
-		Point start = this.getLocalStartPoint();
-		// translate to centerpoint
-		start.setX(start.getX() + this.center.getX());
-		start.setY(start.getY() + this.center.getY());
-
-		
-		buf.append("M ");
-		buf.append(SVGUtils.formatNumberAttribute(start.getX()));
-		buf.append(' ');
-		buf.append(SVGUtils.formatNumberAttribute(start.getY()));
-
-		// get the angle between x-axis and major-axis
-		double major = this.majorAxisDirection.getLength();
-
-
-		double angle = this.getRotationAngle();
-
-		buf.append(" A ");
-		buf.append(SVGUtils.formatNumberAttribute(major));
-		buf.append(' ');
-		buf.append(SVGUtils.formatNumberAttribute(major * this.ratio));
-		buf.append(' ');
-		// rotation value of the ellipse
-		buf.append(SVGUtils.formatNumberAttribute(Math.toDegrees(angle)));
-		if (startParameter == DEFAULT_START_PARAMETER
-				&& endParameter == DEFAULT_END_PARAMETER) {
-			
-		
-            //drawing a full ellipse -> from start point to half 
-			//and then back
-
-
-	
-			// the large-arc flag and the sweep-flag always 1
-			buf.append(" 1 1 ");
-			// the endpoint
-			Point end = this.getLocalPointAt(Math.PI);
-			// translate to centerpoint
-			end.setX(end.getX() + this.center.getX());
-			end.setY(end.getY() + this.center.getY());
-			
-			buf.append(SVGUtils.formatNumberAttribute(end.getX()));
-			buf.append(' ');
-			buf.append(SVGUtils.formatNumberAttribute(end.getY()));	
-			
-			
-			buf.append(" A ");
-			buf.append(SVGUtils.formatNumberAttribute(major));
-			buf.append(' ');
-			buf.append(SVGUtils.formatNumberAttribute(major * this.ratio));
-			buf.append(' ');
-
-			// rotation value of the ellipse
-			buf.append( SVGUtils.formatNumberAttribute(Math.toDegrees(angle)));
-		
-		
-
-			buf.append(" 1 1 ");
-
-
-			buf.append(SVGUtils.formatNumberAttribute(start.getX()));
-			buf.append(' ');
-			buf.append(SVGUtils.formatNumberAttribute(start.getY()));	
-			//buf.append(" z ");
-		}else{
-		
-
-			buf.append(' ');
-
-			// the large-arc flag
-			if ((this.endParameter - this.startParameter) >= Math.PI) {
-				buf.append(1);
-			} else {
-				buf.append(0);
-			}
-			buf.append(' ');
-
-			// the sweep-flag always 1
-			buf.append(" 1 ");
-
-			// the endpoint
-			Point end = this.getLocalEndPoint();
-			// translate to centerpoint
-			end.setX(end.getX() + this.center.getX());
-			end.setY(end.getY() + this.center.getY());
-		
-
-			buf.append(SVGUtils.formatNumberAttribute(end.getX()));
-			buf.append(' ');
-			buf.append(SVGUtils.formatNumberAttribute(end.getY()));
-		}
-		
-		return buf.toString();
-	}
 
 	public double getHalfMajorAxisLength() {
 		return majorAxisDirection.getLength();

@@ -24,15 +24,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
-import org.kabeja.parser.dxf.filter.DXFStreamFilter;
-import org.kabeja.parser.dxf.filter.DXFStreamLayerFilter;
 import org.kabeja.processing.PostProcessManager;
 import org.kabeja.processing.ProcessorManager;
 import org.kabeja.svg.SVGConstants;

@@ -26,9 +26,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.jedit.syntaxhighlight.JEditTextArea;
-import org.jedit.syntaxhighlight.JavaScriptTokenMarker;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;

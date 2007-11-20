@@ -5,15 +5,8 @@
 package org.kabeja.dxf;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import org.kabeja.dxf.helpers.Point;
-import org.kabeja.dxf.objects.DXFImageDefObject;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -72,52 +65,6 @@ public class DXFImage extends DXFEntity {
 		return DXFConstants.ENTITY_TYPE_IMAGE;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler)
-	 */
-	public void toSAX(ContentHandler handler, Map svgContext) throws SAXException {
-
-		// TODO add clipping here with clipPath
-
-		AttributesImpl attr = new AttributesImpl();
-		super.setCommonAttributes(attr, svgContext);
-
-		SVGUtils.addAttribute(attr, "x", "" + insertPoint.getX());
-		SVGUtils.addAttribute(attr, "y", "" + insertPoint.getY());
-		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_WIDTH, ""
-				+ imageSizeAlongU);
-		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_HEIGHT, ""
-				+ imageSizeAlongV);
-
-		// get the image path from the referenced IMAGEDEF object
-		DXFImageDefObject imageDef = (DXFImageDefObject) doc.getDXFObject(imageDefID);
-
-		// convert the file to uri
-
-
-		attr.addAttribute(SVGConstants.XMLNS_NAMESPACE, "xlink", "xmlns:xlink", "CDATA",
-                SVGConstants.XLINK_NAMESPACE);
-		attr.addAttribute(SVGConstants.XLINK_NAMESPACE, "href", "xlink:href",
-				"CDATA", SVGUtils.pathToURI(imageDef.getFilename()));
-
-		// We have a main transformation on the complete draft.
-		// So we need here the rotate of image to get the right
-		// view back.
-
-		StringBuffer transform = new StringBuffer();
-		transform.append("rotate(180 ");
-		transform.append((insertPoint.getX()+ imageSizeAlongU / 2));
-		transform.append(" ");
-		transform.append((insertPoint.getY() + imageSizeAlongV / 2));
-		transform.append(")");
-
-		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_TRANSFORM,
-				transform.toString());
-		SVGUtils.emptyElement(handler, SVGConstants.SVG_IMAGE, attr);
-
-	}
 
 	public Point getInsertPoint() {
 		return insertPoint;

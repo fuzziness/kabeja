@@ -15,17 +15,8 @@
 */
 package org.kabeja.dxf;
 
-import java.util.Map;
-
-import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.Vector;
-import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 
 /**
@@ -54,29 +45,6 @@ public class DXFRay extends DXFEntity {
         return DXFConstants.ENTITY_TYPE_RAY;
     }
 
-    /* (non-Javadoc)
-     * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler, java.util.Map)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException {
-        Bounds b = (Bounds) svgContext.get(SVGContext.DRAFT_BOUNDS);
-
-        //we will create a line, which goes over or to the end of the draft bounds
-        double t = Math.sqrt(Math.pow(b.getHeight(), 2) +
-                Math.pow(b.getWidth(), 2));
-
-        Point end = DXFUtils.getPointFromParameterizedLine(basePoint,
-                direction, t);
-
-        AttributesImpl atts = new AttributesImpl();
-        SVGUtils.addAttribute(atts, "x1", "" + basePoint.getX());
-        SVGUtils.addAttribute(atts, "y1", "" + basePoint.getY());
-        SVGUtils.addAttribute(atts, "x2", "" + end.getX());
-        SVGUtils.addAttribute(atts, "y2", "" + end.getY());
-        super.setCommonAttributes(atts, svgContext);
-
-        SVGUtils.emptyElement(handler, SVGConstants.SVG_LINE, atts);
-    }
 
     /**
      * @return Returns the basePoint.

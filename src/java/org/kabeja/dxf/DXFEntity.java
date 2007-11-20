@@ -19,10 +19,7 @@ import java.util.Map;
 
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGFragmentGenerator;
 import org.kabeja.svg.SVGUtils;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 
@@ -31,7 +28,7 @@ import org.xml.sax.helpers.AttributesImpl;
  *
  *
  */
-public abstract class DXFEntity implements SVGFragmentGenerator {
+public abstract class DXFEntity {
     public static String TYPE = "";
     protected DXFDocument doc;
     protected String id = "";
@@ -80,8 +77,8 @@ public abstract class DXFEntity implements SVGFragmentGenerator {
         this.layerID = id;
     }
 
-    public abstract void toSAX(ContentHandler handler, Map svgContext)
-        throws SAXException;
+//    public abstract void toSAX(ContentHandler handler, Map svgContext)
+//        throws SAXException;
 
     public abstract Bounds getBounds();
 
@@ -279,7 +276,7 @@ public abstract class DXFEntity implements SVGFragmentGenerator {
         this.thickness = thickness;
     }
 
-    protected boolean isOmitLineType() {
+    public boolean isOmitLineType() {
         return false;
     }
 
