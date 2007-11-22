@@ -31,7 +31,7 @@ import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.processing.helper.PolylineQueue;
 
-public class PolylineConverter implements PostProcessor {
+public class PolylineConverter extends AbstractPostProcessor {
 
 	
 	public final static String PROPERTY_POINT_DISTANCE="point.distance";

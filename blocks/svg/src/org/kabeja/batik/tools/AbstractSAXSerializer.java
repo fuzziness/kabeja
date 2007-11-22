@@ -292,4 +292,9 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter implements
 		//add more papers here
 	}
 	
+	public Map getProperties() {
+		
+		return this.properties;
+	}
+	
 }

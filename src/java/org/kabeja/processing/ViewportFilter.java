@@ -29,7 +29,7 @@ import org.kabeja.dxf.DXFViewport;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class ViewportFilter implements PostProcessor {
+public class ViewportFilter extends AbstractPostProcessor  {
     /*
      * (non-Javadoc)
      *

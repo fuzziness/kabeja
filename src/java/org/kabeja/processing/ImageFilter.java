@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package org.kabeja.processing;
 
 import java.io.File;
@@ -26,40 +26,39 @@ import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.objects.DXFImageDefObject;
 
 /**
- *
+ * 
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  */
-public class ImageFilter implements PostProcessor {
+public class ImageFilter extends AbstractPostProcessor {
 
-    /* (non-Javadoc)
-     * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument, java.util.Map)
-     */
-    public void process(DXFDocument doc, Map context) throws ProcessorException {
-        Iterator i = doc.getDXFLayerIterator();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument,
+	 *      java.util.Map)
+	 */
+	public void process(DXFDocument doc, Map context) throws ProcessorException {
+		Iterator i = doc.getDXFLayerIterator();
 
-        while (i.hasNext()) {
-            DXFLayer l = (DXFLayer) i.next();
+		while (i.hasNext()) {
+			DXFLayer l = (DXFLayer) i.next();
 
-            if (l.hasDXFEntities(DXFConstants.ENTITY_TYPE_IMAGE)) {
-                Iterator in = l.getDXFEntities(DXFConstants.ENTITY_TYPE_IMAGE).iterator();
+			if (l.hasDXFEntities(DXFConstants.ENTITY_TYPE_IMAGE)) {
+				Iterator in = l.getDXFEntities(DXFConstants.ENTITY_TYPE_IMAGE)
+						.iterator();
 
-                while (in.hasNext()) {
-                     DXFImage img = (DXFImage) in.next();
-                     String imgDef = img.getImageDefObjectID();
-                     DXFImageDefObject def = (DXFImageDefObject)doc.getDXFObject(imgDef);
-                     File f = new File(def.getFilename());
-                     if(!f.exists()){
-                         in.remove();
-                     }
-                }
-        }
-    }
-    }
-    /* (non-Javadoc)
-     * @see org.kabeja.tools.PostProcessor#setProperties(java.util.Map)
-     */
-    public void setProperties(Map properties) {
+				while (in.hasNext()) {
+					DXFImage img = (DXFImage) in.next();
+					String imgDef = img.getImageDefObjectID();
+					DXFImageDefObject def = (DXFImageDefObject) doc
+							.getDXFObject(imgDef);
+					File f = new File(def.getFilename());
+					if (!f.exists()) {
+						in.remove();
+					}
+				}
+			}
+		}
+	}
 
-
-    }
 }

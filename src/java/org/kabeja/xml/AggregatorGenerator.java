@@ -18,6 +18,7 @@ package org.kabeja.xml;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
 import org.xml.sax.ContentHandler;
@@ -74,4 +75,9 @@ public class AggregatorGenerator extends AbstractSAXFilter implements
 	public void addSAXGenerator(SAXGenerator generator){
 		this.generators.add(generator);
 	}
+
+	public Map getProperties() {
+		return this.properties;
+	}
+	
 }

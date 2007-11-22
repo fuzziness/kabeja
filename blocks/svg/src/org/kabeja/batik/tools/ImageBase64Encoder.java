@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.batik.util.Base64EncoderStream;
@@ -39,6 +40,7 @@ public class ImageBase64Encoder extends XMLFilterImpl implements SAXFilter {
     public static final String XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
     public static final String XLINK_ATTRIBUTE_HREF = "href";
 
+    protected Map properties = new HashMap();
     /*
      * (non-Javadoc)
      *
@@ -111,4 +113,9 @@ public class ImageBase64Encoder extends XMLFilterImpl implements SAXFilter {
 
         return "";
     }
+    
+	public Map getProperties() {
+		
+		return this.properties;
+	}
 }

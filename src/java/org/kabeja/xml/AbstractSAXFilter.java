@@ -24,7 +24,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class AbstractSAXFilter extends XMLFilterImpl implements SAXFilter {
+public abstract class AbstractSAXFilter extends XMLFilterImpl implements SAXFilter {
     protected Map properties;
 
     /* (non-Javadoc)
@@ -33,4 +33,9 @@ public class AbstractSAXFilter extends XMLFilterImpl implements SAXFilter {
     public void setProperties(Map properties) {
         this.properties = properties;
     }
+    
+	public Map getProperties() {
+		
+		return this.properties;
+	}
 }

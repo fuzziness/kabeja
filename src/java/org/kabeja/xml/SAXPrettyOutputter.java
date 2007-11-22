@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class SAXPrettyOutputter implements SAXSerializer {
+public class SAXPrettyOutputter extends AbstractSAXSerializer implements SAXSerializer {
     public static final String DEFAULT_ENCODING = "UTF-8";
     public static final String SUFFIX = "svg";
     public static final String SUFFIX_GZIP = "svgz";
@@ -58,7 +58,7 @@ public class SAXPrettyOutputter implements SAXSerializer {
     private boolean parent = false;
     private ArrayList textContentList = new ArrayList();
     protected HashMap rootxmlns = new HashMap();
-    protected Map properties;
+
     protected boolean gzip = false;
 
     public SAXPrettyOutputter(OutputStream output, String encoding) {

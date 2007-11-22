@@ -19,16 +19,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.processing.AbstractConfigurable;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-public abstract class AbstractSAXGenerator implements SAXGenerator {
+public abstract class AbstractSAXGenerator extends AbstractConfigurable implements SAXGenerator {
 
 	protected DXFDocument doc;
 
 	protected ContentHandler handler;
-
-	protected Map properties= new HashMap();
 
 	public void generate(DXFDocument doc, ContentHandler handler) throws SAXException{
 		this.doc = doc;
@@ -37,10 +36,7 @@ public abstract class AbstractSAXGenerator implements SAXGenerator {
 		
 	}
 
-	public void setProperties(Map properties) {
-		this.properties = properties;
 
-	}
 
 	/**
 	 * This method has to be overwritten by any subclass. At this point the

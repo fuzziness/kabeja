@@ -32,7 +32,7 @@ import org.kabeja.dxf.DXFText;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class BoundsDebugger implements PostProcessor {
+public class BoundsDebugger extends AbstractPostProcessor {
 	public static final String LAYER_NAME = "kabeja_bounds_debug";
 	
 	

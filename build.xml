@@ -44,6 +44,11 @@
 			<pathelement location="tools/lib/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
+	<taskdef classname="org.kabeja.ant.BlockTask" name="blockbuild">
+		<classpath>
+			<pathelement location="tools/anttask/build" />
+		</classpath>
+	</taskdef>
 
 	<target name="init">
 		<tstamp />
@@ -91,7 +96,7 @@
 	</target>
 
 
-	<target name="dist" depends="core.jars,blocks" description="Building  Kabeja (default).">
+	<target name="dist" depends="core.jars,build-blocks" description="Building  Kabeja (default).">
 		
 	</target>
 
@@ -244,7 +249,7 @@
 		</zip>
 	</target>
 
-	<target name="clean" depends="blocks-clean">
+	<target name="clean" depends="clean-blocks">
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
 		<delete dir="${packages}" />
@@ -427,6 +432,16 @@
 				</ant>
 			</else>
 		</if>
+	</target>
+	
+	
+	
+	<target name="build-blocks"  description="build all blocks">
+          <blockbuild blockdir="blocks"/>
+	</target>
+	
+	<target name="clean-blocks"  description="clean all blocks">
+          <blockbuild blockdir="blocks" target="clean"/>
 	</target>
 
 	<target name="create-block" if="block.name" 

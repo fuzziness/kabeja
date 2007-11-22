@@ -17,6 +17,7 @@
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.processing.Configurable;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 /**
@@ -32,9 +33,9 @@ import org.xml.sax.SAXException;
  * @author simon.mieth
  *
  */
-public interface SAXGenerator {
+public interface SAXGenerator extends Configurable{
 
-	public void setProperties(Map properties);
+	
 
 	public void generate(DXFDocument doc,ContentHandler handler) throws SAXException;
 

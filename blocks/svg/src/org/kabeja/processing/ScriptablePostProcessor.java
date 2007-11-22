@@ -25,7 +25,7 @@ import org.kabeja.processing.scripting.ScriptEngine;
 import org.kabeja.processing.scripting.ScriptException;
 import org.kabeja.processing.scripting.impl.JavaScriptEngine;
 
-public class ScriptablePostProcessor implements PostProcessor {
+public class ScriptablePostProcessor extends AbstractPostProcessor {
 
 	public final static String PROPERTY_SCRIPT_TYPE = "type";
 	public final static String PROPERTY_SCRIPT_SRC = "src";

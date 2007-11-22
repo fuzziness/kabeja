@@ -30,7 +30,7 @@ import org.kabeja.dxf.DXFLayer;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class VisibilityFilter implements PostProcessor {
+public class VisibilityFilter extends AbstractPostProcessor  {
     /* (non-Javadoc)
      * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument)
      */

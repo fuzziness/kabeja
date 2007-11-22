@@ -49,33 +49,27 @@
 	<target name="compile" depends="init">
 		<if>
 			<equals arg1="${inkscape.importfilter.type}" arg2="native" />
+
+
+
+
 			<then>
 				<echo>Native import filter</echo>
-				<javac compiler="${inkscape.java.compiler}">
-					<classpath>
-						<pathelement path="${classpath}" />
-						<dirset dir="${kabeja.home}/${build}/${classes}" />
-					</classpath>
-
-					<src path="${src}" />
-					<src path="${kabeja.home}/src/java/" />
-
-					<include name="**/*.java" />
-					<exclude name="**/CVS/*" />
-					<compilerarg line="${inkscape.java.compiler.properties}  --main=${main.class}   -o ${dist}/${name.binary}" />
-				</javac>
+				<ant target="extension-jar" />
+				<exec executable="gcj">
+					<arg line=" ${inkscape.java.compiler.properties} --main=${main.class} -o ${basedir}/${dist}/${name.binary} ${basedir}/${dist}/${block.releasename}.jar" />
+				</exec>
 			</then>
 			<else>
 				<echo>Java import filter</echo>
 				<javac destdir="${build}/${classes}">
 					<classpath>
 						<pathelement path="${classpath}" />
-						<dirset dir="${kabeja.home}/${build}/${classes}" />
+						<fileset dir="${kabeja.home}/${dist}/${libs}">
+							<include name="**/*.jar" />
+						</fileset>
 					</classpath>
-
 					<src path="${src}" />
-					<src path="${kabeja.home}/src/java/" />
-
 					<include name="**/*.java" />
 					<exclude name="**/CVS/*" />
 				</javac>
@@ -88,17 +82,25 @@
 
 	<target name="dist" depends="compile, manifest">
 		<mkdir dir="${kabeja.home}/${dist}/inkscape-extension" />
-
 		<if>
 			<equals arg1="${inkscape.importfilter.type}" arg2="native" />
 			<then>
-
 				<copy file="${dist}/${name.binary}" todir="${kabeja.home}/${dist}/inkscape-extension" />
 				<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" perm="+rx" />
 				<copy file="${conf}/kabeja-native.inx" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
 			</then>
 			<else>
-				<jar jarfile="${kabeja.home}/${dist}/inkscape-extension/${block.releasename}.jar" basedir="${build}/${classes}" includes="**/*" manifest="${manifest}" />
+				<unjar dest="${build}/${classes}">
+					<fileset dir="${kabeja.home}/${dist}/${libs}">
+						<include name="**/kabeja-svg.jar" />
+					</fileset>
+				</unjar>
+
+				<jar jarfile="${kabeja.home}/${dist}/inkscape-extension/${block.releasename}.jar" manifest="${manifest}">
+					<fileset dir="${kabeja.home}/${build}/${classes}">
+						<include name="**/*" />
+					</fileset>
+				</jar>
 				<copy file="${conf}/kabeja.sh" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja" />
 				<chmod file="${kabeja.home}/${dist}/inkscape-extension/kabeja" perm="+rx" />
 				<copy file="${conf}/kabeja.bat" todir="${kabeja.home}/${dist}/inkscape-extension" />
@@ -106,6 +108,40 @@
 			</else>
 		</if>
 	</target>
+
+
+	<target name="extension-jar">
+		<javac destdir="${build}/${classes}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${kabeja.home}/${dist}/${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<src path="${src}" />
+			<include name="**/*.java" />
+			<exclude name="**/CVS/*" />
+		</javac>
+
+		<unjar dest="${build}/${classes}">
+			<fileset dir="${kabeja.home}/${dist}/${libs}">
+				<include name="**/kabeja-svg*.jar" />
+			</fileset>
+		</unjar>
+		<jar jarfile="${dist}/${block.releasename}.jar" manifest="${manifest}">
+			<fileset dir="${kabeja.home}/${build}/${classes}">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${build}/${classes}">
+				<exclude name="org/kabeja/batik/**/*" />
+				<exclude name="org/kabeja/ui/**/*" />
+				<exclude name="org/kabeja/postprocessing/**/*" />
+			</fileset>
+		</jar>
+	</target>
+
+
+
 
 	<target name="manifest">
 		<fileset dir="${libs}" id="jar.files">

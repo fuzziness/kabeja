@@ -17,6 +17,7 @@ package org.kabeja.xml;
 
 import java.util.Map;
 
+import org.kabeja.processing.Configurable;
 import org.xml.sax.ContentHandler;
 
 
@@ -27,9 +28,7 @@ import org.xml.sax.ContentHandler;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public interface SAXFilter extends ContentHandler {
+public interface SAXFilter extends ContentHandler, Configurable {
   
-	public void setProperties(Map properties);
-
     public void setContentHandler(ContentHandler handler);
 }

@@ -39,6 +39,7 @@ import org.kabeja.tools.CodePageParser;
  */
 public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
 
+	public final static String PARSER_NAME="DXFParser";
 	public final static String EXTENSION = "dxf";
 
 	private final static String SECTION_START = "SECTION";
@@ -312,5 +313,12 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
 		this.filter = handler;
 
 	}
+
+	public String getName() {
+		
+		return PARSER_NAME;
+	}
+	
+	
 
 }

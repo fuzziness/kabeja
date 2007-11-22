@@ -43,6 +43,7 @@ import javax.swing.JToolBar;
 import javax.swing.text.BadLocationException;
 
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.processing.AbstractPostProcessor;
 import org.kabeja.processing.PostProcessor;
 import org.kabeja.processing.ProcessorException;
 import org.kabeja.processing.scripting.ScriptEngine;
@@ -52,7 +53,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.tools.shell.Global;
 
-public class JavaScriptShell implements PostProcessor {
+public class JavaScriptShell extends AbstractPostProcessor {
 
 	protected JFrame frame;
 	protected JTextArea textArea;

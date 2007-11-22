@@ -29,7 +29,7 @@ import org.kabeja.dxf.DXFView;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class ViewFilter implements PostProcessor {
+public class ViewFilter extends AbstractPostProcessor  {
     public static final String CONTEXT_OPTION_VIEW_NAME = "view.name";
 
     /*

@@ -33,8 +33,8 @@ import org.kabeja.dxf.DXFDocument;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public interface PostProcessor {
-    public void setProperties(Map properties);
+public interface PostProcessor extends Configurable{
+   
 
     /**
      * Postprocess the given DXFDocument

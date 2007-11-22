@@ -142,6 +142,7 @@ public class MathUtils {
 		Vector n = crossProduct(u, v);
 		Vector m = crossProduct(getVector(a, b), v);
 		double s = 0;
+		
 		if (n.getZ() != 0.0) {
 			s = m.getZ() / n.getZ();
 		} else if (n.getY() != 0.0) {
@@ -322,5 +323,6 @@ public class MathUtils {
 		
 		return r;
 	}
+	
 	
 }

@@ -18,6 +18,7 @@ package org.kabeja.xml;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.kabeja.processing.Configurable;
 import org.xml.sax.ContentHandler;
 
 
@@ -37,8 +38,8 @@ import org.xml.sax.ContentHandler;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public interface SAXSerializer extends ContentHandler {
-    public void setProperties(Map properties);
+public interface SAXSerializer extends ContentHandler, Configurable{
+   
 
     public String getSuffix();
 

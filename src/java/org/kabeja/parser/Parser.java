@@ -46,4 +46,6 @@ public interface Parser extends Handler{
 
 
 	public abstract boolean supportedExtension(String extension);
+	
+	public abstract String getName();
 }
