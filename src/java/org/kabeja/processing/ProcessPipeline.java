@@ -35,9 +35,9 @@ import org.xml.sax.SAXException;
  *
  */
 public class ProcessPipeline {
-    private ProcessorManager manager;
-    private List postProcessors = new ArrayList();
-    private List filters = new ArrayList();
+    private ProcessingManager manager;
+    private List postProcessorConfigs = new ArrayList();
+    private List saxFilterConfigs = new ArrayList();
     private SAXGenerator generator;
     private Map serializerProperties;
     private Map generatorProperties;
@@ -49,14 +49,23 @@ public class ProcessPipeline {
     	
         ContentHandler handler = null;
 
-        if (this.filters.size() > 0) {
-            Iterator i = filters.iterator();
-            SAXFilter last = getSAXFilter((SAXFilterConfig) i.next());
-
+        List saxFilterProperties = new ArrayList();
+        
+        if (this.saxFilterConfigs.size() > 0) {
+            Iterator i = saxFilterConfigs.iterator();
+            SAXFilterConfig sc = (SAXFilterConfig)i.next();
+            SAXFilter last =  this.manager.getSAXFilter(sc.getFilterName());
+            saxFilterProperties.add(last.getProperties());
+            last.setProperties(sc.getProperties());
+            
             while (i.hasNext()) {
-                SAXFilter f = getSAXFilter((SAXFilterConfig) i.next());
+            	 sc = (SAXFilterConfig)i.next();
+                SAXFilter f =  this.manager.getSAXFilter(sc.getFilterName());
+               
                 f.setContentHandler(last);
                 last = f;
+                saxFilterProperties.add(last.getProperties());
+                last.setProperties(sc.getProperties());
             }
 
             last.setContentHandler(this.serializer);
@@ -67,24 +76,46 @@ public class ProcessPipeline {
         }
 
         //postprocess
-        Iterator i = this.postProcessors.iterator();
+        Iterator i = this.postProcessorConfigs.iterator();
 
         while (i.hasNext()) {
-            PostProcessor pp = getPostProcessor((PostProcessorConfig) i.next());
+        	PostProcessorConfig ppc = (PostProcessorConfig) i.next();
+            PostProcessor pp = this.manager.getPostProcessor(ppc.getPostProcessorName());
+            
+            //backup the default props
+            Map oldProps = pp.getProperties();
+            //setup the pipepine props
+            pp.setProperties(ppc.getProperties());
             pp.process(doc, context);
+            //restore the default props
+            pp.setProperties(oldProps);
+            
         }
 
+        Map oldProbs = this.serializer.getProperties();
         this.serializer.setProperties(this.serializerProperties);
 
         //invoke the filter and serialier
         this.serializer.setOutput(out);
         try {
+        	Map oldGenProps = this.generator.getProperties();
+            this.generator.setProperties(this.generatorProperties);
 			this.generator.generate(doc, handler);
+			//restore the old props
+			this.generator.setProperties(oldGenProps);
 		} catch (SAXException e) {
 			throw new ProcessorException(e);
 			
 		}
-      
+        
+		//restore the serializer properties
+		this.serializer.setProperties(oldProbs);
+		
+		//restore the filter properties
+		for(int x=0;x<saxFilterProperties.size();x++){
+			SAXFilterConfig sc = (SAXFilterConfig)saxFilterConfigs.get(x);
+			this.manager.getSAXFilter(sc.getFilterName()).setProperties((Map)saxFilterProperties.get(x));
+		}
     }
 
     /**
@@ -105,7 +136,7 @@ public class ProcessPipeline {
     /**
      * @return Returns the manager.
      */
-    public ProcessorManager getProcessorManager() {
+    public ProcessingManager getProcessorManager() {
         return manager;
     }
 
@@ -113,7 +144,7 @@ public class ProcessPipeline {
      * @param manager
      *            The manager to set.
      */
-    public void setProcessorManager(ProcessorManager manager) {
+    public void setProcessorManager(ProcessingManager manager) {
         this.manager = manager;
     }
 
@@ -135,26 +166,18 @@ public class ProcessPipeline {
     public void prepare() {
     }
 
-    protected SAXFilter getSAXFilter(SAXFilterConfig config) {
-        SAXFilter f = this.manager.getSAXFilter(config.getFilterName());
-        f.setProperties(config.getProperties());
-
-        return f;
-    }
-
-    protected PostProcessor getPostProcessor(PostProcessorConfig config) {
-        PostProcessor pp = this.manager.getPostProcessor(config.getPostProcessorName());
-        pp.setProperties(config.getProperties());
-
-        return pp;
+  
+   
+    public List getPostProcessorConfigs(){
+    	return this.postProcessorConfigs;
     }
 
     public void addSAXFilterConfig(SAXFilterConfig config) {
-        this.filters.add(config);
+        this.saxFilterConfigs.add(config);
     }
 
     public void addPostProcessorConfig(PostProcessorConfig config) {
-        this.postProcessors.add(config);
+        this.postProcessorConfigs.add(config);
     }
 
     /**

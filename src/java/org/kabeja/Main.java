@@ -31,8 +31,14 @@ import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.processing.PostProcessManager;
-import org.kabeja.processing.ProcessorManager;
-import org.kabeja.tools.SAXProcessorBuilder;
+import org.kabeja.processing.ProcessingManager;
+import org.kabeja.tools.SAXProcessingManagerBuilder;
+import org.kabeja.ui.ViewComponent;
+import org.kabeja.ui.impl.ProcessingEditorViewComponent;
+import org.kabeja.ui.impl.ProcessingRunViewComponent;
+import org.kabeja.ui.impl.ProcessingUI;
+import org.kabeja.ui.impl.ServiceContainer;
+import org.kabeja.ui.xml.SAXServiceContainerBuilder;
 import org.kabeja.xml.SAXPrettyOutputter;
 
 /**
@@ -61,7 +67,7 @@ public class Main {
 
 	private PostProcessManager ppManager;
 
-	private ProcessorManager processorManager;
+	private ProcessingManager processorManager;
 
 	private String pipeline;
 
@@ -69,6 +75,11 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		
+		
+		
+		
+		
 		if (args.length == 0) {
 			printUsage();
 			System.exit(0);
@@ -121,8 +132,8 @@ public class Main {
 	}
 
 	public void convert() {
-		if (parser == null) {	
-			parser = ParserBuilder.createDefaultParser();	
+		if (parser == null) {
+			parser = ParserBuilder.createDefaultParser();
 		}
 
 		File f = new File(this.sourceFile);
@@ -154,8 +165,8 @@ public class Main {
 					}
 				}
 			}
-		}else{
-			System.err.println("Cannot open "+this.sourceFile);
+		} else {
+			System.err.println("Cannot open " + this.sourceFile);
 		}
 	}
 
@@ -186,9 +197,7 @@ public class Main {
 
 	private void parseFile(File f, String output) {
 		try {
-			
-			
-			
+
 			this.parser.parse(new FileInputStream(f), encoding);
 
 			DXFDocument doc = parser.getDocument();
@@ -219,7 +228,7 @@ public class Main {
 
 				// if (this.outputDTD) {
 				// writer.setDTD(SVGConstants.SVG_DTD_1_0);
-				//				}
+				// }
 				// SAXGenerator gen = new SVGGenerator();
 				// gen.setProperties(new HashMap());
 				// gen.generate(doc, writer);
@@ -264,8 +273,14 @@ public class Main {
 
 	public void setProcessConfig(String file) {
 		try {
-			this.processorManager = SAXProcessorBuilder
+			this.processorManager = SAXProcessingManagerBuilder
 					.buildFromStream(new FileInputStream(file));
+			
+			ServiceContainer sc = SAXServiceContainerBuilder.buildFromStream(new FileInputStream("conf/ui.xml"));
+			sc.setProcessingManager(this.processorManager);
+			sc.start();
+	
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

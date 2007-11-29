@@ -30,6 +30,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -45,15 +46,18 @@ import javax.swing.text.BadLocationException;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.processing.AbstractPostProcessor;
 import org.kabeja.processing.PostProcessor;
+import org.kabeja.processing.ProcessingManager;
 import org.kabeja.processing.ProcessorException;
 import org.kabeja.processing.scripting.ScriptEngine;
 import org.kabeja.processing.scripting.ScriptException;
+import org.kabeja.ui.DXFDocumentViewComponent;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.tools.shell.Global;
 
-public class JavaScriptShell extends AbstractPostProcessor {
+public class JavaScriptShell extends AbstractPostProcessor implements
+		DXFDocumentViewComponent {
 
 	protected JFrame frame;
 	protected JTextArea textArea;
@@ -63,6 +67,8 @@ public class JavaScriptShell extends AbstractPostProcessor {
 	protected ArrayList history = new ArrayList();
 	protected int historyPos = 0;
 	protected ScriptWorker worker;
+	protected  String title="JSShell";
+	
 
 	public void process(DXFDocument doc, Map context) throws ProcessorException {
 
@@ -88,16 +94,12 @@ public class JavaScriptShell extends AbstractPostProcessor {
 
 	protected void init() {
 
-		textArea = new JTextArea();
+	
 
-		textArea.addKeyListener(new CommandKeyListener());
-
-		this.initActions();
-
-		frame = new JFrame("JSShell");
+		frame = new JFrame(getTitle());
 		frame.setJMenuBar(this.createMenuBar());
 		frame.getContentPane().setLayout(new BorderLayout());
-		// frame.getContentPane().add(createToolbar(), BorderLayout.NORTH);
+		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				// capture the second close-event and ignore
@@ -107,7 +109,7 @@ public class JavaScriptShell extends AbstractPostProcessor {
 			}
 		});
 
-		frame.getContentPane().add(new JScrollPane(textArea),
+		frame.getContentPane().add(getView(),
 				BorderLayout.CENTER);
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, 2, 2));
 		JButton button = new JButton((Action) actions.get("close"));
@@ -450,7 +452,6 @@ public class JavaScriptShell extends AbstractPostProcessor {
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -480,6 +481,43 @@ public class JavaScriptShell extends AbstractPostProcessor {
 			}
 
 		}
+
+	}
+
+	public void showDXFDocument(DXFDocument doc) {
+		worker = new ScriptWorker(doc);
+		worker.start();
+	}
+
+	public String getTitle() {
+		
+		return this.title;
+	}
+
+	public JComponent getView() {
+
+		textArea = new JTextArea();
+
+		textArea.addKeyListener(new CommandKeyListener());
+
+		this.initActions();
+
+		JPanel panel = new JPanel(new BorderLayout());
+
+		panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
+
+		panel.add(createToolbar(), BorderLayout.NORTH);
+		panel.setPreferredSize(new Dimension(640, 480));
+
+		newShellLine();
+		
+		worker = new ScriptWorker(null);
+		worker.start();
+
+		return panel;
+	}
+
+	public void setProcessingManager(ProcessingManager manager) {
 
 	}
 

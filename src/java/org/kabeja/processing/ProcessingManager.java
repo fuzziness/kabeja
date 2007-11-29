@@ -28,6 +28,7 @@ import java.util.Map;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.parser.DXFParseException;
 import org.kabeja.parser.Parser;
+import org.kabeja.processing.event.ProcessingListener;
 import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
 import org.kabeja.xml.SAXSerializer;
@@ -37,7 +38,7 @@ import org.kabeja.xml.SAXSerializer;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class ProcessorManager {
+public class ProcessingManager {
     private Map saxfilters = new HashMap();
     private Map saxserializers = new HashMap();
     private Map postprocessors = new HashMap();
@@ -186,6 +187,18 @@ public class ProcessorManager {
         
         public Map getSAXGenerators(){
         	return this.saxgenerators;
+        }
+        
+        
+        
+        public void addProcessingListener(ProcessingListener l){
+        	
+        }
+        
+        
+        
+        public void removeProcessingListener(ProcessingListener l){
+        	
         }
     
 }

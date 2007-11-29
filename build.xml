@@ -27,9 +27,9 @@
 	<property name="tools" value="tools" />
 	<property name="blocks" value="blocks" />
 	<property name="java.target.version" value="1.3" />
-	<property name="debug" value="true"/>
+	<property name="debug" value="true" />
 
-    <!-- first the local settings -->
+	<!-- first the local settings -->
 	<property file="local.blocks.properties" />
 	<property file="blocks.properties" />
 
@@ -54,6 +54,7 @@
 		<tstamp />
 		<mkdir dir="${build}" />
 		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${build}/${classes}/${icons}" />
 		<mkdir dir="${dist}" />
 		<mkdir dir="${dist}/${libs}" />
 		<mkdir dir="${dist}/${conf}" />
@@ -65,9 +66,9 @@
 		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}" debug="${debug}" debuglevel="lines,var,source">
 			<classpath>
 				<pathelement path="${classpath}" />
-				<!--<fileset dir="${libs}">
+				<fileset dir="${libs}">
 					<include name="**/*.jar" />
-				</fileset>  -->
+				</fileset>
 			</classpath>
 		</javac>
 	</target>
@@ -75,7 +76,7 @@
 	<target name="config" depends="compile">
 		<copy todir="${dist}/${conf}">
 			<fileset dir="${conf}">
-				<exclude name="**/*~;**/*manifest*" />
+				<exclude name="**/*~;**/*manifest*;process.xml;ui.xml" />
 			</fileset>
 		</copy>
 
@@ -86,18 +87,22 @@
 				<exclude name="**/cvs" />
 			</fileset>
 		</copy>
-
+		<copy todir="${build}/${classes}/${icons}">
+			<fileset dir="${icons}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 	</target>
 
-    <target name="core.jars" depends="config,manifest">
-    	<jar jarfile="${dist}/${libs}/${releasename}-${releaseversion}.jar" basedir="${build}/${classes}" excludes="org/kabeja/Loader.class" includes="**/*" manifest="${manifest}" />
-    	<jar jarfile="${dist}/launcher.jar" basedir="${build}/${classes}" includes="org/kabeja/Loader.class" manifest="${manifest}" />
-    	<delete file="${manifest}" />
+	<target name="core.jars" depends="config,manifest">
+		<jar jarfile="${dist}/${libs}/${releasename}-${releaseversion}.jar" basedir="${build}/${classes}" excludes="org/kabeja/Loader.class" includes="**/*" manifest="${manifest}" />
+		<jar jarfile="${dist}/launcher.jar" basedir="${build}/${classes}" includes="org/kabeja/Loader.class" manifest="${manifest}" />
+		<delete file="${manifest}" />
 	</target>
 
 
-	<target name="dist" depends="core.jars,build-blocks" description="Building  Kabeja (default).">
-		
+	<target name="dist" depends="core.jars,blocks2ui,blocks2processing,build-blocks" description="Building  Kabeja (default).">
+
 	</target>
 
 
@@ -433,19 +438,18 @@
 			</else>
 		</if>
 	</target>
-	
-	
-	
-	<target name="build-blocks"  description="build all blocks">
-          <blockbuild blockdir="blocks"/>
-	</target>
-	
-	<target name="clean-blocks"  description="clean all blocks">
-          <blockbuild blockdir="blocks" target="clean"/>
+
+
+
+	<target name="build-blocks" description="build all blocks">
+		<blockbuild blockdir="blocks" />
 	</target>
 
-	<target name="create-block" if="block.name" 
-		description="Create initial buildsystem for a new block. You have to use -Dblock.name=MyBlock. After all you will find your new block inside the blocks folder.">
+	<target name="clean-blocks" description="clean all blocks">
+		<blockbuild blockdir="blocks" target="clean" />
+	</target>
+
+	<target name="create-block" if="block.name" description="Create initial buildsystem for a new block. You have to use -Dblock.name=MyBlock. After all you will find your new block inside the blocks folder.">
 		<mkdir dir="${blocks}${file.separator}${file.separator}${block.name}" />
 		<mkdir dir="${blocks}${file.separator}${file.separator}${block.name}${file.separator}lib" />
 		<mkdir dir="${blocks}${file.separator}${file.separator}${block.name}${file.separator}src" />
@@ -464,6 +468,73 @@ block.${block.name}=true
    	    </echo>
 	</target>
 
+
+	<target name="blocks2processing">
+		<antcall target="blockXSLMerge">
+			<param name="source.xml.file" value="process" />
+		</antcall>
+	</target>
+
+
+
+	<target name="blocks2ui">
+		<antcall target="blockXSLMerge">
+			<param name="source.xml.file" value="ui" />
+		</antcall>
+	</target>
+
+
+	<target name="blockXSLMerge" if="source.xml.file">
+		<mkdir dir="${build}/${classes}/${conf}" />
+		<delete file="${build}/${classes}/${conf}/${source.xml.file}.xml" />
+		<mkdir dir="${tempdir}" />
+		<copy file="${conf}/${source.xml.file}.xml" todir="${build}/${classes}/${conf}" />
+		<for param="file">
+			<path>
+				<dirset dir="${blocks}" includes="*" />
+			</path>
+			<sequential>
+				<var name="current.block" unset="true" />
+				<basename file="@{file}" property="current.block" />
+
+				<if>
+					<isset property="block.${current.block}" />
+					<then>
+						<propertycopy property="block.build" from="block.${current.block}" override="true" />
+						<if>
+							<and>
+								<equals arg1="${block.build}" arg2="true" />
+								<available file="@{file}/conf/${source.xml.file}.xml" />
+							</and>
+							<then>
+								<echo message="include block processing ${current.block}" />
+								<xslt in="${build}/${classes}/${conf}/${source.xml.file}.xml" out="${tempdir}/${source.xml.file}.xml" style="tools/xsl/block2${source.xml.file}.xsl">
+									<param name="fragment" expression="@{file}/conf/${source.xml.file}.xml" />
+								</xslt>
+
+
+								<delete file="${build}/${classes}/${conf}/${source.xml.file}.xml" />
+								<copy file="${tempdir}/${source.xml.file}.xml" todir="${build}/${classes}/${conf}" />
+								<delete file="${tempdir}/${source.xml.file}.xml" />
+							</then>
+
+
+							<else>
+								<echo message="Omit block ${current.block}" />
+							</else>
+
+						</if>
+					</then>
+					<else>
+						<echo message="Omit block ${current.block}" />
+					</else>
+				</if>
+			</sequential>
+		</for>
+
+		<copy file="${build}/${classes}/${conf}/${source.xml.file}.xml" todir="${dist}/${conf}" />
+
+	</target>
 
 </project>
 

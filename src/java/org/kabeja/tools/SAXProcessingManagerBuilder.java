@@ -28,7 +28,7 @@ import org.kabeja.parser.SAXParserBuilder;
 import org.kabeja.processing.PostProcessor;
 import org.kabeja.processing.PostProcessorConfig;
 import org.kabeja.processing.ProcessPipeline;
-import org.kabeja.processing.ProcessorManager;
+import org.kabeja.processing.ProcessingManager;
 import org.kabeja.xml.AggregatorGenerator;
 import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
@@ -44,7 +44,7 @@ import org.xml.sax.XMLReader;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  * 
  */
-public class SAXProcessorBuilder implements ContentHandler {
+public class SAXProcessingManagerBuilder implements ContentHandler {
 	public static String XMLNS_KABEJA_PROCESSING = "http://kabeja.org/processing/1.0";
 
 	public static final String ELEMENT_CONFIGURATION = "configuration";
@@ -87,7 +87,7 @@ public class SAXProcessorBuilder implements ContentHandler {
 
 	public static final String ATTRIBUTE_VALUE = "value";
 
-	private ProcessorManager manager;
+	private ProcessingManager manager;
 
 	private SAXFilter saxfilter;
 
@@ -263,7 +263,7 @@ public class SAXProcessorBuilder implements ContentHandler {
 	 * @see org.xml.sax.ContentHandler#startDocument()
 	 */
 	public void startDocument() throws SAXException {
-		manager = new ProcessorManager();
+		manager = new ProcessingManager();
 	}
 
 	/*
@@ -367,7 +367,7 @@ public class SAXProcessorBuilder implements ContentHandler {
 
 	}
 
-	public ProcessorManager getManager() {
+	public ProcessingManager getManager() {
 		return this.manager;
 	}
 
@@ -395,10 +395,10 @@ public class SAXProcessorBuilder implements ContentHandler {
 	 * 
 	 * @param in
 	 *            the InputStream
-	 * @return The DXFParser build from the XML description
+	 * @return The ProcessingManager build from the XML description
 	 */
-	public static ProcessorManager buildFromStream(InputStream in) {
-		SAXProcessorBuilder builder = new SAXProcessorBuilder();
+	public static ProcessingManager buildFromStream(InputStream in) {
+		SAXProcessingManagerBuilder builder = new SAXProcessingManagerBuilder();
 
 		try {
 

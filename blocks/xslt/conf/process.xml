@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<processing xmlns="http://kabeja.org/processing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<!--+
+	    | The processing configuration  
+	    +-->
+	<configuration>
+	
+		<filters>
+			<filter class="org.kabeja.xslt.SAXXSLTFilter" name="xslt">
+				<property name="http://xml.org/sax/features/is-standalone/" value="true"/>
+			</filter>
+	    </filters>
+		
+		<serializers>
+			<serializer class="org.kabeja.xslt.SAXXMLSerializer" name="xml"/>
+		</serializers>
+		
+	
+	</configuration>
+
+</processing>
