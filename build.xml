@@ -94,14 +94,14 @@
 		</copy>
 	</target>
 
-	<target name="core.jars" depends="config,manifest">
+	<target name="core.jars" depends="manifest">
 		<jar jarfile="${dist}/${libs}/${releasename}-${releaseversion}.jar" basedir="${build}/${classes}" excludes="org/kabeja/Loader.class" includes="**/*" manifest="${manifest}" />
 		<jar jarfile="${dist}/launcher.jar" basedir="${build}/${classes}" includes="org/kabeja/Loader.class" manifest="${manifest}" />
 		<delete file="${manifest}" />
 	</target>
 
 
-	<target name="dist" depends="core.jars,blocks2ui,blocks2processing,build-blocks" description="Building  Kabeja (default).">
+	<target name="dist" depends="config,blocks2ui,blocks2processing,core.jars,build-blocks" description="Building  Kabeja (default).">
 
 	</target>
 

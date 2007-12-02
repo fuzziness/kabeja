@@ -22,8 +22,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.zip.GZIPOutputStream;
 
 import org.kabeja.dxf.DXFDocument;
@@ -71,102 +73,122 @@ public class Main {
 
 	private String pipeline;
 
+	private boolean nogui = false;
+
 	public Main() {
 	}
 
 	public static void main(String[] args) {
-		
-		
-		
-		
-		
-		if (args.length == 0) {
-			printUsage();
-			System.exit(0);
-		}
 
-		Main m = new Main();
+		Main main = new Main();
 		int i = 0;
 		boolean source = true;
-
+		boolean help = false;
 		while (i < args.length) {
-			if (args[i].equals("-gz")) {
-				m.setGZip(true);
-				i++;
-			} else if (args[i].equals("-e")) {
-				m.setEncoding(args[i + 1]);
-				i += 2;
-			} else if (args[i].equals("-c")) {
-				m.setParserConfigFile(args[i + 1]);
-				i += 2;
-			} else if (args[i].equals("-dtd")) {
-				m.enableDTD(true);
-				i++;
-			} else if (args[i].equals("-pp")) {
-				m.setProcessConfig(args[i + 1]);
+			if (args[i].equals("-pp")) {
+				try {
+					main.setProcessConfig(new FileInputStream(args[i + 1]));
+				} catch (FileNotFoundException e) {
+
+					e.printStackTrace();
+				}
 				i += 2;
 			} else if (args[i].equals("-pipeline")) {
-				m.setPipeline(args[i + 1]);
+				main.setPipeline(args[i + 1]);
 				i += 2;
+				
+			} else if (args[i].equals("--help")) {
+				printUsage();
+				i++;
+				help=true;
+			} else if (args[i].equals("-nogui")) {
+				main.omitUI(true);
+				i++;
 			} else if (source) {
-				m.setSourceFile(args[i]);
+				main.setSourceFile(args[i]);
 				source = false;
 				i++;
 			} else {
-				m.setDestinationFile(args[i]);
+				main.setDestinationFile(args[i]);
 				i++;
 			}
 		}
 
-		m.convert();
+		main.initialize();
+		if (help) {
+			main.printPipelines();
+		} else {
+			main.process();
+		}
 	}
 
 	private static void printUsage() {
 		System.out
-				.println("\n Use: java -jar kabeja.jar <Options> source.dxf out.svg\n\nOptions:\n      -e encoding "
-						+ "of the inputfile (default:ASCII) \n      -c parser-config.xml\n      "
-						+ "-dtd write DTD to output file\n      -gz  compress outputfile (gzip)\n      "
-						+ "-pp process.xml set processing file\n      "
-						+ "-pipeline name  process the given pipeline\n\nIf the source is a directory,"
-						+ " all containing dxf files will be converted.\n\n");
+				.println("\n Use: java -jar kabeja.jar <Options> sourcefile  <outputfile>"
+						+ "\n\nOptions:\n"
+						+ "  --help shows this and exit\n"
+						+ "  -nogui run only the cli, omit the user interface\n"
+						+ "  -pp process.xml set processing file to use\n"
+						+ "  -pipeline name  process the given pipeline\n\n"
+						+ "If the source is a directory,"
+						+ " all containing files will be converted.\n\n");
 	}
 
-	public void convert() {
+	public void initialize() {
+		if (this.processorManager == null) {
+//			this.setProcessConfig(this.getClass().getResourceAsStream(
+//					"/conf/process.xml"));
+			try {
+				this.setProcessConfig(new FileInputStream(
+				"/home/simon/workspace/Kabeja-SVN/build/classes/conf/process.xml"));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	public void process() {
 		if (parser == null) {
 			parser = ParserBuilder.createDefaultParser();
 		}
 
-		File f = new File(this.sourceFile);
+		if (this.nogui) {
+			File f = new File(this.sourceFile);
 
-		if (f.exists() && f.isFile()) {
-			parseFile(f, this.destinationFile);
-		} else if (f.isDirectory()) {
-			File[] files = f.listFiles();
+			if (f.exists() && f.isFile()) {
+				parseFile(f, this.destinationFile);
+			} else if (f.isDirectory()) {
+				File[] files = f.listFiles();
 
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].getName().toLowerCase().endsWith(".dxf")) {
-					try {
-						String source = files[i].getCanonicalPath();
-						String extension = null;
+				for (int i = 0; i < files.length; i++) {
+					if (files[i].getName().toLowerCase().endsWith(".dxf")) {
+						try {
+							String source = files[i].getCanonicalPath();
+							String extension = null;
 
-						if (gzip) {
-							extension = ".svgz";
-						} else {
-							extension = ".svg";
+							String result = source.substring(0, source
+									.toLowerCase().lastIndexOf(".dxf"))
+									+ extension;
+							System.out.println("convert file:" + source);
+							parseFile(files[i], result);
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
-
-						String result = source.substring(0, source
-								.toLowerCase().lastIndexOf(".dxf"))
-								+ extension;
-						System.out.println("convert file:" + source);
-						parseFile(files[i], result);
-					} catch (IOException e) {
-						e.printStackTrace();
 					}
 				}
+			} else {
+				System.err.println("Cannot open " + this.sourceFile);
 			}
 		} else {
-			System.err.println("Cannot open " + this.sourceFile);
+
+			ServiceContainer sc = SAXServiceContainerBuilder
+					.buildFromStream(this.getClass().getResourceAsStream(
+							"/conf/ui.xml"));
+			sc.setProcessingManager(this.processorManager);
+			sc.start();
+
 		}
 	}
 
@@ -271,23 +293,27 @@ public class Main {
 		this.outputDTD = b;
 	}
 
-	public void setProcessConfig(String file) {
-		try {
-			this.processorManager = SAXProcessingManagerBuilder
-					.buildFromStream(new FileInputStream(file));
-			
-			ServiceContainer sc = SAXServiceContainerBuilder.buildFromStream(new FileInputStream("conf/ui.xml"));
-			sc.setProcessingManager(this.processorManager);
-			sc.start();
-	
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+	public void setProcessConfig(InputStream in) {
+		this.processorManager = SAXProcessingManagerBuilder.buildFromStream(in);
 	}
 
 	public void setPipeline(String name) {
 		this.pipeline = name;
 		this.process = true;
+	}
+
+	public void omitUI(boolean b) {
+		this.nogui = b;
+	}
+
+	public void printPipelines() {
+		Iterator i = this.processorManager.getProcessPipelines().keySet()
+				.iterator();
+		System.out.println("\n Available pipelines:\n----------\n");
+		while (i.hasNext()) {
+			String pipeline = (String) i.next();
+			System.out.println("     "+pipeline);
+		}
+
 	}
 }

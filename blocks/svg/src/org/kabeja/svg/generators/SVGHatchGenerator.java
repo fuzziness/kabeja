@@ -22,14 +22,15 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
+public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
 
 	public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity,
 			TransformContext transformContext) throws SAXException {
-		
-		DXFHatch hatch =(DXFHatch)entity;
-		SVGSAXGeneratorManager manager = (SVGSAXGeneratorManager)svgContext.get(SVGContext.SVGSAXGENERATOR_MANAGER);
-		
+
+		DXFHatch hatch = (DXFHatch) entity;
+		SVGSAXGeneratorManager manager = (SVGSAXGeneratorManager) svgContext
+				.get(SVGContext.SVGSAXGENERATOR_MANAGER);
+
 		Bounds hatchBounds = hatch.getBounds();
 
 		if (hatchBounds.isValid()) {
@@ -37,18 +38,16 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 			// the id
 
 			if (hatch.isSolid()) {
-				super.setCommonAttributes(attr, svgContext,hatch);
+				super.setCommonAttributes(attr, svgContext, hatch);
 
 				SVGUtils.addAttribute(attr, "fill", "currentColor");
 				SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 
-				Iterator i =hatch.getBoundaryLoops();
-
-				
+				Iterator i = hatch.getBoundaryLoops();
 
 				while (i.hasNext()) {
 					HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
-				    this.loopToSVGPath(handler, loop,manager);
+					this.loopToSVGPath(handler, loop, manager);
 				}
 
 				SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
@@ -62,8 +61,8 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 				SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
 						.validateID(hatch.getID()));
 				boolean clipClipPath = false;
-				if (hatch.getHatchStyle()< 2) {
-					this.islandToClipPath(handler,hatch,manager);
+				if (hatch.getHatchStyle() < 2) {
+					this.islandToClipPath(handler, hatch, manager);
 					clipClipPath = true;
 					SVGUtils.addAttribute(attr,
 							SVGConstants.SVG_ATTRIBUTE_CLIP_PATH, "url(#"
@@ -75,19 +74,19 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 						attr);
 
 				if (clipClipPath) {
-					this.outermostToSVGPath(handler,hatch,manager);
+					this.outermostToSVGPath(handler, hatch, manager);
 				} else {
 					Iterator i = hatch.getBoundaryLoops();
 
 					while (i.hasNext()) {
 						HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
-						this.loopToSVGPath(handler, loop,manager);
+						this.loopToSVGPath(handler, loop, manager);
 					}
 				}
 
 				SVGUtils.endElement(handler, SVGConstants.SVG_CLIPPING_PATH);
-				DXFHatchPattern pattern = hatch.getDXFDocument().getDXFHatchPattern(hatch
-						.getDXFHatchPatternID());
+				DXFHatchPattern pattern = hatch.getDXFDocument()
+						.getDXFHatchPattern(hatch.getDXFHatchPatternID());
 
 				attr = new AttributesImpl();
 				SVGUtils.addAttribute(attr,
@@ -96,17 +95,18 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 				SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 				SVGUtils.startElement(handler, SVGConstants.SVG_TITLE,
 						new AttributesImpl());
-				SVGUtils.characters(handler,hatch.getName());
+				SVGUtils.characters(handler, hatch.getName());
 				SVGUtils.endElement(handler, SVGConstants.SVG_TITLE);
-				convertHatchPatternToSAX(handler, hatchBounds,hatch, transformContext,pattern);
+				convertHatchPatternToSAX(handler, svgContext, hatchBounds,
+						hatch, transformContext, pattern);
 				SVGUtils.endElement(handler, SVGConstants.SVG_GROUP);
 			}
 		}
-		
+
 	}
-	
-	
-	protected void islandToClipPath(ContentHandler handler,DXFHatch hatch,SVGSAXGeneratorManager manager) throws SAXException {
+
+	protected void islandToClipPath(ContentHandler handler, DXFHatch hatch,
+			SVGSAXGeneratorManager manager) throws SAXException {
 		AttributesImpl attr = new AttributesImpl();
 		SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
 				.validateID(hatch.getID() + "_clip"));
@@ -122,7 +122,7 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 			HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
 
 			if (!loop.isOutermost()) {
-				loopToSVGPath(handler, loop,manager);
+				loopToSVGPath(handler, loop, manager);
 
 			}
 		}
@@ -130,21 +130,22 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 
 	}
 
-	protected void outermostToSVGPath(ContentHandler handler, DXFHatch hatch,SVGSAXGeneratorManager manager)
-			throws SAXException {
+	protected void outermostToSVGPath(ContentHandler handler, DXFHatch hatch,
+			SVGSAXGeneratorManager manager) throws SAXException {
 		Iterator i = hatch.getBoundaryLoops();
 
 		while (i.hasNext()) {
 			HatchBoundaryLoop loop = (HatchBoundaryLoop) i.next();
 			if (loop.isOutermost()) {
-				loopToSVGPath(handler, loop,manager);
+				loopToSVGPath(handler, loop, manager);
 
 			}
 		}
 
 	}
 
-	protected void loopToSVGPath(ContentHandler handler, HatchBoundaryLoop loop, SVGSAXGeneratorManager manager)
+	protected void loopToSVGPath(ContentHandler handler,
+			HatchBoundaryLoop loop, SVGSAXGeneratorManager manager)
 			throws SAXException {
 
 		StringBuffer buf = new StringBuffer();
@@ -152,27 +153,29 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 		if (inner.hasNext()) {
 			DXFEntity entity = (DXFEntity) inner.next();
 			buf.append(' ');
-			
-			String d = manager.getSVGPathBoundaryGenerator(entity.getType()).getSVGPath(entity);
-			if(d.length()==0){
+
+			String d = manager.getSVGPathBoundaryGenerator(entity.getType())
+					.getSVGPath(entity);
+			if (d.length() == 0) {
 				return;
 			}
 			buf.append(d);
 			buf.append(' ');
 			while (inner.hasNext()) {
 				entity = (DXFEntity) inner.next();
-          
-				SVGPathBoundaryGenerator part = manager.getSVGPathBoundaryGenerator(entity.getType());
+
+				SVGPathBoundaryGenerator part = manager
+						.getSVGPathBoundaryGenerator(entity.getType());
 
 				buf.append(' ');
 				d = removeStartPoint(part.getSVGPath(entity).trim());
-				
+
 				buf.append(d);
 				buf.append(' ');
 			}
 
 			// every loop as single path
-			
+
 			if (d.length() > 0) {
 				AttributesImpl attr = new AttributesImpl();
 				SVGUtils.addAttribute(attr, "d", buf.toString());
@@ -181,8 +184,9 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 		}
 
 	}
+
 	protected String removeStartPoint(String svgPath) {
-	       
+
 		if (svgPath.length() > 0 && svgPath.charAt(0) == 'M') {
 			boolean separator = false;
 			int delemiterCount = 0;
@@ -193,8 +197,8 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 				} else {
 					if (separator && delemiterCount == 2) {
 						return svgPath.substring(i - 1);
-						
-					} else if(separator) {
+
+					} else if (separator) {
 						delemiterCount++;
 						separator = false;
 					}
@@ -203,47 +207,50 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 			}
 
 		}
-		 
+
 		return svgPath;
 
 	}
 
-	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler,
 	 *      java.util.Map)
 	 */
-	public void convertHatchPatternToSAX(ContentHandler handler, Bounds hatchBounds,DXFHatch hatch, TransformContext transformContext,DXFHatchPattern p)
+	public void convertHatchPatternToSAX(ContentHandler handler, Map context,
+			Bounds hatchBounds, DXFHatch hatch,
+			TransformContext transformContext, DXFHatchPattern p)
 			throws SAXException {
-		if (hatch.isSolid()) {
-			// we have to create a tile with all lines
 
-			
-			double dotLength = (hatchBounds.getWidth() + hatchBounds.getHeight()) / 2 * 0.002;
+		// we have to create a tile with all lines
 
-			AttributesImpl attr = new AttributesImpl();
+		double dotLength = (hatchBounds.getWidth() + hatchBounds.getHeight()) / 2 * 0.002;
 
-			Iterator i = p.getLineFamilyIterator();
-			//patterns.iterator();
+		AttributesImpl attr = new AttributesImpl();
 
-			while (i.hasNext()) {
-				HatchLineFamily pattern = (HatchLineFamily) i.next();
+		Iterator i = p.getLineFamilyIterator();
+		// patterns.iterator();
 
-				attr = new AttributesImpl();
-				SVGUtils.addAttribute(attr, "d", convertPatternToSVGPath(hatchBounds,hatch,
-						pattern, dotLength));
+		while (i.hasNext()) {
+			HatchLineFamily pattern = (HatchLineFamily) i.next();
 
-				SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
-
+			attr = new AttributesImpl();
+			if (context.containsKey(SVGContext.LAYER_STROKE_WIDTH)) {
+				Double lw = (Double) context.get(SVGContext.LAYER_STROKE_WIDTH);
+				SVGUtils.addAttribute(attr,
+						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
+								.formatNumberAttribute(lw.doubleValue()));
 			}
+			SVGUtils.addAttribute(attr, "d", convertPatternToSVGPath(
+					hatchBounds, hatch, pattern, dotLength));
+
+			SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
 
 		}
+
 	}
 
-	
-	
 	/**
 	 * Creates a SVG path of the used line family and fill the complete given
 	 * bounds.
@@ -256,8 +263,8 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator{
 	 * @return
 	 */
 
-	protected String convertPatternToSVGPath(Bounds b, DXFHatch hatch,HatchLineFamily pattern,
-			double dotlength) {
+	protected String convertPatternToSVGPath(Bounds b, DXFHatch hatch,
+			HatchLineFamily pattern, double dotlength) {
 		StringBuffer buf = new StringBuffer();
 
 		Iterator li = new HatchLineIterator(hatch, pattern);
