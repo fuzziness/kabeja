@@ -57,17 +57,9 @@ public class Main {
 
 	private Parser parser;
 
-	private boolean gzip = false;
-
-	private boolean postProcess = false;
-
-	private boolean outputDTD = false;
-
 	private boolean process = false;
 
 	private boolean directoryMode = true;
-
-	private PostProcessManager ppManager;
 
 	private ProcessingManager processorManager;
 
@@ -96,11 +88,11 @@ public class Main {
 			} else if (args[i].equals("-pipeline")) {
 				main.setPipeline(args[i + 1]);
 				i += 2;
-				
+
 			} else if (args[i].equals("--help")) {
 				printUsage();
 				i++;
-				help=true;
+				help = true;
 			} else if (args[i].equals("-nogui")) {
 				main.omitUI(true);
 				i++;
@@ -136,15 +128,8 @@ public class Main {
 
 	public void initialize() {
 		if (this.processorManager == null) {
-//			this.setProcessConfig(this.getClass().getResourceAsStream(
-//					"/conf/process.xml"));
-			try {
-				this.setProcessConfig(new FileInputStream(
-				"/home/simon/workspace/Kabeja-SVN/build/classes/conf/process.xml"));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			this.setProcessConfig(this.getClass().getResourceAsStream(
+					"/conf/process.xml"));
 
 		}
 	}
@@ -236,17 +221,15 @@ public class Main {
 							this.pipeline, new FileOutputStream(output));
 
 				}
-			} else {
-				OutputStream out = null;
-
-				if (gzip) {
-					out = new GZIPOutputStream(new FileOutputStream(output));
-				} else {
-					out = new FileOutputStream(output);
-				}
-
-				SAXPrettyOutputter writer = new SAXPrettyOutputter(out,
-						SAXPrettyOutputter.DEFAULT_ENCODING);
+			}
+			//TODO move this into the svg block + gzip
+//			else {
+//				OutputStream out = null;
+//
+//				out = new FileOutputStream(output);
+//
+//				SAXPrettyOutputter writer = new SAXPrettyOutputter(out,
+//						SAXPrettyOutputter.DEFAULT_ENCODING);
 
 				// if (this.outputDTD) {
 				// writer.setDTD(SVGConstants.SVG_DTD_1_0);
@@ -254,7 +237,7 @@ public class Main {
 				// SAXGenerator gen = new SVGGenerator();
 				// gen.setProperties(new HashMap());
 				// gen.generate(doc, writer);
-			}
+			//}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -262,35 +245,6 @@ public class Main {
 
 	public void setParserConfigFile(String file) {
 		parser = ParserBuilder.buildFromXML(file);
-	}
-
-	public void setGZip(boolean state) {
-		this.gzip = state;
-	}
-
-	public void setPostProcessorFile(String file) {
-		postProcess = true;
-
-		ppManager = new PostProcessManager();
-
-		File f = new File(file);
-
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(f));
-			String pp = null;
-
-			while ((pp = in.readLine()) != null) {
-				ppManager.addPostProcessor(pp);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-	}
-
-	public void enableDTD(boolean b) {
-		this.outputDTD = b;
 	}
 
 	public void setProcessConfig(InputStream in) {
@@ -312,7 +266,7 @@ public class Main {
 		System.out.println("\n Available pipelines:\n----------\n");
 		while (i.hasNext()) {
 			String pipeline = (String) i.next();
-			System.out.println("     "+pipeline);
+			System.out.println("     " + pipeline);
 		}
 
 	}
