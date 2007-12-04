@@ -45,23 +45,24 @@ CLI:
 ----
 in the 'dist'-folder try:
 
-  java -jar launcher.jar myfile.dxf result.svg
+  * Help and pipeline list
   
-  If your files are not in ASCII-encoding (for example you have umlauts) then
-  you can set the encoding like:
+     java -jar launcher.jar --help 
   
-   java -jar launcher.jar -e ISO-8859-1 myumlautfile.dxf result.svg
+  * Convert to svg
+
+    java -jar launcher.jar -nogui -pipeline svg myfile.dxf result.svg
+  
+  * Convert to pdf|jpeg|png|...
+  
+      java -jar launcher.jar -nogui -pipeline <pdf|jpeg|png>  myfile.dxf 
+  
   
 Normally Java uses 64 MB of your memory, to setup more use the following commandline
 switch:  
 
 java -Xmx256m  -jar ..... 
   
-
-To get a short overview of the commandline switches use:
-
-java -jar launcher.jar 
-
 
   
 GUI-Viewer:

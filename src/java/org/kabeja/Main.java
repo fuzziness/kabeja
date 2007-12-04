@@ -15,33 +15,23 @@
  */
 package org.kabeja;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.zip.GZIPOutputStream;
 
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
-import org.kabeja.processing.PostProcessManager;
 import org.kabeja.processing.ProcessingManager;
 import org.kabeja.tools.SAXProcessingManagerBuilder;
-import org.kabeja.ui.ViewComponent;
-import org.kabeja.ui.impl.ProcessingEditorViewComponent;
-import org.kabeja.ui.impl.ProcessingRunViewComponent;
-import org.kabeja.ui.impl.ProcessingUI;
 import org.kabeja.ui.impl.ServiceContainer;
 import org.kabeja.ui.xml.SAXServiceContainerBuilder;
-import org.kabeja.xml.SAXPrettyOutputter;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth </a>
