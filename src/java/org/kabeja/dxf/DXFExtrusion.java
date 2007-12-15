@@ -100,7 +100,7 @@ public class DXFExtrusion {
      * @return the calculate y direction
      */
     public Vector getDirectionY(){
-    	 return MathUtils.crossProduct(getDirectionX(), n);
+    	 return MathUtils.crossProduct( n,getDirectionX());
     }
 
     public Point extrudePoint(Point basePoint, double elevation) {
