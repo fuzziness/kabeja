@@ -86,7 +86,7 @@
 				<copy file="${dist}/${name.binary}" todir="${kabeja.home}/${dist}/inkscape-extension" />
 				<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" perm="+rx" />
 				<copy file="${conf}/kabeja-native.inx" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
-			</then><attribute name="Class-Path" value="${jar.files}" />
+			</then>
 		</if>
 		<if>
 			<equals arg1="${inkscape.importfilter.type}" arg2="java" />
