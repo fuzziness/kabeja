@@ -132,7 +132,6 @@ public class ProcessingManager {
 				this.process(doc, context, pipeline, out);
 				
 			} catch (DXFParseException e) {
-			
 				 throw new ProcessorException(e);
 			}
     	}
