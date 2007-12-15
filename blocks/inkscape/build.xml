@@ -46,7 +46,7 @@
 		<mkdir dir="${dist}/${libs}" />
 	</target>
 
-	<target name="compile" depends="init,extension-jar">
+	<target name="compile" depends="init,manifest,extension-jar">
 		<if>
 			<equals arg1="${inkscape.importfilter.type}" arg2="native" />
 			<then>
@@ -78,7 +78,7 @@
 
 
 
-	<target name="dist" depends="compile, manifest">
+	<target name="dist" depends="compile">
 		<mkdir dir="${kabeja.home}/${dist}/inkscape-extension" />
 		<if>
 			<equals arg1="${inkscape.importfilter.type}" arg2="native" />
@@ -86,7 +86,7 @@
 				<copy file="${dist}/${name.binary}" todir="${kabeja.home}/${dist}/inkscape-extension" />
 				<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" perm="+rx" />
 				<copy file="${conf}/kabeja-native.inx" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
-			</then>
+			</then><attribute name="Class-Path" value="${jar.files}" />
 		</if>
 		<if>
 			<equals arg1="${inkscape.importfilter.type}" arg2="java" />
@@ -139,7 +139,6 @@
 		</fileset>
 		<manifest file="${manifest}">
 			<attribute name="Main-Class" value="${main.class}" />
-			<attribute name="Class-Path" value="${jars}" />
 		</manifest>
 	</target>
 
