@@ -190,6 +190,7 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter implements
 					new Float(this.height));
 		}
 		
+		
 	}
 
 	/*

@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,13 +24,14 @@ import org.kabeja.ui.ProcessingUIComponent;
 import org.kabeja.ui.ServiceManager;
 import org.kabeja.ui.Serviceable;
 import org.kabeja.ui.Startable;
+import org.kabeja.ui.ApplicationToolBar;
 import org.kabeja.ui.ViewComponent;
 import org.kabeja.ui.model.ProcessingTreeModelPresenter;
 
 import de.miethxml.toolkit.ui.PanelFactory;
 import de.miethxml.toolkit.ui.SelectorComponent;
 
-public class ProcessingUI implements Serviceable,Startable,ProcessingUIComponent{
+public class ProcessingUI implements Serviceable,Startable,ProcessingUIComponent,ApplicationToolBar{
 
 	protected ServiceManager serviceManager;
 	protected ProcessingManager manager;
@@ -82,12 +85,12 @@ public class ProcessingUI implements Serviceable,Startable,ProcessingUIComponent
 	}
 
 	public void addViewComponent(ViewComponent component) {
-
+    
 		int index = components.size();
 		components.add(component);
-
+      
 		JComponent view = component.getView();
-
+		 
 		if (mainPanel.getMinimumSize().getWidth() < view.getPreferredSize()
 				.getWidth()) {
 
@@ -157,6 +160,12 @@ public class ProcessingUI implements Serviceable,Startable,ProcessingUIComponent
 		this.frame.setVisible(false);
 		
 	}
+
+	public void addAction(Action action) {
+		this.toolbar.add(new JButton(action),0);
+		
+	}
+	
 	
 	
 }

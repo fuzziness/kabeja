@@ -51,6 +51,7 @@ import org.kabeja.processing.ProcessorException;
 import org.kabeja.processing.scripting.ScriptEngine;
 import org.kabeja.processing.scripting.ScriptException;
 import org.kabeja.ui.DXFDocumentViewComponent;
+import org.kabeja.ui.UIException;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -369,8 +370,7 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 			this.textArea.getDocument().insertString(
 					this.textArea.getCaretPosition(), str, null);
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+						e.printStackTrace();
 		}
 	}
 
@@ -484,7 +484,7 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 
 	}
 
-	public void showDXFDocument(DXFDocument doc) {
+	public void showDXFDocument(DXFDocument doc) throws UIException{
 		worker = new ScriptWorker(doc);
 		worker.start();
 	}

@@ -38,7 +38,7 @@ public class ProcessingEditorViewComponent implements ViewComponent{
 		ProcessingTreeViewBuilder treeBuilder = new ProcessingTreeViewBuilder(
 				this.manager);
 		sp.setTopComponent(treeBuilder.getView());
-		sp.setBottomComponent(PanelFactory.createTitledPanel(new JPanel(), "PipelineView",null));	
+		sp.setBottomComponent(PanelFactory.createTitledPanel(new JPanel(), "PipelineView"));	
 		this.view = sp;
 	}
 

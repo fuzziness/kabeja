@@ -18,6 +18,7 @@ import org.kabeja.processing.ProcessingManager;
 import org.kabeja.ui.model.ProcessingTreeModelPresenter;
 
 import de.miethxml.toolkit.ui.PanelFactory;
+import de.miethxml.toolkit.ui.UIUtils;
 
 public class ProcessingTreeViewBuilder {
 
@@ -48,7 +49,7 @@ public class ProcessingTreeViewBuilder {
 		
 		sp.setLeftComponent(panel);
 		
-		JPanel panel2 = PanelFactory.createTitledPanel(new JPanel(), "Property Editor",null);
+		JPanel panel2 = PanelFactory.createTitledPanel(new JPanel(), "Property Editor");
 		panel2.setPreferredSize(new Dimension(150, 70));
 		sp.setRightComponent(panel2);
 		
@@ -57,8 +58,7 @@ public class ProcessingTreeViewBuilder {
 
 	private JPopupMenu createBorderMenu() {
 		JPopupMenu bordermenu = new JPopupMenu();
-		JMenuItem item = new JMenuItem("Expand All", new ImageIcon(this.getClass().getClassLoader()
-				.getResource("icons/expand_all.gif")));
+		JMenuItem item = new JMenuItem("Expand All", new ImageIcon(UIUtils.resourceToBytes(this.getClass(),"/icons/expand_all.gif")));
 		item.setMnemonic('E');
 		item.addActionListener(new ActionListener() {
 
@@ -74,8 +74,7 @@ public class ProcessingTreeViewBuilder {
 		});
 		bordermenu.add(item);
 
-		item = new JMenuItem("Collapse All", new ImageIcon(this.getClass().getClassLoader()
-				.getResource("icons/collapse_all.gif")));
+		item = new JMenuItem("Collapse All", new ImageIcon(UIUtils.resourceToBytes(this.getClass(),"/icons/collapse_all.gif")));
 		item.setMnemonic('C');
 		item.addActionListener(new ActionListener() {
 

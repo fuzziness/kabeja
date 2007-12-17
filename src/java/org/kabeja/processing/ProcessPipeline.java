@@ -17,6 +17,7 @@ package org.kabeja.processing;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +40,8 @@ public class ProcessPipeline {
     private List postProcessorConfigs = new ArrayList();
     private List saxFilterConfigs = new ArrayList();
     private SAXGenerator generator;
-    private Map serializerProperties;
-    private Map generatorProperties;
+    private Map serializerProperties = new HashMap();
+    private Map generatorProperties = new HashMap();
     private SAXSerializer serializer;
     private String name;
 

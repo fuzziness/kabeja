@@ -24,7 +24,7 @@
 	<property name="tools" value="tools" />
 	<property name="legal" value="legal"/>
 	<property name="block.mainclass" value="org.kabeja.ui.viewer.Main"/>
-
+	<property name="debug" value="on" />
 
 
 
@@ -45,7 +45,7 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}">
+		<javac srcdir="${src}" destdir="${build}/${classes}" target="${java.target.version}" debug="${debug}" source="${java.target.version}">
 			<classpath>
 				<pathelement path="${classpath}" />
 				<fileset dir="${block.libs}">

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <uiconfiguration xmlns="http://kabeja.org/processing/ui/1.0">
  <components>
+    <component class="org.kabeja.svg.ui.SVGViewUIComponent"/>  
     <component class="org.kabeja.processing.scripting.impl.JavaScriptShell"/>  
  </components>
 </uiconfiguration>

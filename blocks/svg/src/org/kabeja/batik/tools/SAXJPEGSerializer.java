@@ -48,4 +48,12 @@ public class SAXJPEGSerializer extends AbstractSAXSerializer {
     protected Transcoder createTranscoder() {
         return new JPEGTranscoder();
     }
+
+	protected void setupTranscoder(Transcoder t) {
+	
+		super.setupTranscoder(t);
+		t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(this.quality));
+	}
+    
+    
 }

@@ -8,6 +8,6 @@ public interface DXFDocumentViewComponent extends ViewComponent{
 
 	public static final String SERVICE=DXFDocumentViewComponent.class.getName();
 	
-	abstract void showDXFDocument(DXFDocument doc);
+	abstract void showDXFDocument(DXFDocument doc) throws UIException;
 	
 }

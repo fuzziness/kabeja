@@ -158,11 +158,19 @@ public class Main {
 			}
 		} else {
 
-			ServiceContainer sc = SAXServiceContainerBuilder
-					.buildFromStream(this.getClass().getResourceAsStream(
-							"/conf/ui.xml"));
-			sc.setProcessingManager(this.processorManager);
-			sc.start();
+//			ServiceContainer sc = SAXServiceContainerBuilder
+//					.buildFromStream(this.getClass().getResourceAsStream(
+//							"/conf/ui.xml"));
+			try {
+				ServiceContainer sc = SAXServiceContainerBuilder
+				.buildFromStream(new FileInputStream(
+						"conf/ui.xml"));
+				sc.setProcessingManager(this.processorManager);
+				sc.start();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 	}
