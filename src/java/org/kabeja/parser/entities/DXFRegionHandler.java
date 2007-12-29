@@ -108,11 +108,10 @@ public class DXFRegionHandler extends AbstractEntityHandler {
             if (Character.isWhitespace(c[i])) {
                 buf.append(' ');
             } else {
-                int code = (int) c[i] - 159;
+                int code = Math.abs(((int) c[i]) - 159);
                 buf.append((char) code);
             }
         }
-
         return buf.toString();
     }
 
