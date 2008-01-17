@@ -33,7 +33,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.parser.DXFParseException;
+import org.kabeja.parser.ParseException;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;

@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.parser.DXFParseException;
+import org.kabeja.parser.ParseException;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
@@ -135,7 +135,7 @@ public class DXF2SVGReader extends XMLFilterImpl {
 			// a little help for the GC
 			parser.releaseDXFDocument();
 			doc = null;
-		} catch (DXFParseException e) {
+		} catch (ParseException e) {
 			errorhandler.error(new SAXParseException(e.getMessage(), null));
 		}
 	}
@@ -289,7 +289,7 @@ public class DXF2SVGReader extends XMLFilterImpl {
 			// a little help for the GC
 			this.parser.releaseDXFDocument();
 			doc = null;
-		} catch (DXFParseException e) {
+		} catch (ParseException e) {
 			this.errorhandler
 					.error(new SAXParseException(e.getMessage(), null));
 		}

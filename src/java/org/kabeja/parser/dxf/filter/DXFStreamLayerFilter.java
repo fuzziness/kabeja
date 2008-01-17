@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.kabeja.parser.DXFParseException;
+import org.kabeja.parser.ParseException;
 import org.kabeja.parser.DXFValue;
 
 public class DXFStreamLayerFilter extends DXFStreamEntityFilter {
@@ -50,7 +50,7 @@ public class DXFStreamLayerFilter extends DXFStreamEntityFilter {
 		}
 	}
 
-	protected void endEntity() throws DXFParseException {
+	protected void endEntity() throws ParseException {
 	
 		if (include.contains(this.layer) ) {
 			this.outputEntity();
@@ -61,7 +61,7 @@ public class DXFStreamLayerFilter extends DXFStreamEntityFilter {
 	}
 	
 	
-	protected void outputEntity() throws DXFParseException{
+	protected void outputEntity() throws ParseException{
 		// give the complete entity to the next handler
 		for (int i = 0; i < this.parseValues.size(); i++) {
 			ParseValue v = (ParseValue) this.parseValues.get(i);
@@ -70,7 +70,7 @@ public class DXFStreamLayerFilter extends DXFStreamEntityFilter {
 		}
 	}
 
-	protected void startEntity(String type) throws DXFParseException {
+	protected void startEntity(String type) throws ParseException {
 		
 		this.parseValues.clear();
 		this.findLayer=true;
@@ -80,7 +80,7 @@ public class DXFStreamLayerFilter extends DXFStreamEntityFilter {
 	
 	
 	
-	protected void parseEntity(int groupCode, DXFValue value) throws DXFParseException {
+	protected void parseEntity(int groupCode, DXFValue value) throws ParseException {
 	
 		if(this.findLayer && groupCode==LAYER_NAME){
 			this.layer=value.getValue();

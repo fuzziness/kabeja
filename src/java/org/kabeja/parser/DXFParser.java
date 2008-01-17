@@ -81,7 +81,7 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
 	 * 
 	 * @see org.kabeja.parser.Parser#parse(java.lang.String)
 	 */
-	public void parse(String file) throws DXFParseException {
+	public void parse(String file) throws ParseException {
 		parse(file, DEFAULT_ENCODING);
 	}
 
@@ -90,7 +90,7 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
 	 * 
 	 * @see org.kabeja.parser.Parser#parse(java.lang.String, java.lang.String)
 	 */
-	public void parse(String file, String encoding) throws DXFParseException {
+	public void parse(String file, String encoding) throws ParseException {
 		try {
 			parse(new FileInputStream(file), encoding);
 		} catch (FileNotFoundException e) {
@@ -105,7 +105,7 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
 	 *      java.lang.String)
 	 */
 	public void parse(InputStream input, String encoding)
-			throws DXFParseException {
+			throws ParseException {
 		String currentKey = "";
 		key = false;
 		linecount = 0;
@@ -170,15 +170,15 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
 				currentHandler.endSection();
 			}
 		} catch (FileNotFoundException e) {
-			throw new DXFParseException(e.toString());
+			throw new ParseException(e.toString());
 		} catch (IOException ioe) {
-			throw new DXFParseException(ioe.toString());
+			throw new ParseException(ioe.toString());
 		}
 
 	}
 
 	public void parseGroup(int keyCode, DXFValue value)
-			throws DXFParseException {
+			throws ParseException {
         //System.out.println(""+keyCode);
         //System.out.println(" "+value.getValue());
 		try {
@@ -226,7 +226,7 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
 			return;
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
-			throw new DXFParseException("Line: " + linecount
+			throw new ParseException("Line: " + linecount
 					+ " unsupported groupcode: " + key + " for value:" + value,
 					e);
 		}

@@ -21,15 +21,19 @@ package org.kabeja.parser;
  *
  *
  */
-public class DXFParseException extends Exception {
+public class ParseException extends Exception {
    
 	
 
-	public DXFParseException(String s) {
+	public ParseException(String s) {
         super(s);
     }
 
-    public DXFParseException(String s, Exception e) {
+    public ParseException(String s, Exception e) {
         super(s, e);
     }
+
+	public ParseException(Exception e) {
+		super(e);
+	}
 }

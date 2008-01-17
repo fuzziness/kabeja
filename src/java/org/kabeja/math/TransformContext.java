@@ -1,6 +1,5 @@
 package org.kabeja.math;
 
-import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.Vector;
 

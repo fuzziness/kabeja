@@ -1,6 +1,6 @@
 package org.kabeja.parser.dxf.filter;
 
-import org.kabeja.parser.DXFParseException;
+import org.kabeja.parser.ParseException;
 import org.kabeja.parser.DXFValue;
 
 abstract class DXFStreamEntityFilter extends DXFStreamSectionFilter {
@@ -16,7 +16,7 @@ abstract class DXFStreamEntityFilter extends DXFStreamSectionFilter {
 	protected boolean parseHeader = false;
 
 	protected void parseSection(int groupCode, DXFValue value)
-			throws DXFParseException {
+			throws ParseException {
 
 		if (parseHeader) {
 			if (value.getValue().equals(SECTION_KEY)) {
@@ -44,25 +44,25 @@ abstract class DXFStreamEntityFilter extends DXFStreamSectionFilter {
 
 	}
 
-	protected void sectionEnd(String Section) throws DXFParseException {
+	protected void sectionEnd(String Section) throws ParseException {
 		if (section.equals(SECTION_KEY)) {
 			this.entitySection = false;
 		}
 
 	}
 
-	protected void sectionStart(String Section) throws DXFParseException {
+	protected void sectionStart(String Section) throws ParseException {
 		if (section.equals(SECTION_KEY)) {
 			this.parseHeader = true;
 		}
 
 	}
 
-	protected abstract void startEntity(String type) throws DXFParseException;
+	protected abstract void startEntity(String type) throws ParseException;
 
-	protected abstract void endEntity() throws DXFParseException;
+	protected abstract void endEntity() throws ParseException;
 
 	protected abstract void parseEntity(int groupCode, DXFValue value)
-			throws DXFParseException;
+			throws ParseException;
 
 }

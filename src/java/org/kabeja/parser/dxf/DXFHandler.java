@@ -15,9 +15,9 @@
 */
 package org.kabeja.parser.dxf;
 
-import org.kabeja.parser.DXFParseException;
+import org.kabeja.parser.ParseException;
 import org.kabeja.parser.DXFValue;
 
 public interface DXFHandler {
-	  public void parseGroup(int groupCode, DXFValue value) throws DXFParseException ;
+	  public void parseGroup(int groupCode, DXFValue value) throws ParseException ;
 }

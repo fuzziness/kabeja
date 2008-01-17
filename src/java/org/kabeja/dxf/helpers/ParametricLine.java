@@ -1,5 +1,7 @@
 package org.kabeja.dxf.helpers;
 
+import org.kabeja.math.MathUtils;
+
 public class ParametricLine {
 
 	protected Point startPoint;

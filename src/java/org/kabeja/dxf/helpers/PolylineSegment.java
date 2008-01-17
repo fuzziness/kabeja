@@ -17,6 +17,7 @@ package org.kabeja.dxf.helpers;
 
 import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;
+import org.kabeja.math.MathUtils;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>

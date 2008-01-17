@@ -34,13 +34,13 @@ import org.kabeja.dxf.DXFDocument;
 
 public interface Parser extends Handler{
 
-	public abstract void parse(String file) throws DXFParseException;
+	public abstract void parse(String file) throws ParseException;
 
 	public abstract void parse(String file, String encoding)
-			throws DXFParseException;
+			throws ParseException;
 
 	public abstract void parse(InputStream input, String encoding)
-			throws DXFParseException;
+			throws ParseException;
 
 	public abstract DXFDocument getDocument();
 

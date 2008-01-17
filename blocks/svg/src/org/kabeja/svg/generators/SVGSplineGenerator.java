@@ -9,7 +9,7 @@ import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFSpline;
 import org.kabeja.dxf.DXFVertex;
 import org.kabeja.dxf.helpers.DXFSplineConverter;
-import org.kabeja.dxf.helpers.MathUtils;
+import org.kabeja.math.MathUtils;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;

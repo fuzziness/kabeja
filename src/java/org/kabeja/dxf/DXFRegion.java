@@ -12,7 +12,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 package org.kabeja.dxf;
 
 import java.util.ArrayList;
@@ -23,54 +23,54 @@ import org.kabeja.math.TransformContext;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class DXFRegion extends DXFEntity {
-    protected List acisData = new ArrayList();
+	protected List acisData = new ArrayList();
 
-    /* (non-Javadoc)
-     * @see de.miethxml.kabeja.dxf.DXFEntity#getBounds()
-     */
-    public Bounds getBounds() {
-        bounds.setValid(false);
+	/**
+	 * 
+	 * 
+	 * @return always invalid bounds
+	 */
+	public Bounds getBounds() {
+		bounds.setValid(false);
 
-        return bounds;
-    }
+		return bounds;
+	}
 
-    /* (non-Javadoc)
-     * @see de.miethxml.kabeja.dxf.DXFEntity#getType()
-     */
-    public String getType() {
-        // TODO Auto-generated method stub
-        return DXFConstants.ENTITY_TYPE_REGION;
-    }
+	/**
+	 * 
+	 * 
+	 * @see org.kabeja.dxf.DXFEntity#getType()
+	 */
+	public String getType() {
+		return DXFConstants.ENTITY_TYPE_REGION;
+	}
 
-    /* (non-Javadoc)
-     * @see de.miethxml.kabeja.svg.SVGGenerator#toSAX(org.xml.sax.ContentHandler, java.util.Map)
-     */
-    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext)
-        throws SAXException {
-        // no output
-    }
+	/**
+	 * The ACIS commands as a list of lines
+	 * 
+	 * @return the list
+	 */
+	public List getACISDATA() {
+		return acisData;
+	}
 
-    /**
-     * The ACIS commands as a list of lines
-     * @return the list
-     */
-    public List getACISDATA() {
-        return acisData;
-    }
+	public void appendACISDATA(String data) {
+		acisData.add(data);
+	}
 
-    public void appendACISDATA(String data) {
-        acisData.add(data);
-    }
-
+	/**
+	 * This entity is only a container of ACIS data.
+	 * 
+	 * @return always 0
+	 */
 	public double getLength() {
-		
+
 		return 0;
 	}
-    
+
 }

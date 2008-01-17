@@ -4,9 +4,9 @@
  */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.MathUtils;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.Vector;
+import org.kabeja.math.MathUtils;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>

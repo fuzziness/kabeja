@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.parser.DXFParseException;
+import org.kabeja.parser.ParseException;
 import org.kabeja.parser.Parser;
 import org.kabeja.processing.event.ProcessingListener;
 import org.kabeja.xml.SAXFilter;
@@ -131,7 +131,7 @@ public class ProcessingManager {
 				DXFDocument doc = parser.getDocument();
 				this.process(doc, context, pipeline, out);
 				
-			} catch (DXFParseException e) {
+			} catch (ParseException e) {
 				 throw new ProcessorException(e);
 			}
     	}

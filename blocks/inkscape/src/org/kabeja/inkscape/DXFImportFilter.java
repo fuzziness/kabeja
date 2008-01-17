@@ -19,15 +19,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.parser.DXFParseException;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.processing.PolylineConverter;
 import org.kabeja.processing.PostProcessor;
-import org.kabeja.svg.SVGGenerator;
-import org.kabeja.xml.ConsoleSerializer;
 import org.kabeja.svg.FixedStrokeWidthFilter;
 import org.kabeja.svg.RootLayerFilter;
+import org.kabeja.svg.SVGGenerator;
+import org.kabeja.xml.ConsoleSerializer;
 import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
 import org.kabeja.xml.SAXSerializer;

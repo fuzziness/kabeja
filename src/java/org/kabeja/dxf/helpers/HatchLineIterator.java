@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.kabeja.dxf.Bounds;
 import org.kabeja.dxf.DXFHatch;
+import org.kabeja.math.MathUtils;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>

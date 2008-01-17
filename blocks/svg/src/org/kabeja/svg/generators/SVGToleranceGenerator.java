@@ -6,7 +6,7 @@ import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFDimensionStyle;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFTolerance;
-import org.kabeja.dxf.helpers.MathUtils;
+import org.kabeja.math.MathUtils;
 import org.kabeja.math.TransformContext;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
