@@ -15,6 +15,7 @@
 */
 package org.kabeja.xml;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -25,7 +26,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *
  */
 public abstract class AbstractSAXFilter extends XMLFilterImpl implements SAXFilter {
-    protected Map properties;
+    protected Map properties = new HashMap();
 
     /* (non-Javadoc)
      * @see org.kabeja.xml.SAXFilter#setProperties(java.util.Map)
