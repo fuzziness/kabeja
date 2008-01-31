@@ -496,11 +496,13 @@ block.${block.name}=true
 			<sequential>
 				<var name="current.block" unset="true" />
 				<basename file="@{file}" property="current.block" />
-
+              
 				<if>
 					<isset property="block.${current.block}" />
 					<then>
+						
 						<propertycopy property="block.build" from="block.${current.block}" override="true" />
+
 						<if>
 							<and>
 								<equals arg1="${block.build}" arg2="true" />

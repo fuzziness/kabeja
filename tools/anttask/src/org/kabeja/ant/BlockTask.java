@@ -44,10 +44,11 @@ public class BlockTask extends Ant {
 				setupBlock(dirs[i]);
 			}
 		}
-		//setup the properties
-	    getProject().setUserProperty("kabeja.home",getProject().getBaseDir().getAbsolutePath() );
-		
-        buildBlocks();
+		// setup the properties
+		getProject().setUserProperty("kabeja.home",
+				getProject().getBaseDir().getAbsolutePath());
+
+		buildBlocks();
 		// log(this.getProject().getBaseDir().getAbsolutePath());
 
 	}
@@ -69,15 +70,20 @@ public class BlockTask extends Ant {
 						+ ".dependency");
 				handleDependency(dep, b);
 			}
-			b.setEnabled(Boolean.parseBoolean((String)props.get("block."+dir.getName())));
-			addBlock(b);
+			if (props.containsKey("block." + dir.getName())) {
+				b.setEnabled(Boolean.parseBoolean(((String) props.get("block."
+						+ dir.getName())).trim()));
+				addBlock(b);
+			}else{
+				log("Block:"+dir.getName()+" not configured.");
+			}
 		}
 
 	}
 
 	protected void handleDependency(String dependency, Block block) {
 		if (dependency.length() > 0) {
-			log("\tBlock "+block.getName()+" depence on:"+dependency);
+			log("\tBlock " + block.getName() + " depence on:" + dependency);
 			StringTokenizer st = new StringTokenizer(dependency, SEPARATOR);
 			while (st.hasMoreTokens()) {
 				String dep = st.nextToken();
@@ -89,7 +95,7 @@ public class BlockTask extends Ant {
 
 	protected void buildBlocks() {
 		Iterator i = this.blocks.iterator();
-		
+
 		while (i.hasNext()) {
 			Block b = (Block) i.next();
 			if (b.isEnabled()) {
@@ -97,10 +103,10 @@ public class BlockTask extends Ant {
 				setAntfile(b.getBuildFile());
 				setDir(f.getParentFile());
 				super.setTarget(this.target);
-				log("  Process block:" + b.getName() +" Target:"+this.target);
+				log("  Process block:" + b.getName() + " Target:" + this.target);
 				super.execute();
-			}else{
-				log("  Omit block:"+b.getName());
+			} else {
+				log("  Omit block:" + b.getName());
 			}
 		}
 
