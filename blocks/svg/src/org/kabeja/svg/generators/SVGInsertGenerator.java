@@ -25,12 +25,12 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator{
 
         StringBuffer buf = new StringBuffer();
 
-        Point bp = block.getReferencePoint();
+        Point referencePoint = block.getReferencePoint();
 
         int rows = insert.getRows();
         int columns = insert.getColumns();
         double rotate = insert.getRotate();
-        Point p = insert.getPoint();
+        Point insertPoint = insert.getPoint();
         double scale_x = insert.getScaleX();
         double scale_y = insert.getScaleY();
         double column_spacing = insert.getColumnSpacing();
@@ -41,9 +41,9 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator{
             for (int row = 0; row < rows; row++) {
                 // translate to the insert point
                 buf.append("translate(");
-                buf.append(SVGUtils.formatNumberAttribute((p.getX() - (column_spacing * column))));
+                buf.append(SVGUtils.formatNumberAttribute((insertPoint.getX() - (column_spacing * column))));
                 buf.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
-                buf.append(SVGUtils.formatNumberAttribute((p.getY() - (row_spacing * row))));
+                buf.append(SVGUtils.formatNumberAttribute((insertPoint.getY() - (row_spacing * row))));
                 buf.append(")");
 
                 // then rotate
@@ -62,11 +62,11 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator{
                     buf.append(")");
                 }
 
-                if ((bp.getX() != 0.0) || (bp.getY() != 0.0)) {
+                if ((referencePoint.getX() != 0.0) || (referencePoint.getY() != 0.0)) {
                     buf.append(" translate(");
-                    buf.append(SVGUtils.formatNumberAttribute(bp.getX()));
+                    buf.append(SVGUtils.formatNumberAttribute(referencePoint.getX()));
                     buf.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
-                    buf.append(SVGUtils.formatNumberAttribute(bp.getY()));
+                    buf.append(SVGUtils.formatNumberAttribute(referencePoint.getY()));
                     buf.append(")");
                 }
 

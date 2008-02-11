@@ -7,11 +7,11 @@ package org.kabeja.dxf;
 import java.util.ArrayList;
 
 import org.kabeja.dxf.helpers.Point;
-
+import org.kabeja.dxf.objects.DXFImageDefObject;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class DXFImage extends DXFEntity {
 
@@ -43,28 +43,35 @@ public class DXFImage extends DXFEntity {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see de.miethxml.kabeja.dxf.DXFEntity#getBounds()
 	 */
 	public Bounds getBounds() {
 		Bounds b = new Bounds();
-		b.addToBounds(insertPoint.getX(), insertPoint.getY());
-		b.addToBounds(insertPoint.getX() + imageSizeAlongU, insertPoint.getY()
-				+ imageSizeAlongV);
-		return b;
+		DXFImageDefObject imageDef = (DXFImageDefObject) this.doc
+				.getDXFObjectByID(this.getImageDefObjectID());
 
+		if (imageDef != null) {
+			b.addToBounds(this.insertPoint);
+			b.addToBounds(insertPoint.getX() + imageSizeAlongU, insertPoint
+					.getY()
+					+ imageSizeAlongV, this.insertPoint.getZ());
+
+		} else {
+			b.setValid(false);
+		}
+		return b;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see de.miethxml.kabeja.dxf.DXFEntity#getType()
 	 */
 	public String getType() {
 
 		return DXFConstants.ENTITY_TYPE_IMAGE;
 	}
-
 
 	public Point getInsertPoint() {
 		return insertPoint;
@@ -246,9 +253,8 @@ public class DXFImage extends DXFEntity {
 	}
 
 	public double getLength() {
-	
+
 		return 0;
 	}
-	
 
 }

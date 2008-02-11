@@ -39,8 +39,19 @@ public class DXFDictionary extends DXFObject {
 		return findByID(id).getName();
 	}
 
+	/**
+	 * Gets the
+	 * 
+	 * @see DXFObject with the specified ID.
+	 * @param id
+	 * @return the DXFObject or null if there is no such DXFObject
+	 */
 	public DXFObject getDXFObjectByID(String id) {
-		return this.findByID(id).getDXFObject();
+		DXFDictionaryRecord dicRecord = this.findByID(id);
+		if (dicRecord != null) {
+			return this.findByID(id).getDXFObject();
+		}
+		return null;
 	}
 
 	public DXFObject getDXFObjectByName(String name) {

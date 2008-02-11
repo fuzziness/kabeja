@@ -111,10 +111,12 @@ public class DXFMText extends DXFText {
      * @see org.kabeja.dxf.DXFEntity#getBounds()
      */
     public Bounds getBounds() {
+    	
+    	Bounds bounds = new Bounds();
         int l = this.textDoc.getMaximumLineLength();
 
         if (l > 0) {
-            this.bounds.addToBounds(this.p);
+             bounds.addToBounds(this.p);
 
             double h = getHeight();
 
@@ -127,54 +129,54 @@ public class DXFMText extends DXFText {
 
             switch (this.attachmentpoint) {
             case ATTACHMENT_BOTTOM_CENTER:
-                bounds.addToBounds(this.p.getX() + (w / 2), this.p.getY() + h);
-                bounds.addToBounds(this.p.getX() - (w / 2), this.p.getY() + h);
+                bounds.addToBounds(this.p.getX() + (w / 2), this.p.getY() + h,p.getZ());
+                bounds.addToBounds(this.p.getX() - (w / 2), this.p.getY() + h,p.getZ());
 
                 break;
 
             case ATTACHMENT_BOTTOM_LEFT:
-                bounds.addToBounds(this.p.getX() + w, this.p.getY() + h);
+                bounds.addToBounds(this.p.getX() + w, this.p.getY() + h,p.getZ());
 
                 break;
 
             case ATTACHMENT_BOTTOM_RIGHT:
-                bounds.addToBounds(this.p.getX() - w, this.p.getY() + h);
+                bounds.addToBounds(this.p.getX() - w, this.p.getY() + h,p.getZ());
 
                 break;
 
             case ATTACHMENT_MIDDLE_CENTER:
                 bounds.addToBounds(this.p.getX() + (w / 2),
-                    this.p.getY() + (h / 2));
+                    this.p.getY() + (h / 2),p.getZ());
                 bounds.addToBounds(this.p.getX() - (w / 2),
-                    this.p.getY() - (h / 2));
+                    this.p.getY() - (h / 2),p.getZ());
 
                 break;
 
             case ATTACHMENT_MIDDLE_LEFT:
-                bounds.addToBounds(this.p.getX() + w, this.p.getY() + (h / 2));
-                bounds.addToBounds(this.p.getX() + w, this.p.getY() - (h / 2));
+                bounds.addToBounds(this.p.getX() + w, this.p.getY() + (h / 2),p.getZ());
+                bounds.addToBounds(this.p.getX() + w, this.p.getY() - (h / 2),p.getZ());
 
                 break;
 
             case ATTACHMENT_MIDDLE_RIGHT:
-                bounds.addToBounds(this.p.getX() - w, this.p.getY() + (h / 2));
-                bounds.addToBounds(this.p.getX() - w, this.p.getY() - (h / 2));
+                bounds.addToBounds(this.p.getX() - w, this.p.getY() + (h / 2),p.getZ());
+                bounds.addToBounds(this.p.getX() - w, this.p.getY() - (h / 2),p.getZ());
 
                 break;
 
             case ATTACHMENT_TOP:
-                bounds.addToBounds(this.p.getX() + w, this.p.getY() - h);
+                bounds.addToBounds(this.p.getX() + w, this.p.getY() - h,p.getZ());
 
                 break;
 
             case ATTACHMENT_TOP_CENTER:
-                bounds.addToBounds(this.p.getX() + (w / 2), this.p.getY() - h);
-                bounds.addToBounds(this.p.getX() - (w / 2), this.p.getY() - h);
+                bounds.addToBounds(this.p.getX() + (w / 2), this.p.getY() - h,p.getZ());
+                bounds.addToBounds(this.p.getX() - (w / 2), this.p.getY() - h,p.getZ());
 
                 break;
 
             case ATTACHMENT_TOP_RIGHT:
-                bounds.addToBounds(this.p.getX() - w, this.p.getY() - h);
+                bounds.addToBounds(this.p.getX() - w, this.p.getY() - h,p.getZ());
 
                 break;
             }

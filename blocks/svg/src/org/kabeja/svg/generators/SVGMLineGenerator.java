@@ -32,7 +32,7 @@ public class SVGMLineGenerator extends AbstractSVGSAXGenerator {
 		DXFPolyline[] pl = MLineConverter.toDXFPolyline(mline);
 
 		DXFMLineStyle style = (DXFMLineStyle) mline.getDXFDocument()
-				.getDXFObject(mline.getMLineStyleID());
+				.getDXFObjectByID(mline.getMLineStyleID());
 		SVGSAXGeneratorManager manager = (SVGSAXGeneratorManager) svgContext
 				.get(SVGContext.SVGSAXGENERATOR_MANAGER);
 		SVGPathBoundaryGenerator gen = manager

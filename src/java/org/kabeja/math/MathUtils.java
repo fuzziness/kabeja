@@ -24,6 +24,9 @@ import org.kabeja.dxf.helpers.Vector;
  */
 public class MathUtils {
 
+	
+	public final static double DISTANCE_DELTA=0.00001;
+	
 	/**
 	 * Calculate the scalar product of vector a and vector b
 	 *

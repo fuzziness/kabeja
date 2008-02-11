@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.kabeja.dxf.objects.DXFDictionary;
 import org.kabeja.dxf.objects.DXFObject;
@@ -197,12 +198,11 @@ public class DXFDocument {
 	public Bounds getBounds() {
 		this.bounds = new Bounds();
 
-		Enumeration e = layers.elements();
+		Enumeration e = this.layers.elements();
 
 		while (e.hasMoreElements()) {
 			DXFLayer layer = (DXFLayer) e.nextElement();
 			Bounds b = layer.getBounds();
-
 			if (b.isValid()) {
 				this.bounds.addToBounds(b);
 			}
@@ -211,10 +211,18 @@ public class DXFDocument {
 		return bounds;
 	}
 
+	/**
+	 * @deprecated use getBounds().getHeight() instead
+	 * @return
+	 */
 	public double getHeight() {
 		return this.bounds.getHeight();
 	}
 
+	/**
+	 * @deprecated use getBounds().getWidth() instead
+	 * @return
+	 */
 	public double getWidth() {
 		return this.bounds.getWidth();
 	}
@@ -275,6 +283,8 @@ public class DXFDocument {
 		this.views.add(view);
 	}
 
+	
+	
 	public Iterator getDXFViewIterator() {
 		return this.views.iterator();
 	}
@@ -326,12 +336,17 @@ public class DXFDocument {
 
 		return list;
 	}
+	/**
+	 * 
+	 * @param id, the ID of the object
+	 * @return the object
+	 */
 
-	public DXFObject getDXFObject(String id) {
+	public DXFObject getDXFObjectByID(String id) {
 
-		Iterator i = this.objects.entrySet().iterator();
+		Iterator i = this.objects.values().iterator();
 		while (i.hasNext()) {
-			HashMap map = (HashMap) i.next();
+			HashMap map = (HashMap)i.next();
 			Object obj;
 			if ((obj = map.get(id)) != null) {
 				return (DXFObject) obj;
@@ -340,7 +355,32 @@ public class DXFDocument {
 
 		// Nothing found --> search in the dictionaries
 		return this.rootDictionary.getDXFObjectByID(id);
-
+	}
+	
+	/**
+	 * Gets the @see DXFEntity with the specified ID.
+	 * @param id of the @see DXFEntity
+	 * @return the @see DXFEntity with the specified ID  or null if there is no
+	 * @see DXFEntity with the specified ID
+	 */
+	
+	public DXFEntity getDXFEntityByID(String id){
+		DXFEntity entity = null;
+		Iterator i = this.getDXFLayerIterator();
+		while(i.hasNext()){
+			DXFLayer layer = (DXFLayer)i.next();
+			if((entity=layer.getDXFEntityByID(id))!=null){
+				return entity;
+			}
+		}
+		i = this.getDXFBlockIterator();
+		while(i.hasNext()){
+			DXFBlock block = (DXFBlock)i.next();
+			if((entity=block.getDXFEntityByID(id))!=null){
+				return entity;
+			}
+		}
+		return entity;
 	}
 
 	/**

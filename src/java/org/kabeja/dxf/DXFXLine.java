@@ -18,7 +18,7 @@ public class DXFXLine extends DXFRay{
 	public Bounds getBounds() {
 		//the xline is a infinite straight line
 		//so we omit the bounds
-
+		Bounds bounds = new Bounds();
 		bounds.setValid(false);
 		return bounds;
 	}

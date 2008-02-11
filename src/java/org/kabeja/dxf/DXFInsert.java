@@ -23,7 +23,7 @@ import org.kabeja.dxf.helpers.Point;
  *
  */
 public class DXFInsert extends DXFEntity {
-    private Point p;
+    private Point insertPoint =new Point();
     private double scale_x = 1.0;
     private double scale_y = 1.0;
     private double scale_z = 1.0;
@@ -38,8 +38,7 @@ public class DXFInsert extends DXFEntity {
      *
      */
     public DXFInsert() {
-        p = new Point();
-        bounds = new Bounds();
+       
     }
 
     /*
@@ -48,7 +47,7 @@ public class DXFInsert extends DXFEntity {
      * @see org.dxf2svg.dxf.DXFEntity#getBounds()
      */
     public Bounds getBounds() {
-        Bounds insert = new Bounds();
+        Bounds bounds = new Bounds();
 
         // extrusion.calculateExtrusion();
         // get the Block bounds
@@ -56,62 +55,62 @@ public class DXFInsert extends DXFEntity {
         Bounds b = block.getBounds();
 
         if (!b.isValid()) {
-            insert.setValid(false);
+            bounds.setValid(false);
 
-            return insert;
+            return bounds;
         }
 
         Point blkPoint = block.getReferencePoint();
 
         // Translate to origin and scale
-        insert.setMaximumX((b.getMaximumX() - blkPoint.getX()) * scale_x);
-        insert.setMinimumX((b.getMinimumX() - blkPoint.getX()) * scale_x);
-        insert.setMaximumY((b.getMaximumY() - blkPoint.getY()) * scale_y);
-        insert.setMinimumY((b.getMinimumY() - blkPoint.getY()) * scale_y);
+        bounds.setMaximumX((b.getMaximumX() - blkPoint.getX()) * scale_x);
+        bounds.setMinimumX((b.getMinimumX() - blkPoint.getX()) * scale_x);
+        bounds.setMaximumY((b.getMaximumY() - blkPoint.getY()) * scale_y);
+        bounds.setMinimumY((b.getMinimumY() - blkPoint.getY()) * scale_y);
 
         // Rotate the Bounds
         if (rotate != 0) {
-            Point p1 = rotatePoint(insert.getMaximumX(), insert.getMaximumY());
-            Point p2 = rotatePoint(insert.getMaximumX(), insert.getMinimumY());
-            Point p3 = rotatePoint(insert.getMinimumX(), insert.getMaximumY());
-            Point p4 = rotatePoint(insert.getMinimumX(), insert.getMinimumY());
+            Point p1 = rotatePoint(bounds.getMaximumX(), bounds.getMaximumY());
+            Point p2 = rotatePoint(bounds.getMaximumX(), bounds.getMinimumY());
+            Point p3 = rotatePoint(bounds.getMinimumX(), bounds.getMaximumY());
+            Point p4 = rotatePoint(bounds.getMinimumX(), bounds.getMinimumY());
 
             // we have now 4 Points
             // and we have to check all if they are the new maximum/minimum
             // start with a empty bounds
-            insert = new Bounds();
+            bounds = new Bounds();
 
-            insert.addToBounds(p1);
-            insert.addToBounds(p2);
-            insert.addToBounds(p3);
-            insert.addToBounds(p4);
+            bounds.addToBounds(p1);
+            bounds.addToBounds(p2);
+            bounds.addToBounds(p3);
+            bounds.addToBounds(p4);
         }
 
         // translate to the InsertPoint
-        insert.setMaximumX(insert.getMaximumX() + p.getX());
-        insert.setMinimumX(insert.getMinimumX() + p.getX());
-        insert.setMaximumY(insert.getMaximumY() + p.getY());
-        insert.setMinimumY(insert.getMinimumY() + p.getY());
+        bounds.setMaximumX(bounds.getMaximumX() + insertPoint.getX());
+        bounds.setMinimumX(bounds.getMinimumX() + insertPoint.getX());
+        bounds.setMaximumY(bounds.getMaximumY() + insertPoint.getY());
+        bounds.setMinimumY(bounds.getMinimumY() + insertPoint.getY());
 
         // add the space from columns and rows
         double width = (columns - 1) * column_spacing;
         double height = (rows - 1) * row_spacing;
 
         if (width >= 0) {
-            insert.setMinimumX(insert.getMinimumX() - width);
+            bounds.setMinimumX(bounds.getMinimumX() - width);
         } else {
-            insert.setMaximumX(insert.getMaximumX() - width);
+            bounds.setMaximumX(bounds.getMaximumX() - width);
         }
 
         if (height >= 0) {
-            insert.setMinimumY(insert.getMinimumY() - height);
+            bounds.setMinimumY(bounds.getMinimumY() - height);
         } else {
-            insert.setMaximumY(insert.getMaximumY() - height);
+            bounds.setMaximumY(bounds.getMaximumY() - height);
         }
 
        
 
-        return insert;
+        return bounds;
     }
 
     /**
@@ -163,7 +162,7 @@ public class DXFInsert extends DXFEntity {
      * @return Returns the p.
      */
     public Point getPoint() {
-        return p;
+        return insertPoint;
     }
 
     /**
@@ -171,7 +170,7 @@ public class DXFInsert extends DXFEntity {
      *            The p to set.
      */
     public void setPoint(Point p) {
-        this.p = p;
+        this.insertPoint = p;
     }
 
     /**

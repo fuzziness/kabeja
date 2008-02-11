@@ -104,16 +104,16 @@ public class DXFArc extends DXFEntity {
         while (endQ > startQ) {
             switch (startQ) {
             case 0:
-                bounds.addToBounds(center.getX(), center.getY() + radius);
+                bounds.addToBounds(center.getX(), center.getY() + radius,center.getZ());
                 break;
             case 1:
-                bounds.addToBounds(center.getX() - radius, center.getY());
+                bounds.addToBounds(center.getX() - radius, center.getY(),center.getZ());
                 break;
             case 2:
-                bounds.addToBounds(center.getX(), center.getY() - radius);
+                bounds.addToBounds(center.getX(), center.getY() - radius,center.getZ());
                 break;
             case 3:
-                bounds.addToBounds(center.getX() + radius,center.getY());
+                bounds.addToBounds(center.getX() + radius,center.getY(),center.getZ());
                 endQ -= 4;
                 startQ -= 4;
                 break;

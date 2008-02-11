@@ -88,6 +88,7 @@ public class DXFPoint extends DXFEntity {
    
 
     public Bounds getBounds() {
+    	Bounds bounds = new Bounds();
         bounds.addToBounds(p);
 
         return bounds;

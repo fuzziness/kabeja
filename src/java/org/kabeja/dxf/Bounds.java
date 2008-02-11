@@ -188,42 +188,26 @@ public class Bounds {
 	public void addToBounds(double x, double y, double z) {
 		if (x > this.getMaximumX()) {
 			this.setMaximumX(x);
-		} else if (x < this.getMinimumX()) {
+		} 
+		if (x < this.getMinimumX()) {
 			this.setMinimumX(x);
 		}
 
 		if (y > this.getMaximumY()) {
 			this.setMaximumY(y);
-		} else if (y < this.getMinimumY()) {
+		} 
+		if (y < this.getMinimumY()) {
 			this.setMinimumY(y);
 		}
 		if (z < this.getMinimumZ()) {
 			this.setMinimumZ(z);
-		} else if (z > this.getMaximumZ()) {
+		} 
+		if (z > this.getMaximumZ()) {
 			this.setMaximumZ(z);
 		}
 	}
 
-	/**
-	 * Enlarge the Bounds if the given bounds enlarge the coordinates
-	 * 
-	 * @param x
-	 * @param y
-	 * 
-	 */
-	public void addToBounds(double x, double y) {
-		if (x > this.getMaximumX()) {
-			this.setMaximumX(x);
-		} else if (x < this.getMinimumX()) {
-			this.setMinimumX(x);
-		}
 
-		if (y > this.getMaximumY()) {
-			this.setMaximumY(y);
-		} else if (y < this.getMinimumY()) {
-			this.setMinimumY(y);
-		}
-	}
 
 	public void addToBounds(Point p) {
 		addToBounds(p.getX(), p.getY(), p.getZ());
@@ -286,7 +270,7 @@ public class Bounds {
 	 * Determines if the given bounding box part or inside the bounds.
 	 * 
 	 * @param bounds
-	 * @return
+	 * @return true if the bounding box is part or inside the bounds
 	 */
 	public boolean contains(Bounds bounds) {
 		if ((bounds.getMaximumX() <= this.min_x)
@@ -303,6 +287,22 @@ public class Bounds {
 
 		return true;
 	}
+	
+	
+	public boolean contains(Point p){
+		if(this.min_x<=p.getX() && this.max_x>=p.getX()){
+			if(this.min_y<=p.getY() && this.max_y>=p.getY()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Determines if the given bounds are enclosed.
+	 * @param bounds
+	 * @return
+	 */
 
 	public boolean enclose(Bounds bounds) {
 		if ((bounds.getMaximumX() <= this.max_x)

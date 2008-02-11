@@ -342,12 +342,22 @@ public class DXFDimension extends DXFEntity {
 		if (this.doc.getDXFBlock(this.dimensionBlock) != null) {
 			DXFBlock block = doc.getDXFBlock(this.getDimensionBlock());
 			Bounds b = block.getBounds();
+			Point refPoint = block.getReferencePoint();
 
 			if (b.isValid()) {
-				bounds.setMaximumX(b.getWidth() + this.insertPoint.getX());
-				bounds.setMaximumY(b.getHeight() + this.insertPoint.getY());
-				bounds.setMinimumX(this.insertPoint.getX());
-				bounds.setMinimumY(this.insertPoint.getY());
+			    // Translate to origin
+		        bounds.setMaximumX((b.getMaximumX() - refPoint.getX()));
+		        bounds.setMinimumX((b.getMinimumX() - refPoint.getX()));
+		        bounds.setMaximumY((b.getMaximumY() - refPoint.getY()));
+		        bounds.setMinimumY((b.getMinimumY() - refPoint.getY()));
+				
+		        
+		        // translate to the InsertPoint
+		        bounds.setMaximumX(bounds.getMaximumX() + this.insertPoint.getX());
+		        bounds.setMinimumX(bounds.getMinimumX() + this.insertPoint.getX());
+		        bounds.setMaximumY(bounds.getMaximumY() + this.insertPoint.getY());
+		        bounds.setMinimumY(bounds.getMinimumY() + this.insertPoint.getY());
+;
 
 			}
 		} else {

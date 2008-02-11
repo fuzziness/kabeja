@@ -80,6 +80,8 @@ public class DXFText extends DXFEntity {
      * @see org.dxf2svg.dxf.DXFEntity#updateViewPort()
      */
     public Bounds getBounds() {
+    	Bounds bounds = new Bounds();
+    	
         double tl = getTextDocument().getText().length();
 
         if (tl > 0) {
@@ -94,40 +96,40 @@ public class DXFText extends DXFEntity {
             if (!isUpsideDown()) {
                 switch (this.align) {
                 case 0:
-                    bounds.addToBounds(p.getX() + w, p.getY() - h);
+                    bounds.addToBounds(p.getX() + w, p.getY() - h,p.getZ());
 
                     break;
 
                 case 1:
-                    bounds.addToBounds(p.getX() + (w / 2), p.getY() - h);
-                    bounds.addToBounds(p.getX() - (w / 2), p.getY() - h);
+                    bounds.addToBounds(p.getX() + (w / 2), p.getY() - h,p.getZ());
+                    bounds.addToBounds(p.getX() - (w / 2), p.getY() - h,p.getZ());
 
                     break;
 
                 case 2:
-                    bounds.addToBounds(p.getX() - w, p.getY() - h);
+                    bounds.addToBounds(p.getX() - w, p.getY() - h,p.getZ());
 
                     break;
 
                 case 3:
-                    bounds.addToBounds(p.getX() - w, p.getY() - h);
+                    bounds.addToBounds(p.getX() - w, p.getY() - h,p.getZ());
 
                     break;
 
                 case 4:
-                    bounds.addToBounds(p.getX() + (w / 2), p.getY() - (h / 2));
-                    bounds.addToBounds(p.getX() - (w / 2), p.getY() + (h / 2));
+                    bounds.addToBounds(p.getX() + (w / 2), p.getY() - (h / 2),p.getZ());
+                    bounds.addToBounds(p.getX() - (w / 2), p.getY() + (h / 2),p.getZ());
 
                     break;
 
                 case 5:
-                    bounds.addToBounds(p.getX() + (w / 2), p.getY() + h);
-                    bounds.addToBounds(p.getX() - (w / 2), p.getY() + h);
+                    bounds.addToBounds(p.getX() + (w / 2), p.getY() + h,p.getZ());
+                    bounds.addToBounds(p.getX() - (w / 2), p.getY() + h,p.getZ());
 
                     break;
                 }
             } else {
-                bounds.addToBounds(p.getX(), p.getY() - (h * tl));
+                bounds.addToBounds(p.getX(), p.getY() - (h * tl),p.getZ());
             }
         } else {
             bounds.setValid(false);

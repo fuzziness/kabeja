@@ -463,7 +463,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 		Double lw = null;
 		if (lineWeight > 0
 				&& !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)) {
-			lw = new Double(SVGUtils.lineWeightToStrokeWidth(lineWeight));
+			lw = new Double(lineWeight);
 			SVGUtils.addAttribute(attr,
 					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
 							.lineWeightToStrokeWidth(lineWeight));

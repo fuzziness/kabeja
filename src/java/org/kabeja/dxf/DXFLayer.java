@@ -32,7 +32,6 @@ public class DXFLayer  {
     private String name = "";
     private int color = 7;
     private DXFDocument doc;
-    private Bounds bounds = new Bounds();
     private String ltype = "";
     private int flags = 0;
     private int lineWeight=0;
@@ -87,6 +86,8 @@ public class DXFLayer  {
 
 
     public Bounds getBounds() {
+    	
+    	Bounds bounds = new Bounds();
         Enumeration e = entities.elements();
 
         while (e.hasMoreElements()) {
@@ -97,7 +98,6 @@ public class DXFLayer  {
             while (i.hasNext()) {
                 DXFEntity entity = (DXFEntity) i.next();
                 Bounds b = entity.getBounds();
-
                 if (b.isValid()) {
                     bounds.addToBounds(b);
                 }
@@ -133,6 +133,27 @@ public class DXFLayer  {
         return entities.keySet().iterator();
     }
 
+	/**
+	 * Gets the @see DXFEntity with the specified ID.
+	 * @param id of the @see DXFEntity
+	 * @return the @see DXFEntity with the specified ID  or null if there is no
+	 * @see DXFEntity with the specified ID
+	 */
+    public DXFEntity getDXFEntityByID(String id){
+    	DXFEntity entity = null;
+    	Iterator i = this.entities.values().iterator();
+    	while(i.hasNext()){
+    		Iterator entityIterator = ((List)i.next()).iterator();
+    		while(entityIterator.hasNext()){
+    			DXFEntity e = (DXFEntity)entityIterator.next();
+    			if(e.getID().equals(id)){
+    				return e;
+    			}
+    		}
+    	}
+    	return entity;
+    }
+    
     public int getColor() {
         return this.color;
     }

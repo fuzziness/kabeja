@@ -30,7 +30,7 @@ public abstract class DXFEntity {
     protected boolean visibile = true;
     protected String lineType = "";
     protected int flags = 0;
-    protected Bounds bounds = new Bounds();
+    //protected Bounds bounds = new Bounds();
     protected boolean block = false;
     protected double linetypeScaleFactor = 1.0;
     protected int color = 0;

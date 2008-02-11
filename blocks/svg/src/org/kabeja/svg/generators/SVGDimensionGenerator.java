@@ -2,8 +2,10 @@ package org.kabeja.svg.generators;
 
 import java.util.Map;
 
+import org.kabeja.dxf.DXFBlock;
 import org.kabeja.dxf.DXFDimension;
 import org.kabeja.dxf.DXFEntity;
+import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
@@ -19,7 +21,7 @@ public class SVGDimensionGenerator extends AbstractSVGSAXGenerator {
 
 		if (dimension.getDXFDocument().getDXFBlock(
 				dimension.getDimensionBlock()) != null) {
-
+			DXFBlock block = dimension.getDXFDocument().getDXFBlock(dimension.getDimensionBlock());
 			AttributesImpl attr = new AttributesImpl();
 			StringBuffer buf = new StringBuffer();
 
@@ -29,6 +31,14 @@ public class SVGDimensionGenerator extends AbstractSVGSAXGenerator {
 			buf.append((dimension.getInsertPoint().getY()));
 			buf.append(")");
 
+			  Point referencePoint = block.getReferencePoint();
+            if ((referencePoint.getX() != 0.0) || (referencePoint.getY() != 0.0)) {
+                buf.append(" translate(");
+                buf.append(SVGUtils.formatNumberAttribute(referencePoint.getX()));
+                buf.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
+                buf.append(SVGUtils.formatNumberAttribute(referencePoint.getY()));
+                buf.append(")");
+            }
 			SVGUtils.addAttribute(attr, "transform", buf.toString());
 
 			super.setCommonAttributes(attr, svgContext, dimension);

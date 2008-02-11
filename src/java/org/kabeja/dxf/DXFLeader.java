@@ -65,6 +65,7 @@ public class DXFLeader extends DXFEntity {
      * @see org.kabeja.dxf.DXFEntity#getBounds()
      */
     public Bounds getBounds() {
+    	Bounds bounds = new Bounds();
         bounds.setValid(false);
 
         return bounds;

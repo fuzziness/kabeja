@@ -64,8 +64,9 @@ public class DXFLine extends DXFEntity{
 
 
     public Bounds getBounds() {
-        bounds.addToBounds(this.end.getX(), this.end.getY());
-        bounds.addToBounds(this.start.getX(), this.start.getY());
+    	Bounds bounds = new Bounds();
+        bounds.addToBounds(this.end);
+        bounds.addToBounds(this.start);
 
         return bounds;
     }

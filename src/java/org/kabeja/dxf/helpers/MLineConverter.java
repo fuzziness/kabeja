@@ -13,7 +13,7 @@ public class MLineConverter {
 	
 		
 		DXFMLineStyle style = (DXFMLineStyle) mline.getDXFDocument()
-				.getDXFObject(mline.getMLineStyleID());
+				.getDXFObjectByID(mline.getMLineStyleID());
 		// style
 		// .sortDXFMLineStyleElements(new
 		// DXFMLineStyleElementDistanceComparator());

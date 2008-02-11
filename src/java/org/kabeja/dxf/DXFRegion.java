@@ -36,6 +36,7 @@ public class DXFRegion extends DXFEntity {
 	 * @return always invalid bounds
 	 */
 	public Bounds getBounds() {
+		Bounds bounds = new Bounds();
 		bounds.setValid(false);
 
 		return bounds;

@@ -58,11 +58,11 @@ public class ViewportFilter extends AbstractPostProcessor  {
 
             // the upper right corner
             b.addToBounds(viewport.getCenterPoint().getX() + w,
-                viewport.getCenterPoint().getY() + h);
+                viewport.getCenterPoint().getY() + h,viewport.getCenterPoint().getZ());
 
             // the lower left corner
             b.addToBounds(viewport.getCenterPoint().getX() - w,
-                viewport.getCenterPoint().getY() - h);
+                viewport.getCenterPoint().getY() - h,viewport.getCenterPoint().getZ());
             filterEntities(b, doc);
         }
     }

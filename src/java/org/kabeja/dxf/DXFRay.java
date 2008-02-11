@@ -33,6 +33,7 @@ public class DXFRay extends DXFEntity {
     public Bounds getBounds() {
         // we will only add the base point
         //the end is infinite
+    	Bounds bounds = new Bounds();
         bounds.addToBounds(basePoint);
 
         return bounds;

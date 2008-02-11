@@ -385,19 +385,19 @@ public class DXFPolyline extends DXFEntity {
 				switch (startQ) {
 				case 0:
 					bounds.addToBounds(centerPoint.getX(), centerPoint.getY()
-							+ r);
+							+ r,centerPoint.getZ());
 					break;
 				case 1:
 					bounds.addToBounds(centerPoint.getX() - r, centerPoint
-							.getY());
+							.getY(),centerPoint.getZ());
 					break;
 				case 2:
 					bounds.addToBounds(centerPoint.getX(), centerPoint.getY()
-							- r);
+							- r,centerPoint.getZ());
 					break;
 				case 3:
 					bounds.addToBounds(centerPoint.getX() + r, centerPoint
-							.getY());
+							.getY(),centerPoint.getZ());
 					endQ -= 4;
 					startQ -= 4;
 					break;

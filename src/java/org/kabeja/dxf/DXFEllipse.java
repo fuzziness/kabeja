@@ -50,8 +50,8 @@ public class DXFEllipse extends DXFEntity {
 				&& this.endParameter == DEFAULT_END_PARAMETER && alpha == 0.0) {
 			double length = this.getHalfMajorAxisLength();
 
-			bounds.addToBounds(center.getX() + length, center.getY() + length);
-			bounds.addToBounds(center.getX() - length, center.getY() - length);
+			bounds.addToBounds(center.getX() + length, center.getY() + length,center.getZ());
+			bounds.addToBounds(center.getX() - length, center.getY() - length,center.getZ());
 		} else {
 			int n = 40;
 
@@ -72,7 +72,7 @@ public class DXFEllipse extends DXFEntity {
 					y = lx * Math.sin(alpha) + y * Math.cos(alpha);
 				}
 				bounds.addToBounds(this.center.getX() + x, this.center.getY()
-						+ y);
+						+ y,this.center.getZ());
 
 				start += h;
 			}

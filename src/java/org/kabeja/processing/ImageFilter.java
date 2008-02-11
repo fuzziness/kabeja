@@ -51,7 +51,7 @@ public class ImageFilter extends AbstractPostProcessor {
 					DXFImage img = (DXFImage) in.next();
 					String imgDef = img.getImageDefObjectID();
 					DXFImageDefObject def = (DXFImageDefObject) doc
-							.getDXFObject(imgDef);
+							.getDXFObjectByID(imgDef);
 					File f = new File(def.getFilename());
 					if (!f.exists()) {
 						in.remove();
