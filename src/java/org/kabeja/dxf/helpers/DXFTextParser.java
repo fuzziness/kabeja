@@ -38,7 +38,7 @@ public class DXFTextParser {
         p.setInsertPoint(text.getInsertPoint());
 
         switch (text.getAlignment()) {
-        case DXFMText.ATTACHMENT_TOP:
+        case DXFMText.ATTACHMENT_TOP_LEFT:
             p.setValign(StyledTextParagraph.VERTICAL_ALIGNMENT_TOP);
 
             break;

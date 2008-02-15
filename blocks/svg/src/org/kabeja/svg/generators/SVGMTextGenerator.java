@@ -50,7 +50,7 @@ public class SVGMTextGenerator extends AbstractSVGSAXGenerator {
 
 		if (notUpsideDown) {
 			switch (mText.getAlignment()) {
-			case DXFMText.ATTACHMENT_TOP:
+			case DXFMText.ATTACHMENT_TOP_LEFT:
 				SVGUtils.addAttribute(attr,
 						SVGConstants.SVG_ATTRIBUTE_TEXT_ANCHOR, "start");
 				// top = true;

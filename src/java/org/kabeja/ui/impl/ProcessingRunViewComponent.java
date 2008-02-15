@@ -149,9 +149,12 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 					.addDXFDocumentViewComponent((DXFDocumentViewComponent) objects[i]);
 		}
 		objects = manager.getServiceComponents(ApplicationToolBar.SERVICE);
+
+		// we set the action to all toolbars if there are more then on
 		for (int i = 0; i < objects.length; i++) {
 			((ApplicationToolBar) objects[i]).addAction(new AbstractAction(
-					"Open") {
+					"Open", new ImageIcon(UIUtils.resourceToBytes(this
+							.getClass(), "/icons/open.gif"))) {
 
 				public void actionPerformed(ActionEvent e) {
 					Runnable r = new Runnable() {
@@ -231,11 +234,12 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 			if (out != null) {
 				this.manager.process(doc, new HashMap(),
 						this.processingPipeline, new FileOutputStream(out));
-				this.logView.append("Finished:" + out.getAbsolutePath() + "\n");
+				this.log("Finished:" + out.getAbsolutePath() + "\n");
 			} else {
-				this.logView.append("No output set, do nothing.\n");
+				this.log("No output set, do nothing.\n");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			this.logException(e);
 		}
 	}
@@ -262,14 +266,15 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 
 					this.parseFile(file, parser);
 					this.propagateDXFDocument(this.doc);
+
 				} catch (Exception e) {
+					e.printStackTrace();
 					this.logException(e);
 				}
 			} else if (file.isDirectory()) {
 				this.baseDir = file.getAbsolutePath();
-				this.logView.append("Selected directory:"
-						+ file.getAbsolutePath() + "\n");
-				this.logView.append("No preview\n");
+				this.log("Selected directory:" + file.getAbsolutePath() + "\n");
+				this.log("No preview\n");
 
 			}
 			this.sourceFile = file;
@@ -282,16 +287,11 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 		this.doc = parser.getDocument();
 	}
 
-	protected void propagateDXFDocument(DXFDocument doc) {
+	protected void propagateDXFDocument(DXFDocument doc) throws Exception {
 		Iterator i = this.viewComponents.iterator();
 		while (i.hasNext()) {
 			DXFDocumentViewComponent view = (DXFDocumentViewComponent) i.next();
-			try {
-				view.showDXFDocument(doc);
-			} catch (UIException e) {
-			   e.printStackTrace();
-			   this.logException(e);
-			}
+			view.showDXFDocument(doc);
 
 		}
 	}
@@ -299,7 +299,12 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 	protected void logException(Exception e) {
 		StringWriter sw = new StringWriter();
 		e.printStackTrace(new PrintWriter(sw));
-		this.logView.append(sw.toString());
+		this.log(sw.toString());
+	}
+
+	protected void log(String msg) {
+		this.logView.append(msg);
+		this.logView.setCaretPosition(this.logView.getDocument().getLength());
 	}
 
 }

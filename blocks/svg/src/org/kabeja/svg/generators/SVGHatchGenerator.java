@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.kabeja.dxf.Bounds;
+import org.kabeja.dxf.DXFColor;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFHatch;
 import org.kabeja.dxf.DXFHatchPattern;
@@ -85,6 +86,7 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
 				}
 
 				SVGUtils.endElement(handler, SVGConstants.SVG_CLIPPING_PATH);
+	
 				DXFHatchPattern pattern = hatch.getDXFDocument()
 						.getDXFHatchPattern(hatch.getDXFHatchPatternID());
 
@@ -149,9 +151,9 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
 			throws SAXException {
 
 		StringBuffer buf = new StringBuffer();
-		Iterator inner = loop.getBoundaryEdgesIterator();
-		if (inner.hasNext()) {
-			DXFEntity entity = (DXFEntity) inner.next();
+		Iterator i = loop.getBoundaryEdgesIterator();
+		if (i.hasNext()) {
+			DXFEntity entity = (DXFEntity) i.next();
 			buf.append(' ');
 
 			String d = manager.getSVGPathBoundaryGenerator(entity.getType())
@@ -161,12 +163,11 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
 			}
 			buf.append(d);
 			buf.append(' ');
-			while (inner.hasNext()) {
-				entity = (DXFEntity) inner.next();
-
+			while (i.hasNext()) {
+				
+				entity = (DXFEntity) i.next();
 				SVGPathBoundaryGenerator part = manager
 						.getSVGPathBoundaryGenerator(entity.getType());
-
 				buf.append(' ');
 				d = removeStartPoint(part.getSVGPath(entity).trim());
 
@@ -186,7 +187,7 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
 	}
 
 	protected String removeStartPoint(String svgPath) {
-
+        
 		if (svgPath.length() > 0 && svgPath.charAt(0) == 'M') {
 			boolean separator = false;
 			int delemiterCount = 0;

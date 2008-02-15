@@ -70,7 +70,8 @@ public class ParametricPlaneTest extends TestCase {
 	
 	public void testNormal() {
 		ParametricPlane plane = new ParametricPlane(new Point(0, 0, 0), new Point(
-				1, 0, 0),new Point(1.0,0.001,0));
+				1, 0, 0),new Point(1.0,0.001
+						,0));
 		
 		Vector n = plane.getNormal();
 		assertEquals(0.0, n.getX(), 0.001);

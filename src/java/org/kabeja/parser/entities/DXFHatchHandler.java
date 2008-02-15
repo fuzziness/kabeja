@@ -190,6 +190,8 @@ public class DXFHatchHandler extends AbstractEntityHandler {
 	}
 
 	protected void parseBoundary(int groupCode, DXFValue value) {
+		
+
 		if (this.polylineBoundary) {
 			parsePolylineBoundary(groupCode, value);
 		} else {

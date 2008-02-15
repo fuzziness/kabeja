@@ -30,6 +30,8 @@ public class DXFEllipse extends DXFEntity {
 
 	private Vector majorAxisDirection = new Vector();
 
+	private boolean counterclockwise;
+
 	/**
 	 * 
 	 */
@@ -39,40 +41,42 @@ public class DXFEllipse extends DXFEntity {
 
 	}
 
-
-
 	public Bounds getBounds() {
 		// this are the bounds of a circle with major-radius of the ellipse
 		// TODO change this to the correct bounds
-		double alpha = Math.toRadians(this.getRotationAngle());
+		double alpha = this.getRotationAngle();
 		Bounds bounds = new Bounds();
 		if (this.startParameter == DEFAULT_START_PARAMETER
 				&& this.endParameter == DEFAULT_END_PARAMETER && alpha == 0.0) {
 			double length = this.getHalfMajorAxisLength();
 
-			bounds.addToBounds(center.getX() + length, center.getY() + length,center.getZ());
-			bounds.addToBounds(center.getX() - length, center.getY() - length,center.getZ());
+			bounds.addToBounds(center.getX() + length, center.getY() + length,
+					center.getZ());
+			bounds.addToBounds(center.getX() - length, center.getY() - length,
+					center.getZ());
 		} else {
 			int n = 40;
 
 			// we walking over the the ellipse or elliptical arc
 			double h = (this.endParameter - this.startParameter) / n;
-
+			
 			double start = this.startParameter;
 			double major = this.getHalfMajorAxisLength();
 			double minor = major * this.ratio;
 			for (int i = 0; i <= n; i++) {
+				
+				
 				double x = major * Math.cos(start);
 				double y = minor * Math.sin(start);
 				
 				if (alpha != 0.0) {
-
-					double lx=x;
+					double lx = x;
 					x = lx * Math.cos(alpha) - y * Math.sin(alpha);
 					y = lx * Math.sin(alpha) + y * Math.cos(alpha);
 				}
+
 				bounds.addToBounds(this.center.getX() + x, this.center.getY()
-						+ y,this.center.getZ());
+						+y, this.center.getZ());
 
 				start += h;
 			}
@@ -102,7 +106,12 @@ public class DXFEllipse extends DXFEntity {
 	}
 
 	public void setEndParameter(double endParameter) {
-		this.endParameter = endParameter;
+		if (endParameter < 0) {
+			this.endParameter = Math.PI * 2 + endParameter;
+		} else {
+			this.endParameter = endParameter;
+		}
+		
 	}
 
 	public double getRatio() {
@@ -118,21 +127,22 @@ public class DXFEllipse extends DXFEntity {
 	}
 
 	public void setStartParameter(double startParameter) {
-		this.startParameter = startParameter;
+		if (startParameter < 0) {
+			this.startParameter = Math.PI * 2 + startParameter;
+		} else {
+			this.startParameter = startParameter;
+		}
 	}
 
 	public String getType() {
 		return DXFConstants.ENTITY_TYPE_ELLIPSE;
 	}
 
-
 	public double getHalfMajorAxisLength() {
 		return majorAxisDirection.getLength();
 	}
 
-	
-	
-	public Point getLocalPointAt(double para){
+	public Point getLocalPointAt(double para) {
 		Point p = new Point();
 		double major = getHalfMajorAxisLength();
 		double minor = major * this.ratio;
@@ -149,26 +159,19 @@ public class DXFEllipse extends DXFEntity {
 		p.setZ(0.0);
 		return p;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public Point getLocalStartPoint() {
-	   return this.getLocalPointAt(this.startParameter);
+		return this.getLocalPointAt(this.startParameter);
 	}
 
 	public Point getLocalEndPoint() {
-	      return this.getLocalPointAt(this.endParameter);
+		return this.getLocalPointAt(this.endParameter);
 	}
 
 	public double getRotationAngle() {
 
-		return MathUtils.getAngle(DXFConstants.DEFAULT_X_AXIS_VECTOR, majorAxisDirection);
+		return MathUtils.getAngle(DXFConstants.DEFAULT_X_AXIS_VECTOR,
+				majorAxisDirection);
 	}
 
 	public double getLength() {
@@ -204,4 +207,12 @@ public class DXFEllipse extends DXFEntity {
 		return length;
 	}
 
+
+	public boolean isCounterClockwise() {
+		return counterclockwise;
+	}
+
+	public void setCounterClockwise(boolean counterclockwise) {
+		this.counterclockwise = counterclockwise;
+	}
 }

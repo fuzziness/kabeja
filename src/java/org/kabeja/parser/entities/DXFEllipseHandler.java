@@ -31,6 +31,7 @@ public class DXFEllipseHandler extends AbstractEntityHandler {
     public final static int RATIO = 40;
     public final static int START_PARAMETER = 41;
     public final static int END_PARAMTER = 42;
+    public static final int COUNTERCLOCKWISE = 73;
     private DXFEllipse ellipse;
 
     public void endDXFEntity() {
@@ -96,7 +97,10 @@ public class DXFEllipseHandler extends AbstractEntityHandler {
             ellipse.setEndParameter(value.getDoubleValue());
 
             break;
-
+        case COUNTERCLOCKWISE:
+            ellipse.setCounterClockwise(value.getBooleanValue());
+            break;
+            
         default:
             super.parseCommonProperty(groupCode, value, ellipse);
 

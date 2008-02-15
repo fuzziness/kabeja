@@ -29,18 +29,24 @@ public class SVGArcGenerator extends AbstractSVGSAXGenerator implements
 
 	}
 
-	
 	public String getSVGPath(DXFEntity entity) {
+
 		DXFArc arc = (DXFArc) entity;
+		if (arc.isCounterClockwise()) {
+
+		} else {
+
+		}
 
 		Point p;
 
 		StringBuffer path = new StringBuffer();
 
 		p = arc.getStartPoint();
-       
+
 		double radius = arc.getRadius();
 		path.append("M ");
+
 		path.append(p.getX());
 		path.append(' ');
 		path.append(p.getY());
@@ -48,8 +54,11 @@ public class SVGArcGenerator extends AbstractSVGSAXGenerator implements
 		path.append(radius);
 		path.append(' ');
 		path.append(radius);
+		// x-axis rotation -> always no rotation
 		path.append(" 0");
 
+
+		
 		double diff = arc.getTotalAngle();
 
 		// the large-arc-flag
@@ -59,18 +68,24 @@ public class SVGArcGenerator extends AbstractSVGSAXGenerator implements
 			path.append(" 0 ");
 		}
 
-		if (Math.abs(diff) > 0) {
+		if (!arc.isCounterClockwise()) {
 			// the sweep-flag
 			path.append(" 1 ");
 
 		} else {
 			// sweep flag 0
-			// funny here we would never come
-			// here
 			path.append(" 0 ");
 		}
 
-		p = arc.getEndPoint();
+		
+		double angle = arc.getEndAngle();
+		//handling of only for hatch boundary 
+		if(arc.isCounterClockwise()){
+			angle=-1*angle;
+		}
+
+		p = arc.getPoint(angle);
+		
 		path.append(' ');
 		path.append(p.getX());
 		path.append(' ');

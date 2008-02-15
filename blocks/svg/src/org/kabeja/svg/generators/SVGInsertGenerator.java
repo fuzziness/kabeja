@@ -64,9 +64,9 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator{
 
                 if ((referencePoint.getX() != 0.0) || (referencePoint.getY() != 0.0)) {
                     buf.append(" translate(");
-                    buf.append(SVGUtils.formatNumberAttribute(referencePoint.getX()));
+                    buf.append(SVGUtils.formatNumberAttribute((-1*referencePoint.getX())));
                     buf.append(SVGConstants.SVG_ATTRIBUTE_PATH_PLACEHOLDER);
-                    buf.append(SVGUtils.formatNumberAttribute(referencePoint.getY()));
+                    buf.append(SVGUtils.formatNumberAttribute((-1*referencePoint.getY())));
                     buf.append(")");
                 }
 

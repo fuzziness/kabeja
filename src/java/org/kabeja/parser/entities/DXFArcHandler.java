@@ -29,6 +29,7 @@ public class DXFArcHandler extends AbstractEntityHandler {
     public static final int RADIUS = 40;
     public static final int START_ANGLE = 50;
     public static final int END_ANGLE = 51;
+    public static final int COUNTERCLOCKWISE = 73;
     private DXFArc arc;
 
     /**
@@ -103,6 +104,11 @@ public class DXFArcHandler extends AbstractEntityHandler {
 
         case END_ANGLE:
             arc.setEndAngle(value.getDoubleValue());
+
+            break;
+            
+        case COUNTERCLOCKWISE:
+            arc.setCounterClockwise(value.getBooleanValue());
 
             break;
 

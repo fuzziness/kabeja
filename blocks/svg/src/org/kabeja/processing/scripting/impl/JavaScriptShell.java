@@ -53,9 +53,12 @@ import org.kabeja.processing.scripting.ScriptException;
 import org.kabeja.ui.DXFDocumentViewComponent;
 import org.kabeja.ui.UIException;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-import org.mozilla.javascript.tools.shell.Global;
+
 
 public class JavaScriptShell extends AbstractPostProcessor implements
 		DXFDocumentViewComponent {
@@ -398,13 +401,38 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 		}
 
 		protected void init() {
-			this.ctx = Context.enter();
-			// Global g = new Global(ctx);
+			//this.ctx = ContextFactory.getGlobal().enter();
+		   ContextFactory f = new ContextFactory();
+	
+		    this.ctx =f.enter();
 			err = System.err;
 			out = System.out;
-			System.setOut(output);
-			System.setErr(output);
+			//System.setOut(output);
+		    //System.setErr(output);
 			this.scope = ctx.initStandardObjects();
+			ctx.setErrorReporter(new ErrorReporter(){
+
+				public void error(String arg0, String arg1, int arg2,
+						String arg3, int arg4) {
+					textArea.append(arg0+" from line:"+arg3+"\n");
+					
+					
+				}
+
+				public EvaluatorException runtimeError(String arg0,
+						String arg1, int arg2, String arg3, int arg4) {
+					textArea.append(arg0+" from line:"+arg3+"\n");
+					return new EvaluatorException(arg0);
+				}
+
+				public void warning(String arg0, String arg1, int arg2,
+						String arg3, int arg4) {
+					textArea.append(arg0+" from line:"+arg3+"\n");
+					
+				}
+				
+			});
+			
 			Object jsOut = Context.javaToJS(doc, scope);
 			ScriptableObject.putProperty(scope, "dxf", jsOut);
 		}
@@ -426,7 +454,7 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 						}
 
 					} catch (Exception e) {
-						e.printStackTrace();
+						e.printStackTrace(output);
 						init();
 					}
 

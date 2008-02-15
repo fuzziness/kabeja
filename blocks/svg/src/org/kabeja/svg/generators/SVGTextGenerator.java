@@ -64,11 +64,7 @@ public class SVGTextGenerator extends AbstractSVGSAXGenerator {
 			// SVGUtils.addAttribute(attr,SVGConstants.SVG_ATTRIBUTE_FONT_FAMILY,"simplex");
 		}
 
-		if (!text.isBackward()) {
-			SVGUtils.addAttribute(attr, "writing-mode", "lr-tb");
-		} else {
-			SVGUtils.addAttribute(attr, "writing-mode", "rl-tb");
-		}
+
 
 		// set the alignment
 		if (!text.isUpsideDown()) {
@@ -120,6 +116,16 @@ public class SVGTextGenerator extends AbstractSVGSAXGenerator {
 		// in order to get the right text-view
 		StringBuffer transform = new StringBuffer();
 
+		
+		if (!text.isBackward()) {
+			SVGUtils.addAttribute(attr, "writing-mode", "lr-tb");
+		} else {
+			//SVGUtils.addAttribute(attr, "writing-mode", "rl");
+			transform.append("matrix(-1 0 0 1  ");
+			transform.append(2*alignmentPoint.getX());
+			transform.append(" 0)");
+		}
+		
 		if (!text.isUpsideDown()) {
 			transform.append("matrix(1 0 0 -1 0 ");
 			transform.append(2 * alignmentPoint.getY());

@@ -68,8 +68,14 @@ public class SVGEllipseGenerator extends AbstractSVGSAXGenerator implements
 
 	public String getSVGPath(DXFEntity entity) {
 
+		
+		
+		
 		DXFEllipse ellipse = (DXFEllipse) entity;
-
+		if (ellipse.isCounterClockwise()) {
+           System.out.println("Ellipse Counter clockwise:"+ellipse.getID());
+		}
+		
 		StringBuffer buf = new StringBuffer();
 
 		Point start = ellipse.getLocalStartPoint();
