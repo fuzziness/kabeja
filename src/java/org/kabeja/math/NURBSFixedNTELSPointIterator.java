@@ -47,10 +47,10 @@ public class NURBSFixedNTELSPointIterator implements Iterator {
 		}
 	    this.t=0;
 		this.nextInterval();
-		//fix for some problem nurbs
-//		if(this.interval-1<this.nurbs.getDegree()){
-//			this.interval=this.nurbs.getDegree()+1;
-//		}
+		//fix for some broken nurbs
+		if(this.interval-1<this.nurbs.getDegree()){
+			this.interval=this.nurbs.getDegree()+1;
+		}
 		
 	}
 
