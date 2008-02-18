@@ -72,17 +72,13 @@ public class SVGEllipseGenerator extends AbstractSVGSAXGenerator implements
 		
 		
 		DXFEllipse ellipse = (DXFEllipse) entity;
-		if (ellipse.isCounterClockwise()) {
-           System.out.println("Ellipse Counter clockwise:"+ellipse.getID());
-		}
+
 		
 		StringBuffer buf = new StringBuffer();
 
-		Point start = ellipse.getLocalStartPoint();
-		// translate to centerpoint
-		start.setX(start.getX() + ellipse.getCenterPoint().getX());
-		start.setY(start.getY() + ellipse.getCenterPoint().getY());
-
+		Point start = ellipse.getPointAt(ellipse.getStartParameter());
+		Point end = ellipse.getPointAt(ellipse.getEndParameter());
+	
 		buf.append("M ");
 		buf.append(SVGUtils.formatNumberAttribute(start.getX()));
 		buf.append(' ');
@@ -90,7 +86,6 @@ public class SVGEllipseGenerator extends AbstractSVGSAXGenerator implements
 
 		// get the angle between x-axis and major-axis
 		double major = ellipse.getMajorAxisDirection().getLength();
-
 		double angle = ellipse.getRotationAngle();
 
 		buf.append(" A ");
@@ -108,11 +103,8 @@ public class SVGEllipseGenerator extends AbstractSVGSAXGenerator implements
 
 			// the large-arc flag and the sweep-flag always 1
 			buf.append(" 1 1 ");
-			// the endpoint
-			Point end = ellipse.getLocalPointAt(Math.PI);
-			// translate to centerpoint
-			end.setX(end.getX() + ellipse.getCenterPoint().getX());
-			end.setY(end.getY() + ellipse.getCenterPoint().getY());
+		
+		
 
 			buf.append(SVGUtils.formatNumberAttribute(end.getX()));
 			buf.append(' ');
@@ -130,12 +122,15 @@ public class SVGEllipseGenerator extends AbstractSVGSAXGenerator implements
 
 			buf.append(" 1 1 ");
 
+		
 			buf.append(SVGUtils.formatNumberAttribute(start.getX()));
 			buf.append(' ');
 			buf.append(SVGUtils.formatNumberAttribute(start.getY()));
 			// buf.append(" z ");
 		} else {
 
+			//TODO check the correct flags 
+			//
 			buf.append(' ');
 
 			// the large-arc flag
@@ -146,15 +141,13 @@ public class SVGEllipseGenerator extends AbstractSVGSAXGenerator implements
 			}
 			buf.append(' ');
 
+			
+
+			
 			// the sweep-flag always 1
 			buf.append(" 1 ");
 
-			// the endpoint
-			Point end = ellipse.getLocalEndPoint();
-			// translate to centerpoint
-			end.setX(end.getX() + ellipse.getCenterPoint().getX());
-			end.setY(end.getY() + ellipse.getCenterPoint().getY());
-
+	
 			buf.append(SVGUtils.formatNumberAttribute(end.getX()));
 			buf.append(' ');
 			buf.append(SVGUtils.formatNumberAttribute(end.getY()));

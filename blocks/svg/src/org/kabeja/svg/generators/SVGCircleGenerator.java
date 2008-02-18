@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.kabeja.dxf.DXFCircle;
 import org.kabeja.dxf.DXFEntity;
+import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.ParametricPlane;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
@@ -17,10 +19,13 @@ public class SVGCircleGenerator extends AbstractSVGSAXGenerator {
 			TransformContext transformContext) throws SAXException {
 		DXFCircle circle = (DXFCircle) entity;
 		AttributesImpl attr = new AttributesImpl();
-		SVGUtils.addAttribute(attr, "cx", SVGUtils.formatNumberAttribute(circle
-				.getCenterPoint().getX()));
-		SVGUtils.addAttribute(attr, "cy", SVGUtils.formatNumberAttribute(circle
-				.getCenterPoint().getY()));
+		ParametricPlane plane = new ParametricPlane(circle.getExtrusion());
+		Point center = circle.getCenterPoint();
+		
+		Point p = plane.getPoint(center.getX(), center.getY());
+		
+		SVGUtils.addAttribute(attr, "cx", SVGUtils.formatNumberAttribute(p.getX()));
+		SVGUtils.addAttribute(attr, "cy", SVGUtils.formatNumberAttribute(p.getY()));
 		SVGUtils.addAttribute(attr, "r", SVGUtils.formatNumberAttribute(circle
 				.getRadius()));
 

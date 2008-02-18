@@ -32,6 +32,7 @@ import org.kabeja.parser.entities.DXFInsertHandler;
 import org.kabeja.parser.entities.DXFLWPolylineHandler;
 import org.kabeja.parser.entities.DXFLeaderHandler;
 import org.kabeja.parser.entities.DXFLineHandler;
+import org.kabeja.parser.entities.DXFMLineHandler;
 import org.kabeja.parser.entities.DXFMTextHandler;
 import org.kabeja.parser.entities.DXFPolylineHandler;
 import org.kabeja.parser.entities.DXFRayHandler;
@@ -45,6 +46,7 @@ import org.kabeja.parser.entities.DXFXLineHandler;
 import org.kabeja.parser.objects.DXFDictionaryHandler;
 import org.kabeja.parser.objects.DXFImageDefHandler;
 import org.kabeja.parser.objects.DXFLayoutHandler;
+import org.kabeja.parser.objects.DXFMLineStyleHandler;
 import org.kabeja.parser.objects.DXFPlotsettingsHandler;
 import org.kabeja.parser.table.DXFDimensionStyleTableHandler;
 import org.kabeja.parser.table.DXFLayerTableHandler;
@@ -135,6 +137,9 @@ public class ParserBuilder {
         handlerManager.addHandler(h);
 
         h = new DXFSplineHandler();
+        handlerManager.addHandler(h);
+        
+        h = new DXFMLineHandler();
         handlerManager.addHandler(h);
 
         h = new DXFLeaderHandler();
@@ -233,6 +238,9 @@ public class ParserBuilder {
         h = new DXFSplineHandler();
         handlerManager.addHandler(h);
 
+        h = new DXFMLineHandler();
+        handlerManager.addHandler(h);
+        
         h = new DXFLeaderHandler();
         handlerManager.addHandler(h);
 
@@ -257,6 +265,8 @@ public class ParserBuilder {
         h = new DXFLayoutHandler();
         handlerManager.addHandler(h);
 
+        h = new DXFMLineStyleHandler();
+        handlerManager.addHandler(h);
         
         //add the HandlerManager as Handler to the parser
         parser.addHandler(handlerManager);

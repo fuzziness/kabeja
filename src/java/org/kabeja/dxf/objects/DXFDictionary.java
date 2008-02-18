@@ -47,9 +47,14 @@ public class DXFDictionary extends DXFObject {
 	 * @return the DXFObject or null if there is no such DXFObject
 	 */
 	public DXFObject getDXFObjectByID(String id) {
-		DXFDictionaryRecord dicRecord = this.findByID(id);
-		if (dicRecord != null) {
-			return this.findByID(id).getDXFObject();
+	
+		//search for child dictionaries
+		DXFDictionary dic = this.getDXFDictionaryForID(id);
+		if(dic !=null){
+			DXFDictionaryRecord dicRecord  = dic.findByID(id);
+			if (dicRecord != null) {
+				return dicRecord.getDXFObject();
+			}
 		}
 		return null;
 	}

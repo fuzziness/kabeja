@@ -32,11 +32,6 @@ public class SVGArcGenerator extends AbstractSVGSAXGenerator implements
 	public String getSVGPath(DXFEntity entity) {
 
 		DXFArc arc = (DXFArc) entity;
-		if (arc.isCounterClockwise()) {
-
-		} else {
-
-		}
 
 		Point p;
 
@@ -68,7 +63,8 @@ public class SVGArcGenerator extends AbstractSVGSAXGenerator implements
 			path.append(" 0 ");
 		}
 
-		if (!arc.isCounterClockwise()) {
+		//TODO change the extrusion >0 
+		if (!arc.isCounterClockwise()&& arc.getExtrusion().getZ()>0) {
 			// the sweep-flag
 			path.append(" 1 ");
 
@@ -76,7 +72,7 @@ public class SVGArcGenerator extends AbstractSVGSAXGenerator implements
 			// sweep flag 0
 			path.append(" 0 ");
 		}
-
+		
 		
 		double angle = arc.getEndAngle();
 		//handling of only for hatch boundary 

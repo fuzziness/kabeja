@@ -16,6 +16,7 @@
 package org.kabeja.dxf;
 
 import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.ParametricPlane;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
@@ -57,10 +58,13 @@ public class DXFCircle extends DXFEntity {
 	public Bounds getBounds() {
 
 		Bounds bounds = new Bounds();
-		bounds.setMaximumX(center.getX() + radius);
-		bounds.setMinimumX(center.getX() - radius);
-		bounds.setMaximumY(center.getY() + radius);
-		bounds.setMinimumY(center.getY() - radius);
+		ParametricPlane plane = new ParametricPlane(this
+				.getExtrusion());
+		Point p = plane.getPoint(this.center.getX(), this.center.getY());
+		bounds.setMaximumX(p.getX() + radius);
+		bounds.setMinimumX(p.getX() - radius);
+		bounds.setMaximumY(p.getY() + radius);
+		bounds.setMinimumY(p.getY() - radius);
 
 		return bounds;
 	}

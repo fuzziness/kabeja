@@ -10,55 +10,66 @@ public class ParametricPlane {
 	protected Vector directionX;
 	protected Vector directionY;
 	protected Vector normal;
- 
+
 	/**
 	 * 
-	 * @param basePoint The base point of this plane
-	 * @param directionX the x direction of this plane
-	 * @param directionY the y direction of this plane
+	 * @param basePoint
+	 *            The base point of this plane
+	 * @param directionX
+	 *            the x direction of this plane
+	 * @param directionY
+	 *            the y direction of this plane
+	 * @param normal
+	 *            the normal direction of this plane
 	 */
-	public ParametricPlane(Point basePoint, Vector directionX, Vector directionY) {
+	public ParametricPlane(Point basePoint, Vector directionX,
+			Vector directionY, Vector normal) {
 		this.base = basePoint;
 		this.directionX = directionX;
 		this.directionY = directionY;
-		this.normal = MathUtils.crossProduct(this.directionX, this.directionY);
-		this.normal.normalize();
+		this.normal = normal;
+	}
+
+	/**
+	 * 
+	 * @param basePoint
+	 *            The base point of this plane
+	 * @param directionX
+	 *            the x direction of this plane
+	 * @param directionY
+	 *            the y direction of this plane
+	 */
+	public ParametricPlane(Point basePoint, Vector directionX, Vector directionY) {
+		this(basePoint, directionX, directionY, MathUtils.normalize(MathUtils
+				.crossProduct(directionX, directionY)));
 	}
 
 	/**
 	 * Generates a plane with the base point and uses the vector from base point
-	 * to b as x direction. The y direction is generated with the cross product of the normal with 
-	 * the x direction.
+	 * to b as x direction. The y direction is generated with the cross product
+	 * of the normal with the x direction.
+	 * 
 	 * @param basePoint
 	 * @param b
 	 * @param normal
 	 */
 	public ParametricPlane(Point basePoint, Point b, Vector normal) {
-		this.base = basePoint;
-		this.directionX = MathUtils.getVector(base, b);
-		this.directionY = MathUtils.crossProduct(normal, this.directionX);
-		this.normal=normal;
-		this.normal.normalize();
+		this(basePoint, MathUtils.normalize(MathUtils.getVector(basePoint, b)),
+				MathUtils.normalize(MathUtils.crossProduct(normal, MathUtils
+						.normalize(MathUtils.getVector(basePoint, b)))), normal);
 	}
 
-	
-	public ParametricPlane(Point basePoint,Point b,Point c){
-		this.base = basePoint;
-		this.directionX = MathUtils.getVector(base, b);
-		this.directionY = MathUtils.getVector(base, c);
-		this.normal = MathUtils.crossProduct(this.directionX, this.directionY);
-		this.normal.normalize();
+	public ParametricPlane(Point basePoint, Point b, Point c) {
+		this(basePoint, MathUtils.normalize(MathUtils.getVector(basePoint, b)),
+				MathUtils.normalize(MathUtils.getVector(basePoint, c)));
+
 	}
-	
-	
-	public ParametricPlane(DXFExtrusion e){
-		this.base = new Point(0.0,0.0,0.0);
-		this.directionX = e.getDirectionX();
-		this.directionY = e.getDirectionY();
-		this.normal = e.getDirectionZ();
-		this.normal.normalize();
+
+	public ParametricPlane(DXFExtrusion e) {
+		this(new Point(0.0, 0.0, 0.0), e.getDirectionX(), e.getDirectionY(), e
+				.getNormal());
 	}
-	
+
 	/**
 	 * Calculate the point in world coordinates for the given parameters
 	 * 
@@ -78,14 +89,20 @@ public class ParametricPlane {
 				+ this.directionY.getZ() * y);
 		return p;
 	}
+	
+	public Point getPoint(Point point) {
+
+        return getPoint(point.getX(),point.getY());
+	}
 
 	/**
-	 * Calculates the plane parameters of the given point relative to the base point of the plane
+	 * Calculates the plane parameters of the given point relative to the base
+	 * point of the plane
+	 * 
 	 * @param p
 	 * @return double[]{parameter x direction, parameter y direction}
 	 */
-	
-	
+
 	public double[] getParameter(Point p) {
 		double u = 0.0;
 		double v = this.directionX.getY() * this.directionY.getX()
@@ -114,10 +131,12 @@ public class ParametricPlane {
 
 	/**
 	 * Determines if the given point lies on the plane.
-	 * @param p the point to determine
+	 * 
+	 * @param p
+	 *            the point to determine
 	 * @return true if the point lies on the plane, otherwise false.
 	 */
-	
+
 	public boolean isOnPlane(Point p) {
 		double[] para = this.getParameter(p);
 		double v = this.base.getZ() + this.directionX.getZ() * para[0]
@@ -158,7 +177,7 @@ public class ParametricPlane {
 
 	public Vector getDirectionY() {
 		return directionY;
-		
+
 	}
 
 	public void setDirectionY(Vector directionY) {

@@ -6,6 +6,7 @@ package org.kabeja.dxf;
 
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.MathUtils;
+import org.kabeja.math.ParametricPlane;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
@@ -21,8 +22,8 @@ public class DXFArc extends DXFEntity {
 
 	private double end_angle;
 
-	private boolean counterclockwise=false;
-	
+	private boolean counterclockwise = false;
+
 	public DXFArc() {
 
 		center = new Point();
@@ -86,9 +87,11 @@ public class DXFArc extends DXFEntity {
 		Point end = this.getEndPoint();
 		bounds.addToBounds(start);
 		bounds.addToBounds(end);
-
-		int startQ = MathUtils.getQuadrant(start, this.center);
-		int endQ = MathUtils.getQuadrant(end, this.center);
+		ParametricPlane plane = new ParametricPlane(this
+				.getExtrusion());
+		Point center = plane.getPoint(this.center.getX(),this.center.getY());
+		int startQ = MathUtils.getQuadrant(start, center);
+		int endQ = MathUtils.getQuadrant(end, center);
 
 		if (endQ < startQ) {
 			endQ += 4;
@@ -140,9 +143,9 @@ public class DXFArc extends DXFEntity {
 
 		double angle = this.start_angle;
 
-//		if (this.start_angle < 0) {
-//			angle += 360;
-//		}
+		// if (this.start_angle < 0) {
+		// angle += 360;
+		// }
 
 		return this.getPoint(angle);
 	}
@@ -157,9 +160,9 @@ public class DXFArc extends DXFEntity {
 
 		double angle = this.end_angle;
 
-//		if (this.end_angle < 0) {
-//			angle += 360;
-//		}
+		// if (this.end_angle < 0) {
+		// angle += 360;
+		// }
 
 		return this.getPoint(angle);
 	}
@@ -173,14 +176,15 @@ public class DXFArc extends DXFEntity {
 	 */
 
 	public Point getPoint(double angle) {
-		Point p = new Point();
 
+		// the local part
 		double x = this.radius * Math.cos(Math.toRadians(angle));
-		p.setX(this.center.getX() + x);
-
 		double y = radius * Math.sin(Math.toRadians(angle));
-		p.setY(this.center.getY() + y);
 
+		// the wcs part
+		ParametricPlane plane = new ParametricPlane(this
+				.getExtrusion());
+		Point p = plane.getPoint(x+this.center.getX(), y+this.center.getY());
 		return p;
 
 	}

@@ -45,13 +45,17 @@ public class NURBSFixedNTELSPointIterator implements Iterator {
 				this.lastInterval--;
 			}
 		}
-	
+	    this.t=0;
 		this.nextInterval();
+		//fix for some problem nurbs
+//		if(this.interval-1<this.nurbs.getDegree()){
+//			this.interval=this.nurbs.getDegree()+1;
+//		}
 		
 	}
 
 	public boolean hasNext() {
-		if (this.t < this.nurbs.getKnots()[this.interval]) {
+		if (this.t < this.nurbs.getKnots()[this.interval] && this.interval<this.lastInterval) {
 			return true;
 		} else if (this.interval < this.lastInterval) {
 			this.nextInterval();
@@ -63,6 +67,7 @@ public class NURBSFixedNTELSPointIterator implements Iterator {
 
 	public Object next() {
 
+	
 		Point p = this.nurbs.getPointAt(this.interval-1,t);
 		this.t += this.dt;
 		
