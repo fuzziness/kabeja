@@ -37,6 +37,6 @@ public interface SAXGenerator extends Configurable{
 
 	
 
-	public void generate(DXFDocument doc,ContentHandler handler) throws SAXException;
+	public void generate(DXFDocument doc,ContentHandler handler, Map context) throws SAXException;
 
 }

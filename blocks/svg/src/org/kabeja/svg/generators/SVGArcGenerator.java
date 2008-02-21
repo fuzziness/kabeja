@@ -80,7 +80,7 @@ public class SVGArcGenerator extends AbstractSVGSAXGenerator implements
 			angle=-1*angle;
 		}
 
-		p = arc.getPoint(angle);
+		p = arc.getPointAt(angle);
 		
 		path.append(' ');
 		path.append(p.getX());

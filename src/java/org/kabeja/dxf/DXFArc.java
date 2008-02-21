@@ -147,7 +147,7 @@ public class DXFArc extends DXFEntity {
 		// angle += 360;
 		// }
 
-		return this.getPoint(angle);
+		return this.getPointAt(angle);
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class DXFArc extends DXFEntity {
 		// angle += 360;
 		// }
 
-		return this.getPoint(angle);
+		return this.getPointAt(angle);
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class DXFArc extends DXFEntity {
 	 * @return Point on the circle
 	 */
 
-	public Point getPoint(double angle) {
+	public Point getPointAt(double angle) {
 
 		// the local part
 		double x = this.radius * Math.cos(Math.toRadians(angle));
@@ -224,4 +224,6 @@ public class DXFArc extends DXFEntity {
 		this.counterclockwise = counterclockwise;
 	}
 
+	
+	
 }

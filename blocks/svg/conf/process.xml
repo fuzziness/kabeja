@@ -76,13 +76,13 @@
 
 
 
-		<pipeline name="svg">
+		<pipeline name="svg" description="Converts the draft to SVG">
 		    <generate name="svg"/>
 		    <serialize name="svg"/>
 		</pipeline>
 		
 		
-		<pipeline name="debug">
+		<pipeline name="debug" description="Helps to debug false bounds">
 			<postprocess name="bounds.debugger"/>
 			<generate name="svg"/>
 			<filter name="image"/>
@@ -120,7 +120,7 @@
 		</pipeline>
 		
 		
-		<pipeline name="font">
+		<pipeline name="font" description="Convert to SVG and tries to embed fonts">
 		  	<generate name="svg"/>
 			<filter name="xslt">
 			  <property name="stylesheet" value="../tools/xsl/embedfont.xsl"/>
@@ -128,15 +128,10 @@
 			<serialize name="svg"/>
 		</pipeline>
 		
+
 		
-		<pipeline name="svg-xml">
-		    <generate name="svg"/>
-		    <serialize name="xml"/>   
-		</pipeline>
-		
-		
-		<pipeline name="embed">
-                        <generate name="svg"/>
+		<pipeline name="embed" description="Convert to SVG and tries to embed fonts and images">
+            <generate name="svg"/>
 			<postprocess name="image.filter"/>
 			<generate name="svg"/>
 			<filter name="image"/>
@@ -148,7 +143,7 @@
 			<serialize name="svg"/>
 		</pipeline>
 			
-	   <pipeline name="mozilla">
+	   <pipeline name="mozilla" description="Generate a Mozilla 1.5.X compatible SVG (change all to a fixed stoke-width)">
 	        <generate name="svg"/>
 	        <!--  Mozilla based browser only render svg with a 
 	              fixed stroke-width, a percent value will cause a
@@ -157,7 +152,7 @@
 	        <serialize name="svg"/>
 	   </pipeline>	
 
-          <pipeline name="scripting">
+          <pipeline name="scripting" desription="Invokes the javascipt postprocessor before converting to SVG">
                 <generate name="svg"/>
                 <postprocess name="js">
                     <property name="src" value="scripts/layoutDebug.js"/>

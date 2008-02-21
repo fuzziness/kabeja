@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,13 +53,13 @@ import org.kabeja.processing.scripting.ScriptEngine;
 import org.kabeja.processing.scripting.ScriptException;
 import org.kabeja.ui.DXFDocumentViewComponent;
 import org.kabeja.ui.UIException;
+import org.mozilla.javascript.ClassCache;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-
 
 public class JavaScriptShell extends AbstractPostProcessor implements
 		DXFDocumentViewComponent {
@@ -71,8 +72,7 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 	protected ArrayList history = new ArrayList();
 	protected int historyPos = 0;
 	protected ScriptWorker worker;
-	protected  String title="JSShell";
-	
+	protected String title = "JSShell";
 
 	public void process(DXFDocument doc, Map context) throws ProcessorException {
 
@@ -98,12 +98,10 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 
 	protected void init() {
 
-	
-
 		frame = new JFrame(getTitle());
 		frame.setJMenuBar(this.createMenuBar());
 		frame.getContentPane().setLayout(new BorderLayout());
-		
+
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				// capture the second close-event and ignore
@@ -113,8 +111,7 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 			}
 		});
 
-		frame.getContentPane().add(getView(),
-				BorderLayout.CENTER);
+		frame.getContentPane().add(getView(), BorderLayout.CENTER);
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, 2, 2));
 		JButton button = new JButton((Action) actions.get("close"));
 		p.add(button);
@@ -373,7 +370,7 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 			this.textArea.getDocument().insertString(
 					this.textArea.getCaretPosition(), str, null);
 		} catch (BadLocationException e) {
-						e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -401,38 +398,45 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 		}
 
 		protected void init() {
-			//this.ctx = ContextFactory.getGlobal().enter();
-		   ContextFactory f = new ContextFactory();
-	
-		    this.ctx =f.enter();
+			// this.ctx = ContextFactory.getGlobal().enter();
+			ContextFactory f = new ContextFactory();
+
+			this.ctx = f.enter();
 			err = System.err;
 			out = System.out;
-			//System.setOut(output);
-		    //System.setErr(output);
-			this.scope = ctx.initStandardObjects();
-			ctx.setErrorReporter(new ErrorReporter(){
+			// System.setOut(output);
+			// System.setErr(output);
+			this.scope = ctx.initStandardObjects(null,false);
+			try {
+				ScriptableObject.defineClass(this.scope, Global.class);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 this.scope = new Global();
+			 Global.setOutput(output);
+			ctx.setErrorReporter(new ErrorReporter() {
 
 				public void error(String arg0, String arg1, int arg2,
 						String arg3, int arg4) {
-					textArea.append(arg0+" from line:"+arg3+"\n");
-					
-					
+					textArea.append(arg0 + " from line:" + arg3 + "\n");
+
 				}
 
 				public EvaluatorException runtimeError(String arg0,
 						String arg1, int arg2, String arg3, int arg4) {
-					textArea.append(arg0+" from line:"+arg3+"\n");
+					textArea.append(arg0 + " from line:" + arg3 + "\n");
 					return new EvaluatorException(arg0);
 				}
 
 				public void warning(String arg0, String arg1, int arg2,
 						String arg3, int arg4) {
-					textArea.append(arg0+" from line:"+arg3+"\n");
-					
+					textArea.append(arg0 + " from line:" + arg3 + "\n");
+
 				}
-				
+
 			});
-			
+
 			Object jsOut = Context.javaToJS(doc, scope);
 			ScriptableObject.putProperty(scope, "dxf", jsOut);
 		}
@@ -512,13 +516,13 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 
 	}
 
-	public void showDXFDocument(DXFDocument doc) throws UIException{
+	public void showDXFDocument(DXFDocument doc) throws UIException {
 		worker = new ScriptWorker(doc);
 		worker.start();
 	}
 
 	public String getTitle() {
-		
+
 		return this.title;
 	}
 
@@ -538,7 +542,7 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 		panel.setPreferredSize(new Dimension(640, 480));
 
 		newShellLine();
-		
+
 		worker = new ScriptWorker(null);
 		worker.start();
 

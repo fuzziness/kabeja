@@ -86,6 +86,8 @@ public class SAXProcessingManagerBuilder implements ContentHandler {
 	public static final String ATTRIBUTE_CLASS = "class";
 
 	public static final String ATTRIBUTE_VALUE = "value";
+	
+	public static final String ATTRIBUTE_DESCRIPTION = "description";
 
 	private ProcessingManager manager;
 
@@ -302,6 +304,7 @@ public class SAXProcessingManagerBuilder implements ContentHandler {
 				this.aggregate = false;
 				this.pipeline = new ProcessPipeline();
 				this.pipeline.setName(atts.getValue(ATTRIBUTE_NAME));
+				this.pipeline.setDescription(atts.getValue(ATTRIBUTE_DESCRIPTION));
 
 			} else if (ELEMENT_SERIALIZE.equals(localName)) {
 

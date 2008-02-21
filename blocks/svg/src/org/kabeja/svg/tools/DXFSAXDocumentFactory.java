@@ -15,6 +15,8 @@
 */
 package org.kabeja.svg.tools;
 
+import java.util.Map;
+
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.dom.util.SAXDocumentFactory;
 import org.kabeja.dxf.DXFDocument;
@@ -37,13 +39,14 @@ public class DXFSAXDocumentFactory extends SAXDocumentFactory {
 		super(SVGDOMImplementation.getDOMImplementation(), null);
 	}
 
-	public SVGDocument createDocument(DXFDocument doc) throws SAXException {
+	public SVGDocument createDocument(DXFDocument doc,Map properties) throws SAXException {
 
 		XMLReader myReader = XMLReaderFactory.createXMLReader();
 		parser = myReader;
 
 		SAXGenerator gen = new SVGGenerator();
-		gen.generate(doc, this);
+		gen.setProperties(properties);
+		gen.generate(doc, this, null);
 		Document res = document;
 		document = null;
 		return (SVGDocument) res;

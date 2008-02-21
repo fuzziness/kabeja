@@ -30,7 +30,6 @@ public abstract class DXFEntity {
     protected boolean visibile = true;
     protected String lineType = "";
     protected int flags = 0;
-    //protected Bounds bounds = new Bounds();
     protected boolean block = false;
     protected double linetypeScaleFactor = 1.0;
     protected int color = 0;
@@ -39,7 +38,10 @@ public abstract class DXFEntity {
     protected double transparency;
     protected double thickness = 0.0;
     protected DXFExtrusion extrusion = new DXFExtrusion();
-    protected boolean modelSpace = false;
+    /**
+     * From the DXF Specs default all entities are in model space.
+     */
+    protected boolean modelSpace = true;
 
     public DXFEntity() {
     }

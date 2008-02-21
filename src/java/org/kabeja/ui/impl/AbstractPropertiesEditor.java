@@ -1,6 +1,7 @@
 package org.kabeja.ui.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public abstract class AbstractPropertiesEditor implements PropertiesEditor{
 
 	protected ArrayList listeners = new ArrayList();
 
-	protected Map properties;
+	protected Map properties = new HashMap();
 	
 	public void addPropertiesListener(PropertiesListener listener) {
 		this.listeners.add(listener);
@@ -34,6 +35,7 @@ public abstract class AbstractPropertiesEditor implements PropertiesEditor{
 	}
 	
 	protected void firePropertiesChangedEvent(){
+		
 		Iterator i = ((ArrayList)this.listeners.clone()).iterator();
 		while(i.hasNext()){
 			PropertiesListener l = (PropertiesListener)i.next();

@@ -44,6 +44,7 @@ public class ProcessPipeline {
     private Map generatorProperties = new HashMap();
     private SAXSerializer serializer;
     private String name;
+    private String description="";
 
     public void process(DXFDocument doc, Map context, OutputStream out)
         throws ProcessorException {
@@ -101,7 +102,7 @@ public class ProcessPipeline {
         try {
         	Map oldGenProps = this.generator.getProperties();
             this.generator.setProperties(this.generatorProperties);
-			this.generator.generate(doc, handler);
+			this.generator.generate(doc, handler, context);
 			//restore the old props
 			this.generator.setProperties(oldGenProps);
 		} catch (SAXException e) {
@@ -211,4 +212,12 @@ public class ProcessPipeline {
     public SAXGenerator getSAXGenerator(){
     	return this.generator;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

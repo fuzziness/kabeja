@@ -15,6 +15,7 @@
 */
 package org.kabeja.parser.entities;
 
+import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFInsert;
 import org.kabeja.parser.DXFValue;
@@ -25,7 +26,7 @@ import org.kabeja.parser.DXFValue;
  *
  */
 public class DXFInsertHandler extends AbstractEntityHandler {
-    public final static String ENTITY_NAME = "INSERT";
+   
     public static final int SCALE_X = 41;
     public static final int SCALE_Y = 42;
     public static final int SCALE_Z = 43;
@@ -67,7 +68,7 @@ public class DXFInsertHandler extends AbstractEntityHandler {
      * @see org.dxf2svg.parser.entities.DXFEntityHandler#getDXFEntityName()
      */
     public String getDXFEntityName() {
-        return ENTITY_NAME;
+        return DXFConstants.ENTITY_TYPE_INSERT;
     }
 
     /*

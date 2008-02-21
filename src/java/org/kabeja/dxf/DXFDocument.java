@@ -66,8 +66,6 @@ public class DXFDocument {
 	private List views = new ArrayList();
 
 	private DXFDictionary rootDictionary = new DXFDictionary();
-	
-	
 
 	public DXFDocument() {
 		// the defalut layer
@@ -149,7 +147,6 @@ public class DXFDocument {
 		return lineTypes.values().iterator();
 	}
 
-
 	public void addDXFEntity(DXFEntity entity) {
 		entity.setDXFDocument(this);
 		DXFLayer layer = this.getDXFLayer(entity.getLayerName());
@@ -189,7 +186,6 @@ public class DXFDocument {
 		return this.properties.containsKey(key);
 	}
 
-
 	/**
 	 * Returns the bounds of this document
 	 * 
@@ -202,9 +198,35 @@ public class DXFDocument {
 
 		while (e.hasMoreElements()) {
 			DXFLayer layer = (DXFLayer) e.nextElement();
-			Bounds b = layer.getBounds();
-			if (b.isValid()) {
-				this.bounds.addToBounds(b);
+			if (!layer.isFrozen()) {
+				Bounds b = layer.getBounds();
+				if (b.isValid()) {
+					this.bounds.addToBounds(b);
+				}
+			}
+		}
+
+		return bounds;
+	}
+
+	/**
+	 * Returns the bounds of this document
+	 * 
+	 * @return
+	 */
+	public Bounds getBounds(boolean onModelspace) {
+
+		Bounds bounds = new Bounds();
+
+		Enumeration e = this.layers.elements();
+
+		while (e.hasMoreElements()) {
+			DXFLayer layer = (DXFLayer) e.nextElement();
+			if (!layer.isFrozen()) {
+				Bounds b = layer.getBounds(onModelspace);
+				if (b.isValid()) {
+					this.bounds.addToBounds(b);
+				}
 			}
 		}
 
@@ -283,21 +305,16 @@ public class DXFDocument {
 		this.views.add(view);
 	}
 
-	
-	
 	public Iterator getDXFViewIterator() {
 		return this.views.iterator();
 	}
 
 	public void addDXFObject(DXFObject obj) {
 
-		
-		
-		
 		// look if the object goes in a dictionary
 		DXFDictionary d = this.rootDictionary
 				.getDXFDictionaryForID(obj.getID());
-		
+
 		if (d != null) {
 			d.putDXFObject(obj);
 		} else {
@@ -324,11 +341,10 @@ public class DXFDocument {
 	public DXFDictionary getRootDXFDictionary() {
 		return this.rootDictionary;
 	}
-	
-	public void setRootDXFDictionary(DXFDictionary  root) {
-		this.rootDictionary=root;
+
+	public void setRootDXFDictionary(DXFDictionary root) {
+		this.rootDictionary = root;
 	}
-	
 
 	public List getDXFObjectsByType(String type) {
 		HashMap objecttypes = (HashMap) this.objects.get(type);
@@ -336,9 +352,11 @@ public class DXFDocument {
 
 		return list;
 	}
+
 	/**
 	 * 
-	 * @param id, the ID of the object
+	 * @param id,
+	 *            the ID of the object
 	 * @return the object
 	 */
 
@@ -346,7 +364,7 @@ public class DXFDocument {
 
 		Iterator i = this.objects.values().iterator();
 		while (i.hasNext()) {
-			HashMap map = (HashMap)i.next();
+			HashMap map = (HashMap) i.next();
 			Object obj;
 			if ((obj = map.get(id)) != null) {
 				return (DXFObject) obj;
@@ -356,27 +374,32 @@ public class DXFDocument {
 		// Nothing found --> search in the dictionaries
 		return this.rootDictionary.getDXFObjectByID(id);
 	}
-	
+
 	/**
-	 * Gets the @see DXFEntity with the specified ID.
-	 * @param id of the @see DXFEntity
-	 * @return the @see DXFEntity with the specified ID  or null if there is no
+	 * Gets the
+	 * 
+	 * @see DXFEntity with the specified ID.
+	 * @param id
+	 *            of the
+	 * @see DXFEntity
+	 * @return the
+	 * @see DXFEntity with the specified ID or null if there is no
 	 * @see DXFEntity with the specified ID
 	 */
-	
-	public DXFEntity getDXFEntityByID(String id){
+
+	public DXFEntity getDXFEntityByID(String id) {
 		DXFEntity entity = null;
 		Iterator i = this.getDXFLayerIterator();
-		while(i.hasNext()){
-			DXFLayer layer = (DXFLayer)i.next();
-			if((entity=layer.getDXFEntityByID(id))!=null){
+		while (i.hasNext()) {
+			DXFLayer layer = (DXFLayer) i.next();
+			if ((entity = layer.getDXFEntityByID(id)) != null) {
 				return entity;
 			}
 		}
 		i = this.getDXFBlockIterator();
-		while(i.hasNext()){
-			DXFBlock block = (DXFBlock)i.next();
-			if((entity=block.getDXFEntityByID(id))!=null){
+		while (i.hasNext()) {
+			DXFBlock block = (DXFBlock) i.next();
+			if ((entity = block.getDXFEntityByID(id)) != null) {
 				return entity;
 			}
 		}

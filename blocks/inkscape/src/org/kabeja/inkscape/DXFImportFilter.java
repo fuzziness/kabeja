@@ -79,7 +79,7 @@ public class DXFImportFilter {
 			// and start the generation
 
 			filter2.setContentHandler(serializer);
-			generator.generate(doc, filter1);
+			generator.generate(doc, filter1, null);
 
 		} catch (Exception e) {
 			e.printStackTrace();

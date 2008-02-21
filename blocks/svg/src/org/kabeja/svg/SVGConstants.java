@@ -75,6 +75,8 @@ public class SVGConstants {
     public static final String SVG_ATTRIBUTE_FONT_WEIGHT = "font-weight";
     public static final String SVG_ATTRIBUTE_PATTERN_UNITS = "patternUnits";
     public static final String SVG_ATTRIBUTE_PATTERN_TRANSFORM = "patternTransform";
+    public static final String SVG_ATTRIBUTE_X="x";
+    public static final String SVG_ATTRIBUTE_Y="y";
     public static final String SVG_ATTRIBUTE_X1="x1";
     public static final String SVG_ATTRIBUTE_X2="x2";
     public static final String SVG_ATTRIBUTE_Y1="y1";

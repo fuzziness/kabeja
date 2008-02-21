@@ -78,4 +78,18 @@ public class DXFCircle extends DXFEntity {
 		return 2 * Math.PI * this.radius;
 	}
 
+	
+	public Point getPointAt(double angle) {
+
+		// the local part
+		double x = this.radius * Math.cos(Math.toRadians(angle));
+		double y = radius * Math.sin(Math.toRadians(angle));
+
+		// the wcs part
+		ParametricPlane plane = new ParametricPlane(this
+				.getExtrusion());
+		Point p = plane.getPoint(x+this.center.getX(), y+this.center.getY());
+		return p;
+
+	}
 }

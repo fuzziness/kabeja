@@ -117,7 +117,7 @@ public class LayerSeparator {
                         file), SAXPrettyOutputter.DEFAULT_ENCODING);
             writer.setDTD(SVGConstants.SVG_DTD_1_0);
             SAXGenerator svgGenerator = new SVGGenerator();
-            svgGenerator.generate(doc, writer);
+            svgGenerator.generate(doc, writer, null);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -75,6 +75,7 @@ public class DXFEntitiesSectionHandler extends AbstractSectionHandler
                 parseEntity = true;
             } else {
                 //no handler found
+            
                 parseEntity = false;
             }
         } else if (parseEntity) {

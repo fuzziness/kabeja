@@ -130,7 +130,7 @@ public class DXF2SVGReader extends XMLFilterImpl {
 			// the pipeline from parent class
 			SAXGenerator generator = new SVGGenerator();
 			generator.setProperties(new HashMap());
-			generator.generate(doc, this.getContentHandler());
+			generator.generate(doc, this.getContentHandler(), null);
 
 			// a little help for the GC
 			parser.releaseDXFDocument();
@@ -281,7 +281,7 @@ public class DXF2SVGReader extends XMLFilterImpl {
 			// the pipeline from parent class
 			SAXGenerator generator = new SVGGenerator();
 			generator.setProperties(new HashMap());
-			generator.generate(doc, this.getContentHandler());
+			generator.generate(doc, this.getContentHandler(), null);
 
 			// a little help for the GC
 			parser.releaseDXFDocument();

@@ -28,10 +28,12 @@ public abstract class AbstractSAXGenerator extends AbstractConfigurable implemen
 	protected DXFDocument doc;
 
 	protected ContentHandler handler;
+	protected Map context;
 
-	public void generate(DXFDocument doc, ContentHandler handler) throws SAXException{
+	public void generate(DXFDocument doc, ContentHandler handler, Map context) throws SAXException{
 		this.doc = doc;
 		this.handler = handler;
+		this.context=context;
 		this.generate();
 		
 	}

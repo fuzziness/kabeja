@@ -36,7 +36,7 @@ public class AggregatorGenerator extends AbstractSAXFilter implements
 
 	protected DXFDocument doc;
 
-	public void generate(DXFDocument doc, ContentHandler handler) throws SAXException{
+	public void generate(DXFDocument doc, ContentHandler handler, Map context) throws SAXException{
 		this.setContentHandler(handler);
 		this.doc = doc;
 		try {
@@ -59,7 +59,7 @@ public class AggregatorGenerator extends AbstractSAXFilter implements
 		Iterator i = this.generators.iterator();
 		while (i.hasNext()) {
 			SAXGenerator generator = (SAXGenerator) i.next();
-			generator.generate(this.doc, this);
+			generator.generate(this.doc, this, null);
 		}
 	}
 

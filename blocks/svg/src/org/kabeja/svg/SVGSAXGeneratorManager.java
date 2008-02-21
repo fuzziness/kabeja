@@ -29,6 +29,7 @@ import org.kabeja.svg.generators.SVGSplineGenerator;
 import org.kabeja.svg.generators.SVGTextGenerator;
 import org.kabeja.svg.generators.SVGToleranceGenerator;
 import org.kabeja.svg.generators.SVGTraceGenerator;
+import org.kabeja.svg.generators.SVGViewportGenerator;
 import org.kabeja.svg.generators.SVGXLineGenerator;
 
 public class SVGSAXGeneratorManager {
@@ -37,6 +38,8 @@ public class SVGSAXGeneratorManager {
 
 	protected Map pathBoundaryGenerator = new HashMap();
 	
+	
+
 	
 	public SVGSAXGeneratorManager(){
 		this.initialize();
@@ -113,6 +116,9 @@ public class SVGSAXGeneratorManager {
 				new SVGToleranceGenerator());
 		this.generators.put(DXFConstants.ENTITY_TYPE_TRACE,
 				new SVGTraceGenerator());
+		
+		this.generators.put(DXFConstants.ENTITY_TYPE_VIEWPORT,
+				new SVGViewportGenerator());
 		this.generators.put(DXFConstants.ENTITY_TYPE_XLINE,
 				new SVGXLineGenerator());
 		

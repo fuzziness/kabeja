@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -37,10 +38,13 @@ import org.kabeja.parser.ParseException;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
+import org.kabeja.processing.ProcessPipeline;
 import org.kabeja.processing.ProcessingManager;
 import org.kabeja.processing.ProcessorException;
 import org.kabeja.ui.ApplicationToolBar;
 import org.kabeja.ui.DXFDocumentViewComponent;
+import org.kabeja.ui.PropertiesEditor;
+import org.kabeja.ui.PropertiesListener;
 import org.kabeja.ui.ServiceManager;
 import org.kabeja.ui.Serviceable;
 import org.kabeja.ui.UIException;
@@ -50,7 +54,7 @@ import de.miethxml.toolkit.ui.PanelFactory;
 import de.miethxml.toolkit.ui.UIUtils;
 
 public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
-		ActionListener {
+		ActionListener,PropertiesListener{
 
 	protected JTabbedPane tabbedPane;
 	protected JComponent view;
@@ -65,6 +69,8 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 	protected File sourceFile;
 	protected DXFDocument doc;
 	protected boolean autogenerateOutput = false;
+	protected Map properties = new HashMap();
+	
 
 	public String getTitle() {
 
@@ -123,10 +129,13 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 		pipelinePanel.removeAll();
 		Iterator i = manager.getProcessPipelines().keySet().iterator();
 		while (i.hasNext()) {
+		
 			String pipelineName = (String) i.next();
+			ProcessPipeline p = manager.getProcessPipeline(pipelineName);
 			JButton button = new JButton(pipelineName);
 			button.setActionCommand(pipelineName);
 			button.addActionListener(this);
+			button.setToolTipText(p.getDescription());
 			pipelinePanel.add(button);
 
 		}
@@ -138,6 +147,10 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 			DXFDocumentViewComponent component) {
 		this.tabbedPane.add(component.getTitle(), component.getView());
 		this.viewComponents.add(component);
+		//register  as listener
+		if(component instanceof PropertiesEditor){
+			((PropertiesEditor)component).addPropertiesListener(this);
+		}
 
 	}
 
@@ -232,7 +245,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 				}
 			}
 			if (out != null) {
-				this.manager.process(doc, new HashMap(),
+				this.manager.process(doc, this.properties,
 						this.processingPipeline, new FileOutputStream(out));
 				this.log("Finished:" + out.getAbsolutePath() + "\n");
 			} else {
@@ -264,6 +277,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 				Parser parser = ParserBuilder.createDefaultParser();
 				try {
 
+					this.properties.clear();
 					this.parseFile(file, parser);
 					this.propagateDXFDocument(this.doc);
 
@@ -305,6 +319,17 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 	protected void log(String msg) {
 		this.logView.append(msg);
 		this.logView.setCaretPosition(this.logView.getDocument().getLength());
+	}
+
+	public void propertiesChanged(Map props) {
+		//copy changed properties to my properties
+	
+		Iterator i =props.keySet().iterator();
+		while(i.hasNext()){
+			String key = (String)i.next();		
+			this.properties.put(key, props.get(key));
+		}
+		
 	}
 
 }

@@ -23,9 +23,56 @@ import org.kabeja.dxf.helpers.Vector;
  *
  */
 public class DXFConstants {
+    public final static int COMMAND_CODE = 0;
+    
+    
     public static final String DEFAULT_LAYER = "0";
-    
-    
+    public final static Vector DEFAULT_X_AXIS_VECTOR = new Vector(1.0, 0.0, 0.0);
+    public final static Vector DEFAULT_Y_AXIS_VECTOR = new Vector(0.0, 1.0, 0.0);
+    public final static Vector DEFAULT_Z_AXIS_VECTOR = new Vector(0.0, 0.0, 1.0);
+    public final static String DICTIONARY_KEY_GROUP="ACAD_GROUP";
+    public final static String DICTIONARY_KEY_LAYOUT="ACAD_LAYOUT";
+    public final static String DICTIONARY_KEY_MLINESTYLE="ACAD_MLINESTYLE";
+    public final static String DICTIONARY_KEY_PLOTSETTINGS="ACAD_PLOTSETTINGS";
+    public final static String DICTIONARY_KEY_PLOTSTYLENAME="ACAD_PLOTSTYLENAME";
+    public final static String END_STREAM = "EOF";
+    public final static String ENTITY_TYPE_3DFACE = "3DFACE";
+    public final static String ENTITY_TYPE_3DSOLID = "3DSOLID";
+    //Entity types
+    public final static String ENTITY_TYPE_ARC = "ARC";
+    public final static String ENTITY_TYPE_ATTRIB = "ATTRIB";
+    public final static String ENTITY_TYPE_BODY = "BODY";
+    public final static String ENTITY_TYPE_CIRCLE = "CIRCLE";
+    public final static String ENTITY_TYPE_DIMENSION = "DIMENSION";
+    public final static String ENTITY_TYPE_ELLIPSE = "ELLIPSE";
+    public final static String ENTITY_TYPE_HATCH = "HATCH";
+    public final static String ENTITY_TYPE_IMAGE = "IMAGE";
+    public final static String ENTITY_TYPE_INSERT = "INSERT";
+    public final static String ENTITY_TYPE_LEADER = "LEADER";
+    public final static String ENTITY_TYPE_LINE = "LINE";
+    public final static String ENTITY_TYPE_LWPOLYLINE = "LWPOLYLINE";
+    public final static String ENTITY_TYPE_MLINE = "MLINE";
+    public final static String ENTITY_TYPE_MTEXT = "MTEXT";
+    public final static String ENTITY_TYPE_POINT = "POINT";
+    public final static String ENTITY_TYPE_POLYLINE = "POLYLINE";
+    public final static String ENTITY_TYPE_RAY = "RAY";
+    public final static String ENTITY_TYPE_REGION = "REGION";
+    public final static String ENTITY_TYPE_SHAPE = "SHAPE";
+    public final static String ENTITY_TYPE_SOLID = "SOLID";
+    public final static String ENTITY_TYPE_SPLINE = "SPLINE";
+    public final static String ENTITY_TYPE_TABLE = "TABLE";
+    public final static String ENTITY_TYPE_TEXT = "TEXT";
+    public final static String ENTITY_TYPE_TOLERANCE = "TOLERANCE";
+    public final static String ENTITY_TYPE_TRACE = "TRACE";
+    public final static String ENTITY_TYPE_VERTEX = "VERTEX";
+    public final static String ENTITY_TYPE_VIEWPORT = "VIEWPORT";
+    public final static String ENTITY_TYPE_XLINE = "XLINE";
+  
+    public final static int ENVIRONMENT_VARIABLE_LWDEFAULT=25;
+    public final static int GROUPCODE_STANDARD_FLAGS = 70;
+    public final static int GROUPCODE_STANDARD_LAYER = 8;
+    public final static int GROUPCODE_SUBCLASS_MARKER = 100;
+  
     public static final String HEADER_VARIABLE_ACADMAINTVER="$ACADMAINTVER";
     public static final String HEADER_VARIABLE_ACADVER="$ACADVER";
     public static final String HEADER_VARIABLE_ANGBASE="$ANGBASE";
@@ -121,9 +168,15 @@ public class DXFConstants {
     public static final String HEADER_VARIABLE_EXTMAX="$EXTMAX";
     public static final String HEADER_VARIABLE_EXTMIN="$EXTMIN";
     public static final String HEADER_VARIABLE_EXTNAMES="$EXTNAMES";
+    /** 
+     * Some older header variables maybe overriden by the vport table 
+     */
+    public static final String HEADER_VARIABLE_FASTZOOM="$FASTZOOM";
     public static final String HEADER_VARIABLE_FILLETRAD="$FILLETRAD";
     public static final String HEADER_VARIABLE_FILLMODE="$FILLMODE";
     public static final String HEADER_VARIABLE_FINGERPRINTGUID="$FINGERPRINTGUID";
+    public static final String HEADER_VARIABLE_GRIDMODE="$GRIDMODE";
+    public static final String HEADER_VARIABLE_GRIDUNIT="$GRIDUNIT";
     public static final String HEADER_VARIABLE_HALOGAP="$HALOGAP";
     public static final String HEADER_VARIABLE_HANDSEED="$HANDSEED";
     public static final String HEADER_VARIABLE_HIDETEXT="$HIDETEXT";
@@ -183,11 +236,17 @@ public class DXFConstants {
     public static final String HEADER_VARIABLE_SHADEDIF="$SHADEDIF";
     public static final String HEADER_VARIABLE_SKETCHINC="$SKETCHINC";
     public static final String HEADER_VARIABLE_SKPOLY="$SKPOLY";
+    public static final String HEADER_VARIABLE_SNAPANG="$SNAPANG";
+    public static final String HEADER_VARIABLE_SNAPBASE="$SNAPBASE";
+    public static final String HEADER_VARIABLE_SNAPISOPAIR="$SNAPISOPAIR";
+    public static final String HEADER_VARIABLE_SNAPMODE="$SNAPMODE";
+    public static final String HEADER_VARIABLE_SNAPSTYLE="$SNAPSTYLE";
+    public static final String HEADER_VARIABLE_SNAPUNIT="$SNAPUNIT";
     public static final String HEADER_VARIABLE_SORTENTS="$SORTENTS";
     public static final String HEADER_VARIABLE_SPLFRAME="$SPLFRAME";
     public static final String HEADER_VARIABLE_SPLINESEGS="$SPLINESEGS";
     public static final String HEADER_VARIABLE_SPLINETYPE="$SPLINETYPE";
-    public static final String HEADER_VARIABLE_SURFTAB1="$SURFTAB1";
+    public static final String HEADER_VARIABLE_SURFTAB1="$SURFTAB1"; 
     public static final String HEADER_VARIABLE_SURFTAB2="$SURFTAB2";
     public static final String HEADER_VARIABLE_SURFTYPE="$SURFTYPE";
     public static final String HEADER_VARIABLE_SURFU="$SURFU";
@@ -217,145 +276,81 @@ public class DXFConstants {
     public static final String HEADER_VARIABLE_UCSORTHOVIEW="$UCSORTHOVIEW";
     public static final String HEADER_VARIABLE_UCSXDIR="$UCSXDIR";
     public static final String HEADER_VARIABLE_UCSYDIR="$UCSYDIR";
-    public static final String HEADER_VARIABLE_UNITMODE="$UNITMODE";
+    public static final String HEADER_VARIABLE_UNITMODE="$UNITMODE"; 
     public static final String HEADER_VARIABLE_USERI1="$USERI1";
     public static final String HEADER_VARIABLE_USERR1="$USERR1";
     public static final String HEADER_VARIABLE_USRTIMER="$USRTIMER";
     public static final String HEADER_VARIABLE_VERSIONGUID="$VERSIONGUID";
+    public static final String HEADER_VARIABLE_VIEWCTR="$VIEWCTR";
+    public static final String HEADER_VARIABLE_VIEWDIR="$VIEWDIR";
+    public static final String HEADER_VARIABLE_VIEWSIZE="$VIEWSIZE";
     public static final String HEADER_VARIABLE_VISRETAIN="$VISRETAIN";
     public static final String HEADER_VARIABLE_WORLDVIEW="$WORLDVIEW";
     public static final String HEADER_VARIABLE_XCLIPFRAME="$XCLIPFRAME";
     public static final String HEADER_VARIABLE_XEDIT="$XEDIT";
-
-    /** 
-     * Some older header variables maybe overriden by the vport table 
-     */
-    public static final String HEADER_VARIABLE_FASTZOOM="$FASTZOOM";
-    public static final String HEADER_VARIABLE_GRIDMODE="$GRIDMODE";
-    public static final String HEADER_VARIABLE_GRIDUNIT="$GRIDUNIT";
-    public static final String HEADER_VARIABLE_SNAPANG="$SNAPANG";
-    public static final String HEADER_VARIABLE_SNAPBASE="$SNAPBASE";
-    public static final String HEADER_VARIABLE_SNAPISOPAIR="$SNAPISOPAIR";
-    public static final String HEADER_VARIABLE_SNAPMODE="$SNAPMODE";
-    public static final String HEADER_VARIABLE_SNAPSTYLE="$SNAPSTYLE";
-    public static final String HEADER_VARIABLE_SNAPUNIT="$SNAPUNIT";
-    public static final String HEADER_VARIABLE_VIEWCTR="$VIEWCTR";
-    public static final String HEADER_VARIABLE_VIEWDIR="$VIEWDIR";
-    public static final String HEADER_VARIABLE_VIEWSIZE="$VIEWSIZE";
-
-
-    public final static int GROUPCODE_STANDARD_LAYER = 8;
-    public final static int GROUPCODE_STANDARD_FLAGS = 70;
-    public final static int GROUPCODE_SUBCLASS_MARKER = 100;
     
-    //Entity types
-    public final static String ENTITY_TYPE_ARC = "ARC";
-    public final static String ENTITY_TYPE_LINE = "LINE";
-    public final static String ENTITY_TYPE_MLINE = "MLINE";
-    public final static String ENTITY_TYPE_XLINE = "XLINE";
-    public final static String ENTITY_TYPE_RAY = "RAY";
-    public final static String ENTITY_TYPE_CIRCLE = "CIRCLE";
-    public final static String ENTITY_TYPE_ELLIPSE = "ELLIPSE";
-    public final static String ENTITY_TYPE_IMAGE = "IMAGE";
-    public final static String ENTITY_TYPE_POLYLINE = "POLYLINE";
-    public final static String ENTITY_TYPE_LWPOLYLINE = "LWPOLYLINE";
-    public final static String ENTITY_TYPE_HATCH = "HATCH";
-    public final static String ENTITY_TYPE_TEXT = "TEXT";
-    public final static String ENTITY_TYPE_MTEXT = "MTEXT";
-    public final static String ENTITY_TYPE_VERTEX = "VERTEX";
-    public final static String ENTITY_TYPE_POINT = "POINT";
-    public final static String ENTITY_TYPE_SOLID = "SOLID";
-    public final static String ENTITY_TYPE_TRACE = "TRACE";
-    public final static String ENTITY_TYPE_INSERT = "INSERT";
-    public final static String ENTITY_TYPE_ATTRIB = "ATTRIB";
-    public final static String ENTITY_TYPE_3DFACE = "3DFACE";
-    public final static String ENTITY_TYPE_3DSOLID = "3DSOLID";
-    public final static String ENTITY_TYPE_BODY = "BODY";
-    public final static String ENTITY_TYPE_REGION = "REGION";
-    public final static String ENTITY_TYPE_SPLINE = "SPLINE";
-    public final static String ENTITY_TYPE_SHAPE = "SHAPE";
-    public final static String ENTITY_TYPE_LEADER = "LEADER";
-    public final static String ENTITY_TYPE_TOLERANCE = "TOLERANCE";
-    public final static String ENTITY_TYPE_TABLE = "TABLE";
-    public final static String ENTITY_TYPE_DIMENSION = "DIMENSION";
+    public final static String LAYOUT_DEFAULT_NAME="Model";
     
-    //Object types
-    public final static String OBJECT_TYPE_IMAGEDEF = "IMAGEDEF";
-    public final static String OBJECT_TYPE_DICTIONARY = "DICTIONARY";
-    public final static String OBJECT_TYPE_PLOTSETTINGS="PLOTSETTINGS";
-    public final static String OBJECT_TYPE_LAYOUT="LAYOUT";
     public final static String OBJECT_TYPE_ACAD_PROXY_OBJECT="ACAD_PROXY_OBJERCT";
     public final static String OBJECT_TYPE_ACDBDICTIONARYWDFLT="ACDBDICTIONARYWDFLT";
     public final static String OBJECT_TYPE_ACDBPLACEHOLDER="ACDBPLACEHOLDER";
+    public final static String OBJECT_TYPE_DICTIONARY = "DICTIONARY";
     public final static String OBJECT_TYPE_DICTIONARYVAR="DICTIONARYVAR";
     public final static String OBJECT_TYPE_DIMASSOC="DIMASSOC";
     public final static String OBJECT_TYPE_FIELD="FIELD";
     public final static String OBJECT_TYPE_GROUP="GROUP";
     public final static String OBJECT_TYPE_IDBUFFER="IDBUFFER";
+    //Object types
+    public final static String OBJECT_TYPE_IMAGEDEF = "IMAGEDEF";
     public final static String OBJECT_TYPE_IMAGEDEF_REACTOR="IMAGEDEF_REACTOR";
-    public final static String OBJECT_TYPE_LAYER_INDEX="LAYER_INDEX";
     public final static String OBJECT_TYPE_LAYER_FILTER="LAYER_FILTER";
+    public final static String OBJECT_TYPE_LAYER_INDEX="LAYER_INDEX";
+    public final static String OBJECT_TYPE_LAYOUT="LAYOUT";
     public final static String OBJECT_TYPE_MATERIAL="MATERIAL";
     public final static String OBJECT_TYPE_MLINESTYLE="MLINESTYLE";
     public final static String OBJECT_TYPE_OBJECT_PTR="OBJECT_PTR";
+    public final static String OBJECT_TYPE_PLOTSETTINGS="PLOTSETTINGS";
     public final static String OBJECT_TYPE_RASTERVARIABLES="RASTERVARIABLES";
-    public final static String OBJECT_TYPE_SPATIAL_INDEX="SPATIAL_INDEX";
-    public final static String OBJECT_TYPE_SPATIAL_FILTER="SPATIAL_FILTER";
     public final static String OBJECT_TYPE_SORTENTSTABLE="SORTENTSTABLE";
+    public final static String OBJECT_TYPE_SPATIAL_FILTER="SPATIAL_FILTER";
+    public final static String OBJECT_TYPE_SPATIAL_INDEX="SPATIAL_INDEX";
     public final static String OBJECT_TYPE_TABLESTYLE="TABLESTYLE";
     public final static String OBJECT_TYPE_VBA_PROJECT="VBA_PROJECT";
     public final static String OBJECT_TYPE_WIPEOUTVARIABLES="WIPEOUTVARIABLES";
     public final static String OBJECT_TYPE_XRECORD="XRECORD";
     
-    
-    
-    public final static Vector DEFAULT_X_AXIS_VECTOR = new Vector(1.0, 0.0, 0.0);
-    public final static Vector DEFAULT_Y_AXIS_VECTOR = new Vector(0.0, 1.0, 0.0);
-    public final static Vector DEFAULT_Z_AXIS_VECTOR = new Vector(0.0, 0.0, 1.0);
-    public final static String TABLE_KEY_VPORT = "VPORT";
-    public final static String TABLE_KEY_VIEW = "VIEW";
-    public final static String TABLE_KEY_DIMSTYLE = "DIMSTYLE";
-    public final static String TABLE_KEY_LAYER = "LAYER";
-    public final static String TABLE_KEY_LTYPE = "LTYPE";
-    public final static String TABLE_KEY_STYLE = "STYLE";
-    public final static String TABLE_KEY_UCS = "UCS";
-    public final static String TABLE_KEY_APPID = "APPID";
-    public final static String TABLE_KEY_BLOCK_RECORD = "BLOCK_RECORD";
-    
-    public final static String DICTIONARY_KEY_LAYOUT="ACAD_LAYOUT";
-    public final static String DICTIONARY_KEY_PLOTSETTINGS="ACAD_PLOTSETTINGS";
-    public final static String DICTIONARY_KEY_GROUP="ACAD_GROUP";
-    public final static String DICTIONARY_KEY_MLINESTYLE="ACAD_MLINESTYLE";
-    public final static String DICTIONARY_KEY_PLOTSTYLENAME="ACAD_PLOTSTYLENAME";
-    
-    public final static String LAYOUT_DEFAULT_NAME="Model";
-    
-    public final static String SECTION_START = "SECTION";
-    public final static String SECTION_END = "ENDSEC";
-    public final static String END_STREAM = "EOF";
-    public final static int COMMAND_CODE = 0;
-    public final static String SECTION_HEADER = "HEADER";
-    public final static String SECTION_CLASSES = "CLASSES";
-    public final static String SECTION_TABLES = "TABLES";
-    public final static String SECTION_BLOCKS = "BLOCKS";
-    public final static String SECTION_ENTITIES = "ENTITIES";
-    public final static String SECTION_OBJECTS = "OBJECTS";
-    public final static String SECTION_THUMBNAILIMAGE = "THUMBNAILIMAGE";
-    
-    public static double POINT_CONNECTION_RADIUS=0.0001;
-    
-    
     public final static int PAPER_UNIT_INCH=0;
     public final static int PAPER_UNIT_MILLIMETER=1;
     public final static int PAPER_UNIT_PIXEL=2;
     
-    public final static int PLOT_STYLE_LAST_SCREEN_DISPLAY=0;	
+    
     public final static int PLOT_STYLE_DRAWING_EXTENTS=1;
     public final static int PLOT_STYLE_DRAWING_LIMITS=2;
+    public final static int PLOT_STYLE_LAST_SCREEN_DISPLAY=0;
+    public final static int PLOT_STYLE_LAYOUT=5;
     public final static int PLOT_STYLE_SPECIFIECED_VIEW=3;
     public final static int PLOT_STYLE_SPECIFIECED_WINDOW=4;
-    public final static int PLOT_STYLE_LAYOUT=5;
     
-    public final static int ENVIRONMENT_VARIABLE_LWDEFAULT=25;
+    public static double POINT_CONNECTION_RADIUS=0.0001;
+    
+    public final static String SECTION_BLOCKS = "BLOCKS";
+    public final static String SECTION_CLASSES = "CLASSES";
+    public final static String SECTION_END = "ENDSEC";
+    public final static String SECTION_ENTITIES = "ENTITIES";
+    public final static String SECTION_HEADER = "HEADER";
+    public final static String SECTION_OBJECTS = "OBJECTS";
+    public final static String SECTION_START = "SECTION";
+    public final static String SECTION_TABLES = "TABLES";
+    public final static String SECTION_THUMBNAILIMAGE = "THUMBNAILIMAGE";
+    
+    public final static String TABLE_KEY_APPID = "APPID";
+    public final static String TABLE_KEY_BLOCK_RECORD = "BLOCK_RECORD";   
+    public final static String TABLE_KEY_DIMSTYLE = "DIMSTYLE";	
+    public final static String TABLE_KEY_LAYER = "LAYER";
+    public final static String TABLE_KEY_LTYPE = "LTYPE";
+    public final static String TABLE_KEY_STYLE = "STYLE";
+    public final static String TABLE_KEY_UCS = "UCS";
+    public final static String TABLE_KEY_VIEW = "VIEW";
+    public final static String TABLE_KEY_VPORT = "VPORT";
     
 }

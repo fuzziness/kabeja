@@ -24,7 +24,7 @@ import org.kabeja.parser.DXFValue;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class DXFViewportTableHandler extends AbstractTableHandler {
+public class DXFVPortTableHandler extends AbstractTableHandler {
     public final static int GROUPCODE_VPORT_NAME = 2;
     public final static int GROUPCODE_VPORT_LOWER_LEFT_X = 10;
     public final static int GROUPCODE_VPORT_LOWER_LEFT_Y = 20;
@@ -58,7 +58,7 @@ public class DXFViewportTableHandler extends AbstractTableHandler {
     public void parseGroup(int groupCode, DXFValue value) {
         switch (groupCode) {
         case GROUPCODE_VPORT_NAME:
-            viewport.setName(value.getValue());
+            viewport.setViewportID(value.getValue());
 
             if ("*active".equals( value.getValue().toLowerCase() )) {
                 viewport.setActive(true);

@@ -42,6 +42,7 @@ import org.kabeja.parser.entities.DXFSplineHandler;
 import org.kabeja.parser.entities.DXFTextHandler;
 import org.kabeja.parser.entities.DXFToleranceHandler;
 import org.kabeja.parser.entities.DXFTraceHandler;
+import org.kabeja.parser.entities.DXFViewportHandler;
 import org.kabeja.parser.entities.DXFXLineHandler;
 import org.kabeja.parser.objects.DXFDictionaryHandler;
 import org.kabeja.parser.objects.DXFImageDefHandler;
@@ -53,7 +54,7 @@ import org.kabeja.parser.table.DXFLayerTableHandler;
 import org.kabeja.parser.table.DXFLineTypeTableHandler;
 import org.kabeja.parser.table.DXFStyleTableHandler;
 import org.kabeja.parser.table.DXFViewTableHandler;
-import org.kabeja.parser.table.DXFViewportTableHandler;
+import org.kabeja.parser.table.DXFVPortTableHandler;
 
 
 /**
@@ -147,6 +148,10 @@ public class ParserBuilder {
 
         h = new DXFToleranceHandler();
         handlerManager.addHandler(h);
+        
+        h = new DXFViewportHandler();
+        handlerManager.addHandler(h);
+
 
         // the table handler
         handlerManager = new DXFTableSectionHandler();
@@ -164,7 +169,7 @@ public class ParserBuilder {
         handler = new DXFStyleTableHandler();
         handlerManager.addHandler(handler);
 
-        handler = new DXFViewportTableHandler();
+        handler = new DXFVPortTableHandler();
         handlerManager.addHandler(handler);
 
         handler = new DXFViewTableHandler();
@@ -246,6 +251,10 @@ public class ParserBuilder {
 
         h = new DXFToleranceHandler();
         handlerManager.addHandler(h);
+        
+        h = new DXFViewportHandler();
+        handlerManager.addHandler(h);
+
 
         // the OBJECTS section
         handlerManager = new DXFObjectsSectionHandler();

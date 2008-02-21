@@ -162,7 +162,10 @@ public class ProcessingUI implements Serviceable,Startable,ProcessingUIComponent
 	}
 
 	public void addAction(Action action) {
-		this.toolbar.add(new JButton(action),0);
+		JButton button = new JButton(action);
+		button.setToolTipText( button.getText());
+		button.setText("");
+		this.toolbar.add(button,0);
 		
 	}
 	
