@@ -53,6 +53,8 @@ import org.kabeja.processing.scripting.ScriptEngine;
 import org.kabeja.processing.scripting.ScriptException;
 import org.kabeja.ui.DXFDocumentViewComponent;
 import org.kabeja.ui.UIException;
+import org.kabeja.ui.event.DXFDocumentChangeEventProvider;
+import org.kabeja.ui.event.DXFDocumentChangeListener;
 import org.mozilla.javascript.ClassCache;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -62,7 +64,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 public class JavaScriptShell extends AbstractPostProcessor implements
-		DXFDocumentViewComponent {
+		DXFDocumentViewComponent, DXFDocumentChangeEventProvider {
 
 	protected JFrame frame;
 	protected JTextArea textArea;
@@ -73,6 +75,8 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 	protected int historyPos = 0;
 	protected ScriptWorker worker;
 	protected String title = "JSShell";
+	protected ArrayList listeners = new ArrayList();
+	protected DXFDocument doc;
 
 	public void process(DXFDocument doc, Map context) throws ProcessorException {
 
@@ -132,6 +136,9 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 		button = new JButton((Action) actions.get("paste"));
 		toolbar.add(button);
 		button = new JButton((Action) actions.get("cut"));
+		toolbar.add(button);
+
+		button = new JButton((Action) actions.get("reload"));
 		toolbar.add(button);
 
 		return toolbar;
@@ -259,6 +266,15 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 
 		};
 		actions.put("open", action);
+		action = new AbstractAction("Reload") {
+
+			public void actionPerformed(ActionEvent e) {
+				fireDXFDocumentChangeEvent();
+			}
+
+		};
+		actions.put("reload", action);
+
 	}
 
 	protected String getLineAtCaretPosition() {
@@ -406,15 +422,15 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 			out = System.out;
 			// System.setOut(output);
 			// System.setErr(output);
-			this.scope = ctx.initStandardObjects(null,false);
+			this.scope = ctx.initStandardObjects(null, false);
 			try {
 				ScriptableObject.defineClass(this.scope, Global.class);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			 this.scope = new Global();
-			 Global.setOutput(output);
+			this.scope = new Global();
+			Global.setOutput(output);
 			ctx.setErrorReporter(new ErrorReporter() {
 
 				public void error(String arg0, String arg1, int arg2,
@@ -517,6 +533,7 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 	}
 
 	public void showDXFDocument(DXFDocument doc) throws UIException {
+		this.doc = doc;
 		worker = new ScriptWorker(doc);
 		worker.start();
 	}
@@ -549,8 +566,28 @@ public class JavaScriptShell extends AbstractPostProcessor implements
 		return panel;
 	}
 
-	public void setProcessingManager(ProcessingManager manager) {
 
+	public void addDXFDocumentChangeListener(DXFDocumentChangeListener listener) {
+
+		this.listeners.add(listener);
+
+	}
+
+	public void removeDXFDocumentChangeListener(
+			DXFDocumentChangeListener listener) {
+		this.listeners.remove(listener);
+
+	}
+
+	protected void fireDXFDocumentChangeEvent() {
+		if (this.doc != null) {
+			Iterator i = ((ArrayList) this.listeners.clone()).iterator();
+			while (i.hasNext()) {
+				DXFDocumentChangeListener l = (DXFDocumentChangeListener) i
+						.next();
+				l.changed(this.doc);
+			}
+		}
 	}
 
 }

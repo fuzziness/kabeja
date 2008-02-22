@@ -57,9 +57,55 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
 
 			if (!viewport.isModelSpace()
 					&& !viewport.getViewportID().equals("1")) {
+				attr = new AttributesImpl();
+				// first the clip path
+				SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
+						.validateID(viewport.getID() + "_clip"));
+				SVGUtils.startElement(handler, SVGConstants.SVG_CLIPPING_PATH,
+						attr);
+				Bounds viewBounds = viewport.getModelspaceViewBounds();
+				attr = new AttributesImpl();
+				double w = viewBounds.getWidth() / 2;
+				double h = viewBounds.getHeight() / 2;
+				Point p = viewport.getViewCenterPoint();
+				StringBuffer buf = new StringBuffer();
+				buf.append('M');
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute((p.getX() - w)));
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute((p.getY() - h)));
+				buf.append(' ');
+				buf.append('L');
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute((p.getX() + w)));
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute((p.getY() - h)));
+				buf.append(' ');
+
+				buf.append('L');
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute((p.getX() + w)));
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute((p.getY() + h)));
+				buf.append(' ');
+				buf.append('L');
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute((p.getX() - w)));
+				buf.append(' ');
+				buf.append(SVGUtils.formatNumberAttribute((p.getY() + h)));
+				buf.append(' ');
+				buf.append('z');
+
+				SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_VIEWBOX,
+						buf.toString());
+
+				SVGUtils.addAttribute(attr, "d", buf.toString());
+				SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
+
+				SVGUtils.endElement(handler, SVGConstants.SVG_CLIPPING_PATH);
 
 				// output the view to modelspace
-				Bounds viewBounds = viewport.getModelspaceViewBounds();
+				
 				double zoomXP = viewport.getZoomXPFactor();
 				this.manager = (SVGSAXGeneratorManager) svgContext
 						.get(SVGContext.SVGSAXGENERATOR_MANAGER);
@@ -69,7 +115,7 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
 						.getID());
 				// the transform
 
-				Point p = viewport.getViewTargetPoint();
+				
 				StringBuffer buff = new StringBuffer();
 
 				buff.append("translate(");
@@ -117,6 +163,12 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
 						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
 								.formatNumberAttribute(width));
 				svgContext.put(SVGContext.STROKE_WIDTH, new Double(width));
+
+				// reference the clip path
+				SVGUtils.addAttribute(attr,
+						SVGConstants.SVG_ATTRIBUTE_CLIP_PATH, "url(#"
+								+ SVGUtils.validateID(viewport.getID()
+										+ "_clip") + ")");
 
 				SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 
@@ -198,11 +250,13 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
 				SVGSAXGenerator gen = this.manager.getSVGGenerator(type);
 				while (i.hasNext()) {
 					DXFEntity entity = (DXFEntity) i.next();
+					Bounds b = entity.getBounds();
+
 					// TODO only output the modelspace entities which are inside
 					// or partial the
 					// bounds
 
-					if (entity.isModelSpace()) {
+					if (entity.isModelSpace() && b.contains(viewBounds)) {
 						gen.toSAX(handler, context, entity, null);
 					}
 				}

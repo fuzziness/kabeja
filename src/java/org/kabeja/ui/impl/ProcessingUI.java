@@ -2,6 +2,7 @@ package org.kabeja.ui.impl;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -165,7 +166,16 @@ public class ProcessingUI implements Serviceable,Startable,ProcessingUIComponent
 		JButton button = new JButton(action);
 		button.setToolTipText( button.getText());
 		button.setText("");
-		this.toolbar.add(button,0);
+        this.addAction(button);
+		
+	}
+
+	public void addAction(Component component) {
+		if(this.toolbar.getComponentCount()>1){
+			this.toolbar.add(component,this.toolbar.getComponentCount()-2);
+		}else{
+		  this.toolbar.add(component);
+		}
 		
 	}
 	

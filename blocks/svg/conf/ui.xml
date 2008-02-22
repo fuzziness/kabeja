@@ -3,5 +3,6 @@
  <components>
     <component class="org.kabeja.svg.ui.SVGViewUIComponent"/>  
     <component class="org.kabeja.processing.scripting.impl.JavaScriptShell"/>  
+    <component class="org.kabeja.svg.ui.OutputSettingsUI"/>  
  </components>
 </uiconfiguration>

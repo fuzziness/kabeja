@@ -36,6 +36,12 @@
 		<tstamp />
 		<mkdir dir="${build}" />
 		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${build}/${classes}/${icons}" />
+		<copy todir="${build}/${classes}/${icons}">
+			<fileset dir="${icons}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 		<mkdir dir="${dist}" />
 		<mkdir dir="${dist}/${help}" />
 		<mkdir dir="${dist}/${lang}" />
@@ -49,6 +55,9 @@
 			<classpath>
 				<pathelement path="${classpath}" />
 				<fileset dir="${block.libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${kabeja.home}/${libs}">
 					<include name="**/*.jar" />
 				</fileset>
 				<dirset dir="${kabeja.home}/${build}/${classes}"/>

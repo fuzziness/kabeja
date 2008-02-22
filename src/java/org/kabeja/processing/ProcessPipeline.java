@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.processing.helper.MergeMap;
 import org.kabeja.tools.SAXFilterConfig;
 import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
@@ -52,12 +53,12 @@ public class ProcessPipeline {
         ContentHandler handler = null;
 
         List saxFilterProperties = new ArrayList();
-        
+        //setup saxfilters
         if (this.saxFilterConfigs.size() > 0) {
             Iterator i = saxFilterConfigs.iterator();
             SAXFilterConfig sc = (SAXFilterConfig)i.next();
             SAXFilter last =  this.manager.getSAXFilter(sc.getFilterName());
-            saxFilterProperties.add(last.getProperties());
+            saxFilterProperties.add(new MergeMap(last.getProperties(),context));
             last.setProperties(sc.getProperties());
             
             while (i.hasNext()) {
@@ -87,7 +88,7 @@ public class ProcessPipeline {
             //backup the default props
             Map oldProps = pp.getProperties();
             //setup the pipepine props
-            pp.setProperties(ppc.getProperties());
+            pp.setProperties(new MergeMap(ppc.getProperties(),context));
             pp.process(doc, context);
             //restore the default props
             pp.setProperties(oldProps);
@@ -95,9 +96,9 @@ public class ProcessPipeline {
         }
 
         Map oldProbs = this.serializer.getProperties();
-        this.serializer.setProperties(this.serializerProperties);
+        this.serializer.setProperties(new MergeMap(this.serializerProperties,context));
 
-        //invoke the filter and serialier
+        //invoke the filter and serializer
         this.serializer.setOutput(out);
         try {
         	Map oldGenProps = this.generator.getProperties();

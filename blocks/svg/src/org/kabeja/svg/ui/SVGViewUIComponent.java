@@ -47,10 +47,15 @@ import org.kabeja.processing.ProcessingManager;
 import org.kabeja.svg.SVGGenerator;
 import org.kabeja.svg.tools.DXFSAXDocumentFactory;
 import org.kabeja.ui.DXFDocumentViewComponent;
+import org.kabeja.ui.PropertiesEditor;
+import org.kabeja.ui.ServiceManager;
+import org.kabeja.ui.Serviceable;
 import org.kabeja.ui.UIException;
+import org.kabeja.ui.event.DXFDocumentChangeEventProvider;
+import org.kabeja.ui.event.DXFDocumentChangeListener;
 import org.w3c.dom.svg.SVGDocument;
 
-public class SVGViewUIComponent extends org.kabeja.ui.impl.AbstractPropertiesEditor implements DXFDocumentViewComponent{
+public class SVGViewUIComponent extends org.kabeja.ui.impl.AbstractPropertiesEditor implements DXFDocumentViewComponent,Serviceable,DXFDocumentChangeListener{
 
 	protected boolean initialized = false;
 	protected JSVGCanvas canvas;
@@ -150,9 +155,6 @@ public class SVGViewUIComponent extends org.kabeja.ui.impl.AbstractPropertiesEdi
 		return parentPanel;
 	}
 
-	public void setProcessingManager(ProcessingManager manager) {
-
-	}
 
 	public void showDXFDocument(DXFDocument doc) throws UIException {
 		this.doc = doc;
@@ -224,6 +226,23 @@ public class SVGViewUIComponent extends org.kabeja.ui.impl.AbstractPropertiesEdi
 		});
 
 		return this.switchViewBox;
+	}
+
+	public void setServiceManager(ServiceManager manager) {
+	   Object[] obj = manager.getServiceComponents(DXFDocumentChangeEventProvider.SERVICE);
+		for(int i=0;i<obj.length;i++){
+			((DXFDocumentChangeEventProvider)obj[i]).addDXFDocumentChangeListener(this);
+		}
+	}
+
+	public void changed(DXFDocument doc) {
+		 try {
+			 System.out.println("got event");
+			this.updateView(doc);
+		} catch (UIException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 

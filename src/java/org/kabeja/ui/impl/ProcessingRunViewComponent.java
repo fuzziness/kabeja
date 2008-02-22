@@ -49,12 +49,14 @@ import org.kabeja.ui.ServiceManager;
 import org.kabeja.ui.Serviceable;
 import org.kabeja.ui.UIException;
 import org.kabeja.ui.ViewComponent;
+import org.kabeja.ui.event.DXFDocumentChangeEventProvider;
+import org.kabeja.ui.event.DXFDocumentChangeListener;
 
 import de.miethxml.toolkit.ui.PanelFactory;
 import de.miethxml.toolkit.ui.UIUtils;
 
 public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
-		ActionListener,PropertiesListener{
+		ActionListener, PropertiesListener, DXFDocumentChangeEventProvider {
 
 	protected JTabbedPane tabbedPane;
 	protected JComponent view;
@@ -70,7 +72,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 	protected DXFDocument doc;
 	protected boolean autogenerateOutput = false;
 	protected Map properties = new HashMap();
-	
+	protected ArrayList listeners = new ArrayList();
 
 	public String getTitle() {
 
@@ -129,7 +131,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 		pipelinePanel.removeAll();
 		Iterator i = manager.getProcessPipelines().keySet().iterator();
 		while (i.hasNext()) {
-		
+
 			String pipelineName = (String) i.next();
 			ProcessPipeline p = manager.getProcessPipeline(pipelineName);
 			JButton button = new JButton(pipelineName);
@@ -147,10 +149,6 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 			DXFDocumentViewComponent component) {
 		this.tabbedPane.add(component.getTitle(), component.getView());
 		this.viewComponents.add(component);
-		//register  as listener
-		if(component instanceof PropertiesEditor){
-			((PropertiesEditor)component).addPropertiesListener(this);
-		}
 
 	}
 
@@ -166,8 +164,10 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 		// we set the action to all toolbars if there are more then on
 		for (int i = 0; i < objects.length; i++) {
 			((ApplicationToolBar) objects[i]).addAction(new AbstractAction(
-					"Open", new ImageIcon(UIUtils.resourceToBytes(this
-							.getClass(), "/icons/open.gif"))) {
+
+			"Open", new ImageIcon(UIUtils.resourceToBytes(this.getClass(),
+					"/icons/open.gif"))) {
+				private static final long serialVersionUID = 1L;
 
 				public void actionPerformed(ActionEvent e) {
 					Runnable r = new Runnable() {
@@ -181,6 +181,10 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 				}
 
 			});
+		}
+		objects = manager.getServiceComponents(PropertiesEditor.SERVICE);
+		for (int i = 0; i < objects.length; i++) {
+			((PropertiesEditor) objects[i]).addPropertiesListener(this);
 		}
 	}
 
@@ -211,8 +215,17 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 				Parser parser = ParserBuilder.createDefaultParser();
 				// we have to parse every file
 				for (int i = 0; i < files.length; i++) {
-					this.parseFile(files[i], parser);
-					this.processFile(this.doc, files[i]);
+					String ext = files[i].getAbsolutePath();
+					System.out.println("file=" + ext);
+					int index = ext.lastIndexOf(".");
+					if (index + 1 < ext.length()) {
+						ext = ext.substring(ext.lastIndexOf(".") + 1);
+						System.out.println("ext=" + ext);
+						if (parser.supportedExtension(ext)) {
+							this.parseFile(files[i], parser);
+							this.processFile(this.doc, files[i]);
+						}
+					}
 				}
 				// file already parsed
 			} else if (this.sourceFile.isFile()) {
@@ -277,9 +290,8 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 				Parser parser = ParserBuilder.createDefaultParser();
 				try {
 
-					this.properties.clear();
 					this.parseFile(file, parser);
-					this.propagateDXFDocument(this.doc);
+					this.fireDXFDocumentChangeEvent();
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -322,14 +334,39 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 	}
 
 	public void propertiesChanged(Map props) {
-		//copy changed properties to my properties
-	
-		Iterator i =props.keySet().iterator();
-		while(i.hasNext()){
-			String key = (String)i.next();		
+		// copy changed properties to my properties
+
+		Iterator i = props.keySet().iterator();
+		while (i.hasNext()) {
+			String key = (String) i.next();
 			this.properties.put(key, props.get(key));
 		}
-		
+
 	}
 
+	public void addDXFDocumentChangeListener(DXFDocumentChangeListener listener) {
+
+		this.listeners.add(listener);
+
+	}
+
+	public void removeDXFDocumentChangeListener(
+			DXFDocumentChangeListener listener) {
+		this.listeners.remove(listener);
+
+	}
+
+	protected void fireDXFDocumentChangeEvent() throws Exception {
+		Iterator i = ((ArrayList) this.listeners.clone()).iterator();
+		while (i.hasNext()) {
+			DXFDocumentChangeListener l = (DXFDocumentChangeListener) i.next();
+			if (!(l instanceof DXFDocumentViewComponent)) {
+				// avoid double event
+				l.changed(this.doc);
+			}
+
+		}
+		this.propagateDXFDocument(this.doc);
+
+	}
 }

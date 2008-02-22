@@ -37,16 +37,17 @@ public class ServiceContainer implements ServiceManager,Application{
 	protected List getServiceComponentsByServiceField(String service){
 		List list = new ArrayList();
 		Iterator i = this.components.iterator();
-		while(i.hasNext()){
-			Object obj = i.next();
-			Class[] c= obj.getClass().getInterfaces();
-			
-			for(int x=0;x<c.length;x++){
-				if(c[x].getName().equals(service)){
+		try {
+			Class serviceClass = this.getClass().getClassLoader().loadClass(service);
+			while(i.hasNext()){
+				Object obj = i.next();
+				if(serviceClass.isInstance(obj)){
 					list.add(obj);
 				}
-			}
 
+			}
+		} catch (ClassNotFoundException e) {
+						e.printStackTrace();
 		}
 		return list;
 	}
