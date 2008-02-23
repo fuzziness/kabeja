@@ -71,8 +71,8 @@ public class BlockTask extends Ant {
 				handleDependency(dep, b);
 			}
 			if (props.containsKey("block." + dir.getName())) {
-				b.setEnabled(Boolean.parseBoolean(((String) props.get("block."
-						+ dir.getName())).trim()));
+				b.setEnabled(Boolean.valueOf((((String) props.get("block."
+						+ dir.getName())).trim())).booleanValue());
 				addBlock(b);
 			}else{
 				log("Block:"+dir.getName()+" not configured.");
