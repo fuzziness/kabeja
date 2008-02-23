@@ -12,7 +12,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 package org.kabeja.svg.tools;
 
 import java.util.Map;
@@ -30,8 +30,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Build a SVGDocument from DXFDocument.
+ * 
  * @author simon
- *
+ * 
  */
 public class DXFSAXDocumentFactory extends SAXDocumentFactory {
 
@@ -39,7 +40,17 @@ public class DXFSAXDocumentFactory extends SAXDocumentFactory {
 		super(SVGDOMImplementation.getDOMImplementation(), null);
 	}
 
-	public SVGDocument createDocument(DXFDocument doc,Map properties) throws SAXException {
+	public SVGDocument createDocument(DXFDocument doc, Map properties)
+			throws SAXException {
+
+		String version = System.getProperty("java.version").substring(0, 3);
+		// fix for jaxp 1.1 -> java 1.4
+		if (version.compareTo("1.5") < 0 && version.compareTo("1.3") > 0
+				&& System.getProperty("org.xml.sax.driver") == null) {
+			System.setProperty("org.xml.sax.driver",
+					"org.apache.crimson.parser.XMLReaderImpl");
+
+		}
 
 		XMLReader myReader = XMLReaderFactory.createXMLReader();
 		parser = myReader;
@@ -53,6 +64,11 @@ public class DXFSAXDocumentFactory extends SAXDocumentFactory {
 
 	}
 
+	public void startDocument() throws SAXException {
+		super.startDocument();
+		// fix for java 1.5 bundled xerces
+		inProlog = false;
 
+	}
 
 }

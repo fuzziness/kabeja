@@ -17,67 +17,57 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-public class SAXServiceContainerBuilder implements ContentHandler{
+public class SAXServiceContainerBuilder implements ContentHandler {
 
-	
-	public static final String NAMESPACE="http://kabeja.org/processing/ui/1.0";
-	public static final String ELEMET_UICONFIGURATION="uiconfiguration";
-	public static final String ELEMET_COMPONENTS="components";
-	public static final String ELEMET_COMPONENT="component";
-	public static final String ATTRIBUTE_CLASS="class";
-	
+	public static final String NAMESPACE = "http://kabeja.org/processing/ui/1.0";
+	public static final String ELEMET_UICONFIGURATION = "uiconfiguration";
+	public static final String ELEMET_COMPONENTS = "components";
+	public static final String ELEMET_COMPONENT = "component";
+	public static final String ATTRIBUTE_CLASS = "class";
+
 	protected ServiceContainer container;
-	protected boolean components=false;
-	
-	
+	protected boolean components = false;
+
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-	
-		
+
 	}
 
 	public void endDocument() throws SAXException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void endElement(String uri, String localName, String name)
 			throws SAXException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void endPrefixMapping(String prefix) throws SAXException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void ignorableWhitespace(char[] ch, int start, int length)
 			throws SAXException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void processingInstruction(String target, String data)
 			throws SAXException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setDocumentLocator(Locator locator) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void skippedEntity(String name) throws SAXException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void startDocument() throws SAXException {
 		this.container = new ServiceContainer();
-		this.components=false;
-		
+		this.components = false;
+
 	}
 
 	public void startElement(String uri, String localName, String name,
@@ -87,8 +77,9 @@ public class SAXServiceContainerBuilder implements ContentHandler{
 			if (ELEMET_COMPONENT.equals(localName) && this.components) {
 				String className = atts.getValue(ATTRIBUTE_CLASS);
 				try {
-					Object obj = this.getClass().getClassLoader().loadClass(className).newInstance();
-					this.container.addComponent((Component)obj);
+					Object obj = this.getClass().getClassLoader().loadClass(
+							className).newInstance();
+					this.container.addComponent((Component) obj);
 				} catch (InstantiationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -99,25 +90,23 @@ public class SAXServiceContainerBuilder implements ContentHandler{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}else if(ELEMET_COMPONENTS.equals(localName)){
-			this.components=true;
-		}
+			} else if (ELEMET_COMPONENTS.equals(localName)) {
+				this.components = true;
+			}
 		}
 	}
 
 	public void startPrefixMapping(String prefix, String uri)
 			throws SAXException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-	public ServiceContainer getServiceContainer(){
+	public ServiceContainer getServiceContainer() {
 		return this.container;
-		
-		
+
 	}
-	
+
 	public static ServiceContainer buildFromStream(InputStream in) {
 		SAXServiceContainerBuilder builder = new SAXServiceContainerBuilder();
 
@@ -125,7 +114,6 @@ public class SAXServiceContainerBuilder implements ContentHandler{
 
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setNamespaceAware(true);
-			factory.setXIncludeAware(true);
 			XMLReader saxparser = factory.newSAXParser().getXMLReader();
 
 			saxparser.setContentHandler(builder);
@@ -140,5 +128,5 @@ public class SAXServiceContainerBuilder implements ContentHandler{
 
 		return builder.getServiceContainer();
 	}
-	
+
 }

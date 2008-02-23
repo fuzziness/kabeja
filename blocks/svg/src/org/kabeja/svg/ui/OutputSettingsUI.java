@@ -182,8 +182,6 @@ public class OutputSettingsUI extends AbstractPropertiesEditor implements
 			this.dialog.setTitle("Paper Selection");
 			this.dialog.getContentPane().add(panel, BorderLayout.NORTH);
 			this.dialog.pack();
-			this.dialog.setPreferredSize(this.dialog.getPreferredSize());
-			this.dialog.setMinimumSize(this.dialog.getPreferredSize());
 			this.initialized=true;
 		}
 	}

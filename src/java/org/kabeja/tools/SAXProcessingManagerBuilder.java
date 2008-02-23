@@ -407,17 +407,28 @@ public class SAXProcessingManagerBuilder implements ContentHandler {
 
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setNamespaceAware(true);
-			factory.setXIncludeAware(true);
-			XMLReader saxparser = factory.newSAXParser().getXMLReader();
+			
+			
+			//factory.setXIncludeAware(true);
+			try {
+				factory.setFeature("http://apache.org/xml/features/xinclude", true);
+			} catch (Exception e) {
+			      //OK older jaxp 
+				System.out.println("No XInclude support (use JAXP 1.4 or later for XInclude)");
+			}
+			try {
+				XMLReader saxparser = factory.newSAXParser().getXMLReader();
 
-			saxparser.setContentHandler(builder);
-			saxparser.parse(new InputSource(in));
+				saxparser.setContentHandler(builder);
+				saxparser.parse(new InputSource(in));
+			} catch (ParserConfigurationException e) {
+			
+				e.printStackTrace();
+			}
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
 		}
 
 		return builder.getManager();

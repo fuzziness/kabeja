@@ -74,9 +74,9 @@
 	</target>
 
 	<target name="config" depends="compile">
-		<copy todir="${dist}/${conf}">
-			<fileset dir="${conf}">
-				<exclude name="**/*~;**/*manifest*;process.xml;ui.xml" />
+		<copy todir="${dist}/${conf}" >
+			<fileset dir="${conf}" excludes="process.xml,ui.xml,**/*~,**/*manifest*">
+		
 			</fileset>
 		</copy>
 
