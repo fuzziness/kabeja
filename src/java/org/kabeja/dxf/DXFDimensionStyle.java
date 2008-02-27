@@ -165,7 +165,7 @@ public class DXFDimensionStyle {
     public boolean getBooleanProperty(String name) {
         String value = (String) properties.get(name);
 
-        if ("1".equals( value )) {
+        if ("1".equals(value)) {
             return true;
         } else {
             return false;
@@ -176,7 +176,7 @@ public class DXFDimensionStyle {
         if (hasProperty(name)) {
             String value = (String) properties.get(name);
 
-            if ("1".equals( value )) {
+            if ("1".equals(value)) {
                 return true;
             } else {
                 return false;

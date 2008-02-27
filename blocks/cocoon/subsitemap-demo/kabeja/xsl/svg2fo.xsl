@@ -1,6 +1,4 @@
 <?xml version="1.0"?>
-
-
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
@@ -63,7 +61,7 @@
 			Draft data
 		</fo:block>
 		<fo:block font-size="11pt">
-			This section will list some data of the dxf file.
+			This section lists some data of the draft file.
 		</fo:block>
 		<fo:block font-size="18pt" space-before="5mm"
 			space-after="5mm">

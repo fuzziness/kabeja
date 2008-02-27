@@ -17,86 +17,87 @@ package org.kabeja.dxf.helpers;
 
 import org.kabeja.dxf.DXFConstants;
 
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class Point {
-	protected double x = 0.0;
+    protected double x = 0.0;
+    protected double y = 0.0;
+    protected double z = 0.0;
 
-	protected double y = 0.0;
+    public Point() {
+    }
 
-	protected double z = 0.0;
+    public Point(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
-	public Point() {
-	}
+    /**
+     * @return Returns the x.
+     */
+    public double getX() {
+        return x;
+    }
 
-	public Point(double x, double y, double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
+    /**
+     * @param x
+     *            The x to set.
+     */
+    public void setX(double x) {
+        this.x = x;
+    }
 
-	/**
-	 * @return Returns the x.
-	 */
-	public double getX() {
-		return x;
-	}
+    /**
+     * @return Returns the y.
+     */
+    public double getY() {
+        return y;
+    }
 
-	/**
-	 * @param x
-	 *            The x to set.
-	 */
-	public void setX(double x) {
-		this.x = x;
-	}
+    /**
+     * @param y
+     *            The y to set.
+     */
+    public void setY(double y) {
+        this.y = y;
+    }
 
-	/**
-	 * @return Returns the y.
-	 */
-	public double getY() {
-		return y;
-	}
+    /**
+     * @return Returns the z.
+     */
+    public double getZ() {
+        return z;
+    }
 
-	/**
-	 * @param y
-	 *            The y to set.
-	 */
-	public void setY(double y) {
-		this.y = y;
-	}
+    /**
+     * @param z
+     *            The z to set.
+     */
+    public void setZ(double z) {
+        this.z = z;
+    }
 
-	/**
-	 * @return Returns the z.
-	 */
-	public double getZ() {
-		return z;
-	}
+    public String toString() {
+        return super.toString() + "[" + this.x + "," + this.y + "," + this.z +
+        "]";
+    }
 
-	/**
-	 * @param z
-	 *            The z to set.
-	 */
-	public void setZ(double z) {
-		this.z = z;
-	}
+    public boolean equals(Object obj) {
+        if (obj instanceof Point) {
+            Point p = (Point) obj;
+            double d = DXFConstants.POINT_CONNECTION_RADIUS;
 
-	public String toString() {
-		return  super.toString()+"[" + this.x + "," + this.y + "," + this.z + "]";
-	}
+            if ((Math.abs(x - p.getX()) <= d) && (Math.abs(y - p.getY()) <= d)) {
+                return Math.abs(z - p.getZ()) <= d;
+            }
+        }
 
-	public boolean equals(Object obj) {
-
-		if (obj instanceof Point) {
-			Point p = (Point) obj;
-			            double d = DXFConstants.POINT_CONNECTION_RADIUS;
-			           if(Math.abs(x - p.getX()) <= d && Math.abs(y - p.getY()) <= d)
-			               return Math.abs(z - p.getZ()) <= d;
-			         }
-	
-		return false;
-	}
+        return false;
+    }
 }

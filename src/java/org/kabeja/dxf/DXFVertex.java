@@ -31,12 +31,10 @@ public class DXFVertex extends DXFPoint {
     private double startWidth = 0.0;
     private double endWidth = 0.0;
     private double bulge = 0;
-
     private int polyFaceMeshVertex0;
     private int polyFaceMeshVertex1;
     private int polyFaceMeshVertex2;
     private int polyFaceMeshVertex3;
-
 
     /**
      *
@@ -44,9 +42,9 @@ public class DXFVertex extends DXFPoint {
     public DXFVertex() {
         super();
     }
-    
-    public DXFVertex(Point p){
-    	super(p);
+
+    public DXFVertex(Point p) {
+        super(p);
     }
 
     /**
@@ -84,8 +82,8 @@ public class DXFVertex extends DXFPoint {
      *
      * @see org.dxf2svg.dxf.DXFEntity#toSAX(org.xml.sax.ContentHandler)
      */
-    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext)
-        throws SAXException {
+    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity,
+        TransformContext transformContext) throws SAXException {
     }
 
     public Bounds getBounds() {
@@ -134,21 +132,18 @@ public class DXFVertex extends DXFPoint {
         return (this.flags & 8) == 8;
     }
 
-    public boolean isPolyFaceMeshVertex(){
-
+    public boolean isPolyFaceMeshVertex() {
         //bit 7 and 8 are set
-        return ((this.flags & 64)==64 && (this.flags &128)==128);
+        return (((this.flags & 64) == 64) && ((this.flags & 128) == 128));
     }
 
-    public boolean isFaceRecord(){
+    public boolean isFaceRecord() {
         return this.flags == 128;
     }
 
-    public boolean isMeshApproximationVertex(){
-        return (this.flags & 64)==64 && (this.flags & 8) == 8;
+    public boolean isMeshApproximationVertex() {
+        return ((this.flags & 64) == 64) && ((this.flags & 8) == 8);
     }
-
-
 
     /**
      * @return Returns the polyFaceMeshVertex0.
@@ -156,42 +151,49 @@ public class DXFVertex extends DXFPoint {
     public int getPolyFaceMeshVertex0() {
         return Math.abs(polyFaceMeshVertex0);
     }
+
     /**
      * @param polyFaceMeshVertex0 The polyFaceMeshVertex0 to set.
      */
     public void setPolyFaceMeshVertex0(int polyFaceMeshVertex0) {
         this.polyFaceMeshVertex0 = polyFaceMeshVertex0;
     }
+
     /**
      * @return Returns the polyFaceMeshVertex1.
      */
     public int getPolyFaceMeshVertex1() {
         return Math.abs(polyFaceMeshVertex1);
     }
+
     /**
      * @param polyFaceMeshVertex1 The polyFaceMeshVertex1 to set.
      */
     public void setPolyFaceMeshVertex1(int polyFaceMeshVertex1) {
         this.polyFaceMeshVertex1 = polyFaceMeshVertex1;
     }
+
     /**
      * @return Returns the polyFaceMeshVertex2.
      */
     public int getPolyFaceMeshVertex2() {
         return Math.abs(polyFaceMeshVertex2);
     }
+
     /**
      * @param polyFaceMeshVertex2 The polyFaceMeshVertex2 to set.
      */
     public void setPolyFaceMeshVertex2(int polyFaceMeshVertex2) {
         this.polyFaceMeshVertex2 = polyFaceMeshVertex2;
     }
+
     /**
      * @return Returns the polyFaceMeshVertex3.
      */
     public int getPolyFaceMeshVertex3() {
         return Math.abs(polyFaceMeshVertex3);
     }
+
     /**
      * @param polyFaceMeshVertex3 The polyFaceMeshVertex3 to set.
      */
@@ -199,17 +201,19 @@ public class DXFVertex extends DXFPoint {
         this.polyFaceMeshVertex3 = polyFaceMeshVertex3;
     }
 
-    public boolean isPolyFaceEdge0Visible(){
-        return this.polyFaceMeshVertex0>0;
-    }
-    public boolean isPolyFaceEdge1Visible(){
-        return this.polyFaceMeshVertex1>0;
-    }
-    public boolean isPolyFaceEdge2Visible(){
-        return this.polyFaceMeshVertex2>0;
-    }
-    public boolean isPolyFaceEdge3Visible(){
-        return this.polyFaceMeshVertex3>0;
+    public boolean isPolyFaceEdge0Visible() {
+        return this.polyFaceMeshVertex0 > 0;
     }
 
+    public boolean isPolyFaceEdge1Visible() {
+        return this.polyFaceMeshVertex1 > 0;
+    }
+
+    public boolean isPolyFaceEdge2Visible() {
+        return this.polyFaceMeshVertex2 > 0;
+    }
+
+    public boolean isPolyFaceEdge3Visible() {
+        return this.polyFaceMeshVertex3 > 0;
+    }
 }

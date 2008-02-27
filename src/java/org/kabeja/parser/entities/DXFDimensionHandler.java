@@ -25,7 +25,6 @@ import org.kabeja.parser.DXFValue;
  *
  */
 public class DXFDimensionHandler extends AbstractEntityHandler {
-    protected String ENTITY_NAME = "DIMENSION";
     protected final static int GROUPCODE_REFERENCE_POINT_X = 10;
     protected final static int GROUPCODE_REFERENCE_POINT_Y = 20;
     protected final static int GROUPCODE_REFERENCE_POINT_Z = 30;
@@ -57,6 +56,7 @@ public class DXFDimensionHandler extends AbstractEntityHandler {
     protected final static int GROUPCODE_INCLINATION_HELPLINE = 52;
     protected final static int GROUPCODE_TEXT_ROTATION = 53;
     protected final static int GROUPCODE_DIMENSION_TYPE = 70;
+    protected String ENTITY_NAME = "DIMENSION";
     protected DXFDimension dimension;
 
     public void endDXFEntity() {

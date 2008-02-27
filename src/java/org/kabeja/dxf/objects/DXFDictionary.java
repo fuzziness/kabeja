@@ -22,184 +22,181 @@ import java.util.Set;
 
 import org.kabeja.dxf.DXFConstants;
 
+
 public class DXFDictionary extends DXFObject {
+    protected ArrayList records = new ArrayList();
 
-	protected ArrayList records = new ArrayList();
+    public String getObjectType() {
+        return DXFConstants.OBJECT_TYPE_DICTIONARY;
+    }
 
-	public String getObjectType() {
+    public boolean hasDXFObjectByID(String id) {
+        return findByID(id) != null;
+    }
 
-		return DXFConstants.OBJECT_TYPE_DICTIONARY;
-	}
+    public String getNameForDXFObjectID(String id) {
+        return findByID(id).getName();
+    }
 
-	public boolean hasDXFObjectByID(String id) {
-		return findByID(id) != null;
-	}
+    /**
+     * Gets the
+     *
+     * @see DXFObject with the specified ID.
+     * @param id
+     * @return the DXFObject or null if there is no such DXFObject
+     */
+    public DXFObject getDXFObjectByID(String id) {
+        //search for child dictionaries
+        DXFDictionary dic = this.getDXFDictionaryForID(id);
 
-	public String getNameForDXFObjectID(String id) {
-		return findByID(id).getName();
-	}
+        if (dic != null) {
+            DXFDictionaryRecord dicRecord = dic.findByID(id);
 
-	/**
-	 * Gets the
-	 * 
-	 * @see DXFObject with the specified ID.
-	 * @param id
-	 * @return the DXFObject or null if there is no such DXFObject
-	 */
-	public DXFObject getDXFObjectByID(String id) {
-	
-		//search for child dictionaries
-		DXFDictionary dic = this.getDXFDictionaryForID(id);
-		if(dic !=null){
-			DXFDictionaryRecord dicRecord  = dic.findByID(id);
-			if (dicRecord != null) {
-				return dicRecord.getDXFObject();
-			}
-		}
-		return null;
-	}
+            if (dicRecord != null) {
+                return dicRecord.getDXFObject();
+            }
+        }
 
-	public DXFObject getDXFObjectByName(String name) {
+        return null;
+    }
 
-		DXFDictionaryRecord record = findByName(name);
-		if (record != null) {
-			return record.getDXFObject();
-		}
+    public DXFObject getDXFObjectByName(String name) {
+        DXFDictionaryRecord record = findByName(name);
 
-		return null;
-	}
+        if (record != null) {
+            return record.getDXFObject();
+        }
 
-	public void putDXFObject(DXFObject obj) {
-		findByID(obj.getID()).setDXFObject(obj);
-	}
+        return null;
+    }
 
-	public void putDXFObjectRelation(String name, String id) {
-		DXFDictionaryRecord record = null;
-		if ((record = findByName(name)) != null) {
-			record.setID(id);
-		} else {
-			record = new DXFDictionaryRecord(name, id);
-			this.records.add(record);
-		}
-	}
+    public void putDXFObject(DXFObject obj) {
+        findByID(obj.getID()).setDXFObject(obj);
+    }
 
-	protected DXFDictionaryRecord findByName(String name) {
-		for (int i = 0; i < this.records.size(); i++) {
-			DXFDictionaryRecord record = (DXFDictionaryRecord) records.get(i);
-			if (record.getName().equals(name)) {
-				return record;
-			}
-		}
-		return null;
-	}
+    public void putDXFObjectRelation(String name, String id) {
+        DXFDictionaryRecord record = null;
 
-	protected DXFDictionaryRecord findByID(String id) {
+        if ((record = findByName(name)) != null) {
+            record.setID(id);
+        } else {
+            record = new DXFDictionaryRecord(name, id);
+            this.records.add(record);
+        }
+    }
 
-		for (int i = 0; i < this.records.size(); i++) {
-			DXFDictionaryRecord record = (DXFDictionaryRecord) records.get(i);
-			if (record.getID().equals(id)) {
+    protected DXFDictionaryRecord findByName(String name) {
+        for (int i = 0; i < this.records.size(); i++) {
+            DXFDictionaryRecord record = (DXFDictionaryRecord) records.get(i);
 
-				return record;
-			}
-		}
-		return null;
-	}
+            if (record.getName().equals(name)) {
+                return record;
+            }
+        }
 
-	/**
-	 * Searches recursive for the dictionary which holds the ID
-	 * 
-	 * @param id
-	 * @return the dictionary or null
-	 */
+        return null;
+    }
 
-	public DXFDictionary getDXFDictionaryForID(String id) {
+    protected DXFDictionaryRecord findByID(String id) {
+        for (int i = 0; i < this.records.size(); i++) {
+            DXFDictionaryRecord record = (DXFDictionaryRecord) records.get(i);
 
-		Set dictionaries = new HashSet();
-		DXFObject obj = null;
-		for (int i = 0; i < this.records.size(); i++) {
-			DXFDictionaryRecord record = (DXFDictionaryRecord) records.get(i);
-			if (record.getID().equals(id)) {
+            if (record.getID().equals(id)) {
+                return record;
+            }
+        }
 
-				return this;
-			} else if ((obj = record.getDXFObject()) != null
-					&& obj.getObjectType().equals(
-							DXFConstants.OBJECT_TYPE_DICTIONARY)) {
-				dictionaries.add(obj);
-			}
-		}
+        return null;
+    }
 
-		Iterator ie = dictionaries.iterator();
-		while (ie.hasNext()) {
-			DXFDictionary dic = (DXFDictionary) ie.next();
-			DXFDictionary d = dic.getDXFDictionaryForID(id);
-			if (d != null) {
-				return d;
-			}
-		}
+    /**
+     * Searches recursive for the dictionary which holds the ID
+     *
+     * @param id
+     * @return the dictionary or null
+     */
+    public DXFDictionary getDXFDictionaryForID(String id) {
+        Set dictionaries = new HashSet();
+        DXFObject obj = null;
 
-		return null;
-	}
+        for (int i = 0; i < this.records.size(); i++) {
+            DXFDictionaryRecord record = (DXFDictionaryRecord) records.get(i);
 
-	/**
-	 * 
-	 * @return iterator over all DXFObjects in this dictionary
-	 */
+            if (record.getID().equals(id)) {
+                return this;
+            } else if (((obj = record.getDXFObject()) != null) &&
+                    obj.getObjectType()
+                           .equals(DXFConstants.OBJECT_TYPE_DICTIONARY)) {
+                dictionaries.add(obj);
+            }
+        }
 
-	public Iterator getDXFObjectIterator() {
+        Iterator ie = dictionaries.iterator();
 
-		Iterator i = new Iterator() {
+        while (ie.hasNext()) {
+            DXFDictionary dic = (DXFDictionary) ie.next();
+            DXFDictionary d = dic.getDXFDictionaryForID(id);
 
-			int count = 0;
+            if (d != null) {
+                return d;
+            }
+        }
 
-			public boolean hasNext() {
+        return null;
+    }
 
-				return count < records.size();
-			}
+    /**
+     *
+     * @return iterator over all DXFObjects in this dictionary
+     */
+    public Iterator getDXFObjectIterator() {
+        Iterator i = new Iterator() {
+                int count = 0;
 
-			public Object next() {
+                public boolean hasNext() {
+                    return count < records.size();
+                }
 
-				return ((DXFDictionaryRecord) records.get(count++))
-						.getDXFObject();
-			}
+                public Object next() {
+                    return ((DXFDictionaryRecord) records.get(count++)).getDXFObject();
+                }
 
-			public void remove() {
-				records.remove(count - 1);
+                public void remove() {
+                    records.remove(count - 1);
+                }
+            };
 
-			}
+        return i;
+    }
 
-		};
-		return i;
-	}
+    private class DXFDictionaryRecord {
+        private String id;
+        private String name;
+        private DXFObject obj;
 
-	private class DXFDictionaryRecord {
-		private String id;
-		private String name;
-		private DXFObject obj;
+        public DXFDictionaryRecord(String name, String id) {
+            this.id = id;
+            this.name = name;
+        }
 
-		public DXFDictionaryRecord(String name, String id) {
-			this.id = id;
-			this.name = name;
-		}
+        public String getName() {
+            return this.name;
+        }
 
-		public String getName() {
-			return this.name;
-		}
+        public String getID() {
+            return this.id;
+        }
 
-		public String getID() {
-			return this.id;
-		}
+        public void setID(String id) {
+            this.id = id;
+        }
 
-		public void setID(String id) {
-			this.id = id;
-		}
+        public void setDXFObject(DXFObject obj) {
+            this.obj = obj;
+        }
 
-		public void setDXFObject(DXFObject obj) {
-			this.obj = obj;
-		}
-
-		public DXFObject getDXFObject() {
-			return this.obj;
-		}
-	}
-
+        public DXFObject getDXFObject() {
+            return this.obj;
+        }
+    }
 }

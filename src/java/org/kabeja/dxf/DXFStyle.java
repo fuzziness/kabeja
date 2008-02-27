@@ -16,12 +16,11 @@
 package org.kabeja.dxf;
 
 
-
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public class DXFStyle{
+public class DXFStyle {
     private String name = "";
     private String fontFile = "";
     private String bigFontFile = "";
@@ -167,7 +166,6 @@ public class DXFStyle{
         this.flags = flags;
     }
 
-   
     public boolean isBackward() {
         return this.textGenerationFlag == 2;
     }

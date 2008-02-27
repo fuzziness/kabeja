@@ -18,78 +18,71 @@ package org.kabeja.dxf;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.ParametricPlane;
 
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- * 
+ *
  */
 public class DXFCircle extends DXFEntity {
-	private Point center;
+    private Point center;
+    private double radius;
 
-	private double radius;
+    /**
+     *
+     */
+    public DXFCircle() {
+    }
 
-	/**
-	 * 
-	 */
-	public DXFCircle() {
-	}
+    public double getRadius() {
+        return radius;
+    }
 
-	public double getRadius() {
-		return radius;
-	}
+    /**
+     * @param radius
+     *            The radius to set.
+     */
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
 
-	/**
-	 * @param radius
-	 *            The radius to set.
-	 */
-	public void setRadius(double radius) {
-		this.radius = radius;
-	}
+    public void setCenterPoint(Point p) {
+        this.center = p;
+    }
 
-	public void setCenterPoint(Point p) {
-		this.center = p;
-	}
+    public Point getCenterPoint() {
+        return center;
+    }
 
-	public Point getCenterPoint() {
-		return center;
-	}
+    public Bounds getBounds() {
+        Bounds bounds = new Bounds();
+        ParametricPlane plane = new ParametricPlane(this.getExtrusion());
+        Point p = plane.getPoint(this.center.getX(), this.center.getY());
+        bounds.setMaximumX(p.getX() + radius);
+        bounds.setMinimumX(p.getX() - radius);
+        bounds.setMaximumY(p.getY() + radius);
+        bounds.setMinimumY(p.getY() - radius);
 
+        return bounds;
+    }
 
+    public String getType() {
+        return DXFConstants.ENTITY_TYPE_CIRCLE;
+    }
 
-	public Bounds getBounds() {
+    public double getLength() {
+        return 2 * Math.PI * this.radius;
+    }
 
-		Bounds bounds = new Bounds();
-		ParametricPlane plane = new ParametricPlane(this
-				.getExtrusion());
-		Point p = plane.getPoint(this.center.getX(), this.center.getY());
-		bounds.setMaximumX(p.getX() + radius);
-		bounds.setMinimumX(p.getX() - radius);
-		bounds.setMaximumY(p.getY() + radius);
-		bounds.setMinimumY(p.getY() - radius);
+    public Point getPointAt(double angle) {
+        // the local part
+        double x = this.radius * Math.cos(Math.toRadians(angle));
+        double y = radius * Math.sin(Math.toRadians(angle));
 
-		return bounds;
-	}
+        // the wcs part
+        ParametricPlane plane = new ParametricPlane(this.getExtrusion());
+        Point p = plane.getPoint(x + this.center.getX(), y +
+                this.center.getY());
 
-	public String getType() {
-		return DXFConstants.ENTITY_TYPE_CIRCLE;
-	}
-
-	public double getLength() {
-
-		return 2 * Math.PI * this.radius;
-	}
-
-	
-	public Point getPointAt(double angle) {
-
-		// the local part
-		double x = this.radius * Math.cos(Math.toRadians(angle));
-		double y = radius * Math.sin(Math.toRadians(angle));
-
-		// the wcs part
-		ParametricPlane plane = new ParametricPlane(this
-				.getExtrusion());
-		Point p = plane.getPoint(x+this.center.getX(), y+this.center.getY());
-		return p;
-
-	}
+        return p;
+    }
 }

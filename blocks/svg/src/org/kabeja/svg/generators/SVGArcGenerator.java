@@ -1,3 +1,18 @@
+/*
+   Copyright 2008 Simon Mieth
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
 package org.kabeja.svg.generators;
 
 import java.util.Map;
@@ -13,81 +28,75 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-public class SVGArcGenerator extends AbstractSVGSAXGenerator implements
-		SVGPathBoundaryGenerator {
 
-	public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity,
-			TransformContext transformContext) throws SAXException {
-		DXFArc arc = (DXFArc) entity;
-		AttributesImpl attr = new AttributesImpl();
+public class SVGArcGenerator extends AbstractSVGSAXGenerator
+    implements SVGPathBoundaryGenerator {
+    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity,
+        TransformContext transformContext) throws SAXException {
+        DXFArc arc = (DXFArc) entity;
+        AttributesImpl attr = new AttributesImpl();
 
-		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_PATH,
-				getSVGPath(arc));
+        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_PATH,
+            getSVGPath(arc));
 
-		super.setCommonAttributes(attr, svgContext, arc);
-		SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
+        super.setCommonAttributes(attr, svgContext, arc);
+        SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
+    }
 
-	}
+    public String getSVGPath(DXFEntity entity) {
+        DXFArc arc = (DXFArc) entity;
 
-	public String getSVGPath(DXFEntity entity) {
+        Point p;
 
-		DXFArc arc = (DXFArc) entity;
+        StringBuffer path = new StringBuffer();
 
-		Point p;
+        p = arc.getStartPoint();
 
-		StringBuffer path = new StringBuffer();
+        double radius = arc.getRadius();
+        path.append("M ");
 
-		p = arc.getStartPoint();
+        path.append(p.getX());
+        path.append(' ');
+        path.append(p.getY());
+        path.append(" A ");
+        path.append(radius);
+        path.append(' ');
+        path.append(radius);
+        // x-axis rotation -> always no rotation
+        path.append(" 0");
 
-		double radius = arc.getRadius();
-		path.append("M ");
+        double diff = arc.getTotalAngle();
 
-		path.append(p.getX());
-		path.append(' ');
-		path.append(p.getY());
-		path.append(" A ");
-		path.append(radius);
-		path.append(' ');
-		path.append(radius);
-		// x-axis rotation -> always no rotation
-		path.append(" 0");
+        // the large-arc-flag
+        if (diff > 180) {
+            path.append(" 1 ");
+        } else {
+            path.append(" 0 ");
+        }
 
+        //TODO change the extrusion >0 
+        if (!arc.isCounterClockwise() && (arc.getExtrusion().getZ() > 0)) {
+            // the sweep-flag
+            path.append(" 1 ");
+        } else {
+            // sweep flag 0
+            path.append(" 0 ");
+        }
 
-		
-		double diff = arc.getTotalAngle();
+        double angle = arc.getEndAngle();
 
-		// the large-arc-flag
-		if (diff > 180) {
-			path.append(" 1 ");
-		} else {
-			path.append(" 0 ");
-		}
+        //handling of only for hatch boundary 
+        if (arc.isCounterClockwise()) {
+            angle = -1 * angle;
+        }
 
-		//TODO change the extrusion >0 
-		if (!arc.isCounterClockwise()&& arc.getExtrusion().getZ()>0) {
-			// the sweep-flag
-			path.append(" 1 ");
+        p = arc.getPointAt(angle);
 
-		} else {
-			// sweep flag 0
-			path.append(" 0 ");
-		}
-		
-		
-		double angle = arc.getEndAngle();
-		//handling of only for hatch boundary 
-		if(arc.isCounterClockwise()){
-			angle=-1*angle;
-		}
+        path.append(' ');
+        path.append(p.getX());
+        path.append(' ');
+        path.append(p.getY());
 
-		p = arc.getPointAt(angle);
-		
-		path.append(' ');
-		path.append(p.getX());
-		path.append(' ');
-		path.append(p.getY());
-
-		return path.toString();
-	}
-
+        return path.toString();
+    }
 }

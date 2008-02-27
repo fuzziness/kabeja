@@ -59,7 +59,6 @@ public class DXFRegionHandler extends AbstractEntityHandler {
     public void parseGroup(int groupCode, DXFValue value) {
         switch (groupCode) {
         case DATA:
-
             //first cleanup
             checkBuffer();
             data.append(value.getValue());
@@ -112,6 +111,7 @@ public class DXFRegionHandler extends AbstractEntityHandler {
                 buf.append((char) code);
             }
         }
+
         return buf.toString();
     }
 

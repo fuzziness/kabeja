@@ -35,28 +35,26 @@ public class ConfigHelper {
         // check for version 1.4 and above
         String ver = System.getProperty("java.version");
         String parser = null;
+
         try {
-			parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader().getClass().getName();
-			XMLReader r = XMLReaderFactory.createXMLReader(parser);
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
+            parser = SAXParserFactory.newInstance().newSAXParser().getXMLReader()
+                                     .getClass().getName();
 
-//        if (ver.startsWith("1.2") || ver.startsWith("1.3")) {
-//            parser = System.getProperty("org.xml.sax.driver");
-//        } else if (ver.startsWith("1.4")) {
-//            // jdk 1.4 uses crimson
-//            parser = JAVA_14_SAX_DRIVER;
-//        } else if (ver.startsWith("1.5")) {
-//            parser = JAVA_15_SAX_DRIVER;
-//        }
+            XMLReader r = XMLReaderFactory.createXMLReader(parser);
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
-
+        //        if (ver.startsWith("1.2") || ver.startsWith("1.3")) {
+        //            parser = System.getProperty("org.xml.sax.driver");
+        //        } else if (ver.startsWith("1.4")) {
+        //            // jdk 1.4 uses crimson
+        //            parser = JAVA_14_SAX_DRIVER;
+        //        } else if (ver.startsWith("1.5")) {
+        //            parser = JAVA_15_SAX_DRIVER;
+        //        }
         return parser;
-
     }
-    
-    
 }

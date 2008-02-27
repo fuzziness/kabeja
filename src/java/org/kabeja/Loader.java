@@ -39,9 +39,9 @@ public class Loader {
     }
 
     public void launch(String[] args) {
+        args = parseMainClass(args);
 
-    	args = parseMainClass(args);
-    	URLClassLoader cl = new URLClassLoader(getClasspath());
+        URLClassLoader cl = new URLClassLoader(getClasspath());
 
         try {
             Class clazz = cl.loadClass(this.mainClass);
@@ -96,19 +96,18 @@ public class Loader {
         return (URL[]) urls.toArray(new URL[urls.size()]);
     }
 
-    protected String[] parseMainClass(String[] args){
+    protected String[] parseMainClass(String[] args) {
         List list = new ArrayList();
 
-    	for(int i=0;i<args.length;i++){
-    		if("-main".equals( args[i] ) && (i+1)<args.length){
-    			i++;
-    			this.mainClass=args[i];
-    		}else{
-               list.add(args[i]);
-    		}
-    	}
+        for (int i = 0; i < args.length; i++) {
+            if ("-main".equals(args[i]) && ((i + 1) < args.length)) {
+                i++;
+                this.mainClass = args[i];
+            } else {
+                list.add(args[i]);
+            }
+        }
 
-    	return (String[])list.toArray(new String[list.size()]);
+        return (String[]) list.toArray(new String[list.size()]);
     }
-
 }

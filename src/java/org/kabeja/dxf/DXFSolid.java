@@ -43,7 +43,6 @@ public class DXFSolid extends DXFEntity {
         return bounds;
     }
 
-   
     /**
      * @return Returns the point1.
      */
@@ -108,14 +107,13 @@ public class DXFSolid extends DXFEntity {
         return DXFConstants.ENTITY_TYPE_SOLID;
     }
 
-	public double getLength() {
-		double length=0.0;
-		length+=MathUtils.distance(this.point1,this.point2);
-		length+=MathUtils.distance(this.point2,this.point4);
-		length+=MathUtils.distance(this.point4,this.point3);
-		length+=MathUtils.distance(this.point3,this.point1);
-		return length;
-	}
-    
-    
+    public double getLength() {
+        double length = 0.0;
+        length += MathUtils.distance(this.point1, this.point2);
+        length += MathUtils.distance(this.point2, this.point4);
+        length += MathUtils.distance(this.point4, this.point3);
+        length += MathUtils.distance(this.point3, this.point1);
+
+        return length;
+    }
 }

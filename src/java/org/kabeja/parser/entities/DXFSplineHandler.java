@@ -133,7 +133,6 @@ public class DXFSplineHandler extends AbstractEntityHandler {
 
             break;
 
-
         case FIT_TOLERANCE:
             spline.setFitTolerance(value.getDoubleValue());
 

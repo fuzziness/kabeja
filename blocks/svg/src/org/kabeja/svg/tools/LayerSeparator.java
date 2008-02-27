@@ -16,10 +16,8 @@
 package org.kabeja.svg.tools;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import org.kabeja.dxf.Bounds;
@@ -41,7 +39,6 @@ import org.kabeja.xml.SAXPrettyOutputter;
  *
  */
 public class LayerSeparator {
-	
     public static void main(String[] args) {
         LayerSeparator split = new LayerSeparator();
 
@@ -116,6 +113,7 @@ public class LayerSeparator {
             SAXPrettyOutputter writer = new SAXPrettyOutputter(new FileOutputStream(
                         file), SAXPrettyOutputter.DEFAULT_ENCODING);
             writer.setDTD(SVGConstants.SVG_DTD_1_0);
+
             SAXGenerator svgGenerator = new SVGGenerator();
             svgGenerator.generate(doc, writer, null);
         } catch (Exception e) {

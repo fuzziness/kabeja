@@ -33,7 +33,7 @@ public class DXFRay extends DXFEntity {
     public Bounds getBounds() {
         // we will only add the base point
         //the end is infinite
-    	Bounds bounds = new Bounds();
+        Bounds bounds = new Bounds();
         bounds.addToBounds(basePoint);
 
         return bounds;
@@ -45,7 +45,6 @@ public class DXFRay extends DXFEntity {
     public String getType() {
         return DXFConstants.ENTITY_TYPE_RAY;
     }
-
 
     /**
      * @return Returns the basePoint.
@@ -75,10 +74,7 @@ public class DXFRay extends DXFEntity {
         this.direction = direction;
     }
 
-	public double getLength() {
-		
-		return 0;
-	}
-    
-    
+    public double getLength() {
+        return 0;
+    }
 }

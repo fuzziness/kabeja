@@ -34,12 +34,13 @@ import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.validity.TimeStampValidity;
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.parser.DXFParseException;
 import org.kabeja.parser.DXFParser;
 import org.kabeja.parser.Handler;
+import org.kabeja.parser.ParseException;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.parser.SAXParserBuilder;
+import org.kabeja.svg.SVGGenerator;
 import org.kabeja.xml.SAXGenerator;
 import org.xml.sax.SAXException;
 
@@ -103,15 +104,11 @@ public class DXF2SVGGenerator extends AbstractGenerator
 
             DXFDocument doc = parser.getDocument();
 
-    		// the xmlConsumer the next component in
-			// the pipeline from parent class
-			SAXGenerator generator = new org.kabeja.svg.SVGGenerator();
-			generator.setProperties(new HashMap());
-			generator.generate(doc, this.xmlConsumer);
-
-            
-            
-         
+            // the xmlConsumer the next component in
+            // the pipeline from parent class
+            SAXGenerator generator = new SVGGenerator();
+            generator.setProperties(new HashMap());
+            generator.generate(doc, this.xmlConsumer, null);
 
             // all is done release the source
             this.resolver.release(this.inputSource);
@@ -120,7 +117,7 @@ public class DXF2SVGGenerator extends AbstractGenerator
             ((Handler) this.parser).releaseDXFDocument();
 
             doc = null;
-        } catch (DXFParseException e) {
+        } catch (ParseException e) {
             throw new ProcessingException(e);
         } catch (IOException e) {
             throw new ProcessingException(e);
@@ -176,6 +173,7 @@ public class DXF2SVGGenerator extends AbstractGenerator
 
     protected void initParser(String config) throws Exception {
         // TODO use the sourceresolver
-        this.parser = SAXParserBuilder.buildFromStream(new FileInputStream(config));
+        this.parser = SAXParserBuilder.buildFromStream(new FileInputStream(
+                    config));
     }
 }

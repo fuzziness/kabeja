@@ -66,12 +66,12 @@ public class DXFBlocksSectionHandler extends DXFEntitiesSectionHandler {
         switch (groupCode) {
         case BLOCK:
 
-            if (BLOCK_START.equals( value.getValue() )) {
+            if (BLOCK_START.equals(value.getValue())) {
                 // handle
                 parseBlockHeader = true;
 
                 block = new DXFBlock();
-            } else if (BLOCK_END.equals( value.getValue() )) {
+            } else if (BLOCK_END.equals(value.getValue())) {
                 // handle
                 endEntity();
 

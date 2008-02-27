@@ -1,0 +1,15 @@
+<inkscape-extension>
+    <_name>Kabeja DXF Input</_name>
+    <id>org.kabeja.inkscape.import.dxf</id>
+    <dependency type="extension">org.inkscape.input.svg</dependency>
+    <input>
+        <extension>.dxf</extension>
+        <mimetype>image/x-svgz</mimetype>
+        <_filetypename>Kabeja-AutoCAD DXF (*.dxf)</_filetypename>
+        <_filetypetooltip>Import AutoCAD's Document Exchange Format</_filetypetooltip>
+        <output_extension>org.inkscape.output.svg</output_extension>
+    </input>
+    <script>
+        <command reldir="extensions">kabeja-dxf2svg</command>
+    </script>
+</inkscape-extension>

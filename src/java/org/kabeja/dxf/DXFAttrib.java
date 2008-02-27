@@ -16,7 +16,6 @@
 package org.kabeja.dxf;
 
 
-
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
@@ -24,7 +23,6 @@ package org.kabeja.dxf;
 public class DXFAttrib extends DXFText {
     public DXFAttrib() {
     }
-
 
     /* (non-Javadoc)
      * @see de.miethxml.kabeja.dxf.DXFEntity#getType()

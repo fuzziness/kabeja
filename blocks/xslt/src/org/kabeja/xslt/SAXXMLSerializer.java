@@ -26,78 +26,76 @@ import org.kabeja.xml.SAXSerializer;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLFilterImpl;
 
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
- * 
+ *
  */
 public class SAXXMLSerializer extends XMLFilterImpl implements SAXSerializer {
-	public static final String MIME_TYPE = "text/xml";
-	public static final String SUFFIX = "xml";
-	private OutputStream out;
-	private Map properties;
+    public static final String MIME_TYPE = "text/xml";
+    public static final String SUFFIX = "xml";
+    private OutputStream out;
+    private Map properties;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kabeja.xml.SAXSerializer#getMimeType()
-	 */
-	public String getMimeType() {
-		// TODO Auto-generated method stub
-		return MIME_TYPE;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.kabeja.xml.SAXSerializer#getMimeType()
+     */
+    public String getMimeType() {
+        // TODO Auto-generated method stub
+        return MIME_TYPE;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kabeja.xml.SAXSerializer#getSuffix()
-	 */
-	public String getSuffix() {
-		// TODO Auto-generated method stub
-		return SUFFIX;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.kabeja.xml.SAXSerializer#getSuffix()
+     */
+    public String getSuffix() {
+        // TODO Auto-generated method stub
+        return SUFFIX;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kabeja.xml.SAXSerializer#setOutput(java.io.OutputStream)
-	 */
-	public void setOutput(OutputStream out) {
-		this.out = out;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.kabeja.xml.SAXSerializer#setOutput(java.io.OutputStream)
+     */
+    public void setOutput(OutputStream out) {
+        this.out = out;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kabeja.xml.SAXSerializer#setProperties(java.util.Map)
-	 */
-	public void setProperties(Map properties) {
-		this.properties = properties;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.kabeja.xml.SAXSerializer#setProperties(java.util.Map)
+     */
+    public void setProperties(Map properties) {
+        this.properties = properties;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.ContentHandler#startDocument()
-	 */
-	public void startDocument() throws SAXException {
-		try {
-			SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory
-					.newInstance();
-			TransformerHandler f = factory.newTransformerHandler();
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.ContentHandler#startDocument()
+     */
+    public void startDocument() throws SAXException {
+        try {
+            SAXTransformerFactory factory = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+            TransformerHandler f = factory.newTransformerHandler();
 
-			// put the the transformer in the chain
-			f.setResult(new StreamResult(out));
-			super.setContentHandler(f);
-		} catch (Exception e) {
-			throw new SAXException(e);
-		}
+            // put the the transformer in the chain
+            f.setResult(new StreamResult(out));
+            super.setContentHandler(f);
+        } catch (Exception e) {
+            throw new SAXException(e);
+        }
 
-		super.startDocument();
-	}
+        super.startDocument();
+    }
 
-	public Map getProperties() {
-
-		return this.properties;
-	}
-
+    public Map getProperties() {
+        return this.properties;
+    }
 }

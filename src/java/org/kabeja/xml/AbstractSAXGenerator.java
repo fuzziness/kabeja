@@ -15,7 +15,6 @@
 */
 package org.kabeja.xml;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
@@ -23,30 +22,26 @@ import org.kabeja.processing.AbstractConfigurable;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-public abstract class AbstractSAXGenerator extends AbstractConfigurable implements SAXGenerator {
 
-	protected DXFDocument doc;
+public abstract class AbstractSAXGenerator extends AbstractConfigurable
+    implements SAXGenerator {
+    protected DXFDocument doc;
+    protected ContentHandler handler;
+    protected Map context;
 
-	protected ContentHandler handler;
-	protected Map context;
+    public void generate(DXFDocument doc, ContentHandler handler, Map context)
+        throws SAXException {
+        this.doc = doc;
+        this.handler = handler;
+        this.context = context;
+        this.generate();
+    }
 
-	public void generate(DXFDocument doc, ContentHandler handler, Map context) throws SAXException{
-		this.doc = doc;
-		this.handler = handler;
-		this.context=context;
-		this.generate();
-		
-	}
-
-
-
-	/**
-	 * This method has to be overwritten by any subclass. At this point the
-	 * XMLGenerator is setup (properties, ContentHandler and DXFDocument) and
-	 * should emit the XML content to the ContentHandler.
-	 * 
-	 */
-
-	protected abstract void generate() throws SAXException;
-
+    /**
+     * This method has to be overwritten by any subclass. At this point the
+     * XMLGenerator is setup (properties, ContentHandler and DXFDocument) and
+     * should emit the XML content to the ContentHandler.
+     *
+     */
+    protected abstract void generate() throws SAXException;
 }

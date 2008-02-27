@@ -22,43 +22,28 @@ import org.kabeja.dxf.DXFVertex;
 import org.kabeja.parser.DXFEntitiesSectionHandler;
 import org.kabeja.parser.DXFValue;
 
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth </a>
  *
  */
 public class DXFPolylineHandler extends AbstractEntityHandler {
     public static final String ENTITY_NAME = "POLYLINE";
-
     public static final String ENTITY_VERTEX = "VERTEX";
-
     public static final String END_SEQUENCE = "SEQEND";
-
     public static final int END_SEQUENCE_CODE = -2;
-
     public static final int VERTEX_BULGE = 42;
-
     public static final int START_WIDTH = 40;
-
     public static final int END_WIDTH = 41;
-
     public static final int THICKNESS = 39;
-
     public static final int SURFACE_TYPE = 75;
-
     public static final int SUREFACE_DENSITY_ROW_COUNT = 73;
-
     public static final int SUREFACE_DENSITY_COLUMN_COUNT = 74;
-
     public static final int ROW_COUNT = 71;
-
     public static final int COLUMN_COUNT = 72;
-
     private boolean follow = true;
-
     private boolean parse_vertex = false;
-
     private DXFVertex vertex;
-
     private DXFPolyline polyline;
 
     /**
@@ -112,8 +97,8 @@ public class DXFPolylineHandler extends AbstractEntityHandler {
      *      org.dxf2svg.parser.DXFValue)
      */
     public void parseGroup(int groupCode, DXFValue value) {
-        if ((groupCode == END_SEQUENCE_CODE)
-                || END_SEQUENCE.equals( value.getValue() )) {
+        if ((groupCode == END_SEQUENCE_CODE) ||
+                END_SEQUENCE.equals(value.getValue())) {
             polyline.addVertex(vertex);
             follow = false;
 
@@ -123,7 +108,7 @@ public class DXFPolylineHandler extends AbstractEntityHandler {
         switch (groupCode) {
         case DXFEntitiesSectionHandler.ENTITY_START:
 
-            if (ENTITY_VERTEX.equals( value.getValue() )) {
+            if (ENTITY_VERTEX.equals(value.getValue())) {
                 // store the old before
                 if (parse_vertex) {
                     polyline.addVertex(vertex);
@@ -200,22 +185,27 @@ public class DXFPolylineHandler extends AbstractEntityHandler {
             break;
 
         case ROW_COUNT:
+
             if (parse_vertex) {
                 vertex.setPolyFaceMeshVertex0(value.getIntegerValue());
-            }else{
+            } else {
                 polyline.setRows(value.getIntegerValue());
             }
+
             break;
 
         case COLUMN_COUNT:
+
             if (parse_vertex) {
                 vertex.setPolyFaceMeshVertex1(value.getIntegerValue());
-            }else{
+            } else {
                 polyline.setColumns(value.getIntegerValue());
             }
+
             break;
 
         case SUREFACE_DENSITY_ROW_COUNT:
+
             if (parse_vertex) {
                 vertex.setPolyFaceMeshVertex2(value.getIntegerValue());
             } else {
@@ -225,6 +215,7 @@ public class DXFPolylineHandler extends AbstractEntityHandler {
             break;
 
         case SUREFACE_DENSITY_COLUMN_COUNT:
+
             if (parse_vertex) {
                 vertex.setPolyFaceMeshVertex3(value.getIntegerValue());
             } else {

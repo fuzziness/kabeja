@@ -33,7 +33,7 @@ public class DXFTolerance extends DXFEntity {
      * @see org.kabeja.dxf.DXFEntity#getBounds()
      */
     public Bounds getBounds() {
-    	Bounds bounds = new Bounds();
+        Bounds bounds = new Bounds();
         bounds.setValid(false);
 
         return bounds;
@@ -46,7 +46,6 @@ public class DXFTolerance extends DXFEntity {
         // TODO Auto-generated method stub
         return DXFConstants.ENTITY_TYPE_TOLERANCE;
     }
-
 
     /**
      * @return Returns the insertionPoint.
@@ -104,9 +103,7 @@ public class DXFTolerance extends DXFEntity {
         this.xaxisDirection = xaxisDirection;
     }
 
-	public double getLength() {
-		
-		return 0;
-	}
-    
+    public double getLength() {
+        return 0;
+    }
 }

@@ -53,8 +53,8 @@ import org.kabeja.parser.table.DXFDimensionStyleTableHandler;
 import org.kabeja.parser.table.DXFLayerTableHandler;
 import org.kabeja.parser.table.DXFLineTypeTableHandler;
 import org.kabeja.parser.table.DXFStyleTableHandler;
-import org.kabeja.parser.table.DXFViewTableHandler;
 import org.kabeja.parser.table.DXFVPortTableHandler;
+import org.kabeja.parser.table.DXFViewTableHandler;
 
 
 /**
@@ -139,7 +139,7 @@ public class ParserBuilder {
 
         h = new DXFSplineHandler();
         handlerManager.addHandler(h);
-        
+
         h = new DXFMLineHandler();
         handlerManager.addHandler(h);
 
@@ -148,10 +148,9 @@ public class ParserBuilder {
 
         h = new DXFToleranceHandler();
         handlerManager.addHandler(h);
-        
+
         h = new DXFViewportHandler();
         handlerManager.addHandler(h);
-
 
         // the table handler
         handlerManager = new DXFTableSectionHandler();
@@ -245,41 +244,37 @@ public class ParserBuilder {
 
         h = new DXFMLineHandler();
         handlerManager.addHandler(h);
-        
+
         h = new DXFLeaderHandler();
         handlerManager.addHandler(h);
 
         h = new DXFToleranceHandler();
         handlerManager.addHandler(h);
-        
+
         h = new DXFViewportHandler();
         handlerManager.addHandler(h);
-
 
         // the OBJECTS section
         handlerManager = new DXFObjectsSectionHandler();
 
         h = new DXFImageDefHandler();
         handlerManager.addHandler(h);
-     
 
         h = new DXFDictionaryHandler();
         handlerManager.addHandler(h);
-     
-        
+
         h = new DXFPlotsettingsHandler();
         handlerManager.addHandler(h);
-      
-     
+
         h = new DXFLayoutHandler();
         handlerManager.addHandler(h);
 
         h = new DXFMLineStyleHandler();
         handlerManager.addHandler(h);
-        
+
         //add the HandlerManager as Handler to the parser
         parser.addHandler(handlerManager);
-        
+
         return parser;
     }
 

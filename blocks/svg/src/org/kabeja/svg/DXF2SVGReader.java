@@ -20,8 +20,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.parser.ParseException;
 import org.kabeja.parser.DXFParser;
+import org.kabeja.parser.ParseException;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.xml.SAXGenerator;
@@ -38,6 +38,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 
+
 /**
  * <p>
  * This is a implementation of the SAX2 driver. You can parse DXF-Files as they
@@ -46,338 +47,313 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * <p>
  * Use:
  * </p>
- * 
+ *
  * <pre>
  * XMLreader driver = new DXFSVGReader();
  * driver.setContentHander(new MyContentHandler());
  * driver.parse(&quot;/path/to/my.dxf&quot;);
  * </pre>
- * 
+ *
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
- * 
+ *
  */
 public class DXF2SVGReader extends XMLFilterImpl {
-	public static final String PROPERTY_DXF_ENCODING = "encoding";
+    public static final String PROPERTY_DXF_ENCODING = "encoding";
+    public static final String PROPERTY_PARSER_CONFIGURATION_FILENAME = "config-filename";
+    public static final String PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM = "config-inputstream";
+    public static final String PROPERTY_SAX_XML_DOCUMENT_VERSION = "http://xml.org/sax/properties/document-xml-version";
+    public static final String FEATURE_NAMESPACES = "http://xml.org/sax/features/namespaces";
+    public static final String FEATURE_NAMESPACES_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
+    public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";
+    public static final String FEATURE_STRING_INTERNING = "http://xml.org/sax/features/string-interning";
+    public static final String FEATURE_EXTERNAL_GENERAL_ENTITIES = "http://xml.org/sax/features/external-general-entities";
+    public static final String FEATURE_EXTERNAL_PARAMETER_ENTITIES = "http://xml.org/sax/features/external-parameter-entities";
+    protected DTDHandler dtdhandler;
 
-	public static final String PROPERTY_PARSER_CONFIGURATION_FILENAME = "config-filename";
+    //protected ContentHandler contenthandler;
+    protected EntityResolver resolver;
+    protected InputSource source;
+    protected ErrorHandler errorhandler;
+    protected boolean namespaces = true;
+    protected boolean namespacesPrefix = false;
+    protected boolean stringInterning = false;
+    protected boolean validation = false;
+    protected boolean externalGeneralEntities = false;
+    protected boolean externalParameterEntities = false;
+    protected String encoding = null;
+    protected String configURL;
+    protected Parser parser = null;
 
-	public static final String PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM = "config-inputstream";
+    /**
+     *
+     */
+    public DXF2SVGReader() {
+    }
 
-	
-	public static final String PROPERTY_SAX_XML_DOCUMENT_VERSION="http://xml.org/sax/properties/document-xml-version";
-	
-	public static final String FEATURE_NAMESPACES = "http://xml.org/sax/features/namespaces";
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#parse(java.lang.String)
+     */
+    public void parse(String systemId) throws IOException, SAXException {
+        this.initialize();
 
-	public static final String FEATURE_NAMESPACES_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
+        try {
+            parser.parse(systemId, this.encoding);
 
-	public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";
+            DXFDocument doc = parser.getDocument();
 
-	public static final String FEATURE_STRING_INTERNING = "http://xml.org/sax/features/string-interning";
+            // the xmlConsumer the next component in
+            // the pipeline from parent class
+            SAXGenerator generator = new SVGGenerator();
+            generator.setProperties(new HashMap());
+            generator.generate(doc, this.getContentHandler(), null);
 
-	public static final String FEATURE_EXTERNAL_GENERAL_ENTITIES = "http://xml.org/sax/features/external-general-entities";
+            // a little help for the GC
+            parser.releaseDXFDocument();
+            doc = null;
+        } catch (ParseException e) {
+            errorhandler.error(new SAXParseException(e.getMessage(), null));
+        }
+    }
 
-	public static final String FEATURE_EXTERNAL_PARAMETER_ENTITIES = "http://xml.org/sax/features/external-parameter-entities";
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#getFeature(java.lang.String)
+     */
+    public boolean getFeature(String name)
+        throws SAXNotRecognizedException, SAXNotSupportedException {
+        // throw new SAXNotSupportedException("no feature: " + name);
+        if (FEATURE_NAMESPACES.equals(name)) {
+            return this.namespaces;
+        } else if (FEATURE_NAMESPACES_PREFIX.equals(name)) {
+            return this.namespacesPrefix;
+        } else if (FEATURE_VALIDATION.equals(name)) {
+            return this.validation;
+        } else if (FEATURE_EXTERNAL_GENERAL_ENTITIES.equals(name)) {
+            return this.externalGeneralEntities;
+        } else if (FEATURE_EXTERNAL_PARAMETER_ENTITIES.equals(name)) {
+            return this.externalParameterEntities;
+        }
 
-	protected DTDHandler dtdhandler;
+        return false;
+    }
 
-	//protected ContentHandler contenthandler;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#setFeature(java.lang.String, boolean)
+     */
+    public void setFeature(String name, boolean value)
+        throws SAXNotRecognizedException, SAXNotSupportedException {
+        if (FEATURE_NAMESPACES.equals(name)) {
+            this.namespaces = value;
+        } else if (FEATURE_NAMESPACES_PREFIX.equals(name)) {
+            this.namespacesPrefix = value;
+        } else if (FEATURE_VALIDATION.equals(name)) {
+            this.validation = value;
+        } else if (FEATURE_EXTERNAL_GENERAL_ENTITIES.equals(name)) {
+            this.externalGeneralEntities = value;
+        } else if (FEATURE_EXTERNAL_PARAMETER_ENTITIES.equals(name)) {
+            this.externalParameterEntities = value;
+        }
+    }
 
-	protected EntityResolver resolver;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#getContentHandler()
+     */
+    public ContentHandler getContentHandler() {
+        return super.getContentHandler();
+    }
 
-	protected InputSource source;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#setContentHandler(org.xml.sax.ContentHandler)
+     */
+    public void setContentHandler(ContentHandler handler) {
+        super.setContentHandler(handler);
+    }
 
-	protected ErrorHandler errorhandler;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#getDTDHandler()
+     */
+    public DTDHandler getDTDHandler() {
+        return this.dtdhandler;
+    }
 
-	protected boolean namespaces = true;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#setDTDHandler(org.xml.sax.DTDHandler)
+     */
+    public void setDTDHandler(DTDHandler handler) {
+        this.dtdhandler = handler;
+    }
 
-	protected boolean namespacesPrefix = false;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#getEntityResolver()
+     */
+    public EntityResolver getEntityResolver() {
+        return this.resolver;
+    }
 
-	protected boolean stringInterning = false;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#setEntityResolver(org.xml.sax.EntityResolver)
+     */
+    public void setEntityResolver(EntityResolver resolver) {
+        this.resolver = resolver;
+    }
 
-	protected boolean validation = false;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#getErrorHandler()
+     */
+    public ErrorHandler getErrorHandler() {
+        return this.errorhandler;
+    }
 
-	protected boolean externalGeneralEntities = false;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#setErrorHandler(org.xml.sax.ErrorHandler)
+     */
+    public void setErrorHandler(ErrorHandler handler) {
+        this.errorhandler = handler;
+    }
 
-	protected boolean externalParameterEntities = false;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#parse(org.xml.sax.InputSource)
+     */
+    public void parse(InputSource input) throws IOException, SAXException {
+        this.initialize();
 
-	protected String encoding = null;
+        try {
+            String en = null;
 
-	protected String configURL;
+            if (input.getEncoding() != null) {
+                en = input.getEncoding();
+            } else {
+                en = this.encoding;
+            }
 
-	protected Parser parser = null;
+            this.parser.parse(input.getByteStream(), en);
 
-	/**
-	 * 
-	 */
-	public DXF2SVGReader() {
-	}
+            DXFDocument doc = this.parser.getDocument();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#parse(java.lang.String)
-	 */
-	public void parse(String systemId) throws IOException, SAXException {
+            // the xmlConsumer the next component in
+            // the pipeline from parent class
+            SAXGenerator generator = new SVGGenerator();
+            generator.setProperties(new HashMap());
+            generator.generate(doc, this.getContentHandler(), null);
 
-		this.initialize();
+            // a little help for the GC
+            parser.releaseDXFDocument();
 
-		try {
-			parser.parse(systemId, this.encoding);
+            // a little help for the GC
+            this.parser.releaseDXFDocument();
+            doc = null;
+        } catch (ParseException e) {
+            this.errorhandler.error(new SAXParseException(e.getMessage(), null));
+        }
+    }
 
-			DXFDocument doc = parser.getDocument();
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#getProperty(java.lang.String)
+     */
+    public Object getProperty(String name)
+        throws SAXNotRecognizedException, SAXNotSupportedException {
+        if (PROPERTY_DXF_ENCODING.equals(name)) {
+            return (Object) this.encoding;
+        } else if (PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM.equals(name)) {
+            return null;
+        } else if (PROPERTY_PARSER_CONFIGURATION_FILENAME.equals(name)) {
+            return (Object) this.configURL;
+        } else if (PROPERTY_SAX_XML_DOCUMENT_VERSION.equals(name)) {
+            return "1.0";
+        }
 
-			// the xmlConsumer the next component in
-			// the pipeline from parent class
-			SAXGenerator generator = new SVGGenerator();
-			generator.setProperties(new HashMap());
-			generator.generate(doc, this.getContentHandler(), null);
+        throw new SAXNotSupportedException("no feature: " + name);
 
-			// a little help for the GC
-			parser.releaseDXFDocument();
-			doc = null;
-		} catch (ParseException e) {
-			errorhandler.error(new SAXParseException(e.getMessage(), null));
-		}
-	}
+        //return null;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#getFeature(java.lang.String)
-	 */
-	public boolean getFeature(String name) throws SAXNotRecognizedException,
-			SAXNotSupportedException {
-		// throw new SAXNotSupportedException("no feature: " + name);
-		if (FEATURE_NAMESPACES.equals(name)) {
-			return this.namespaces;
-		} else if (FEATURE_NAMESPACES_PREFIX.equals(name)) {
-			return this.namespacesPrefix;
-		} else if (FEATURE_VALIDATION.equals(name)) {
-			return this.validation;
-		} else if (FEATURE_EXTERNAL_GENERAL_ENTITIES.equals(name)) {
-			return this.externalGeneralEntities;
-		} else if (FEATURE_EXTERNAL_PARAMETER_ENTITIES.equals(name)) {
-			return this.externalParameterEntities;
-		}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.XMLReader#setProperty(java.lang.String,
+     *      java.lang.Object)
+     */
+    public void setProperty(String name, Object value)
+        throws SAXNotRecognizedException, SAXNotSupportedException {
+        if (PROPERTY_DXF_ENCODING.equals(name)) {
+            this.encoding = (String) value;
+        } else if (PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM.equals(name)) {
+            InputStream in = (InputStream) value;
+            parser = ParserBuilder.buildFromXML(in);
+        } else if (PROPERTY_PARSER_CONFIGURATION_FILENAME.equals(name)) {
+            this.configURL = (String) value;
+            parser = ParserBuilder.buildFromXML(this.configURL);
+        }
+    }
 
-		return false;
-	}
+    protected void initialize() {
+        if (this.parser == null) {
+            this.parser = ParserBuilder.createDefaultParser();
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#setFeature(java.lang.String, boolean)
-	 */
-	public void setFeature(String name, boolean value)
-			throws SAXNotRecognizedException, SAXNotSupportedException {
-		if (FEATURE_NAMESPACES.equals(name)) {
-			this.namespaces = value;
-		} else if (FEATURE_NAMESPACES_PREFIX.equals(name)) {
-			this.namespacesPrefix = value;
-		} else if (FEATURE_VALIDATION.equals(name)) {
-			this.validation = value;
-		} else if (FEATURE_EXTERNAL_GENERAL_ENTITIES.equals(name)) {
-			this.externalGeneralEntities = value;
-		} else if (FEATURE_EXTERNAL_PARAMETER_ENTITIES.equals(name)) {
-			this.externalParameterEntities = value;
-		}
-	}
+        if (this.encoding == null) {
+            this.encoding = DXFParser.DEFAULT_ENCODING;
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#getContentHandler()
-	 */
-	public ContentHandler getContentHandler() {
-		return super.getContentHandler();
-	}
+        if (!namespacesPrefix && !namespaces) {
+            namespacesPrefix = true;
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#setContentHandler(org.xml.sax.ContentHandler)
-	 */
-	public void setContentHandler(ContentHandler handler) {
-		
-		super.setContentHandler(handler);
-	}
+        if (validation) {
+            externalGeneralEntities = true;
+            externalParameterEntities = true;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#getDTDHandler()
-	 */
-	public DTDHandler getDTDHandler() {
-		return this.dtdhandler;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
+     *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
+     */
+    public void startElement(String uri, String localName, String qName,
+        Attributes atts) throws SAXException {
+        if (this.namespacesPrefix) {
+            AttributesImpl attributes = new AttributesImpl(atts);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#setDTDHandler(org.xml.sax.DTDHandler)
-	 */
-	public void setDTDHandler(DTDHandler handler) {
-		this.dtdhandler = handler;
-	}
+            if (atts.getIndex("xmlns") == -1) {
+                attributes.addAttribute("", "xmlns", "xmlns", "CDATA",
+                    SVGConstants.SVG_NAMESPACE);
+            }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#getEntityResolver()
-	 */
-	public EntityResolver getEntityResolver() {
-		return this.resolver;
-	}
+            if (atts.getIndex("xmlns:xlink") == -1) {
+                attributes.addAttribute("", "", "xmlns:xlink", "CDATA",
+                    SVGConstants.XLINK_NAMESPACE);
+            }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#setEntityResolver(org.xml.sax.EntityResolver)
-	 */
-	public void setEntityResolver(EntityResolver resolver) {
-		this.resolver = resolver;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#getErrorHandler()
-	 */
-	public ErrorHandler getErrorHandler() {
-		return this.errorhandler;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#setErrorHandler(org.xml.sax.ErrorHandler)
-	 */
-	public void setErrorHandler(ErrorHandler handler) {
-		this.errorhandler = handler;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#parse(org.xml.sax.InputSource)
-	 */
-	public void parse(InputSource input) throws IOException, SAXException {
-		this.initialize();
-
-		try {
-			String en = null;
-
-			if (input.getEncoding() != null) {
-				en = input.getEncoding();
-			} else {
-				en = this.encoding;
-			}
-
-			this.parser.parse(input.getByteStream(), en);
-
-			DXFDocument doc = this.parser.getDocument();
-
-			// the xmlConsumer the next component in
-			// the pipeline from parent class
-			SAXGenerator generator = new SVGGenerator();
-			generator.setProperties(new HashMap());
-			generator.generate(doc, this.getContentHandler(), null);
-
-			// a little help for the GC
-			parser.releaseDXFDocument();
-
-			// a little help for the GC
-			this.parser.releaseDXFDocument();
-			doc = null;
-		} catch (ParseException e) {
-			this.errorhandler
-					.error(new SAXParseException(e.getMessage(), null));
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#getProperty(java.lang.String)
-	 */
-	public Object getProperty(String name) throws SAXNotRecognizedException,
-			SAXNotSupportedException {
-		if (PROPERTY_DXF_ENCODING.equals(name)) {
-			return (Object) this.encoding;
-		} else if (PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM.equals(name)) {
-			return null;
-		} else if (PROPERTY_PARSER_CONFIGURATION_FILENAME.equals(name)) {
-			return (Object) this.configURL;
-		} else if(PROPERTY_SAX_XML_DOCUMENT_VERSION.equals(name)){
-			return "1.0";
-		}
-
-		throw new SAXNotSupportedException("no feature: " + name);
-		//return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.XMLReader#setProperty(java.lang.String,
-	 *      java.lang.Object)
-	 */
-	public void setProperty(String name, Object value)
-			throws SAXNotRecognizedException, SAXNotSupportedException {
-		if (PROPERTY_DXF_ENCODING.equals(name)) {
-			this.encoding = (String) value;
-		} else if (PROPERTY_PARSER_CONFIGURATION_INPUTSTREAM.equals(name)) {
-			InputStream in = (InputStream) value;
-			parser = ParserBuilder.buildFromXML(in);
-		} else if (PROPERTY_PARSER_CONFIGURATION_FILENAME.equals(name)) {
-			this.configURL = (String) value;
-			parser = ParserBuilder.buildFromXML(this.configURL);
-		}
-	}
-
-	protected void initialize() {
-		if (this.parser == null) {
-			this.parser = ParserBuilder.createDefaultParser();
-		}
-
-		if (this.encoding == null) {
-			this.encoding = DXFParser.DEFAULT_ENCODING;
-		}
-
-		if (!namespacesPrefix && !namespaces) {
-			namespacesPrefix = true;
-		}
-
-		if (validation) {
-			externalGeneralEntities = true;
-			externalParameterEntities = true;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
-	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
-	public void startElement(String uri, String localName, String qName,
-			Attributes atts) throws SAXException {
-		if (this.namespacesPrefix) {
-			AttributesImpl attributes = new AttributesImpl(atts);
-
-			if (atts.getIndex("xmlns") == -1) {
-				attributes.addAttribute("", "xmlns", "xmlns", "CDATA",
-						SVGConstants.SVG_NAMESPACE);
-			}
-
-			if (atts.getIndex("xmlns:xlink") == -1) {
-				attributes.addAttribute("", "", "xmlns:xlink", "CDATA",
-						SVGConstants.XLINK_NAMESPACE);
-			}
-
-			super.startElement(uri, localName, qName, attributes);
-		} else {
-			super.startElement(uri, localName, qName, atts);
-		}
-	}
+            super.startElement(uri, localName, qName, attributes);
+        } else {
+            super.startElement(uri, localName, qName, atts);
+        }
+    }
 }

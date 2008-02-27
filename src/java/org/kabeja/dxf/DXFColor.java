@@ -109,14 +109,14 @@ public class DXFColor {
     private static final String DEFAULT_COLOR = "0,0,0";
 
     public static String getRGBString(int dxfColorCode) {
-        if ((dxfColorCode > 0) && ((dxfColorCode-1) <= (rgbs.length - 1))) {
+        if ((dxfColorCode > 0) && ((dxfColorCode - 1) <= (rgbs.length - 1))) {
             // the StringBuffer is faster then the String concat
             StringBuffer buf = new StringBuffer();
-            buf.append(rgbs[dxfColorCode-1][0]);
+            buf.append(rgbs[dxfColorCode - 1][0]);
             buf.append(",");
-            buf.append(rgbs[dxfColorCode-1][1]);
+            buf.append(rgbs[dxfColorCode - 1][1]);
             buf.append(",");
-            buf.append(rgbs[dxfColorCode-1][2]);
+            buf.append(rgbs[dxfColorCode - 1][2]);
 
             return buf.toString();
         }

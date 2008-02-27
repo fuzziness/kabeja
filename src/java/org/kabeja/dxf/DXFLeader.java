@@ -65,7 +65,7 @@ public class DXFLeader extends DXFEntity {
      * @see org.kabeja.dxf.DXFEntity#getBounds()
      */
     public Bounds getBounds() {
-    	Bounds bounds = new Bounds();
+        Bounds bounds = new Bounds();
         bounds.setValid(false);
 
         return bounds;
@@ -80,7 +80,6 @@ public class DXFLeader extends DXFEntity {
         return DXFConstants.ENTITY_TYPE_LEADER;
     }
 
- 
     /**
      * @return Returns the arrowHeadSize.
      */
@@ -279,19 +278,19 @@ public class DXFLeader extends DXFEntity {
     public void addCoordinate(Point vertex) {
         coordinates.add(vertex);
     }
-    
-    public int getCoordinateCount(){
-    	return this.coordinates.size();
-    }
-    
-    public Point getCoordinateAt(int index){
-    	return (Point)this.coordinates.get(index);
+
+    public int getCoordinateCount() {
+        return this.coordinates.size();
     }
 
-    
-    public Iterator getCoordinateIterator(){
-    	return this.coordinates.iterator();
+    public Point getCoordinateAt(int index) {
+        return (Point) this.coordinates.get(index);
     }
+
+    public Iterator getCoordinateIterator() {
+        return this.coordinates.iterator();
+    }
+
     /**
      * @return Returns the arrowEnabled.
      */
@@ -311,10 +310,8 @@ public class DXFLeader extends DXFEntity {
         return this.pathType == 1;
     }
 
-	public double getLength() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-    
-    
+    public double getLength() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

@@ -76,7 +76,6 @@
 	<target name="config" depends="compile">
 		<copy todir="${dist}/${conf}" >
 			<fileset dir="${conf}" excludes="process.xml,ui.xml,**/*~,**/*manifest*">
-		
 			</fileset>
 		</copy>
 
@@ -90,6 +89,11 @@
 		<copy todir="${build}/${classes}/${icons}">
 			<fileset dir="${icons}">
 				<include name="**/*" />
+			</fileset>
+		</copy>
+		<copy todir="${build}/${classes}">
+			<fileset dir="${src}/${sources}">
+				<include name="**/*.properties" />
 			</fileset>
 		</copy>
 	</target>

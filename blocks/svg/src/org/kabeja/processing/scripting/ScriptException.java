@@ -16,8 +16,7 @@
 package org.kabeja.processing.scripting;
 
 public class ScriptException extends Exception {
-
-	public ScriptException(Exception e){
-		super(e);
-	}
+    public ScriptException(Exception e) {
+        super(e);
+    }
 }

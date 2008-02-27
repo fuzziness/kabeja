@@ -22,127 +22,126 @@ import org.kabeja.dxf.helpers.DXFMLineSegment;
 import org.kabeja.dxf.helpers.MLineConverter;
 import org.kabeja.dxf.helpers.Point;
 
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- * 
+ *
  */
 public class DXFMLine extends DXFEntity {
+    public final static int JUSTIFICATION_TOP = 0;
+    public final static int JUSTIFICATION_ZERO = 1;
+    public final static int JUSTIFICATION_BOTTOM = 2;
+    protected double scale = 1.0;
+    protected Point startPoint = new Point();
+    protected List mlineSegments = new ArrayList();
+    protected int lineCount = 0;
+    protected int justification = 0;
+    protected String mLineStyleID = "";
+    protected String mLineStyleName = "";
 
-	public final static int JUSTIFICATION_TOP = 0;
-	public final static int JUSTIFICATION_ZERO = 1;
-	public final static int JUSTIFICATION_BOTTOM = 2;
+    /*
+     * (non-Javadoc)
+     *
+     * @see de.miethxml.kabeja.dxf.DXFEntity#getBounds()
+     */
+    public Bounds getBounds() {
+        Bounds b = new Bounds();
+        DXFPolyline[] pl = this.toDXFPolylines();
 
-	protected double scale = 1.0;
-	protected Point startPoint = new Point();
-	protected List mlineSegments = new ArrayList();
-	protected int lineCount = 0;
-	protected int justification = 0;
+        for (int i = 0; i < pl.length; i++) {
+            b.addToBounds(pl[i].getBounds());
+        }
 
-	protected String mLineStyleID = "";
-	protected String mLineStyleName = "";
+        // b.setValid(false);
+        return b;
+    }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see de.miethxml.kabeja.dxf.DXFEntity#getType()
+     */
+    public String getType() {
+        return DXFConstants.ENTITY_TYPE_MLINE;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.miethxml.kabeja.dxf.DXFEntity#getBounds()
-	 */
-	public Bounds getBounds() {
-		Bounds b = new Bounds();
-		DXFPolyline[] pl = this.toDXFPolylines();
-		for (int i = 0; i < pl.length; i++) {
-			b.addToBounds(pl[i].getBounds());
-		}
-		// b.setValid(false);
+    public double getLength() {
+        //TODO convert  mline -> polyline only  after changes
+        DXFPolyline[] pl = toDXFPolylines();
+        double l = 0;
 
-		return b;
-	}
+        for (int i = 0; i < pl.length; i++) {
+            l += pl[i].getLength();
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.miethxml.kabeja.dxf.DXFEntity#getType()
-	 */
-	public String getType() {
-		return DXFConstants.ENTITY_TYPE_MLINE;
-	}
+        return l;
+    }
 
-	public double getLength() {
-   
-		//TODO convert  mline -> polyline only  after changes
-	   DXFPolyline[] pl = toDXFPolylines();
-       double l = 0;
-       for(int i=0;i<pl.length;i++){
-    	   l+=pl[i].getLength();
-       }	
-		return l;
-	}
+    public void addDXFMLineSegement(DXFMLineSegment seg) {
+        this.mlineSegments.add(seg);
+    }
 
-	public void addDXFMLineSegement(DXFMLineSegment seg) {
-		this.mlineSegments.add(seg);
-	}
+    public int getDXFMLineSegmentCount() {
+        return this.mlineSegments.size();
+    }
 
-	public int getDXFMLineSegmentCount() {
-		return this.mlineSegments.size();
-	}
+    public DXFMLineSegment getDXFMLineSegment(int index) {
+        return (DXFMLineSegment) this.mlineSegments.get(index);
+    }
 
-	public DXFMLineSegment getDXFMLineSegment(int index) {
-		return (DXFMLineSegment) this.mlineSegments.get(index);
-	}
+    public double getScale() {
+        return scale;
+    }
 
-	public double getScale() {
-		return scale;
-	}
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
 
-	public void setScale(double scale) {
-		this.scale = scale;
-	}
+    public Point getStartPoint() {
+        return startPoint;
+    }
 
-	public Point getStartPoint() {
-		return startPoint;
-	}
+    public void setStartPoint(Point startPoint) {
+        this.startPoint = startPoint;
+    }
 
-	public void setStartPoint(Point startPoint) {
-		this.startPoint = startPoint;
-	}
+    public int getLineCount() {
+        return lineCount;
+    }
 
-	public int getLineCount() {
-		return lineCount;
-	}
+    public void setLineCount(int lineCount) {
+        this.lineCount = lineCount;
+    }
 
-	public void setLineCount(int lineCount) {
-		this.lineCount = lineCount;
-	}
+    public String getMLineStyleID() {
+        return mLineStyleID;
+    }
 
-	public String getMLineStyleID() {
-		return mLineStyleID;
-	}
+    public void setMLineStyleID(String lineStyleID) {
+        mLineStyleID = lineStyleID;
+    }
 
-	public void setMLineStyleID(String lineStyleID) {
-		mLineStyleID = lineStyleID;
-	}
+    public int getJustification() {
+        return justification;
+    }
 
-	public int getJustification() {
-		return justification;
-	}
+    public void setJustification(int justification) {
+        this.justification = justification;
+    }
 
-	public void setJustification(int justification) {
-		this.justification = justification;
-	}
+    public String getMLineStyleName() {
+        return mLineStyleName;
+    }
 
-	public String getMLineStyleName() {
-		return mLineStyleName;
-	}
+    public void setMLineStyleName(String lineStyleName) {
+        mLineStyleName = lineStyleName;
+    }
 
-	public void setMLineStyleName(String lineStyleName) {
-		mLineStyleName = lineStyleName;
-	}
+    protected DXFPolyline[] toDXFPolylines() {
+        return MLineConverter.toDXFPolyline(this);
+    }
 
-	protected DXFPolyline[] toDXFPolylines() {
-	      return MLineConverter.toDXFPolyline(this);
-	}
-
-	public boolean isClosed() {
-		return (this.flags & 2) == 2;
-	}
+    public boolean isClosed() {
+        return (this.flags & 2) == 2;
+    }
 }

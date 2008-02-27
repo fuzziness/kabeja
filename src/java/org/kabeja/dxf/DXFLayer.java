@@ -21,227 +21,240 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- * 
- * 
+ *
+ *
  */
 public class DXFLayer {
-	private Hashtable entities = new Hashtable();
-	private String name = "";
-	private int color = 7;
-	private DXFDocument doc;
-	private String ltype = "";
-	private int flags = 0;
-	private int lineWeight = 0;
-	private String plotStyle = "";
+    private Hashtable entities = new Hashtable();
+    private String name = "";
+    private int color = 7;
+    private DXFDocument doc;
+    private String ltype = "";
+    private int flags = 0;
+    private int lineWeight = 0;
+    private String plotStyle = "";
 
-	public DXFLayer() {
-	}
+    public DXFLayer() {
+    }
 
-	/**
-	 * @return Returns the name.
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * @return Returns the name.
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @param name
-	 *            The name to set.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * @param name
+     *            The name to set.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void addDXFEntity(DXFEntity entity) {
-		entity.setDXFDocument(this.doc);
-		if (entities.containsKey(entity.getType())) {
-			((ArrayList) entities.get(entity.getType())).add(entity);
-		} else {
-			ArrayList list = new ArrayList();
+    public void addDXFEntity(DXFEntity entity) {
+        entity.setDXFDocument(this.doc);
 
-			list.add(entity);
-			entities.put(entity.getType(), list);
-		}
-	}
+        if (entities.containsKey(entity.getType())) {
+            ((ArrayList) entities.get(entity.getType())).add(entity);
+        } else {
+            ArrayList list = new ArrayList();
 
-	public void removeDXFEntity(DXFEntity entity) {
-		if (entities.containsKey(entity.getType())) {
-			ArrayList list = (ArrayList) entities.get(entity.getType());
-			list.remove(entity);
-			if (list.isEmpty()) {
-				entities.remove(entity.getType());
-			}
-		}
-	}
+            list.add(entity);
+            entities.put(entity.getType(), list);
+        }
+    }
 
-	public void setDXFDocument(DXFDocument doc) {
-		this.doc = doc;
-	}
+    public void removeDXFEntity(DXFEntity entity) {
+        if (entities.containsKey(entity.getType())) {
+            ArrayList list = (ArrayList) entities.get(entity.getType());
+            list.remove(entity);
 
-	public DXFDocument getDXFDocument() {
-		return this.doc;
-	}
+            if (list.isEmpty()) {
+                entities.remove(entity.getType());
+            }
+        }
+    }
 
-	public Bounds getBounds() {
+    public void setDXFDocument(DXFDocument doc) {
+        this.doc = doc;
+    }
 
-		Bounds bounds = new Bounds();
-		Enumeration e = entities.elements();
+    public DXFDocument getDXFDocument() {
+        return this.doc;
+    }
 
-		while (e.hasMoreElements()) {
-			ArrayList list = (ArrayList) e.nextElement();
+    public Bounds getBounds() {
+        Bounds bounds = new Bounds();
+        Enumeration e = entities.elements();
 
-			Iterator i = list.iterator();
+        while (e.hasMoreElements()) {
+            ArrayList list = (ArrayList) e.nextElement();
 
-			while (i.hasNext()) {
-				DXFEntity entity = (DXFEntity) i.next();
-				Bounds b = entity.getBounds();
-				if (b.isValid()) {
-					bounds.addToBounds(b);
-				}
-			}
-		}
+            Iterator i = list.iterator();
 
-		return bounds;
-	}
+            while (i.hasNext()) {
+                DXFEntity entity = (DXFEntity) i.next();
+                Bounds b = entity.getBounds();
 
-	/**
-	 * Get the bounds for the given filter flag. If true the bounds contains only
-	 * entity bounds which are on model space. Else returns the bounds which contains the entity bounds which are on 
-	 * paperspace. 
-	 * @param onModelspace
-	 * @return
-	 */
-	
-	public Bounds getBounds(boolean onModelspace) {
-		Bounds bounds = new Bounds();
+                if (b.isValid()) {
+                    bounds.addToBounds(b);
+                }
+            }
+        }
 
-		Enumeration e = entities.elements();
+        return bounds;
+    }
 
-		while (e.hasMoreElements()) {
-			ArrayList list = (ArrayList) e.nextElement();
+    /**
+     * Get the bounds for the given filter flag. If true the bounds contains only
+     * entity bounds which are on model space. Else returns the bounds which contains the entity bounds which are on
+     * paperspace.
+     * @param onModelspace
+     * @return
+     */
+    public Bounds getBounds(boolean onModelspace) {
+        Bounds bounds = new Bounds();
 
-			Iterator i = list.iterator();
+        Enumeration e = entities.elements();
 
-			while (i.hasNext()) {
-				DXFEntity entity = (DXFEntity) i.next();
-				if ((onModelspace && entity.isModelSpace())|| (!onModelspace && !entity.isModelSpace())) {
-					Bounds b = entity.getBounds();
-					if (b.isValid()) {
-						bounds.addToBounds(b);
-					}
-				}
-			}
-		}
+        while (e.hasMoreElements()) {
+            ArrayList list = (ArrayList) e.nextElement();
 
-		return bounds;
-	}
+            Iterator i = list.iterator();
 
-	/**
-	 * Returns the list of the DXFenetities of the Type or null.
-	 * 
-	 * @param type
-	 * @return List or null
-	 */
-	public List getDXFEntities(String type) {
-		if (entities.containsKey(type)) {
-			return (ArrayList) entities.get(type);
-		}
+            while (i.hasNext()) {
+                DXFEntity entity = (DXFEntity) i.next();
 
-		return null;
-	}
+                if ((onModelspace && entity.isModelSpace()) ||
+                        (!onModelspace && !entity.isModelSpace())) {
+                    Bounds b = entity.getBounds();
 
-	public boolean hasDXFEntities(String type) {
-		return entities.containsKey(type);
-	}
+                    if (b.getMaximumX() == Double.NaN) {
+                        System.out.println("NANA=" + entity);
+                    }
 
-	/**
-	 * 
-	 * @return a iterator over all entity types of this layer
-	 */
-	public Iterator getDXFEntityTypeIterator() {
-		return entities.keySet().iterator();
-	}
+                    if (b.isValid()) {
+                        bounds.addToBounds(b);
+                    }
+                }
+            }
+        }
 
-	/**
-	 * Gets the
-	 * 
-	 * @see DXFEntity with the specified ID.
-	 * @param id
-	 *            of the
-	 * @see DXFEntity
-	 * @return the
-	 * @see DXFEntity with the specified ID or null if there is no
-	 * @see DXFEntity with the specified ID
-	 */
-	public DXFEntity getDXFEntityByID(String id) {
-		DXFEntity entity = null;
-		Iterator i = this.entities.values().iterator();
-		while (i.hasNext()) {
-			Iterator entityIterator = ((List) i.next()).iterator();
-			while (entityIterator.hasNext()) {
-				DXFEntity e = (DXFEntity) entityIterator.next();
-				if (e.getID().equals(id)) {
-					return e;
-				}
-			}
-		}
-		return entity;
-	}
+        return bounds;
+    }
 
-	public int getColor() {
-		return this.color;
-	}
+    /**
+     * Returns the list of the DXFenetities of the Type or null.
+     *
+     * @param type
+     * @return List or null
+     */
+    public List getDXFEntities(String type) {
+        if (entities.containsKey(type)) {
+            return (ArrayList) entities.get(type);
+        }
 
-	public void setColor(int color) {
-		this.color = color;
-	}
+        return null;
+    }
 
-	public void setLineType(String ltype) {
-		this.ltype = ltype;
-	}
+    public boolean hasDXFEntities(String type) {
+        return entities.containsKey(type);
+    }
 
-	public String getLineType() {
-		return ltype;
-	}
+    /**
+     *
+     * @return a iterator over all entity types of this layer
+     */
+    public Iterator getDXFEntityTypeIterator() {
+        return entities.keySet().iterator();
+    }
 
-	/**
-	 * @return Returns the flags.
-	 */
-	public int getFlags() {
-		return flags;
-	}
+    /**
+     * Gets the
+     *
+     * @see DXFEntity with the specified ID.
+     * @param id
+     *            of the
+     * @see DXFEntity
+     * @return the
+     * @see DXFEntity with the specified ID or null if there is no
+     * @see DXFEntity with the specified ID
+     */
+    public DXFEntity getDXFEntityByID(String id) {
+        DXFEntity entity = null;
+        Iterator i = this.entities.values().iterator();
 
-	/**
-	 * @param flags
-	 *            The flags to set.
-	 */
-	public void setFlags(int flags) {
-		this.flags = flags;
-	}
+        while (i.hasNext()) {
+            Iterator entityIterator = ((List) i.next()).iterator();
 
-	public boolean isVisible() {
-		return color >= 0;
-	}
+            while (entityIterator.hasNext()) {
+                DXFEntity e = (DXFEntity) entityIterator.next();
 
-	public boolean isFrozen() {
-		return ((this.flags & 1) == 1);
-	}
+                if (e.getID().equals(id)) {
+                    return e;
+                }
+            }
+        }
 
-	public int getLineWeight() {
-		return lineWeight;
-	}
+        return entity;
+    }
 
-	public void setLineWeight(int lineWeight) {
-		this.lineWeight = lineWeight;
-	}
+    public int getColor() {
+        return this.color;
+    }
 
-	public String getPlotStyle() {
-		return plotStyle;
-	}
+    public void setColor(int color) {
+        this.color = color;
+    }
 
-	public void setPlotStyle(String plotStyle) {
-		this.plotStyle = plotStyle;
-	}
+    public void setLineType(String ltype) {
+        this.ltype = ltype;
+    }
+
+    public String getLineType() {
+        return ltype;
+    }
+
+    /**
+     * @return Returns the flags.
+     */
+    public int getFlags() {
+        return flags;
+    }
+
+    /**
+     * @param flags
+     *            The flags to set.
+     */
+    public void setFlags(int flags) {
+        this.flags = flags;
+    }
+
+    public boolean isVisible() {
+        return color >= 0;
+    }
+
+    public boolean isFrozen() {
+        return ((this.flags & 1) == 1);
+    }
+
+    public int getLineWeight() {
+        return lineWeight;
+    }
+
+    public void setLineWeight(int lineWeight) {
+        this.lineWeight = lineWeight;
+    }
+
+    public String getPlotStyle() {
+        return plotStyle;
+    }
+
+    public void setPlotStyle(String plotStyle) {
+        this.plotStyle = plotStyle;
+    }
 }

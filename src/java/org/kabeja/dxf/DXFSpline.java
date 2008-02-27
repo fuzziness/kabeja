@@ -22,248 +22,232 @@ import java.util.List;
 import org.kabeja.dxf.helpers.DXFSplineConverter;
 import org.kabeja.dxf.helpers.SplinePoint;
 
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- * 
+ *
  */
-public class DXFSpline extends DXFEntity{
-	protected int degree;
+public class DXFSpline extends DXFEntity {
+    protected static final int APPROXIMATION_STEPS = 10;
+    protected int degree;
+    protected int nodePointsSize;
+    protected int controlPointSize;
+    protected int fitPointSize;
+    protected double[] knots;
+    protected double[] weights;
+    protected List points = new ArrayList();
+    protected double fitTolerance;
+    protected double knotsTolerance;
+    protected double controlPointTolerance;
+    DXFPolyline polyline;
 
-	protected int nodePointsSize;
+    /*
+     * (non-Javadoc)
+     *
+     * @see de.miethxml.kabeja.dxf.DXFEntity#getBounds()
+     */
+    public Bounds getBounds() {
+        // simple the convex hull of the spline
+        // Iterator i = points.iterator();
+        //
+        // while (i.hasNext()) {
+        // SplinePoint p = (SplinePoint) i.next();
+        // bounds.addToBounds(p);
+        // }
+        //
+        // return bounds;
 
-	protected int controlPointSize;
+        //more correct bounds
+        if (this.polyline == null) {
+            this.polyline = toDXFPolyline();
+        }
 
-	protected int fitPointSize;
+        return this.polyline.getBounds();
+    }
 
-	protected double[] knots;
+    /*
+     * (non-Javadoc)
+     *
+     * @see de.miethxml.kabeja.dxf.DXFEntity#getType()
+     */
+    public String getType() {
+        return DXFConstants.ENTITY_TYPE_SPLINE;
+    }
 
-	protected double[] weights;
+    public void addSplinePoint(SplinePoint p) {
+        this.points.add(p);
+        this.polyline = null;
+    }
 
-	protected List points = new ArrayList();
+    public Iterator getSplinePointIterator() {
+        return points.iterator();
+    }
 
-	protected double fitTolerance;
+    public boolean isRational() {
+        return (this.flags & 4) == 4;
+    }
 
-	protected double knotsTolerance;
+    public boolean isClosed() {
+        return (this.flags & 1) == 1;
+    }
 
-	protected double controlPointTolerance;
+    public boolean isPeriodic() {
+        return (this.flags & 2) == 2;
+    }
 
-	protected static final int APPROXIMATION_STEPS = 10;
+    public boolean isPlanar() {
+        return (this.flags & 8) == 8;
+    }
 
-	DXFPolyline polyline;
+    public boolean isLinear() {
+        return (this.flags & 16) == 16;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.miethxml.kabeja.dxf.DXFEntity#getBounds()
-	 */
-	public Bounds getBounds() {
-		// simple the convex hull of the spline
-		// Iterator i = points.iterator();
-		//
-		// while (i.hasNext()) {
-		// SplinePoint p = (SplinePoint) i.next();
-		// bounds.addToBounds(p);
-		// }
-		//
-		// return bounds;
+    /**
+     * @return Returns the controlPointSize.
+     */
+    public int getControlPointSize() {
+        return controlPointSize;
+    }
 
-		//more correct bounds
-		if (this.polyline == null) {
-			this.polyline = toDXFPolyline();
-		}
-		return this.polyline.getBounds();
-	}
+    /**
+     * @param controlPointSize
+     *            The controlPointSize to set.
+     */
+    public void setControlPointSize(int controlPointSize) {
+        this.controlPointSize = controlPointSize;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.miethxml.kabeja.dxf.DXFEntity#getType()
-	 */
-	public String getType() {
+    /**
+     * @return Returns the degree.
+     */
+    public int getDegree() {
+        return degree;
+    }
 
-		return DXFConstants.ENTITY_TYPE_SPLINE;
-	}
+    /**
+     * @param degree
+     *            The degree to set.
+     */
+    public void setDegree(int degree) {
+        this.degree = degree;
+    }
 
+    /**
+     * @return Returns the fitPointSize.
+     */
+    public int getFitPointSize() {
+        return fitPointSize;
+    }
 
-	public void addSplinePoint(SplinePoint p) {
-		this.points.add(p);
-		this.polyline=null;
-	}
+    /**
+     * @param fitPointSize
+     *            The fitPointSize to set.
+     */
+    public void setFitPointSize(int fitPointSize) {
+        this.fitPointSize = fitPointSize;
+    }
 
-	public Iterator getSplinePointIterator() {
-		return points.iterator();
-	}
+    /**
+     * @return Returns the fitTolerance.
+     */
+    public double getFitTolerance() {
+        return fitTolerance;
+    }
 
-	public boolean isRational() {
-		return (this.flags & 4) == 4;
-	}
+    /**
+     * @param fitTolerance
+     *            The fitTolerance to set.
+     */
+    public void setFitTolerance(double fitTolerance) {
+        this.fitTolerance = fitTolerance;
+    }
 
-	public boolean isClosed() {
-		return (this.flags & 1) == 1;
-	}
+    /**
+     * @return Returns the knots.
+     */
+    public double[] getKnots() {
+        return knots;
+    }
 
-	public boolean isPeriodic() {
-		return (this.flags & 2) == 2;
-	}
+    /**
+     * @param knots
+     *            The knots to set.
+     */
+    public void setKnots(double[] knots) {
+        this.knots = knots;
+        this.polyline = null;
+    }
 
-	public boolean isPlanar() {
-		return (this.flags & 8) == 8;
-	}
+    /**
+     * @return Returns the nodePointsSize.
+     */
+    public int getNodePointsSize() {
+        return nodePointsSize;
+    }
 
-	public boolean isLinear() {
-		return (this.flags & 16) == 16;
-	}
+    /**
+     * @param nodePointsSize
+     *            The nodePointsSize to set.
+     */
+    public void setNodePointsSize(int nodePointsSize) {
+        this.nodePointsSize = nodePointsSize;
+    }
 
-	/**
-	 * @return Returns the controlPointSize.
-	 */
-	public int getControlPointSize() {
-		return controlPointSize;
-	}
+    /**
+     * @return Returns the weights.
+     */
+    public double[] getWeights() {
+        return weights;
+    }
 
-	/**
-	 * @param controlPointSize
-	 *            The controlPointSize to set.
-	 */
-	public void setControlPointSize(int controlPointSize) {
-		this.controlPointSize = controlPointSize;
-	}
+    /**
+     * @param weights
+     *            The weights to set.
+     */
+    public void setWeights(double[] weights) {
+        this.weights = weights;
+    }
 
-	/**
-	 * @return Returns the degree.
-	 */
-	public int getDegree() {
-		return degree;
-	}
+    /**
+     * @return Returns the controlPointTolerance.
+     */
+    public double getControlPointTolerance() {
+        return controlPointTolerance;
+    }
 
-	/**
-	 * @param degree
-	 *            The degree to set.
-	 */
-	public void setDegree(int degree) {
-		this.degree = degree;
-	}
+    /**
+     * @param controlPointTolerance
+     *            The controlPointTolerance to set.
+     */
+    public void setControlPointTolerance(double controlPointTolerance) {
+        this.controlPointTolerance = controlPointTolerance;
+    }
 
-	/**
-	 * @return Returns the fitPointSize.
-	 */
-	public int getFitPointSize() {
-		return fitPointSize;
-	}
+    /**
+     * @return Returns the knotsTolerance.
+     */
+    public double getKnotsTolerance() {
+        return knotsTolerance;
+    }
 
-	/**
-	 * @param fitPointSize
-	 *            The fitPointSize to set.
-	 */
-	public void setFitPointSize(int fitPointSize) {
-		this.fitPointSize = fitPointSize;
-	}
+    /**
+     * @param knotsTolerance
+     *            The knotsTolerance to set.
+     */
+    public void setKnotsTolerance(double knotsTolerance) {
+        this.knotsTolerance = knotsTolerance;
+    }
 
-	/**
-	 * @return Returns the fitTolerance.
-	 */
-	public double getFitTolerance() {
-		return fitTolerance;
-	}
+    public double getLength() {
+        if (this.polyline == null) {
+            this.polyline = toDXFPolyline();
+        }
 
-	/**
-	 * @param fitTolerance
-	 *            The fitTolerance to set.
-	 */
-	public void setFitTolerance(double fitTolerance) {
-		this.fitTolerance = fitTolerance;
-	}
+        return this.polyline.getLength();
+    }
 
-	/**
-	 * @return Returns the knots.
-	 */
-	public double[] getKnots() {
-		return knots;
-	}
-
-	/**
-	 * @param knots
-	 *            The knots to set.
-	 */
-	public void setKnots(double[] knots) {
-		this.knots = knots;
-		this.polyline=null;
-	}
-
-	/**
-	 * @return Returns the nodePointsSize.
-	 */
-	public int getNodePointsSize() {
-		return nodePointsSize;
-	}
-
-	/**
-	 * @param nodePointsSize
-	 *            The nodePointsSize to set.
-	 */
-	public void setNodePointsSize(int nodePointsSize) {
-		this.nodePointsSize = nodePointsSize;
-	}
-
-	/**
-	 * @return Returns the weights.
-	 */
-	public double[] getWeights() {
-		return weights;
-	}
-
-	/**
-	 * @param weights
-	 *            The weights to set.
-	 */
-	public void setWeights(double[] weights) {
-		this.weights = weights;
-	}
-
-	/**
-	 * @return Returns the controlPointTolerance.
-	 */
-	public double getControlPointTolerance() {
-		return controlPointTolerance;
-	}
-
-	/**
-	 * @param controlPointTolerance
-	 *            The controlPointTolerance to set.
-	 */
-	public void setControlPointTolerance(double controlPointTolerance) {
-		this.controlPointTolerance = controlPointTolerance;
-	}
-
-	/**
-	 * @return Returns the knotsTolerance.
-	 */
-	public double getKnotsTolerance() {
-		return knotsTolerance;
-	}
-
-	/**
-	 * @param knotsTolerance
-	 *            The knotsTolerance to set.
-	 */
-	public void setKnotsTolerance(double knotsTolerance) {
-		this.knotsTolerance = knotsTolerance;
-	}
-
-
-
-	public double getLength() {
-		if (this.polyline == null) {
-			this.polyline = toDXFPolyline();
-		}
-		return this.polyline.getLength();
-	}
-
-	
-	protected DXFPolyline toDXFPolyline(){	
-		return DXFSplineConverter.toDXFPolyline(this);
-	}
-	
-
-
+    protected DXFPolyline toDXFPolyline() {
+        return DXFSplineConverter.toDXFPolyline(this);
+    }
 }

@@ -23,7 +23,6 @@ import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.processing.PolylineConverter;
 import org.kabeja.processing.PostProcessor;
-import org.kabeja.svg.FixedStrokeWidthFilter;
 import org.kabeja.svg.RootLayerFilter;
 import org.kabeja.svg.SVGGenerator;
 import org.kabeja.xml.ConsoleSerializer;
@@ -31,66 +30,69 @@ import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
 import org.kabeja.xml.SAXSerializer;
 
+
 /**
  * This is a CLI wrapper for kabeja to imitate the behavior of the native
  * Inscape dxf2svg import filter
  */
 public class DXFImportFilter {
+    public void importFile(String file) {
+        try {
+            // parse the dxf file
+            Parser parser = ParserBuilder.createDefaultParser();
 
-	public void importFile(String file) {
-		try {
-			// parse the dxf file
-			Parser parser = ParserBuilder.createDefaultParser();
+            parser.parse(file);
 
-			parser.parse(file);
-			DXFDocument doc = parser.getDocument();
+            DXFDocument doc = parser.getDocument();
 
-			Map noprops = new HashMap();
-			
-			//connect all entities, where possible
-			PostProcessor pp = new PolylineConverter();
-			pp.setProperties(noprops);
-			pp.process(doc, noprops);
-			// the processing and svg conversion
-			SAXGenerator generator = new SVGGenerator();
-			generator.setProperties(new HashMap());
+            Map noprops = new HashMap();
 
-			// fix problems width percent width values
-			SAXFilter filter1 = new FixedStrokeWidthFilter();
-			Map properties = new HashMap();
-			properties.put(FixedStrokeWidthFilter.PROPERTY_FIXED_FONTSIZE,"false");
-			filter1.setProperties(properties);
+            //connect all entities, where possible
+            PostProcessor pp = new PolylineConverter();
+            pp.setProperties(noprops);
+            pp.process(doc, noprops);
 
-			
-			//remove the root group
-			SAXFilter filter2 = new RootLayerFilter();
-			filter2.setProperties(noprops);
-			
-			//chain the filters
-			filter1.setContentHandler(filter2);
-			
-			
-			// output goes to stdout
-			SAXSerializer serializer = new ConsoleSerializer();
-			serializer.setOutput(null);
-			serializer.setProperties(noprops);
+            // the processing and svg conversion
+            SAXGenerator generator = new SVGGenerator();
+            generator.setProperties(new HashMap());
 
-			// setup the process pipeline
-			// and start the generation
+            // fix problems width percent width values
+            //			SAXFilter filter1 = new FixedStrokeWidthFilter();
+            //			Map properties = new HashMap();
+            //			properties.put(FixedStrokeWidthFilter.PROPERTY_FIXED_FONTSIZE,"false");
+            //			filter1.setProperties(properties);
 
-			filter2.setContentHandler(serializer);
-			generator.generate(doc, filter1, null);
+            //remove the root group
+            SAXFilter filter2 = new RootLayerFilter();
+            filter2.setProperties(noprops);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            //chain the filters
+            //filter1.setContentHandler(filter2);
 
-	public static void main(String[] args) {
-		if (args.length >= 1) {
-			DXFImportFilter filter = new DXFImportFilter();
-			filter.importFile(args[0]);
-		}
-	}
+            // output goes to stdout
+            SAXSerializer serializer = new ConsoleSerializer();
+            serializer.setOutput(null);
+            serializer.setProperties(noprops);
 
+            // setup the process pipeline
+            // and start the generation
+            filter2.setContentHandler(serializer);
+            generator.generate(doc, filter2, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        if (args.length >= 1) {
+            DXFImportFilter filter = new DXFImportFilter();
+            filter.importFile(args[0]);
+        }
+    }
+
+    protected Map parseParameters(String[] args) {
+        Map map = new HashMap();
+
+        return map;
+    }
 }

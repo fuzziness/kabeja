@@ -56,7 +56,8 @@ public class HatchBoundaryLoop {
 
     public Bounds getBounds() {
         Bounds bounds = new Bounds();
-       // System.out.println("edges="+edges.size());
+
+        // System.out.println("edges="+edges.size());
         if (edges.size() > 0) {
             Iterator i = edges.iterator();
 
@@ -76,8 +77,8 @@ public class HatchBoundaryLoop {
             return bounds;
         }
     }
-    
-    public int getEdgeCount(){
-    	return this.edges.size();
+
+    public int getEdgeCount() {
+        return this.edges.size();
     }
 }

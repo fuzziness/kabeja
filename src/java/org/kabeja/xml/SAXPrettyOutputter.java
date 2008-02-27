@@ -43,7 +43,8 @@ import org.xml.sax.SAXException;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class SAXPrettyOutputter extends AbstractSAXSerializer implements SAXSerializer {
+public class SAXPrettyOutputter extends AbstractSAXSerializer
+    implements SAXSerializer {
     public static final String DEFAULT_ENCODING = "UTF-8";
     public static final String SUFFIX = "svg";
     public static final String SUFFIX_GZIP = "svgz";
@@ -54,11 +55,9 @@ public class SAXPrettyOutputter extends AbstractSAXSerializer implements SAXSeri
     private String encoding;
     private String dtd;
     private int indent = 0;
-   
     private boolean parent = false;
     private ArrayList textContentList = new ArrayList();
     protected HashMap rootxmlns = new HashMap();
-
     protected boolean gzip = false;
 
     public SAXPrettyOutputter(OutputStream output, String encoding) {
@@ -158,7 +157,8 @@ public class SAXPrettyOutputter extends AbstractSAXSerializer implements SAXSeri
         indent = 0;
 
         try {
-            this.out.write("<?xml version=\"1.0\" encoding=\"" + encoding + "\" ?>");
+            this.out.write("<?xml version=\"1.0\" encoding=\"" + encoding +
+                "\" ?>");
 
             if (this.dtd != null) {
                 this.out.write("\n<!DOCTYPE " + dtd + ">");
@@ -170,8 +170,6 @@ public class SAXPrettyOutputter extends AbstractSAXSerializer implements SAXSeri
 
     public void startElement(String namespaceURI, String localName,
         String qName, Attributes atts) throws SAXException {
-
-
         this.indent++;
 
         try {
@@ -194,8 +192,8 @@ public class SAXPrettyOutputter extends AbstractSAXSerializer implements SAXSeri
             int attrCount = atts.getLength();
 
             for (int i = 0; i < attrCount; i++) {
-            	//we need a white space between the 
-            	//attributes
+                //we need a white space between the 
+                //attributes
                 this.indentOutput(1);
 
                 String uri = atts.getURI(i);
@@ -207,7 +205,8 @@ public class SAXPrettyOutputter extends AbstractSAXSerializer implements SAXSeri
                 // .write(" xmlns:" + prefix + "=\"" + uri
                 // + "\" ");
                 // }
-                this.out.write(qname + "=\"" +encodeXML(atts.getValue(i)) + "\"");
+                this.out.write(qname + "=\"" + encodeXML(atts.getValue(i)) +
+                    "\"");
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -215,7 +214,7 @@ public class SAXPrettyOutputter extends AbstractSAXSerializer implements SAXSeri
         }
 
         // no text in this context now
-       this.textContentList.add(Boolean.valueOf(false));
+        this.textContentList.add(Boolean.valueOf(false));
     }
 
     public void startPrefixMapping(String prefix, String uri)

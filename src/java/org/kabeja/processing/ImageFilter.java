@@ -25,40 +25,39 @@ import org.kabeja.dxf.DXFImage;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.objects.DXFImageDefObject;
 
+
 /**
- * 
+ *
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  */
 public class ImageFilter extends AbstractPostProcessor {
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument,
+     *      java.util.Map)
+     */
+    public void process(DXFDocument doc, Map context) throws ProcessorException {
+        Iterator i = doc.getDXFLayerIterator();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument,
-	 *      java.util.Map)
-	 */
-	public void process(DXFDocument doc, Map context) throws ProcessorException {
-		Iterator i = doc.getDXFLayerIterator();
+        while (i.hasNext()) {
+            DXFLayer l = (DXFLayer) i.next();
 
-		while (i.hasNext()) {
-			DXFLayer l = (DXFLayer) i.next();
+            if (l.hasDXFEntities(DXFConstants.ENTITY_TYPE_IMAGE)) {
+                Iterator in = l.getDXFEntities(DXFConstants.ENTITY_TYPE_IMAGE)
+                               .iterator();
 
-			if (l.hasDXFEntities(DXFConstants.ENTITY_TYPE_IMAGE)) {
-				Iterator in = l.getDXFEntities(DXFConstants.ENTITY_TYPE_IMAGE)
-						.iterator();
+                while (in.hasNext()) {
+                    DXFImage img = (DXFImage) in.next();
+                    String imgDef = img.getImageDefObjectID();
+                    DXFImageDefObject def = (DXFImageDefObject) doc.getDXFObjectByID(imgDef);
+                    File f = new File(def.getFilename());
 
-				while (in.hasNext()) {
-					DXFImage img = (DXFImage) in.next();
-					String imgDef = img.getImageDefObjectID();
-					DXFImageDefObject def = (DXFImageDefObject) doc
-							.getDXFObjectByID(imgDef);
-					File f = new File(def.getFilename());
-					if (!f.exists()) {
-						in.remove();
-					}
-				}
-			}
-		}
-	}
-
+                    if (!f.exists()) {
+                        in.remove();
+                    }
+                }
+            }
+        }
+    }
 }

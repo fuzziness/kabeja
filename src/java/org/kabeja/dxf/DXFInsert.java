@@ -23,7 +23,7 @@ import org.kabeja.dxf.helpers.Point;
  *
  */
 public class DXFInsert extends DXFEntity {
-    private Point insertPoint =new Point();
+    private Point insertPoint = new Point();
     private double scale_x = 1.0;
     private double scale_y = 1.0;
     private double scale_z = 1.0;
@@ -38,7 +38,6 @@ public class DXFInsert extends DXFEntity {
      *
      */
     public DXFInsert() {
-       
     }
 
     /*
@@ -107,8 +106,6 @@ public class DXFInsert extends DXFEntity {
         } else {
             bounds.setMaximumY(bounds.getMaximumY() - height);
         }
-
-       
 
         return bounds;
     }
@@ -263,8 +260,6 @@ public class DXFInsert extends DXFEntity {
         this.scale_z = scale_z;
     }
 
-  
-
     private Point rotatePoint(double x, double y) {
         double phi = Math.toRadians(rotate);
         Point point = new Point();
@@ -280,9 +275,7 @@ public class DXFInsert extends DXFEntity {
         return DXFConstants.ENTITY_TYPE_INSERT;
     }
 
-	public double getLength() {	
-		return this.doc.getDXFBlock(this.blockID).getLength();
-	}
-    
-	
+    public double getLength() {
+        return this.doc.getDXFBlock(this.blockID).getLength();
+    }
 }

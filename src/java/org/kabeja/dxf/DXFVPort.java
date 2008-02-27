@@ -22,7 +22,7 @@ import org.kabeja.dxf.helpers.Point;
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public class DXFVPort{
+public class DXFVPort {
     private String name = "";
     private Point lowerLeftCorner = new Point();
     private Point upperRightCorner = new Point();
@@ -325,13 +325,11 @@ public class DXFVPort{
         this.active = active;
     }
 
-	public double getWidth() {
-		return width;
-	}
+    public double getWidth() {
+        return width;
+    }
 
-	public void setWidth(double width) {
-		this.width = width;
-	}
-
-
+    public void setWidth(double width) {
+        this.width = width;
+    }
 }

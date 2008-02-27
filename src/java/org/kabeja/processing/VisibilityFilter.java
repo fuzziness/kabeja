@@ -30,7 +30,7 @@ import org.kabeja.dxf.DXFLayer;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class VisibilityFilter extends AbstractPostProcessor  {
+public class VisibilityFilter extends AbstractPostProcessor {
     /* (non-Javadoc)
      * @see org.kabeja.tools.PostProcessor#process(org.kabeja.dxf.DXFDocument)
      */
@@ -62,11 +62,10 @@ public class VisibilityFilter extends AbstractPostProcessor  {
         }
     }
 
-	/* (non-Javadoc)
-	 * @see org.kabeja.tools.PostProcessor#setProperties(java.util.Map)
-	 */
-	public void setProperties(Map properties) {
-		// TODO Auto-generated method stub
-
-	}
+    /* (non-Javadoc)
+     * @see org.kabeja.tools.PostProcessor#setProperties(java.util.Map)
+     */
+    public void setProperties(Map properties) {
+        // TODO Auto-generated method stub
+    }
 }

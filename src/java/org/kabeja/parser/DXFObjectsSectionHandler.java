@@ -38,7 +38,7 @@ public class DXFObjectsSectionHandler extends AbstractSectionHandler
      * @see de.miethxml.kabeja.parser.DXFSectionHandler#endSection()
      */
     public void endSection() {
-    	this.endObject();
+        this.endObject();
     }
 
     /*
@@ -58,18 +58,18 @@ public class DXFObjectsSectionHandler extends AbstractSectionHandler
      */
     public void parseGroup(int groupCode, DXFValue value) {
         if (groupCode == OBJECT_START) {
-        	this.endObject();
-            
+            this.endObject();
+
             if (this.handlers.containsKey(value.getValue())) {
                 this.parseObject = true;
                 this.handler = (DXFObjectHandler) handlers.get(value.getValue());
                 this.handler.setDXFDocument(this.doc);
                 this.handler.startObject();
             } else {
-            	this.parseObject = false;
+                this.parseObject = false;
             }
         } else if (this.parseObject) {
-        	this.handler.parseGroup(groupCode, value);
+            this.handler.parseGroup(groupCode, value);
         }
     }
 
@@ -88,7 +88,7 @@ public class DXFObjectsSectionHandler extends AbstractSectionHandler
      * @see de.miethxml.kabeja.parser.Handler#releaseDXFDocument()
      */
     public void releaseDXFDocument() {
-       this.doc=null;
+        this.doc = null;
     }
 
     /* (non-Javadoc)

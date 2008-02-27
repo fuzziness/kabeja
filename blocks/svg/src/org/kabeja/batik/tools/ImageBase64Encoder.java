@@ -39,8 +39,8 @@ public class ImageBase64Encoder extends XMLFilterImpl implements SAXFilter {
     public static final String ELEMENT_IMAGE = "image";
     public static final String XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
     public static final String XLINK_ATTRIBUTE_HREF = "href";
-
     protected Map properties = new HashMap();
+
     /*
      * (non-Javadoc)
      *
@@ -57,12 +57,12 @@ public class ImageBase64Encoder extends XMLFilterImpl implements SAXFilter {
      */
     public void startElement(String uri, String localName, String qName,
         Attributes atts) throws SAXException {
-        if (ELEMENT_IMAGE.equals( localName )) {
+        if (ELEMENT_IMAGE.equals(localName)) {
             boolean resolved = false;
             AttributesImpl attr = new AttributesImpl(atts);
 
             for (int i = 0; i < attr.getLength(); i++) {
-                if (XLINK_ATTRIBUTE_HREF.equals( attr.getLocalName(i) )) {
+                if (XLINK_ATTRIBUTE_HREF.equals(attr.getLocalName(i))) {
                     String file = attr.getValue(i);
                     String base = encodeBase64(file);
 
@@ -113,9 +113,8 @@ public class ImageBase64Encoder extends XMLFilterImpl implements SAXFilter {
 
         return "";
     }
-    
-	public Map getProperties() {
-		
-		return this.properties;
-	}
+
+    public Map getProperties() {
+        return this.properties;
+    }
 }

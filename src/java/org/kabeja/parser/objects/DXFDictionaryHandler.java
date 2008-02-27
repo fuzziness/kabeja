@@ -20,52 +20,49 @@ import org.kabeja.dxf.objects.DXFDictionary;
 import org.kabeja.dxf.objects.DXFObject;
 import org.kabeja.parser.DXFValue;
 
+
 public class DXFDictionaryHandler extends AbstractDXFObjectHandler {
+    public final int GROUPCODE_RECORD_NAME = 3;
+    public final int GROUPCODE_RECORD_ID = 350;
+    protected DXFDictionary dictionary;
+    protected String objectName;
+    protected boolean rootDictionaryParsed = false;
 
-	public final int GROUPCODE_RECORD_NAME = 3;
-	public final int GROUPCODE_RECORD_ID = 350;
+    public void endObject() {
+    }
 
-	protected DXFDictionary dictionary;
-	protected String objectName;
-    protected boolean rootDictionaryParsed=false;
-	
-	public void endObject() {
+    public DXFObject getDXFObject() {
+        return dictionary;
+    }
 
-	}
+    public String getObjectType() {
+        return DXFConstants.OBJECT_TYPE_DICTIONARY;
+    }
 
-	public DXFObject getDXFObject() {
-		return dictionary;
-	}
+    public void parseGroup(int groupCode, DXFValue value) {
+        switch (groupCode) {
+        case GROUPCODE_RECORD_NAME:
+            this.objectName = value.getValue();
 
-	public String getObjectType() {
+            break;
 
-		return DXFConstants.OBJECT_TYPE_DICTIONARY;
-	}
+        case GROUPCODE_RECORD_ID:
+            this.dictionary.putDXFObjectRelation(this.objectName,
+                value.getValue());
 
-	public void parseGroup(int groupCode, DXFValue value) {
+            break;
 
-		switch (groupCode) {
-		case GROUPCODE_RECORD_NAME:
-			this.objectName = value.getValue();
-			break;
-		case GROUPCODE_RECORD_ID:
+        default:
+            super.parseCommonGroupCode(groupCode, value, this.dictionary);
+        }
+    }
 
-			this.dictionary.putDXFObjectRelation(this.objectName, value
-					.getValue());
-			break;
-		default:
-			super.parseCommonGroupCode(groupCode, value, this.dictionary);
-		}
-
-	}
-
-	public void startObject() {
-		if(this.rootDictionaryParsed){
-		    this.dictionary = new DXFDictionary();
-		}else{
-			this.dictionary = this.doc.getRootDXFDictionary();
-			this.rootDictionaryParsed=true;
-		}
-	}
-
+    public void startObject() {
+        if (this.rootDictionaryParsed) {
+            this.dictionary = new DXFDictionary();
+        } else {
+            this.dictionary = this.doc.getRootDXFDictionary();
+            this.rootDictionaryParsed = true;
+        }
+    }
 }

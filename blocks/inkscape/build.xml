@@ -69,7 +69,7 @@
 				<echo>Mono DotNet import filter</echo>
 
 				<exec executable="ikvmc">
-					<arg line="-main:${main.class} -out:${basedir}/${dist}/${name.binary}.exe ${basedir}/${dist}/${block.releasename}.jar" />
+					<arg line="-target:winexe -main:${main.class} -out:${basedir}/${dist}/${name.binary}.exe ${basedir}/${dist}/${block.releasename}.jar" />
 				</exec>
 			</then>
 		</if>
@@ -95,13 +95,24 @@
 				<copy file="${conf}/kabeja.sh" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja" />
 				<chmod file="${kabeja.home}/${dist}/inkscape-extension/kabeja" perm="+rx" />
 				<copy file="${conf}/kabeja.bat" todir="${kabeja.home}/${dist}/inkscape-extension" />
+				<copy file="${conf}/kabeja-java.inx" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${inkscape.importfilter.type}" arg2="mono" />
+			<then>
+				<copy file="${dist}/${name.binary}.exe" todir="${kabeja.home}/${dist}/inkscape-extension" />
+				<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}.exe" perm="+rx" />
+				<copy file="${conf}/kabeja-mono.inx" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
+				<copy file="${conf}/kabeja-mono.sh" tofile="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" />
+				<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" perm="+rx" />
 			</then>
 		</if>
 	</target>
 
 
 	<target name="extension-jar">
-		<javac destdir="${build}/${classes}" target="1.3">
+		<javac destdir="${build}/${classes}" target="1.3" source="1.3">
 			<classpath>
 				<pathelement path="${classpath}" />
 				<fileset dir="${kabeja.home}/${dist}/${libs}">
@@ -120,12 +131,18 @@
 		</unjar>
 		<jar jarfile="${dist}/${block.releasename}.jar" manifest="${manifest}">
 			<fileset dir="${kabeja.home}/${build}/${classes}">
+				<exclude name="org/kabeja/ui/**/*" />
+				<exclude name="org/kabeja/*" />
+			<!--	  -->
 				<include name="**/*" />
 			</fileset>
 			<fileset dir="${build}/${classes}">
 				<exclude name="org/kabeja/batik/**/*" />
-				<exclude name="org/kabeja/ui/**/*" />
+				<exclude name="org/kabeja/svg/ui/**/*" />
+				<exclude name="org/kabeja/svg/action/**/*" />
+				<exclude name="org/kabeja/svg/tools/**/*" />
 				<exclude name="org/kabeja/processing/**/*" />
+				<exclude name="org/kabeja/ui/**/*" />
 			</fileset>
 		</jar>
 	</target>

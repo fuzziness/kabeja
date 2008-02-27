@@ -106,7 +106,7 @@ public class DXFArcHandler extends AbstractEntityHandler {
             arc.setEndAngle(value.getDoubleValue());
 
             break;
-            
+
         case COUNTERCLOCKWISE:
             arc.setCounterClockwise(value.getBooleanValue());
 

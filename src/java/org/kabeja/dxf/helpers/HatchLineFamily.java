@@ -122,7 +122,6 @@ public class HatchLineFamily {
     }
 
     public double getLength() {
-    
         if (length <= 0.0) {
             for (int i = 0; i < pattern.length; i++) {
                 this.length += Math.abs(pattern[i]);

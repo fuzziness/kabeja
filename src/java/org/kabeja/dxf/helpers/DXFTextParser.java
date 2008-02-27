@@ -29,7 +29,6 @@ import org.kabeja.dxf.DXFText;
 public class DXFTextParser {
     public static TextDocument parseDXFMText(DXFMText text) {
         // initialize
-    	
         TextDocument doc = new TextDocument();
         StringBuffer buf = new StringBuffer();
         StringBuffer value = new StringBuffer();
@@ -231,7 +230,7 @@ public class DXFTextParser {
                 }
 
                 break;
-                
+
             case 'u':
 
                 if (formatting && keyfollow) {
@@ -366,12 +365,9 @@ public class DXFTextParser {
     }
 
     public static TextDocument parseDXFText(DXFText text) {
+        TextDocument doc = new TextDocument();
 
-    	
-    	
-    	TextDocument doc = new TextDocument();
-      //  boolean asciicontrol = false;
-     
+        //  boolean asciicontrol = false;
         StringBuffer buf = new StringBuffer();
 
         StyledTextParagraph p = new StyledTextParagraph();
@@ -422,8 +418,7 @@ public class DXFTextParser {
         // initialize
         boolean overline = false;
         boolean underline = false;
-        
-        
+
         for (int i = 0; i < str.length(); i++) {
             c = str.charAt(i);
 
@@ -435,7 +430,6 @@ public class DXFTextParser {
                 } else if (marker == 2) {
                     switch (c) {
                     case 'o':
-                    	
                         p.setText(buf.toString());
                         p.setUnderline(underline);
                         p.setOverline(overline);
@@ -448,7 +442,6 @@ public class DXFTextParser {
                         break;
 
                     case 'u':
-                    
                         p.setText(buf.toString());
                         p.setUnderline(underline);
                         p.setOverline(overline);
@@ -456,8 +449,8 @@ public class DXFTextParser {
                         p = createParagraphFromParent(p);
 
                         buf.delete(0, buf.length());
-                    	underline = !underline;
-                    
+                        underline = !underline;
+
                         p.setUnderline(underline);
 
                         break;
@@ -483,8 +476,6 @@ public class DXFTextParser {
 
     public static void parseStyledTextParagraphSettings(char key, String value,
         StyledTextParagraph para) {
-    	
-    	
         switch (key) {
         case 'A':
             para.setValign(Integer.parseInt(value));
@@ -641,10 +632,9 @@ public class DXFTextParser {
                                 buf.append(c);
                                 i += 2;
                             } catch (NumberFormatException e) {
-    
                                 // TODO sometimes there is only one
                                 // digit, so what should be the 
-                            	//replacement???
+                                //replacement???
                                 buf.append('?');
                                 i++;
                             }

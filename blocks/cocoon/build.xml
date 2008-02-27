@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="dxf2svg" default="dist" basedir=".">
 	<property name="homepath" value="" />
-	<property name="block.version" value="0.3" />
-	<property name="block.releasename" value="kabeja-dxf2svg-cocoon-${block.version}" />
+	<property name="block.releasename" value="kabeja-dxf2svg-cocoon-${releaseversion}" />
 	<property name="src" value="src" />
 	<property name="sources" value="java" />
 	<property name="classes" value="classes" />
@@ -52,6 +51,9 @@
 					<include name="**/*.jar" />
 				</fileset>
 				<dirset dir="${kabeja.home}/${build}/${classes}" />
+				<fileset dir="${kabeja.home}/${dist}/${libs}">
+					<include name="**/*.jar" />
+				</fileset>
 			</classpath>
 		</javac>
 	</target>
@@ -121,9 +123,17 @@
 				<include name="*.dxf" />
 			</fileset>
 		</copy>
+		<mkdir dir="${cocoon.webapp}/kabeja" />
 		<copy todir="${cocoon.webapp}/kabeja">
 			<fileset dir="subsitemap-demo/kabeja">
 				<include name="**/*" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+		<copy todir="${cocoon.webapp}/WEB-INF/lib">
+			<fileset dir="${kabeja.home}/${dist}/${libs}">
+				<include name="kabeja*.jar" />
 				<exclude name="**/cvs/*" />
 				<exclude name="**/cvs" />
 			</fileset>

@@ -16,17 +16,16 @@
 package org.kabeja.xml;
 
 import java.io.OutputStream;
-import java.util.Map;
 
 import org.kabeja.processing.Configurable;
 import org.xml.sax.ContentHandler;
 
 
 /**
- *This interface describes a Serializer, which will serialize the SAX-Events 
+ *This interface describes a Serializer, which will serialize the SAX-Events
  *to the given stream.
  *<h3>Lifecycle</h3>
- * 
+ *
  * <ol>
  * <li>setProperties</li>
  * <li>getSuffix()</li>
@@ -34,13 +33,11 @@ import org.xml.sax.ContentHandler;
  * <li>setOutput()</li>
  * <li>startDocument and all other methods from org.xml.sax.ContentHandler </li>
  * </ol>
- * 
+ *
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public interface SAXSerializer extends ContentHandler, Configurable{
-   
-
+public interface SAXSerializer extends ContentHandler, Configurable {
     public String getSuffix();
 
     public String getMimeType();

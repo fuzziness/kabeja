@@ -28,47 +28,45 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+
 /**
  * Build a SVGDocument from DXFDocument.
- * 
+ *
  * @author simon
- * 
+ *
  */
 public class DXFSAXDocumentFactory extends SAXDocumentFactory {
+    public DXFSAXDocumentFactory() {
+        super(SVGDOMImplementation.getDOMImplementation(), null);
+    }
 
-	public DXFSAXDocumentFactory() {
-		super(SVGDOMImplementation.getDOMImplementation(), null);
-	}
+    public SVGDocument createDocument(DXFDocument doc, Map properties)
+        throws SAXException {
+        String version = System.getProperty("java.version").substring(0, 3);
 
-	public SVGDocument createDocument(DXFDocument doc, Map properties)
-			throws SAXException {
+        // fix for jaxp 1.1 -> java 1.4
+        if ((version.compareTo("1.5") < 0) && (version.compareTo("1.3") > 0) &&
+                (System.getProperty("org.xml.sax.driver") == null)) {
+            System.setProperty("org.xml.sax.driver",
+                "org.apache.crimson.parser.XMLReaderImpl");
+        }
 
-		String version = System.getProperty("java.version").substring(0, 3);
-		// fix for jaxp 1.1 -> java 1.4
-		if (version.compareTo("1.5") < 0 && version.compareTo("1.3") > 0
-				&& System.getProperty("org.xml.sax.driver") == null) {
-			System.setProperty("org.xml.sax.driver",
-					"org.apache.crimson.parser.XMLReaderImpl");
+        XMLReader myReader = XMLReaderFactory.createXMLReader();
+        parser = myReader;
 
-		}
+        SAXGenerator gen = new SVGGenerator();
+        gen.setProperties(properties);
+        gen.generate(doc, this, null);
 
-		XMLReader myReader = XMLReaderFactory.createXMLReader();
-		parser = myReader;
+        Document res = document;
+        document = null;
 
-		SAXGenerator gen = new SVGGenerator();
-		gen.setProperties(properties);
-		gen.generate(doc, this, null);
-		Document res = document;
-		document = null;
-		return (SVGDocument) res;
+        return (SVGDocument) res;
+    }
 
-	}
-
-	public void startDocument() throws SAXException {
-		super.startDocument();
-		// fix for java 1.5 bundled xerces
-		inProlog = false;
-
-	}
-
+    public void startDocument() throws SAXException {
+        super.startDocument();
+        // fix for java 1.5 bundled xerces
+        inProlog = false;
+    }
 }

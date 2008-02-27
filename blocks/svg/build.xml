@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="dxf2svg" default="dist" basedir=".">
 	<property name="homepath" value="" />
-	<property name="block.releasename" value="kabeja-svg" />
-	<property name="releaseversion" value="0.1" />
+	<property name="block.releasename" value="kabeja-svg-${releaseversion}" />
 	<property name="src" value="src" />
 	<property name="sources" value="java" />
 	<property name="test" value="test" />
@@ -64,6 +63,11 @@
 
 			</classpath>
 		</javac>
+		<copy todir="${build}/${classes}">
+			<fileset dir="${src}">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
 	</target>
 
 

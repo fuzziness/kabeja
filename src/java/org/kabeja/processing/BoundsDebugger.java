@@ -27,15 +27,13 @@ import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFText;
 
 
-
 /**
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
 public class BoundsDebugger extends AbstractPostProcessor {
-	public static final String LAYER_NAME = "kabeja_bounds_debug";
-	
-	
+    public static final String LAYER_NAME = "kabeja_bounds_debug";
+
     /*
      * (non-Javadoc)
      *
@@ -121,22 +119,20 @@ public class BoundsDebugger extends AbstractPostProcessor {
 
         //left -> red
         left.setColor(0);
-        addBounds(lBounds, doc, 0, left.getType()+"="+left.getID());
+        addBounds(lBounds, doc, 0, left.getType() + "=" + left.getID());
 
         //right -> green
         right.setColor(2);
-        addBounds(rBounds, doc, 2, right.getType()+"="+right.getID());
+        addBounds(rBounds, doc, 2, right.getType() + "=" + right.getID());
 
         //bottom blue
         bottom.setColor(4);
-        addBounds(bBounds, doc, 4, bottom.getType()+"="+bottom.getID());
+        addBounds(bBounds, doc, 4, bottom.getType() + "=" + bottom.getID());
 
         //top color -> magenta
         top.setColor(5);
-        addBounds(tBounds, doc, 5, top.getType()+"="+top.getID());
-        
-        
-        
+        addBounds(tBounds, doc, 5, top.getType() + "=" + top.getID());
+
         //the  color -> magenta
         top.setColor(5);
         addBounds(b, doc, 6, "ALL");
@@ -164,7 +160,7 @@ public class BoundsDebugger extends AbstractPostProcessor {
 
         DXFText t = new DXFText();
         t.setDXFDocument(doc);
-        t.setText("DEBUG-" +type);
+        t.setText("DEBUG-" + type);
         t.getInsertPoint().setX(bounds.getMinimumX());
         t.getInsertPoint().setY(bounds.getMaximumY());
         t.setColor(color);

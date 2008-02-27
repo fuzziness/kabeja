@@ -97,10 +97,12 @@ public class DXFEllipseHandler extends AbstractEntityHandler {
             ellipse.setEndParameter(value.getDoubleValue());
 
             break;
+
         case COUNTERCLOCKWISE:
             ellipse.setCounterClockwise(value.getBooleanValue());
+
             break;
-            
+
         default:
             super.parseCommonProperty(groupCode, value, ellipse);
 

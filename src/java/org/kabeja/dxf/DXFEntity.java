@@ -16,14 +16,12 @@
 package org.kabeja.dxf;
 
 
-
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  *
  */
 public abstract class DXFEntity {
-   
     protected DXFDocument doc;
     protected String id = "";
     protected String layerID = "";
@@ -38,6 +36,7 @@ public abstract class DXFEntity {
     protected double transparency;
     protected double thickness = 0.0;
     protected DXFExtrusion extrusion = new DXFExtrusion();
+
     /**
      * From the DXF Specs default all entities are in model space.
      */
@@ -58,24 +57,20 @@ public abstract class DXFEntity {
      * Gives the name of the layer, which containts the entity.
      * @return the name of the layer
      */
-    
     public String getLayerName() {
         return this.layerID;
     }
 
-    
     /**
      * Set the name of the layer, which containts the entity.
      * @return the name of the layer
      */
-    
     public void setLayerName(String id) {
         this.layerID = id;
     }
 
-//    public abstract void toSAX(ContentHandler handler, Map svgContext)
-//        throws SAXException;
-
+    //    public abstract void toSAX(ContentHandler handler, Map svgContext)
+    //        throws SAXException;
     public abstract Bounds getBounds();
 
     /**
@@ -236,12 +231,10 @@ public abstract class DXFEntity {
     public void setModelSpace(boolean modelSpace) {
         this.modelSpace = modelSpace;
     }
-    
+
     /**
      * Returns the length of the entity or 0 if the entity has no length
      * @return
      */
-    
-    
     public abstract double getLength();
 }

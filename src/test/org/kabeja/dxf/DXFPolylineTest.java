@@ -19,143 +19,126 @@ import junit.framework.TestCase;
 
 import org.kabeja.dxf.helpers.Point;
 
-public class DXFPolylineTest extends TestCase{
 
-	public final static double DELTA=0.0000000001;
-	
-	public void testBounds(){
-		DXFPolyline pl = new DXFPolyline();
-		pl.addVertex(new DXFVertex());
-		pl.addVertex(new DXFVertex(new Point(100,100,0)));
-		
-		Bounds b = pl.getBounds();
-		assertEquals(100,b.getWidth(),0.0);
-		assertEquals(100,b.getHeight() ,0.0);
-		
-	}
-	
-	
-	public void testBulgedBoundsEqualsNegativeRadius(){
-		DXFPolyline pl = new DXFPolyline();
-		DXFVertex v = new DXFVertex(new Point(0,0,0));
-		v.setBulge(1.0);
-		pl.addVertex(v);
-		DXFVertex v2 = new DXFVertex(new Point(100,0.0,0));
-		pl.addVertex(v2);
-		
-		Bounds b = pl.getBounds();
-		
-		assertEquals(100,b.getWidth(),DELTA);
-		assertEquals(50, b.getHeight(),DELTA);
-		assertEquals(0, b.getMaximumY(),DELTA);
-		assertEquals(-50, b.getMinimumY(),DELTA);
-	
-	}
-	
-	
-	
-	public void testBulgedBoundsEqualsPositiveRadius(){
+public class DXFPolylineTest extends TestCase {
+    public final static double DELTA = 0.0000000001;
 
-		DXFPolyline pl = new DXFPolyline();
-		DXFVertex v = new DXFVertex(new Point(0,0,0));
-		v.setBulge(-1.0);
-		pl.addVertex(v);
-		DXFVertex v2 = new DXFVertex(new Point(100,0.0,0));
-		pl.addVertex(v2);
-		
-		Bounds b = pl.getBounds();
+    public void testBounds() {
+        DXFPolyline pl = new DXFPolyline();
+        pl.addVertex(new DXFVertex());
+        pl.addVertex(new DXFVertex(new Point(100, 100, 0)));
 
-		assertEquals(100,b.getWidth(),DELTA);
-		assertEquals(50, b.getHeight(),DELTA);
-		assertEquals(50, b.getMaximumY(),DELTA);
-		assertEquals(0, b.getMinimumY(),DELTA);
-	}
-	
-	
-	public void testBulgedBoundsLowerPositiveRadius(){
+        Bounds b = pl.getBounds();
+        assertEquals(100, b.getWidth(), 0.0);
+        assertEquals(100, b.getHeight(), 0.0);
+    }
 
-		DXFPolyline pl = new DXFPolyline();
-		DXFVertex v = new DXFVertex(new Point(0,0,0));
-		v.setBulge(-.5);
-		pl.addVertex(v);
-		DXFVertex v2 = new DXFVertex(new Point(100,0.0,0));
-		pl.addVertex(v2);
-		
-		Bounds b = pl.getBounds();
- 
+    public void testBulgedBoundsEqualsNegativeRadius() {
+        DXFPolyline pl = new DXFPolyline();
+        DXFVertex v = new DXFVertex(new Point(0, 0, 0));
+        v.setBulge(1.0);
+        pl.addVertex(v);
 
-	
-		assertEquals(100,b.getWidth(),DELTA);
-		assertEquals(25, b.getHeight(),DELTA);
-		assertEquals(25, b.getMaximumY(),DELTA);
-		assertEquals(0, b.getMinimumY(),DELTA);
-	}
-	
-	
-	public void testBulgedBoundsLowerNegativeRadius(){
+        DXFVertex v2 = new DXFVertex(new Point(100, 0.0, 0));
+        pl.addVertex(v2);
 
-		DXFPolyline pl = new DXFPolyline();
-		DXFVertex v = new DXFVertex(new Point(0,0,0));
-		v.setBulge(.5);
-		pl.addVertex(v);
-		DXFVertex v2 = new DXFVertex(new Point(100,0.0,0));
-		pl.addVertex(v2);
-		
-		Bounds b = pl.getBounds();
+        Bounds b = pl.getBounds();
 
+        assertEquals(100, b.getWidth(), DELTA);
+        assertEquals(50, b.getHeight(), DELTA);
+        assertEquals(0, b.getMaximumY(), DELTA);
+        assertEquals(-50, b.getMinimumY(), DELTA);
+    }
 
-		assertEquals(100,b.getWidth(),DELTA);
-		assertEquals(25, b.getHeight(),DELTA);
-		assertEquals(0, b.getMaximumY(),DELTA);
-		assertEquals(-25, b.getMinimumY(),DELTA);
-	}
-	
-	
-	public void testBulgedBoundsGreaterPositiveRadius(){
+    public void testBulgedBoundsEqualsPositiveRadius() {
+        DXFPolyline pl = new DXFPolyline();
+        DXFVertex v = new DXFVertex(new Point(0, 0, 0));
+        v.setBulge(-1.0);
+        pl.addVertex(v);
 
-		DXFPolyline pl = new DXFPolyline();
-		DXFVertex v = new DXFVertex(new Point(0,0,0));
-		v.setBulge(-2.0);
-		pl.addVertex(v);
-		DXFVertex v2 = new DXFVertex(new Point(100,0.0,0));
-		pl.addVertex(v2);
-		
-		Bounds b = pl.getBounds();
+        DXFVertex v2 = new DXFVertex(new Point(100, 0.0, 0));
+        pl.addVertex(v2);
 
+        Bounds b = pl.getBounds();
 
-		double r = 100/(2*Math.sin((4*Math.atan(v.getBulge())/2)));
-		r=Math.abs(r);
-		assertEquals(2*r,b.getWidth(),DELTA);
-		assertEquals(100, b.getHeight(),DELTA);
-		assertEquals(100, b.getMaximumY(),DELTA);
-		assertEquals(0, b.getMinimumY(),DELTA);
-	}
-	
-	
-	public void testBulgedBoundsGreaterNegativeRadius(){
+        assertEquals(100, b.getWidth(), DELTA);
+        assertEquals(50, b.getHeight(), DELTA);
+        assertEquals(50, b.getMaximumY(), DELTA);
+        assertEquals(0, b.getMinimumY(), DELTA);
+    }
 
-		DXFPolyline pl = new DXFPolyline();
-		DXFVertex v = new DXFVertex(new Point(0,0,0));
-		v.setBulge(2.0);
-		pl.addVertex(v);
-		DXFVertex v2 = new DXFVertex(new Point(100,0.0,0));
-		pl.addVertex(v2);
-		
-		Bounds b = pl.getBounds();
+    public void testBulgedBoundsLowerPositiveRadius() {
+        DXFPolyline pl = new DXFPolyline();
+        DXFVertex v = new DXFVertex(new Point(0, 0, 0));
+        v.setBulge(-.5);
+        pl.addVertex(v);
 
-		double r = 100/(2*Math.sin((4*Math.atan(v.getBulge())/2)));
-		r=Math.abs(r);
-		assertEquals(2*r,b.getWidth(),DELTA);
-		assertEquals(100, b.getHeight(),DELTA);
-		assertEquals(0, b.getMaximumY(),DELTA);
-		assertEquals(-100, b.getMinimumY(),DELTA);
-		
-	}
-	
-	
-	
-	
-	public void testBulgedLength(){
-		
-	}
+        DXFVertex v2 = new DXFVertex(new Point(100, 0.0, 0));
+        pl.addVertex(v2);
+
+        Bounds b = pl.getBounds();
+
+        assertEquals(100, b.getWidth(), DELTA);
+        assertEquals(25, b.getHeight(), DELTA);
+        assertEquals(25, b.getMaximumY(), DELTA);
+        assertEquals(0, b.getMinimumY(), DELTA);
+    }
+
+    public void testBulgedBoundsLowerNegativeRadius() {
+        DXFPolyline pl = new DXFPolyline();
+        DXFVertex v = new DXFVertex(new Point(0, 0, 0));
+        v.setBulge(.5);
+        pl.addVertex(v);
+
+        DXFVertex v2 = new DXFVertex(new Point(100, 0.0, 0));
+        pl.addVertex(v2);
+
+        Bounds b = pl.getBounds();
+
+        assertEquals(100, b.getWidth(), DELTA);
+        assertEquals(25, b.getHeight(), DELTA);
+        assertEquals(0, b.getMaximumY(), DELTA);
+        assertEquals(-25, b.getMinimumY(), DELTA);
+    }
+
+    public void testBulgedBoundsGreaterPositiveRadius() {
+        DXFPolyline pl = new DXFPolyline();
+        DXFVertex v = new DXFVertex(new Point(0, 0, 0));
+        v.setBulge(-2.0);
+        pl.addVertex(v);
+
+        DXFVertex v2 = new DXFVertex(new Point(100, 0.0, 0));
+        pl.addVertex(v2);
+
+        Bounds b = pl.getBounds();
+
+        double r = 100 / (2 * Math.sin(((4 * Math.atan(v.getBulge())) / 2)));
+        r = Math.abs(r);
+        assertEquals(2 * r, b.getWidth(), DELTA);
+        assertEquals(100, b.getHeight(), DELTA);
+        assertEquals(100, b.getMaximumY(), DELTA);
+        assertEquals(0, b.getMinimumY(), DELTA);
+    }
+
+    public void testBulgedBoundsGreaterNegativeRadius() {
+        DXFPolyline pl = new DXFPolyline();
+        DXFVertex v = new DXFVertex(new Point(0, 0, 0));
+        v.setBulge(2.0);
+        pl.addVertex(v);
+
+        DXFVertex v2 = new DXFVertex(new Point(100, 0.0, 0));
+        pl.addVertex(v2);
+
+        Bounds b = pl.getBounds();
+
+        double r = 100 / (2 * Math.sin(((4 * Math.atan(v.getBulge())) / 2)));
+        r = Math.abs(r);
+        assertEquals(2 * r, b.getWidth(), DELTA);
+        assertEquals(100, b.getHeight(), DELTA);
+        assertEquals(0, b.getMaximumY(), DELTA);
+        assertEquals(-100, b.getMinimumY(), DELTA);
+    }
+
+    public void testBulgedLength() {
+    }
 }

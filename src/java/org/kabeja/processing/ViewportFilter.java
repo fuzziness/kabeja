@@ -29,7 +29,7 @@ import org.kabeja.dxf.DXFViewport;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public class ViewportFilter extends AbstractPostProcessor  {
+public class ViewportFilter extends AbstractPostProcessor {
     /*
      * (non-Javadoc)
      *
@@ -58,11 +58,13 @@ public class ViewportFilter extends AbstractPostProcessor  {
 
             // the upper right corner
             b.addToBounds(viewport.getCenterPoint().getX() + w,
-                viewport.getCenterPoint().getY() + h,viewport.getCenterPoint().getZ());
+                viewport.getCenterPoint().getY() + h,
+                viewport.getCenterPoint().getZ());
 
             // the lower left corner
             b.addToBounds(viewport.getCenterPoint().getX() - w,
-                viewport.getCenterPoint().getY() - h,viewport.getCenterPoint().getZ());
+                viewport.getCenterPoint().getY() - h,
+                viewport.getCenterPoint().getZ());
             filterEntities(b, doc);
         }
     }
@@ -89,11 +91,11 @@ public class ViewportFilter extends AbstractPostProcessor  {
             }
         }
     }
-    /* (non-Javadoc)
-	 * @see org.kabeja.tools.PostProcessor#setProperties(java.util.Map)
-	 */
-	public void setProperties(Map properties) {
-		// TODO Auto-generated method stub
 
-	}
+    /* (non-Javadoc)
+         * @see org.kabeja.tools.PostProcessor#setProperties(java.util.Map)
+         */
+    public void setProperties(Map properties) {
+        // TODO Auto-generated method stub
+    }
 }

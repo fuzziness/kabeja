@@ -56,14 +56,14 @@ public class DXFTableSectionHandler extends AbstractSectionHandler
     public void parseGroup(int groupCode, DXFValue value) {
         if (groupCode == TABLE_CODE) {
             //switch table
-            if (TABLE_END.equals( value )) {
+            if (TABLE_END.equals(value)) {
                 table = "";
 
                 if (parse) {
                     handler.endParsing();
                     parse = false;
                 }
-            } else if (TABLE_START.equals( value )) {
+            } else if (TABLE_START.equals(value)) {
             } else {
                 if (parse) {
                     handler.endParsing();

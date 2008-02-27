@@ -36,12 +36,11 @@ public class Vector extends Point {
     public double getLength() {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
     }
-    
-    public void normalize(){
-    	double r = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)
-				+ Math.pow(z, 2));
-    	x=x/r;
-    	y=y/r;
-    	z=z/r;
+
+    public void normalize() {
+        double r = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+        x = x / r;
+        y = y / r;
+        z = z / r;
     }
 }

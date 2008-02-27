@@ -30,7 +30,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public abstract class AbstractDimensionOutputter extends AbstractSVGSAXGenerator{
+public abstract class AbstractDimensionOutputter extends AbstractSVGSAXGenerator {
     protected DXFDimension dim;
 
     public AbstractDimensionOutputter(DXFDimension dim) {

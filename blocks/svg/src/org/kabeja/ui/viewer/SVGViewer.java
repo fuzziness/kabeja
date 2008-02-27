@@ -23,10 +23,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.swing.BorderFactory;
@@ -53,7 +51,6 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
-import org.apache.batik.util.XMLResourceDescriptor;
 import org.w3c.dom.svg.SVGDocument;
 
 import de.miethxml.toolkit.ui.SmallShadowBorder;
@@ -73,8 +70,8 @@ public class SVGViewer {
     private JLabel infoLabel;
     private CardLayout cards;
     private JPanel parentPanel;
-    private SAXSVGDocumentFactory factory = new SAXSVGDocumentFactory(
-            "org.kabeja.svg.DXF2SVGReader",true);
+    private SAXSVGDocumentFactory factory = new SAXSVGDocumentFactory("org.kabeja.svg.DXF2SVGReader",
+            true);
     private double scaleXY = 1.0;
 
     /**
@@ -90,10 +87,10 @@ public class SVGViewer {
 
         // the uri-panel
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 3));
-        panel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         panel.add(new JLabel("Url:"));
         uriField = new JTextField(30);
-       
+
         uriField.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Runnable r = new Runnable() {
@@ -125,7 +122,6 @@ public class SVGViewer {
                                     File file = fc.getSelectedFile();
                                     uriField.setText(file.getAbsolutePath());
                                     load(file);
-                                    
                                 }
                             };
 
@@ -134,9 +130,7 @@ public class SVGViewer {
                     }
                 }
             });
-        
- 
-        
+
         panel.add(button);
 
         button = new JButton("Zoom in");
@@ -202,34 +196,36 @@ public class SVGViewer {
         svgCanvas = new JSVGCanvas();
 
         svgCanvas.addSVGDocumentLoaderListener(new SVGDocumentLoaderAdapter() {
-            public void documentLoadingStarted(SVGDocumentLoaderEvent e) {
-            	infoLabel.setText("Loading Draft...");
-            }
-            public void documentLoadingCompleted(SVGDocumentLoaderEvent e) {
-            	infoLabel.setText("Draft Loaded.");
-            }
-        });
+                public void documentLoadingStarted(SVGDocumentLoaderEvent e) {
+                    infoLabel.setText("Loading Draft...");
+                }
+
+                public void documentLoadingCompleted(SVGDocumentLoaderEvent e) {
+                    infoLabel.setText("Draft Loaded.");
+                }
+            });
 
         svgCanvas.addGVTTreeBuilderListener(new GVTTreeBuilderAdapter() {
-            public void gvtBuildStarted(GVTTreeBuilderEvent e) {
-            	infoLabel.setText("Building...");
-            }
-            public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
-               infoLabel.setText("Build Done.");
-              
-            }
-        });
+                public void gvtBuildStarted(GVTTreeBuilderEvent e) {
+                    infoLabel.setText("Building...");
+                }
+
+                public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
+                    infoLabel.setText("Build Done.");
+                }
+            });
 
         svgCanvas.addGVTTreeRendererListener(new GVTTreeRendererAdapter() {
-            public void gvtRenderingPrepare(GVTTreeRendererEvent e) {
-            	infoLabel.setText("Rendering Draft...");
-            }
-            public void gvtRenderingCompleted(GVTTreeRendererEvent e) {
-            	infoLabel.setText("");
-            	cards.show(parentPanel, "view");
-            }
-        });
-        
+                public void gvtRenderingPrepare(GVTTreeRendererEvent e) {
+                    infoLabel.setText("Rendering Draft...");
+                }
+
+                public void gvtRenderingCompleted(GVTTreeRendererEvent e) {
+                    infoLabel.setText("");
+                    cards.show(parentPanel, "view");
+                }
+            });
+
         JSVGScrollPane sp = new JSVGScrollPane(svgCanvas);
         sp.setBorder(new SmallShadowBorder());
 
@@ -245,17 +241,17 @@ public class SVGViewer {
     }
 
     public void load(File file) {
-      //  try {
-            if (file.exists()) {
-                //FileInputStream in = new FileInputStream(file);
+        //  try {
+        if (file.exists()) {
+            //FileInputStream in = new FileInputStream(file);
+            load(file.toURI().toASCIIString());
+        } else {
+            System.out.println("no file:" + file);
+        }
 
-                load(file.toURI().toASCIIString());
-            } else {
-                System.out.println("no file:" + file);
-            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        //        } catch (FileNotFoundException e) {
+        //            e.printStackTrace();
+        //        }
     }
 
     public void load(String uri) {
@@ -267,8 +263,7 @@ public class SVGViewer {
             if (uri.toLowerCase().endsWith(".dxf")) {
                 f = factory;
             } else {
-
-            	f = new SAXSVGDocumentFactory(null);
+                f = new SAXSVGDocumentFactory(null);
             }
 
             SVGDocument doc = f.createSVGDocument(uri);
@@ -277,17 +272,16 @@ public class SVGViewer {
             // add a script to doc here by adding the script element
             this.svgCanvas.setSVGDocument(doc);
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
             JOptionPane.showMessageDialog(frame, e.getMessage(), "Error",
                 JOptionPane.ERROR_MESSAGE);
-            infoLabel.setText("Error:"+e.getLocalizedMessage());
-
+            infoLabel.setText("Error:" + e.getLocalizedMessage());
         } catch (Error e) {
-        	  e.printStackTrace();
+            e.printStackTrace();
             JOptionPane.showMessageDialog(frame, e.getMessage(), "Error",
                 JOptionPane.ERROR_MESSAGE);
-          
-            infoLabel.setText("Error:"+e.getLocalizedMessage());
+
+            infoLabel.setText("Error:" + e.getLocalizedMessage());
         }
     }
 

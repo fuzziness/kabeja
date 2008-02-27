@@ -22,10 +22,7 @@ package org.kabeja.parser;
  *
  */
 public class ParseException extends Exception {
-   
-	
-
-	public ParseException(String s) {
+    public ParseException(String s) {
         super(s);
     }
 
@@ -33,7 +30,7 @@ public class ParseException extends Exception {
         super(s, e);
     }
 
-	public ParseException(Exception e) {
-		super(e);
-	}
+    public ParseException(Exception e) {
+        super(e);
+    }
 }

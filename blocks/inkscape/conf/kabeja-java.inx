@@ -2,7 +2,13 @@
     <_name>Kabeja DXF Input</_name>
     <id>org.kabeja.inkscape.import.dxf</id>
     <dependency type="extension">org.inkscape.input.svg</dependency>
-      <dependency type="executable">java</dependency>
+    <dependency type="executable">java</dependency>
+    <param name="bounds-rule" gui-text="Choose View" type="enum">
+         <item>Modelspace</item>
+         <item>Modelspace-Limits</item>
+         <item>Paperspace</item>
+         <item>Paperspace-Limits</item> 
+    </param>
     <input>
         <extension>.dxf</extension>
         <mimetype>image/x-svgz</mimetype>

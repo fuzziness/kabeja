@@ -19,172 +19,162 @@ import org.kabeja.dxf.Bounds;
 import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.helpers.Point;
 
-public class DXFPlotSettings extends DXFObject{
 
-	protected String name="";
-	protected String configName="";
-	protected String canonicalMediaName="";
-	protected String plotViewName="";
-	protected String currentStylesheet="";
-	
-	/**
-	 * The margins stored [top,right,bottom,left]
-	 */
-	protected double[] margin = new double[4];
-	protected Point plotOrigin = new Point();
-	protected double paperWidth;
-	protected double paperHeight;
-	
-	protected int paperUnits=0;
-	protected int flags=0;
-	protected int plotType=0;
-	protected int plotRotation=0;
-	
-	
-	protected Bounds windowToPlot = new Bounds();
-	
-	protected double customScaleNumerator=1.0;
-	protected double customScaleDenominator=1.0;
-	
-	
-	
-	public String getObjectType() {
-		
-		return DXFConstants.OBJECT_TYPE_PLOTSETTINGS;
-	}
+public class DXFPlotSettings extends DXFObject {
+    protected String name = "";
+    protected String configName = "";
+    protected String canonicalMediaName = "";
+    protected String plotViewName = "";
+    protected String currentStylesheet = "";
 
-	public String getName() {
-		return name;
-	}
+    /**
+     * The margins stored [top,right,bottom,left]
+     */
+    protected double[] margin = new double[4];
+    protected Point plotOrigin = new Point();
+    protected double paperWidth;
+    protected double paperHeight;
+    protected int paperUnits = 0;
+    protected int flags = 0;
+    protected int plotType = 0;
+    protected int plotRotation = 0;
+    protected Bounds windowToPlot = new Bounds();
+    protected double customScaleNumerator = 1.0;
+    protected double customScaleDenominator = 1.0;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getObjectType() {
+        return DXFConstants.OBJECT_TYPE_PLOTSETTINGS;
+    }
 
-	public String getConfigName() {
-		return configName;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setConfigName(String configName) {
-		this.configName = configName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getCanonicalMediaName() {
-		return canonicalMediaName;
-	}
+    public String getConfigName() {
+        return configName;
+    }
 
-	public void setCanonicalMediaName(String canonicalMediaName) {
-		this.canonicalMediaName = canonicalMediaName;
-	}
+    public void setConfigName(String configName) {
+        this.configName = configName;
+    }
 
-	public String getPlotViewName() {
-		return plotViewName;
-	}
+    public String getCanonicalMediaName() {
+        return canonicalMediaName;
+    }
 
-	public void setPlotViewName(String plotViewName) {
-		this.plotViewName = plotViewName;
-	}
+    public void setCanonicalMediaName(String canonicalMediaName) {
+        this.canonicalMediaName = canonicalMediaName;
+    }
 
-	public String getCurrentStylesheet() {
-		return currentStylesheet;
-	}
+    public String getPlotViewName() {
+        return plotViewName;
+    }
 
-	public void setCurrentStylesheet(String currentStylesheet) {
-		this.currentStylesheet = currentStylesheet;
-	}
+    public void setPlotViewName(String plotViewName) {
+        this.plotViewName = plotViewName;
+    }
 
-	public double[] getMargin() {
-		return margin;
-	}
+    public String getCurrentStylesheet() {
+        return currentStylesheet;
+    }
 
-	public void setMargin(double[] margin) {
-		this.margin = margin;
-	}
+    public void setCurrentStylesheet(String currentStylesheet) {
+        this.currentStylesheet = currentStylesheet;
+    }
 
-	public Point getPlotOrigin() {
-		return plotOrigin;
-	}
+    public double[] getMargin() {
+        return margin;
+    }
 
-	public void setPlotOrigin(Point plotOrigin) {
-		this.plotOrigin = plotOrigin;
-	}
+    public void setMargin(double[] margin) {
+        this.margin = margin;
+    }
 
-	public double getPaperWidth() {
-		return paperWidth;
-	}
+    public Point getPlotOrigin() {
+        return plotOrigin;
+    }
 
-	public void setPaperWidth(double paperWidth) {
-		this.paperWidth = paperWidth;
-	}
+    public void setPlotOrigin(Point plotOrigin) {
+        this.plotOrigin = plotOrigin;
+    }
 
-	public double getPaperHeight() {
-		return paperHeight;
-	}
+    public double getPaperWidth() {
+        return paperWidth;
+    }
 
-	public void setPaperHeight(double paperHeight) {
-		this.paperHeight = paperHeight;
-	}
+    public void setPaperWidth(double paperWidth) {
+        this.paperWidth = paperWidth;
+    }
 
-	public int getPaperUnit() {
-		return paperUnits;
-	}
+    public double getPaperHeight() {
+        return paperHeight;
+    }
 
-	public void setPaperUnit(int paperUnits) {
-		this.paperUnits = paperUnits;
-	}
+    public void setPaperHeight(double paperHeight) {
+        this.paperHeight = paperHeight;
+    }
 
-	public int getFlags() {
-		return flags;
-	}
+    public int getPaperUnit() {
+        return paperUnits;
+    }
 
-	public void setFlags(int flags) {
-		this.flags = flags;
-	}
+    public void setPaperUnit(int paperUnits) {
+        this.paperUnits = paperUnits;
+    }
 
-	public int getPlotType() {
-		return plotType;
-	}
+    public int getFlags() {
+        return flags;
+    }
 
-	public void setPlotType(int plotType) {
-		this.plotType = plotType;
-	}
+    public void setFlags(int flags) {
+        this.flags = flags;
+    }
 
-	public int getPlotRotation() {
-		return plotRotation;
-	}
+    public int getPlotType() {
+        return plotType;
+    }
 
-	public void setPlotRotation(int plotRotation) {
-		this.plotRotation = plotRotation;
-	}
+    public void setPlotType(int plotType) {
+        this.plotType = plotType;
+    }
 
-	public Bounds getWindowToPlot() {
-		return windowToPlot;
-	}
+    public int getPlotRotation() {
+        return plotRotation;
+    }
 
-	public void setWindowToPlot(Bounds windowToPlot) {
-		this.windowToPlot = windowToPlot;
-	}
+    public void setPlotRotation(int plotRotation) {
+        this.plotRotation = plotRotation;
+    }
 
-	public double getCustomScaleNumerator() {
-		return customScaleNumerator;
-	}
+    public Bounds getWindowToPlot() {
+        return windowToPlot;
+    }
 
-	public void setCustomScaleNumerator(double customScaleNumerator) {
-		this.customScaleNumerator = customScaleNumerator;
-	}
+    public void setWindowToPlot(Bounds windowToPlot) {
+        this.windowToPlot = windowToPlot;
+    }
 
-	public double getCustomScaleDenominator() {
-		return customScaleDenominator;
-	}
+    public double getCustomScaleNumerator() {
+        return customScaleNumerator;
+    }
 
-	public void setCustomScaleDenominator(double customScaleDenominator) {
-		this.customScaleDenominator = customScaleDenominator;
-	}
+    public void setCustomScaleNumerator(double customScaleNumerator) {
+        this.customScaleNumerator = customScaleNumerator;
+    }
 
-	public double getCustomScale(){
-		return this.customScaleNumerator/this.customScaleDenominator;
-	}
-	
-	
-	
+    public double getCustomScaleDenominator() {
+        return customScaleDenominator;
+    }
+
+    public void setCustomScaleDenominator(double customScaleDenominator) {
+        this.customScaleDenominator = customScaleDenominator;
+    }
+
+    public double getCustomScale() {
+        return this.customScaleNumerator / this.customScaleDenominator;
+    }
 }

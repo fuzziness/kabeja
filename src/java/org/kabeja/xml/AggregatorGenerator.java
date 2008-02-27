@@ -25,59 +25,55 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-public class AggregatorGenerator extends AbstractSAXFilter implements
-		SAXGenerator {
 
-	public final static String ROOT_ELEMENT = "aggregate";
+public class AggregatorGenerator extends AbstractSAXFilter
+    implements SAXGenerator {
+    public final static String ROOT_ELEMENT = "aggregate";
+    public final static String NAMESPACE = "http://kabeja.org/aggregate";
+    protected List generators = new ArrayList();
+    protected DXFDocument doc;
 
-	public final static String NAMESPACE = "http://kabeja.org/aggregate";
+    public void generate(DXFDocument doc, ContentHandler handler, Map context)
+        throws SAXException {
+        this.setContentHandler(handler);
+        this.doc = doc;
 
-	protected List generators = new ArrayList();
+        try {
+            handler.startDocument();
 
-	protected DXFDocument doc;
+            String raw = NAMESPACE + ":" + ROOT_ELEMENT;
+            handler.startElement(NAMESPACE, raw, ROOT_ELEMENT,
+                new AttributesImpl());
+            doGenerate();
+            handler.endElement(NAMESPACE, raw, ROOT_ELEMENT);
+            handler.endDocument();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void generate(DXFDocument doc, ContentHandler handler, Map context) throws SAXException{
-		this.setContentHandler(handler);
-		this.doc = doc;
-		try {
-			handler.startDocument();
-			String raw=NAMESPACE + ":" + ROOT_ELEMENT;
-			handler.startElement(NAMESPACE, raw,
-					ROOT_ELEMENT, new AttributesImpl());
-			doGenerate();
-			handler.endElement(NAMESPACE, raw,
-					ROOT_ELEMENT);
-			handler.endDocument();
-		} catch (SAXException e) {
+    protected void doGenerate() throws SAXException {
+        Iterator i = this.generators.iterator();
 
-			e.printStackTrace();
-		}
+        while (i.hasNext()) {
+            SAXGenerator generator = (SAXGenerator) i.next();
+            generator.generate(this.doc, this, null);
+        }
+    }
 
-	}
+    public void endDocument() throws SAXException {
+        // ignore
+    }
 
-	protected void doGenerate() throws SAXException{
-		Iterator i = this.generators.iterator();
-		while (i.hasNext()) {
-			SAXGenerator generator = (SAXGenerator) i.next();
-			generator.generate(this.doc, this, null);
-		}
-	}
+    public void startDocument() throws SAXException {
+        // ignore
+    }
 
-	public void endDocument() throws SAXException {
-		// ignore
-	}
+    public void addSAXGenerator(SAXGenerator generator) {
+        this.generators.add(generator);
+    }
 
-	public void startDocument() throws SAXException {
-		// ignore
-	}
-
-	
-	public void addSAXGenerator(SAXGenerator generator){
-		this.generators.add(generator);
-	}
-
-	public Map getProperties() {
-		return this.properties;
-	}
-	
+    public Map getProperties() {
+        return this.properties;
+    }
 }

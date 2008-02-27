@@ -25,40 +25,36 @@ import org.kabeja.processing.scripting.ScriptEngine;
 import org.kabeja.processing.scripting.ScriptException;
 import org.kabeja.processing.scripting.impl.JavaScriptEngine;
 
+
 public class ScriptablePostProcessor extends AbstractPostProcessor {
+    public final static String PROPERTY_SCRIPT_TYPE = "type";
+    public final static String PROPERTY_SCRIPT_SRC = "src";
+    public final static String PROPERTY_SCRIPT_INPUTSTREAM = "inputstream";
+    protected ScriptEngine engine;
+    protected InputStream scriptStream;
 
-	public final static String PROPERTY_SCRIPT_TYPE = "type";
-	public final static String PROPERTY_SCRIPT_SRC = "src";
-	public final static String PROPERTY_SCRIPT_INPUTSTREAM = "inputstream";
-	protected ScriptEngine engine;
-	protected InputStream scriptStream;
+    public void process(DXFDocument doc, Map context) throws ProcessorException {
+        ScriptEngine engine = new JavaScriptEngine();
 
-	public void process(DXFDocument doc, Map context) throws ProcessorException {
-		ScriptEngine engine = new JavaScriptEngine();
-		try {
-			engine.eval(doc, this.scriptStream);
-		} catch (ScriptException e) {
+        try {
+            engine.eval(doc, this.scriptStream);
+        } catch (ScriptException e) {
+            throw new ProcessorException(e);
+        }
+    }
 
-			throw new ProcessorException(e);
-		}
+    public void setProperties(Map properties) {
+        try {
+            if (properties.containsKey(PROPERTY_SCRIPT_SRC)) {
+                this.scriptStream = new FileInputStream((String) properties.get(
+                            PROPERTY_SCRIPT_SRC));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
-	}
-
-	public void setProperties(Map properties) {
-		try {
-			if (properties.containsKey(PROPERTY_SCRIPT_SRC)) {
-				this.scriptStream = new FileInputStream((String) properties
-						.get(PROPERTY_SCRIPT_SRC));
-			}
-		} catch (FileNotFoundException e) {
-
-			e.printStackTrace();
-		}
-		if (properties.containsKey(PROPERTY_SCRIPT_INPUTSTREAM)) {
-			this.scriptStream = (InputStream) properties
-					.get(PROPERTY_SCRIPT_INPUTSTREAM);
-		}
-
-	}
-
+        if (properties.containsKey(PROPERTY_SCRIPT_INPUTSTREAM)) {
+            this.scriptStream = (InputStream) properties.get(PROPERTY_SCRIPT_INPUTSTREAM);
+        }
+    }
 }

@@ -12,158 +12,135 @@ import org.kabeja.parser.DXFValue;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
- * 
+ *
  */
 public class DXFLWPolylineHandler extends AbstractEntityHandler {
+    public static final String ENTITY_NAME = "LWPOLYLINE";
+    public static final int VERTEX_BULGE = 42;
+    public static final int START_WIDTH = 40;
+    public static final int END_WIDTH = 41;
+    public static final int CONSTANT_WIDTH = 43;
+    public static final int ELEVATION = 38;
+    public static final int THICKNESS = 39;
+    private DXFVertex vertex;
+    private DXFLWPolyline lwpolyline;
 
-	public static final String ENTITY_NAME = "LWPOLYLINE";
+    /**
+     *
+     */
+    public DXFLWPolylineHandler() {
+        super();
+    }
 
-	public static final int VERTEX_BULGE = 42;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.dxf2svg.parser.entities.EntityHandler#endParsing()
+     */
+    public void endDXFEntity() {
+    }
 
-	public static final int START_WIDTH = 40;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.dxf2svg.parser.entities.EntityHandler#getEntity()
+     */
+    public DXFEntity getDXFEntity() {
+        return lwpolyline;
+    }
 
-	public static final int END_WIDTH = 41;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.dxf2svg.parser.entities.EntityHandler#getEntityName()
+     */
+    public String getDXFEntityName() {
+        return ENTITY_NAME;
+    }
 
-	public static final int CONSTANT_WIDTH = 43;
-	
-	public static final int ELEVATION=38;
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.dxf2svg.parser.entities.EntityHandler#isFollowSequence()
+     */
+    public boolean isFollowSequence() {
+        return false;
+    }
 
-	public static final int THICKNESS=39;
-	
-	
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.dxf2svg.parser.entities.EntityHandler#parseGroup(int,
+     *      org.dxf2svg.parser.DXFValue)
+     */
+    public void parseGroup(int groupCode, DXFValue value) {
+        // the different between polyline and lwpolyline is,
+        // that the vertices comes not as sequence here.
+        switch (groupCode) {
+        case GROUPCODE_START_X:
+            // every new vertex starts with 10
+            createVertex();
+            vertex.setX(value.getDoubleValue());
 
-	
+            break;
 
-	private DXFVertex vertex;
+        case GROUPCODE_START_Y:
+            vertex.setY(value.getDoubleValue());
 
-	private DXFLWPolyline lwpolyline;
+            break;
 
-	/**
-	 * 
-	 */
-	public DXFLWPolylineHandler() {
-		super();
+        case GROUPCODE_START_Z:
+            vertex.setZ(value.getDoubleValue());
 
-	}
+            break;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dxf2svg.parser.entities.EntityHandler#endParsing()
-	 */
-	public void endDXFEntity() {
+        case VERTEX_BULGE:
+            vertex.setBulge(value.getDoubleValue());
 
-	}
+            break;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dxf2svg.parser.entities.EntityHandler#getEntity()
-	 */
-	public DXFEntity getDXFEntity() {
+        case START_WIDTH:
+            vertex.setStartWidth(value.getDoubleValue());
 
-		return lwpolyline;
-	}
+            break;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dxf2svg.parser.entities.EntityHandler#getEntityName()
-	 */
-	public String getDXFEntityName() {
+        case END_WIDTH:
+            vertex.setEndWidth(value.getDoubleValue());
 
-		return ENTITY_NAME;
-	}
+            break;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dxf2svg.parser.entities.EntityHandler#isFollowSequence()
-	 */
-	public boolean isFollowSequence() {
+        case CONSTANT_WIDTH:
+            lwpolyline.setConstantWidth(value.getDoubleValue());
 
-		return false;
-	}
+            break;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dxf2svg.parser.entities.EntityHandler#parseGroup(int,
-	 *      org.dxf2svg.parser.DXFValue)
-	 */
-	public void parseGroup(int groupCode, DXFValue value) {
+        case ELEVATION:
+            lwpolyline.setElevation(value.getDoubleValue());
 
-		// the different between polyline and lwpolyline is,
-		// that the vertices comes not as sequence here.
+            break;
 
-		switch (groupCode) {
+        case THICKNESS:
+            lwpolyline.setThickness(value.getDoubleValue());
 
-		case GROUPCODE_START_X:
-			// every new vertex starts with 10
-			createVertex();
-			vertex.setX(value.getDoubleValue());
+            break;
 
-			break;
+        default:
+            super.parseCommonProperty(groupCode, value, lwpolyline);
+        }
+    }
 
-		case GROUPCODE_START_Y:
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.dxf2svg.parser.entities.EntityHandler#startParsing()
+     */
+    public void startDXFEntity() {
+        lwpolyline = new DXFLWPolyline();
+    }
 
-			vertex.setY(value.getDoubleValue());
-
-			break;
-
-		case GROUPCODE_START_Z:
-
-			vertex.setZ(value.getDoubleValue());
-
-			break;
-
-		case VERTEX_BULGE:
-
-			vertex.setBulge(value.getDoubleValue());
-			break;
-
-		case START_WIDTH:
-			vertex.setStartWidth(value.getDoubleValue());
-			break;
-		case END_WIDTH:
-			vertex.setEndWidth(value.getDoubleValue());
-			break;
-
-		case CONSTANT_WIDTH:
-			lwpolyline.setConstantWidth(value.getDoubleValue());
-			break;
-
-		case ELEVATION:
-			lwpolyline.setElevation(value.getDoubleValue());
-			break;
-			
-		case THICKNESS:
-			lwpolyline.setThickness(value.getDoubleValue());
-			break;
-			
-		default:
-
-			super.parseCommonProperty(groupCode, value, lwpolyline);
-
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dxf2svg.parser.entities.EntityHandler#startParsing()
-	 */
-	public void startDXFEntity() {
-		
-		
-		lwpolyline = new DXFLWPolyline();
-	}
-
-	private void createVertex() {
-		vertex = new DXFVertex();
-		vertex.setDXFDocument(doc);
-		lwpolyline.addVertex(vertex);
-	}
-
+    private void createVertex() {
+        vertex = new DXFVertex();
+        vertex.setDXFDocument(doc);
+        lwpolyline.addVertex(vertex);
+    }
 }

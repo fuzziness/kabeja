@@ -21,78 +21,71 @@ import java.util.List;
 
 import org.kabeja.dxf.helpers.HatchLineFamily;
 
+
 /**
  * This class represent a single line family of a hatch pattern set.
- * 
+ *
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth </a>
- * 
+ *
  */
 public class DXFHatchPattern {
+    private static int idCount = 0;
+    private String id = null;
+    private List patterns = new ArrayList();
+    private DXFHatch hatch;
 
-	private static int idCount = 0;
+    /**
+     * @return Returns the id.
+     */
+    public String getID() {
+        if (this.id == null) {
+            this.id = "HATCH_PATTERN_ID_" + DXFHatchPattern.idCount;
+            DXFHatchPattern.idCount++;
+        }
 
-	private String id = null;
+        return id;
+    }
 
-	private List patterns = new ArrayList();
+    /**
+     * @param id
+     *            The id to set.
+     */
+    public void setID(String id) {
+        this.id = id;
+    }
 
-	private DXFHatch hatch;
+    public void addLineFamily(HatchLineFamily pattern) {
+        patterns.add(pattern);
+    }
 
-	/**
-	 * @return Returns the id.
-	 */
-	public String getID() {
-		if (this.id == null) {
-			this.id = "HATCH_PATTERN_ID_" + DXFHatchPattern.idCount;
-			DXFHatchPattern.idCount++;
-		}
+    public Iterator getLineFamilyIterator() {
+        return patterns.iterator();
+    }
 
-		return id;
-	}
+    /**
+     * The associated hatch for this pattern.
+     *
+     * @return Returns the hatch.
+     */
+    public DXFHatch getDXFHatch() {
+        return this.hatch;
+    }
 
-	/**
-	 * @param id
-	 *            The id to set.
-	 */
-	public void setID(String id) {
-		this.id = id;
-	}
+    /**
+     * The associated hatch for this pattern.
+     *
+     * @param hatch
+     *            The hatch to set.
+     */
+    public void setHatch(DXFHatch hatch) {
+        this.hatch = hatch;
+    }
 
-
-	public void addLineFamily(HatchLineFamily pattern) {
-		patterns.add(pattern);
-	}
-
-	public Iterator getLineFamilyIterator() {
-		return patterns.iterator();
-	}
-
-	/**
-	 * The associated hatch for this pattern.
-	 * 
-	 * @return Returns the hatch.
-	 */
-	public DXFHatch getDXFHatch() {
-		return this.hatch;
-	}
-
-	/**
-	 * The associated hatch for this pattern.
-	 * 
-	 * @param hatch
-	 *            The hatch to set.
-	 */
-	public void setHatch(DXFHatch hatch) {
-		this.hatch = hatch;
-	}
-
-
-
-	/**
-	 * 
-	 * @return the count of the used line families
-	 */
-
-	public int getLineFamilyCount() {
-		return this.patterns.size();
-	}
+    /**
+     *
+     * @return the count of the used line families
+     */
+    public int getLineFamilyCount() {
+        return this.patterns.size();
+    }
 }

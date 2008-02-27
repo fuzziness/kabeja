@@ -17,61 +17,55 @@ package org.kabeja.dxf;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.kabeja.math.TransformContext;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- * 
+ *
  */
 public class DXFRegion extends DXFEntity {
-	protected List acisData = new ArrayList();
+    protected List acisData = new ArrayList();
 
-	/**
-	 * 
-	 * 
-	 * @return always invalid bounds
-	 */
-	public Bounds getBounds() {
-		Bounds bounds = new Bounds();
-		bounds.setValid(false);
+    /**
+     *
+     *
+     * @return always invalid bounds
+     */
+    public Bounds getBounds() {
+        Bounds bounds = new Bounds();
+        bounds.setValid(false);
 
-		return bounds;
-	}
+        return bounds;
+    }
 
-	/**
-	 * 
-	 * 
-	 * @see org.kabeja.dxf.DXFEntity#getType()
-	 */
-	public String getType() {
-		return DXFConstants.ENTITY_TYPE_REGION;
-	}
+    /**
+     *
+     *
+     * @see org.kabeja.dxf.DXFEntity#getType()
+     */
+    public String getType() {
+        return DXFConstants.ENTITY_TYPE_REGION;
+    }
 
-	/**
-	 * The ACIS commands as a list of lines
-	 * 
-	 * @return the list
-	 */
-	public List getACISDATA() {
-		return acisData;
-	}
+    /**
+     * The ACIS commands as a list of lines
+     *
+     * @return the list
+     */
+    public List getACISDATA() {
+        return acisData;
+    }
 
-	public void appendACISDATA(String data) {
-		acisData.add(data);
-	}
+    public void appendACISDATA(String data) {
+        acisData.add(data);
+    }
 
-	/**
-	 * This entity is only a container of ACIS data.
-	 * 
-	 * @return always 0
-	 */
-	public double getLength() {
-
-		return 0;
-	}
-
+    /**
+     * This entity is only a container of ACIS data.
+     *
+     * @return always 0
+     */
+    public double getLength() {
+        return 0;
+    }
 }

@@ -18,24 +18,24 @@ package org.kabeja.parser.dxf.filter;
 import java.util.Map;
 
 import org.kabeja.parser.dxf.DXFHandler;
+
+
 /**
- * 
+ *
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public interface DXFStreamFilter extends DXFHandler{
-	
-	/**
-	 * The next DXFHandler in the chain. 
-	 * @param handler
-	 */
-	public  void setDXFHandler(DXFHandler handler);
-	
-	/**
-	 * Setup properties for the DXFStreamFilter. Will called before the parsing
-	 * starts.
-	 * @param properties
-	 */
-	public void setProperties(Map properties);
-	
+public interface DXFStreamFilter extends DXFHandler {
+    /**
+     * The next DXFHandler in the chain.
+     * @param handler
+     */
+    public void setDXFHandler(DXFHandler handler);
+
+    /**
+     * Setup properties for the DXFStreamFilter. Will called before the parsing
+     * starts.
+     * @param properties
+     */
+    public void setProperties(Map properties);
 }

@@ -19,10 +19,10 @@ import java.io.InputStream;
 
 import org.kabeja.dxf.DXFDocument;
 
-public interface ScriptEngine {
-	
-	public void eval(DXFDocument doc,String script)throws ScriptException;
-	
-	public void eval(DXFDocument doc,InputStream script)throws ScriptException;
 
+public interface ScriptEngine {
+    public void eval(DXFDocument doc, String script) throws ScriptException;
+
+    public void eval(DXFDocument doc, InputStream script)
+        throws ScriptException;
 }

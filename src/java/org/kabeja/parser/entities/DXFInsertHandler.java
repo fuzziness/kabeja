@@ -26,7 +26,6 @@ import org.kabeja.parser.DXFValue;
  *
  */
 public class DXFInsertHandler extends AbstractEntityHandler {
-   
     public static final int SCALE_X = 41;
     public static final int SCALE_Y = 42;
     public static final int SCALE_Z = 43;

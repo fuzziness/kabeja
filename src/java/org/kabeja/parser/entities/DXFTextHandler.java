@@ -95,7 +95,6 @@ public class DXFTextHandler extends AbstractEntityHandler {
     public void parseGroup(int groupCode, DXFValue value) {
         switch (groupCode) {
         case TEXT_VALUE:
-
             //we set the content after the
             //parsing is finished, so the
             //DXFParser will get all infos

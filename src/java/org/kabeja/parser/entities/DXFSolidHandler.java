@@ -34,9 +34,7 @@ public class DXFSolidHandler extends AbstractEntityHandler {
     public final static int POINT4_X = 13;
     public final static int POINT4_Y = 23;
     public final static int POINT4_Z = 33;
-    
     protected String ENTITY_NAME = "SOLID";
-    
     protected DXFSolid solid;
 
     /*

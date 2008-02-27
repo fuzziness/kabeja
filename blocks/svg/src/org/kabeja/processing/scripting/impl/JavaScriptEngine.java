@@ -26,36 +26,32 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
+
 public class JavaScriptEngine implements ScriptEngine {
+    public void eval(DXFDocument doc, String script) throws ScriptException {
+        Context ctx = Context.enter();
+        Scriptable scope = ctx.initStandardObjects();
+        Object jsOut = Context.javaToJS(doc, scope);
+        ScriptableObject.putProperty(scope, "dxf", jsOut);
 
-	public void eval(DXFDocument doc, String script) throws ScriptException {
+        Object result = ctx.evaluateString(scope, script, "<cmd>", 1, null);
+        Context.exit();
+    }
 
-		Context ctx = Context.enter();
-		Scriptable scope = ctx.initStandardObjects();
-		Object jsOut = Context.javaToJS(doc, scope);
-		ScriptableObject.putProperty(scope, "dxf", jsOut);
-		Object result = ctx.evaluateString(scope, script, "<cmd>", 1, null);
-		Context.exit();
+    public void eval(DXFDocument doc, InputStream script)
+        throws ScriptException {
+        try {
+            Context ctx = Context.enter();
+            Scriptable scope = ctx.initStandardObjects();
+            Object jsOut = Context.javaToJS(doc, scope);
+            ScriptableObject.putProperty(scope, "dxf", jsOut);
 
-	}
+            Object result = ctx.evaluateReader(scope,
+                    new InputStreamReader(script), "<cmd>", 1, null);
 
-	public void eval(DXFDocument doc, InputStream script)
-			throws ScriptException {
-
-		try {
-			Context ctx = Context.enter();
-			Scriptable scope = ctx.initStandardObjects();
-			Object jsOut = Context.javaToJS(doc, scope);
-			ScriptableObject.putProperty(scope, "dxf", jsOut);
-			Object result = ctx.evaluateReader(scope, new InputStreamReader(
-					script), "<cmd>", 1, null);
-		
-			Context.exit();
-	
-		} catch (IOException e) {
-			throw new ScriptException(e);
-		}
-
-	}
-
+            Context.exit();
+        } catch (IOException e) {
+            throw new ScriptException(e);
+        }
+    }
 }

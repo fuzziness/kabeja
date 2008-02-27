@@ -51,7 +51,7 @@ public class PostProcessManager {
         }
     }
 
-    public void process(DXFDocument doc, Map context) throws ProcessorException{
+    public void process(DXFDocument doc, Map context) throws ProcessorException {
         Iterator i = processors.iterator();
 
         while (i.hasNext()) {

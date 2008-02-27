@@ -30,6 +30,6 @@ import org.xml.sax.SAXException;
  *
  */
 public interface SVGSAXGenerator {
-    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity, TransformContext transformContext)
-        throws SAXException;
+    public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity,
+        TransformContext transformContext) throws SAXException;
 }

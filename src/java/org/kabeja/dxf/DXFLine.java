@@ -24,7 +24,7 @@ import org.kabeja.math.MathUtils;
  *
  *
  */
-public class DXFLine extends DXFEntity{
+public class DXFLine extends DXFEntity {
     private Point start;
     private Point end;
 
@@ -62,9 +62,8 @@ public class DXFLine extends DXFEntity{
         return start;
     }
 
-
     public Bounds getBounds() {
-    	Bounds bounds = new Bounds();
+        Bounds bounds = new Bounds();
         bounds.addToBounds(this.end);
         bounds.addToBounds(this.start);
 
@@ -75,11 +74,7 @@ public class DXFLine extends DXFEntity{
         return DXFConstants.ENTITY_TYPE_LINE;
     }
 
-  
-	public double getLength() {
-		
-		return MathUtils.distance(this.start,this.end);
-	}
-    
-    
+    public double getLength() {
+        return MathUtils.distance(this.start, this.end);
+    }
 }

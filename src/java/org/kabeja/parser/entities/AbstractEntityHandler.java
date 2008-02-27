@@ -133,6 +133,7 @@ public abstract class AbstractEntityHandler implements DXFEntityHandler {
 
         case GROUPCODE_MODELSPACE:
             entity.setModelSpace(value.getBooleanValue());
+
             break;
         }
     }

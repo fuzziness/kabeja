@@ -17,187 +17,184 @@ package org.kabeja.dxf;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.kabeja.dxf.helpers.Point;
 
+
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- * 
+ *
  */
 public class DXFBlock {
-	public static String TYPE = "BLOCK";
-	private Point referencePoint;
-	private String layerID = DXFConstants.DEFAULT_LAYER;
-	private String name = "";
-	private String description = "";
-	private ArrayList entities;
-	private DXFDocument doc;
+    public static String TYPE = "BLOCK";
+    private Point referencePoint;
+    private String layerID = DXFConstants.DEFAULT_LAYER;
+    private String name = "";
+    private String description = "";
+    private ArrayList entities;
+    private DXFDocument doc;
 
-	/**
-	 * 
-	 */
-	public DXFBlock() {
-		super();
+    /**
+     *
+     */
+    public DXFBlock() {
+        super();
 
-		this.entities = new ArrayList();
-		this.referencePoint = new Point();
+        this.entities = new ArrayList();
+        this.referencePoint = new Point();
+    }
 
-	}
+    public Bounds getBounds() {
+        // first set the own point
+        Bounds bounds = new Bounds();
+        Iterator i = entities.iterator();
 
-	public Bounds getBounds() {
-		// first set the own point
+        if (i.hasNext()) {
+            while (i.hasNext()) {
+                DXFEntity entity = (DXFEntity) i.next();
+                Bounds b = entity.getBounds();
 
-		Bounds bounds = new Bounds();
-		Iterator i = entities.iterator();
+                if (b.isValid()) {
+                    bounds.addToBounds(b);
+                }
+            }
+        } else {
+            bounds.setValid(false);
+        }
 
-		if (i.hasNext()) {
-			while (i.hasNext()) {
-				DXFEntity entity = (DXFEntity) i.next();
-				Bounds b = entity.getBounds();
+        return bounds;
+    }
 
-				if (b.isValid()) {
-					bounds.addToBounds(b);
-				}
-			}
-		} else {
-			bounds.setValid(false);
-		}
+    /**
+     * @return Returns the description.
+     */
+    public String getDescription() {
+        return description;
+    }
 
-		return bounds;
-	}
+    /**
+     * @param description
+     *            The description to set.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	/**
-	 * @return Returns the description.
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @return Returns the p.
+     */
+    public Point getReferencePoint() {
+        return referencePoint;
+    }
 
-	/**
-	 * @param description
-	 *            The description to set.
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @param p
+     *            The p to set.
+     */
+    public void setReferencePoint(Point p) {
+        this.referencePoint = p;
+    }
 
-	/**
-	 * @return Returns the p.
-	 */
-	public Point getReferencePoint() {
-		return referencePoint;
-	}
+    public void addDXFEntity(DXFEntity entity) {
+        entities.add(entity);
+    }
 
-	/**
-	 * @param p
-	 *            The p to set.
-	 */
-	public void setReferencePoint(Point p) {
-		this.referencePoint = p;
-	}
+    /**
+     *
+     * @return a iterator over all entities of this block
+     */
+    public Iterator getDXFEntitiesIterator() {
+        return entities.iterator();
+    }
 
-	public void addDXFEntity(DXFEntity entity) {
-		entities.add(entity);
-	}
+    /**
+     * @return Returns the layerID.
+     */
+    public String getLayerID() {
+        return layerID;
+    }
 
-	/**
-	 * 
-	 * @return a iterator over all entities of this block
-	 */
-	public Iterator getDXFEntitiesIterator() {
-		return entities.iterator();
-	}
+    /**
+     * @param layerID
+     *            The layerID to set.
+     */
+    public void setLayerID(String layerID) {
+        this.layerID = layerID;
+    }
 
-	/**
-	 * @return Returns the layerID.
-	 */
-	public String getLayerID() {
-		return layerID;
-	}
+    /**
+     * @return Returns the name.
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @param layerID
-	 *            The layerID to set.
-	 */
-	public void setLayerID(String layerID) {
-		this.layerID = layerID;
-	}
+    /**
+     * @param name
+     *            The name to set.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * @return Returns the name.
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * @param doc
+     *            The doc to set.
+     */
+    public void setDXFDocument(DXFDocument doc) {
+        this.doc = doc;
 
-	/**
-	 * @param name
-	 *            The name to set.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+        Iterator i = entities.iterator();
 
-	/**
-	 * @param doc
-	 *            The doc to set.
-	 */
-	public void setDXFDocument(DXFDocument doc) {
-		this.doc = doc;
+        while (i.hasNext()) {
+            DXFEntity entity = (DXFEntity) i.next();
+            entity.setDXFDocument(doc);
+        }
+    }
 
-		Iterator i = entities.iterator();
+    /**
+     *
+     * @return the parent document
+     */
+    public DXFDocument getDXFDocument() {
+        return this.doc;
+    }
 
-		while (i.hasNext()) {
-			DXFEntity entity = (DXFEntity) i.next();
-			entity.setDXFDocument(doc);
-		}
-	}
+    public double getLength() {
+        double length = 0;
+        Iterator i = entities.iterator();
 
-	/**
-	 * 
-	 * @return the parent document
-	 */
+        while (i.hasNext()) {
+            DXFEntity entity = (DXFEntity) i.next();
+            length += entity.getLength();
+        }
 
-	public DXFDocument getDXFDocument() {
-		return this.doc;
-	}
+        return length;
+    }
 
-	public double getLength() {
+    /**
+     * Gets the
+     *
+     * @see DXFEntity with the specified ID.
+     * @param id
+     *            of the
+     * @see DXFEntity
+     * @return the
+     * @see DXFEntity with the specified ID or null if there is no
+     * @see DXFEntity with the specified ID
+     */
+    public DXFEntity getDXFEntityByID(String id) {
+        DXFEntity entity = null;
+        Iterator i = this.entities.iterator();
 
-		double length = 0;
-		Iterator i = entities.iterator();
+        while (i.hasNext()) {
+            DXFEntity e = (DXFEntity) i.next();
 
-		while (i.hasNext()) {
-			DXFEntity entity = (DXFEntity) i.next();
-			length += entity.getLength();
+            if (e.getID().equals(id)) {
+                return e;
+            }
+        }
 
-		}
-
-		return length;
-	}
-
-	/**
-	 * Gets the
-	 * 
-	 * @see DXFEntity with the specified ID.
-	 * @param id
-	 *            of the
-	 * @see DXFEntity
-	 * @return the
-	 * @see DXFEntity with the specified ID or null if there is no
-	 * @see DXFEntity with the specified ID
-	 */
-	public DXFEntity getDXFEntityByID(String id) {
-		DXFEntity entity = null;
-		Iterator i = this.entities.iterator();
-		while (i.hasNext()) {
-			DXFEntity e = (DXFEntity) i.next();
-			if (e.getID().equals(id)) {
-				return e;
-			}
-		}
-		return entity;
-	}
-
+        return entity;
+    }
 }

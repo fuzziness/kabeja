@@ -12,17 +12,20 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/package org.kabeja.io;
+*/
+package org.kabeja.io;
 
 import java.io.OutputStream;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
+
+
 /**
- * 
+ *
  * This interface describes a Generator, which will generate  output  the given stream.
  *<h3>Lifecycle</h3>
- * 
+ *
  * <ol>
  * <li>setProperties</li>
  * <li>getSuffix()</li>
@@ -32,8 +35,11 @@ import org.kabeja.dxf.DXFDocument;
  *@author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  */
 public interface StreamGenerator {
-	public void setProperties(Map properties);
-	public String getSuffix();
-	public String getMimeType();
-	public void generate(DXFDocument doc,OutputStream out);
+    public void setProperties(Map properties);
+
+    public String getSuffix();
+
+    public String getMimeType();
+
+    public void generate(DXFDocument doc, OutputStream out);
 }

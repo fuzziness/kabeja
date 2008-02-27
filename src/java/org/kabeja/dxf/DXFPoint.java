@@ -23,8 +23,7 @@ import org.kabeja.dxf.helpers.Point;
  *
  */
 public class DXFPoint extends DXFEntity {
-  
-	protected Point p = new Point();
+    protected Point p = new Point();
 
     public DXFPoint() {
     }
@@ -34,11 +33,10 @@ public class DXFPoint extends DXFEntity {
         this.p.setY(y);
         this.p.setZ(z);
     }
-    
-    public DXFPoint(Point p){
-    	this.p = p;
+
+    public DXFPoint(Point p) {
+        this.p = p;
     }
-    
 
     /**
      * @return Returns the x.
@@ -85,10 +83,8 @@ public class DXFPoint extends DXFEntity {
         this.p.setZ(z);
     }
 
-   
-
     public Bounds getBounds() {
-    	Bounds bounds = new Bounds();
+        Bounds bounds = new Bounds();
         bounds.addToBounds(p);
 
         return bounds;
@@ -106,10 +102,8 @@ public class DXFPoint extends DXFEntity {
         this.p = p;
     }
 
-	public double getLength() {
-		// a point has no length
-		return 0;
-	}
-    
-    
+    public double getLength() {
+        // a point has no length
+        return 0;
+    }
 }

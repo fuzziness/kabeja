@@ -12,11 +12,13 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/package org.kabeja.parser;
+*/
+package org.kabeja.parser;
 
 import java.io.InputStream;
 
 import org.kabeja.dxf.DXFDocument;
+
 
 /**
  * This interface describes a Parser, which will parse a specific
@@ -27,25 +29,22 @@ import org.kabeja.dxf.DXFDocument;
  *   <li>parse(...)</li>
  *   <li>getDXFDocument()</li>
  * </ol>
- * 
+ *
  * <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
+public interface Parser extends Handler {
+    public abstract void parse(String file) throws ParseException;
 
-public interface Parser extends Handler{
+    public abstract void parse(String file, String encoding)
+        throws ParseException;
 
-	public abstract void parse(String file) throws ParseException;
+    public abstract void parse(InputStream input, String encoding)
+        throws ParseException;
 
-	public abstract void parse(String file, String encoding)
-			throws ParseException;
+    public abstract DXFDocument getDocument();
 
-	public abstract void parse(InputStream input, String encoding)
-			throws ParseException;
+    public abstract boolean supportedExtension(String extension);
 
-	public abstract DXFDocument getDocument();
-
-
-	public abstract boolean supportedExtension(String extension);
-	
-	public abstract String getName();
+    public abstract String getName();
 }

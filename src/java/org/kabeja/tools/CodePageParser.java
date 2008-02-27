@@ -45,6 +45,7 @@ public class CodePageParser {
 
             while (((line = reader.readLine()) != null) && next) {
                 line = line.trim();
+
                 if (key) {
                     currentKey = line;
                     key = false;
@@ -60,14 +61,13 @@ public class CodePageParser {
                         // the encoding
                         return translateCodePage(line);
                     } else if (DXFConstants.SECTION_CLASSES.equals(line) ||
-                            DXFConstants.SECTION_BLOCKS.equals(line)||
+                            DXFConstants.SECTION_BLOCKS.equals(line) ||
                             DXFConstants.SECTION_ENTITIES.equals(line)) {
                         return encoding;
                     }
                 }
             }
         } catch (IOException e) {
-
             e.printStackTrace();
         }
 

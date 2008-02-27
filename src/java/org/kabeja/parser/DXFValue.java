@@ -23,7 +23,8 @@ package org.kabeja.parser;
  */
 public final class DXFValue {
     private String value;
-    private int integerValue=Integer.MAX_VALUE;
+    private int integerValue = Integer.MAX_VALUE;
+
     /**
      *
      */
@@ -69,11 +70,12 @@ public final class DXFValue {
     public String toString() {
         return value;
     }
-    
-    public boolean isBitSet(int pos){
-    	if(this.integerValue==Integer.MAX_VALUE){
-    		this.integerValue = getIntegerValue();
-    	}
-    	return (this.integerValue & pos) == pos;
+
+    public boolean isBitSet(int pos) {
+        if (this.integerValue == Integer.MAX_VALUE) {
+            this.integerValue = getIntegerValue();
+        }
+
+        return (this.integerValue & pos) == pos;
     }
 }

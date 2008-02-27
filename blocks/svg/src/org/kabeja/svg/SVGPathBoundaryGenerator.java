@@ -25,7 +25,7 @@ import org.kabeja.dxf.DXFEntity;
 public interface SVGPathBoundaryGenerator {
     /**
      * Must return the element as a part of the SVGPath element
-     * @param entity 
+     * @param entity
      * @return the boundary part as SVGPath
      */
     public String getSVGPath(DXFEntity entity);

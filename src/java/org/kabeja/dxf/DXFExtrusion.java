@@ -21,9 +21,9 @@ import org.kabeja.math.MathUtils;
 
 
 /**
- * This class implements the arbitrary axis algorithm to extract the 
+ * This class implements the arbitrary axis algorithm to extract the
  * direction x,y,z of the plane defined by the extrusion.
- * 
+ *
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  */
 public class DXFExtrusion {
@@ -31,35 +31,33 @@ public class DXFExtrusion {
     protected Vector n = new Vector(0.0, 0.0, 1.0);
     protected Vector x;
     protected Vector y;
-   
-   /**
-    * 
-    * @return the x value of the extrusion direction.
-    */
 
+    /**
+     *
+     * @return the x value of the extrusion direction.
+     */
     public double getX() {
         return n.getX();
     }
 
     /**
-     * 
+     *
      * Set the x value of the extrusion direction.
      */
     public void setX(double x) {
         n.setX(x);
     }
-    
+
     /**
-     * 
+     *
      * @return the y value of the extrusion direction.
      */
-
     public double getY() {
         return n.getY();
     }
 
     /**
-     * 
+     *
      * Set the x value of the extrusion direction.
      */
     public void setY(double y) {
@@ -67,7 +65,7 @@ public class DXFExtrusion {
     }
 
     /**
-     * 
+     *
      * @return the z value of the extrusion direction.
      */
     public double getZ() {
@@ -75,32 +73,31 @@ public class DXFExtrusion {
     }
 
     /**
-     * 
+     *
      * Set the x value of the extrusion direction.
      */
     public void setZ(double z) {
         n.setZ(z);
     }
-    
+
     /**
      * Calculate and returns the x direction of the plane.
      * @return
      */
-    
-    public Vector getDirectionX(){
-    	 if ((Math.abs(n.getX()) < v) && (Math.abs(n.getY()) < v)) {
+    public Vector getDirectionX() {
+        if ((Math.abs(n.getX()) < v) && (Math.abs(n.getY()) < v)) {
             return MathUtils.crossProduct(DXFConstants.DEFAULT_Y_AXIS_VECTOR, n);
-         } else {
-            return  MathUtils.crossProduct(DXFConstants.DEFAULT_Z_AXIS_VECTOR, n);
-         }
+        } else {
+            return MathUtils.crossProduct(DXFConstants.DEFAULT_Z_AXIS_VECTOR, n);
+        }
     }
-    
+
     /**
      * Calculate the y direction of the plane.
      * @return the calculate y direction
      */
-    public Vector getDirectionY(){
-    	 return MathUtils.crossProduct( n,getDirectionX());
+    public Vector getDirectionY() {
+        return MathUtils.crossProduct(n, getDirectionX());
     }
 
     public Point extrudePoint(Point basePoint, double elevation) {
@@ -114,12 +111,12 @@ public class DXFExtrusion {
     public Vector getNormal() {
         return n;
     }
+
     /**
      * @see getNormal()
      * @return
      */
-    
-    public Vector getDirectionZ(){
-    	return n;
+    public Vector getDirectionZ() {
+        return n;
     }
 }

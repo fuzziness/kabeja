@@ -45,26 +45,27 @@ public class ProcessPipeline {
     private Map generatorProperties = new HashMap();
     private SAXSerializer serializer;
     private String name;
-    private String description="";
+    private String description = "";
 
     public void process(DXFDocument doc, Map context, OutputStream out)
         throws ProcessorException {
-    	
         ContentHandler handler = null;
 
         List saxFilterProperties = new ArrayList();
+
         //setup saxfilters
         if (this.saxFilterConfigs.size() > 0) {
             Iterator i = saxFilterConfigs.iterator();
-            SAXFilterConfig sc = (SAXFilterConfig)i.next();
-            SAXFilter last =  this.manager.getSAXFilter(sc.getFilterName());
-            saxFilterProperties.add(new MergeMap(last.getProperties(),context));
+            SAXFilterConfig sc = (SAXFilterConfig) i.next();
+            SAXFilter last = this.manager.getSAXFilter(sc.getFilterName());
+            saxFilterProperties.add(new MergeMap(last.getProperties(), context));
             last.setProperties(sc.getProperties());
-            
+
             while (i.hasNext()) {
-            	 sc = (SAXFilterConfig)i.next();
-                SAXFilter f =  this.manager.getSAXFilter(sc.getFilterName());
-               
+                sc = (SAXFilterConfig) i.next();
+
+                SAXFilter f = this.manager.getSAXFilter(sc.getFilterName());
+
                 f.setContentHandler(last);
                 last = f;
                 saxFilterProperties.add(last.getProperties());
@@ -82,43 +83,44 @@ public class ProcessPipeline {
         Iterator i = this.postProcessorConfigs.iterator();
 
         while (i.hasNext()) {
-        	PostProcessorConfig ppc = (PostProcessorConfig) i.next();
+            PostProcessorConfig ppc = (PostProcessorConfig) i.next();
             PostProcessor pp = this.manager.getPostProcessor(ppc.getPostProcessorName());
-            
+
             //backup the default props
             Map oldProps = pp.getProperties();
             //setup the pipepine props
-            pp.setProperties(new MergeMap(ppc.getProperties(),context));
+            pp.setProperties(new MergeMap(ppc.getProperties(), context));
             pp.process(doc, context);
             //restore the default props
             pp.setProperties(oldProps);
-            
         }
 
         Map oldProbs = this.serializer.getProperties();
-        this.serializer.setProperties(new MergeMap(this.serializerProperties,context));
+        this.serializer.setProperties(new MergeMap(this.serializerProperties,
+                context));
 
         //invoke the filter and serializer
         this.serializer.setOutput(out);
+
         try {
-        	Map oldGenProps = this.generator.getProperties();
+            Map oldGenProps = this.generator.getProperties();
             this.generator.setProperties(this.generatorProperties);
-			this.generator.generate(doc, handler, context);
-			//restore the old props
-			this.generator.setProperties(oldGenProps);
-		} catch (SAXException e) {
-			throw new ProcessorException(e);
-			
-		}
-        
-		//restore the serializer properties
-		this.serializer.setProperties(oldProbs);
-		
-		//restore the filter properties
-		for(int x=0;x<saxFilterProperties.size();x++){
-			SAXFilterConfig sc = (SAXFilterConfig)saxFilterConfigs.get(x);
-			this.manager.getSAXFilter(sc.getFilterName()).setProperties((Map)saxFilterProperties.get(x));
-		}
+            this.generator.generate(doc, handler, context);
+            //restore the old props
+            this.generator.setProperties(oldGenProps);
+        } catch (SAXException e) {
+            throw new ProcessorException(e);
+        }
+
+        //restore the serializer properties
+        this.serializer.setProperties(oldProbs);
+
+        //restore the filter properties
+        for (int x = 0; x < saxFilterProperties.size(); x++) {
+            SAXFilterConfig sc = (SAXFilterConfig) saxFilterConfigs.get(x);
+            this.manager.getSAXFilter(sc.getFilterName())
+                        .setProperties((Map) saxFilterProperties.get(x));
+        }
     }
 
     /**
@@ -169,10 +171,8 @@ public class ProcessPipeline {
     public void prepare() {
     }
 
-  
-   
-    public List getPostProcessorConfigs(){
-    	return this.postProcessorConfigs;
+    public List getPostProcessorConfigs() {
+        return this.postProcessorConfigs;
     }
 
     public void addSAXFilterConfig(SAXFilterConfig config) {
@@ -196,29 +196,28 @@ public class ProcessPipeline {
     public void setSAXSerializerProperties(Map serializerProperties) {
         this.serializerProperties = serializerProperties;
     }
-    
-    public void setSAXGeneratorProperties(Map generatorProperties){
-    	this.generatorProperties=generatorProperties;
-    }
-    
-    public Map getSAXGeneratorProperties(Map generatorProperties){
-    	return this.generatorProperties;
-    }
-    
-    
-    public void setSAXGenerator(SAXGenerator generator){
-    	this.generator=generator;
-    }
-    
-    public SAXGenerator getSAXGenerator(){
-    	return this.generator;
+
+    public void setSAXGeneratorProperties(Map generatorProperties) {
+        this.generatorProperties = generatorProperties;
     }
 
-	public String getDescription() {
-		return description;
-	}
+    public Map getSAXGeneratorProperties(Map generatorProperties) {
+        return this.generatorProperties;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setSAXGenerator(SAXGenerator generator) {
+        this.generator = generator;
+    }
+
+    public SAXGenerator getSAXGenerator() {
+        return this.generator;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
