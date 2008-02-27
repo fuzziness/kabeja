@@ -91,7 +91,14 @@ public class ProcessingUI implements Serviceable, Startable,
         this.menubar = new JMenuBar();
         this.frame.setJMenuBar(this.menubar);
 
-        JMenu menu = new JMenu(Messages.getString("ProcessingUI.menu.file")); //$NON-NLS-1$
+        //Help and about 
+        this.menubar.add(Box.createHorizontalGlue());
+        JMenu menu = new JMenu(Messages.getString("ProcessingUI.menu.help")); //$NON-NLS-1$
+        menu.add(new AboutAction());
+        this.menubar.add(menu);
+        this.menus.put(ApplicationMenuBar.MENU_ID_HELP, menu);
+        
+        menu = new JMenu(Messages.getString("ProcessingUI.menu.file")); //$NON-NLS-1$
         menu.add(new AbstractAction(Messages.getString(
                     "ProcessingUI.menu.file.exit")) {
                 public void actionPerformed(ActionEvent e) {
@@ -103,8 +110,12 @@ public class ProcessingUI implements Serviceable, Startable,
                 }
             });
 
+       
+        
         this.setMenu(ApplicationMenuBar.MENU_ID_FILE, menu);
 
+ 
+      
         this.frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
         this.frame.setSize(700, 580);
         this.frame.validate();
@@ -204,7 +215,8 @@ public class ProcessingUI implements Serviceable, Startable,
     public void setMenu(String menuID, JMenu menu) {
         if (!this.hasMenu(menuID)) {
             this.menus.put(menuID, menu);
-            this.menubar.add(menu);
+            //let the help menu at the end
+            this.menubar.add(menu,this.menubar.getComponentCount()-2);
         }
     }
 

@@ -247,7 +247,12 @@ public class SVGViewUIComponent implements DXFDocumentViewComponent,
             DXFSAXDocumentFactory factory = new DXFSAXDocumentFactory();
             SVGDocument svgDoc = factory.createDocument(doc, this.properties);
             this.setSVGDocument(svgDoc);
+  
         } catch (Exception e) {
+           
+            this.infoLabel.setText("Error:"+e.getMessage());
+            this.infoLabel.repaint();
+            this.cards.show(this.panel, "info");
             throw new UIException(e);
         }
     }

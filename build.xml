@@ -16,7 +16,6 @@
 	<property name="sample" value="sample" />
 	<property name="legal" value="legal" />
 	<property name="manifest" value="manifestfile" />
-	<property name="version" value="0.1" />
 	<property name="packages" value="packages" />
 	<property name="samples" value="samples" />
 	<property name="apidocs" value="javadoc" />
@@ -95,6 +94,9 @@
 			<fileset dir="${src}/${sources}">
 				<include name="**/*.properties" />
 			</fileset>
+		    <filterset>
+		      <filter token="version" value="${releaseversion}"/>
+		    </filterset>
 		</copy>
 	</target>
 

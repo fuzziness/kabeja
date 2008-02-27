@@ -25,6 +25,7 @@ public interface ApplicationMenuBar {
     public static final String MENU_ID_FILE = "menu.file";
     public static final String MENU_ID_VIEW = "menu.view";
     public static final String MENU_ID_EDIT = "menu.edit";
+    public static final String MENU_ID_HELP = "menu.help";
 
     public void setMenu(String menuID, JMenu menu);
 
