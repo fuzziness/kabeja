@@ -55,6 +55,7 @@ public class SVGConstants {
     public static final String SVG_ATTRIBUTE_FILL = "fill";
     public static final String SVG_ATTRIBUTE_FILL_VALUE_NONE = "none";
     public static final String SVG_ATTRIBUTE_OVERFLOW = "overflow";
+    public static final String SVG_ATTRIBUTE_STYLE = "style";
     public static final String SVG_ATTRIBUTE_STROKE = "stroke";
     public static final String SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR = "currentColor";
     public static final String SVG_ATTRIBUTE_STROKE_WITDH = "stroke-width";

@@ -41,8 +41,8 @@ public class AboutAction extends AbstractAction {
     JDialog dialog;
 
     public AboutAction() {
-        super.putValue(NAME, "About");
-        super.putValue(SHORT_DESCRIPTION, "About");
+        super.putValue(NAME, Messages.getString("menuitem.about"));
+        super.putValue(SHORT_DESCRIPTION, Messages.getString("menuitem.about"));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -55,9 +55,9 @@ public class AboutAction extends AbstractAction {
 
     public void showDialog() {
         dialog = new JDialog();
-        dialog.setTitle("About");
+        dialog.setTitle(Messages.getString("menuitem.about"));
 
-        JLabel l = new JLabel("Kabeja") {
+        JLabel l = new JLabel(Messages.getString("AboutDialog.title")) {
                 private static final long serialVersionUID = 1L;
 
                 protected void paintComponent(Graphics g) {
@@ -79,20 +79,20 @@ public class AboutAction extends AbstractAction {
 
         JPanel b = new JPanel(new GridLayout(3, 1));
         b.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        l = new JLabel("CAD(DXF) parsing and processing");
+        l = new JLabel(Messages.getString("AboutDialog.description"));
         l.setBorder(BorderFactory.createEmptyBorder(4, 6, 4, 6));
         b.add(l);
-        l = new JLabel("Version: 0.4");
+        l = new JLabel(Messages.getString("AboutDialog.version"));
         l.setBorder(BorderFactory.createEmptyBorder(4, 6, 4, 6));
         b.add(l);
-        l = new JLabel("Visit http://kabeja.sf.net");
+        l = new JLabel(Messages.getString("AboutDialog.website"));
         l.setBorder(BorderFactory.createEmptyBorder(4, 6, 4, 6));
         b.add(l);
 
         dialog.add(b, BorderLayout.CENTER);
 
         JPanel p2 = new JPanel();
-        JButton close = new JButton("Close");
+        JButton close = new JButton(Messages.getString("button.close"));
         p2.add(close);
         dialog.add(p2, "South");
 

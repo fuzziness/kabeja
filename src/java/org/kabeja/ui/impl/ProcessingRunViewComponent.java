@@ -105,7 +105,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
     protected void initialize() {
         if (!this.initialized) {
             JPanel panel = PanelFactory.createTitledPanel(new JPanel(),
-                    "ProcessingPipelines",
+            		Messages.getString("ProcessingRunViewComponent.processing.pipeline"),
                     new ImageIcon(UIUtils.resourceToBytes(this.getClass(),
                             "/icons/project.gif")));
             pipelinePanel = new JPanel(new GridLayout(0, 1, 0, 3));
@@ -131,7 +131,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
             scroll = new JScrollPane(this.logView);
             scroll.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-            JPanel p = PanelFactory.createTitledPanel(scroll, "ProcessingOutput");
+            JPanel p = PanelFactory.createTitledPanel(scroll,Messages.getString("ProcessingRunViewComponent.processing.output"));
             sp2.setBottomComponent(p);
             sp2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -168,7 +168,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
     public void setServiceManager(ServiceManager manager) {
         Object[] objects = manager.getServiceComponents(ApplicationToolBar.SERVICE);
 
-        Action action = new AbstractAction("Open Draft",
+        Action action = new AbstractAction(Messages.getString("ProcessingRunViewComponent.open.draft"),
                 new ImageIcon(UIUtils.resourceToBytes(this.getClass(),
                         "/icons/open.gif"))) {
                 private static final long serialVersionUID = 1L;
@@ -198,10 +198,10 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 
         // view menu
         ApplicationMenuBar mbar = ((ApplicationMenuBar) manager.getServiceComponents(ApplicationMenuBar.SERVICE)[0]);
-        JMenu viewMenu = new JMenu("Process View");
+        JMenu viewMenu = new JMenu(Messages.getString("ProcessingRunViewComponent.process.view.menuitem"));
 
         if (!mbar.hasMenu(ApplicationMenuBar.MENU_ID_VIEW)) {
-            mbar.setMenu(ApplicationMenuBar.MENU_ID_VIEW, new JMenu("View"));
+            mbar.setMenu(ApplicationMenuBar.MENU_ID_VIEW, new JMenu(Messages.getString("menu.view")));
         }
 
         objects = manager.getServiceComponents(DXFDocumentViewComponent.SERVICE);
@@ -271,7 +271,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 
     protected void processFile(DXFDocument doc, File f) {
         try {
-            this.logView.append("Processing:" + f.getAbsolutePath() + "\n");
+            this.logView.append(Messages.getString("ProcessingRunViewComponent.log.processing") + f.getAbsolutePath() + "\n");
 
             File out = null;
 
@@ -295,7 +295,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
             if (out != null) {
                 this.manager.process(doc, this.properties,
                     this.processingPipeline, new FileOutputStream(out));
-                this.log("Finished:" + out.getAbsolutePath() + "\n");
+                this.log(Messages.getString("ProcessingRunViewComponent.log.finished") + out.getAbsolutePath() + "\n");
             } else {
                 this.log("No output set, do nothing.\n");
             }
@@ -314,7 +314,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 
         JPanel p = new JPanel(new FlowLayout());
         p.add(cb);
-        p.add(new JLabel("Autogenerate outputfile"));
+        p.add(new JLabel(Messages.getString("ProcessingRunViewComponent.file.dialog.autogenerate")));
         fc.setAccessory(p);
 
         int value = fc.showOpenDialog(null);
@@ -328,7 +328,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
                 this.processInput(file);
             } else if (file.isDirectory()) {
                 this.baseDir = file.getAbsolutePath();
-                this.log("Selected directory:" + file.getAbsolutePath() + "\n");
+                this.log(Messages.getString("ProcessingRunViewComponent.log.select.directory")+ file.getAbsolutePath() + "\n");
                 this.log("No preview\n");
             }
         }
@@ -336,7 +336,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
 
     protected void parseFile(File f, Parser parser) throws Exception {
         this.sourceFile = f;
-        this.logView.append("Parsing:" + f.getAbsolutePath() + "\n");
+        this.logView.append(Messages.getString("ProcessingRunViewComponent.log.parsing") + f.getAbsolutePath() + "\n");
         parser.parse(new FileInputStream(f), DXFParser.DEFAULT_ENCODING);
         this.doc = parser.getDocument();
     }

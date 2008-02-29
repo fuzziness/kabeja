@@ -69,7 +69,7 @@
 				<echo>Mono DotNet import filter</echo>
 
 				<exec executable="ikvmc">
-					<arg line="-target:winexe -main:${main.class} -out:${basedir}/${dist}/${name.binary}.exe ${basedir}/${dist}/${block.releasename}.jar" />
+					<arg line="-target:exe -main:${main.class} -out:${basedir}/${dist}/${name.binary}.exe ${basedir}/${dist}/${block.releasename}.jar" />
 				</exec>
 			</then>
 		</if>

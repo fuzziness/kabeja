@@ -3,7 +3,8 @@
     <id>org.kabeja.inkscape.import.dxf</id>
     <dependency type="extension">org.inkscape.input.svg</dependency>
     <dependency type="executable">java</dependency>
-    <param name="bounds-rule" gui-text="Choose View" type="enum">
+    <param name="description" type="description">Choose the layout for the import.</param>
+    <param name="bounds-rule" gui-text="Layout" type="enum">
          <item>Modelspace</item>
          <item>Modelspace-Limits</item>
          <item>Paperspace</item>

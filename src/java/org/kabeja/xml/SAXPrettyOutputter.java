@@ -205,6 +205,10 @@ public class SAXPrettyOutputter extends AbstractSAXSerializer
                 // .write(" xmlns:" + prefix + "=\"" + uri
                 // + "\" ");
                 // }
+                String value = atts.getValue(i);
+                if(value == null){
+                	value="";
+                }
                 this.out.write(qname + "=\"" + encodeXML(atts.getValue(i)) +
                     "\"");
             }

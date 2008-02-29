@@ -15,9 +15,22 @@
  */
 package org.kabeja.inkscape;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import org.kabeja.batik.tools.AbstractSAXSerializer;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
@@ -25,74 +38,107 @@ import org.kabeja.processing.PolylineConverter;
 import org.kabeja.processing.PostProcessor;
 import org.kabeja.svg.RootLayerFilter;
 import org.kabeja.svg.SVGGenerator;
+import org.kabeja.svg.StyleAttributeGenerationFilter;
 import org.kabeja.xml.ConsoleSerializer;
 import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
 import org.kabeja.xml.SAXSerializer;
-
 
 /**
  * This is a CLI wrapper for kabeja to imitate the behavior of the native
  * Inscape dxf2svg import filter
  */
 public class DXFImportFilter {
-    public void importFile(String file) {
-        try {
-            // parse the dxf file
-            Parser parser = ParserBuilder.createDefaultParser();
 
-            parser.parse(file);
+	public void importFile(String[] args) {
+		try {
+			Map properties = null;
+			String file = "";
+			if (args.length > 1) {
+				properties = parseParameters(args);
+				file = args[args.length - 1];
+			} else {
+				properties = new HashMap();
+				file = args[0];
+				//properties = getFromUI();
+			}
+			// parse the dxf file
+			Parser parser = ParserBuilder.createDefaultParser();
 
-            DXFDocument doc = parser.getDocument();
+			parser.parse(file);
 
-            Map noprops = new HashMap();
+			DXFDocument doc = parser.getDocument();
 
-            //connect all entities, where possible
-            PostProcessor pp = new PolylineConverter();
-            pp.setProperties(noprops);
-            pp.process(doc, noprops);
+			Map noprops = new HashMap();
 
-            // the processing and svg conversion
-            SAXGenerator generator = new SVGGenerator();
-            generator.setProperties(new HashMap());
+			// connect all entities, where possible
+			PostProcessor pp = new PolylineConverter();
+			pp.setProperties(noprops);
+			pp.process(doc, noprops);
 
-            // fix problems width percent width values
-            //			SAXFilter filter1 = new FixedStrokeWidthFilter();
-            //			Map properties = new HashMap();
-            //			properties.put(FixedStrokeWidthFilter.PROPERTY_FIXED_FONTSIZE,"false");
-            //			filter1.setProperties(properties);
+			// the processing and svg conversion
+			SAXGenerator generator = new SVGGenerator();
+			generator.setProperties(properties);
 
-            //remove the root group
-            SAXFilter filter2 = new RootLayerFilter();
-            filter2.setProperties(noprops);
+			// remove the root group
+			SAXFilter filter1 = new RootLayerFilter();
+			filter1.setProperties(noprops);
 
-            //chain the filters
-            //filter1.setContentHandler(filter2);
+			// fix problems width percent width values
+			SAXFilter filter2 = new StyleAttributeGenerationFilter();
 
-            // output goes to stdout
-            SAXSerializer serializer = new ConsoleSerializer();
-            serializer.setOutput(null);
-            serializer.setProperties(noprops);
+			filter2.setProperties(noprops);
+			// chain the filters
+			filter1.setContentHandler(filter2);
 
-            // setup the process pipeline
-            // and start the generation
-            filter2.setContentHandler(serializer);
-            generator.generate(doc, filter2, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			// output goes to stdout
+			SAXSerializer serializer = new ConsoleSerializer();
+			serializer.setOutput(null);
+			serializer.setProperties(noprops);
 
-    public static void main(String[] args) {
-        if (args.length >= 1) {
-            DXFImportFilter filter = new DXFImportFilter();
-            filter.importFile(args[0]);
-        }
-    }
+			// setup the process pipeline
+			// and start the generation
+			filter2.setContentHandler(serializer);
+			generator.generate(doc, filter1, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    protected Map parseParameters(String[] args) {
-        Map map = new HashMap();
+	public static void main(String[] args) {
+		if (args.length >= 1) {
+			DXFImportFilter filter = new DXFImportFilter();
+			filter.importFile(args);
+		}
+	}
 
-        return map;
-    }
+	protected Map parseParameters(String[] args) {
+		Map map = new HashMap();
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].startsWith("--")) {
+				int pos = args[i].indexOf('=');
+				String param = args[i].substring(2, pos);
+				String value = args[i].substring(pos + 1);
+				map.put(param, value);
+			}
+		}
+
+		return map;
+	}
+
+	protected Map getFromUI() {
+		String[] layout = new String[] {
+				SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_MODELSPACE_VALUE,
+				SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_MODELSPACE_LIMITS_VALUE,
+				SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_PAPERSPACE_VALUE,
+				SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_PAPERSPACE_LIMITS_VALUE };
+		Map map = new HashMap();
+
+		int index = JOptionPane.showOptionDialog(null, "Choose Layout",
+				"Layout Selection", JOptionPane.OK_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null, layout, layout[0]);
+		map.put(SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE, layout[index]);
+		return map;
+	}
+
 }

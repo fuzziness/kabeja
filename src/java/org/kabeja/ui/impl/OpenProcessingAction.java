@@ -32,8 +32,8 @@ public class OpenProcessingAction extends AbstractAction {
     protected ServiceContainer container;
 
     public OpenProcessingAction(ServiceContainer container) {
-        super("Load Configuration");
-        putValue(SHORT_DESCRIPTION, "Choose a processing configuration file.");
+        super(Messages.getString("OpenProcessingAction.menuitem"));
+        putValue(SHORT_DESCRIPTION, Messages.getString("OpenProcessingAction.menuitem.description"));
         this.container = container;
     }
 
