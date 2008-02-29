@@ -343,6 +343,7 @@ public class JavaScriptShell extends AbstractPostProcessor
     }
 
     public void showDXFDocument(DXFDocument doc) throws UIException {
+    	
         this.doc = doc;
         worker = new ScriptWorker(doc);
         worker.start();
@@ -502,6 +503,11 @@ public class JavaScriptShell extends AbstractPostProcessor
 
             Object jsOut = Context.javaToJS(doc, scope);
             ScriptableObject.putProperty(scope, "dxf", jsOut);
+            textArea.setText("");
+            if(doc!=null){
+            textArea.append("DXFDocument available as 'dxf'\n");
+            }
+            newShellLine();
         }
 
         public void run() {

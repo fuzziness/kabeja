@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="kabeja" default="dist" basedir=".">
 	<property name="releasename" value="kabeja" />
-	<property name="releaseversion" value="0.4pre" />
+	<property name="releaseversion" value="0.4" />
 	<property name="src" value="src" />
 	<property name="sources" value="java" />
 	<property name="classes" value="classes" />
