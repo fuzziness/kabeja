@@ -18,7 +18,12 @@ package org.kabeja.ui;
 import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-
+/**
+ * Appliction menubar service provides access to the applications menubar.
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
+ * 
+ *
+ */
 
 public interface ApplicationMenuBar {
     public static final String SERVICE = ApplicationMenuBar.class.getName();

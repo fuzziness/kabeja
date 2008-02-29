@@ -17,7 +17,7 @@ package org.kabeja.parser;
 
 
 /**
- * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  *
  *

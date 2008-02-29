@@ -16,7 +16,11 @@
 package org.kabeja.ui;
 
 import javax.swing.JComponent;
-
+/**
+ * A ViewComponent provides a view and title for the Processing.
+ *  @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
+ *
+ */
 
 public interface ViewComponent extends ProcessingUIComponent {
     public static final String SERVICE = ViewComponent.class.getName();

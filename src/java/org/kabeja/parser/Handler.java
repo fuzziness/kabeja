@@ -23,7 +23,7 @@ import org.kabeja.dxf.DXFDocument;
  * interface.
  *
  *
- * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  *
  *

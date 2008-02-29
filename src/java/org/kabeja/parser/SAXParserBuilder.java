@@ -69,7 +69,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * </pre>
  *
  *
- * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
 public class SAXParserBuilder implements ContentHandler {

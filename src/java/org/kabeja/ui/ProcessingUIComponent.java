@@ -16,8 +16,18 @@
 package org.kabeja.ui;
 
 import org.kabeja.processing.ProcessingManager;
-
+/**
+ * A ProcessingUIComponent gets access to the current Processing Manager of 
+ * the application. 
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
+ *
+ */
 
 public interface ProcessingUIComponent extends Component {
+	/**
+	 * Set the current @see ProcessingManager of the application.
+	 * Could be called multiple times.
+	 * @param manager
+	 */
     public void setProcessingManager(ProcessingManager manager);
 }

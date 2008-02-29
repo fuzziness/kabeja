@@ -19,7 +19,11 @@ import javax.swing.JComponent;
 
 import org.kabeja.dxf.DXFDocument;
 
-
+/**
+ * A DXFDocumentViewComponent provides a view of the current DXFDocument.
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
+ *
+ */
 public interface DXFDocumentViewComponent extends Component {
     public static final String SERVICE = DXFDocumentViewComponent.class.getName();
 

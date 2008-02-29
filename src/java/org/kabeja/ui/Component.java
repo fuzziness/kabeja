@@ -16,9 +16,8 @@
 package org.kabeja.ui;
 
 /**
- * This is a simple marker interface for the
- * component container.
- * @author simon
+ * This is the base interface for every component in the application.
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
 public interface Component {

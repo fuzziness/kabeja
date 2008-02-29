@@ -153,7 +153,7 @@ public class ProcessingUI implements Serviceable, Startable,
     public void setServiceManager(ServiceManager manager) {
         this.serviceManager = manager;
 
-        Object[] objects = this.serviceManager.getServiceComponents(Application.SERVICE);
+        org.kabeja.ui.Component[] objects = this.serviceManager.getServiceComponents(Application.SERVICE);
         this.application = (Application) objects[0];
 
         this.initialize();

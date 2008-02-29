@@ -14,11 +14,22 @@
    limitations under the License.
 */
 package org.kabeja.ui;
-
+/**
+ * Main application service for starting and stopping the 
+ * application.
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
+ *
+ */
 public interface Application {
     public final static String SERVICE = Application.class.getName();
 
+    /**
+     * Starts the application.
+     */
     public void start();
 
+    /**
+     * Stops the application
+     */
     public void stop();
 }

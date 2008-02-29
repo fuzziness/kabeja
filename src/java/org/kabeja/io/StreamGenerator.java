@@ -41,5 +41,10 @@ public interface StreamGenerator {
 
     public String getMimeType();
 
+    /**
+     * Output the generation result to the given stream.
+     * @param doc the @see DXFDocument to  output
+     * @param out
+     */
     public void generate(DXFDocument doc, OutputStream out);
 }

@@ -16,15 +16,32 @@
 package org.kabeja.ui;
 
 import java.util.Map;
-
+/**
+ * A Properties Editor edits processing properties.
+ * 
+ * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
+ *
+ */
 
 public interface PropertiesEditor {
     public static final String SERVICE = PropertiesEditor.class.getName();
 
+    /**
+     * Set the properties to edit.
+     * @param properties
+     */
     public void setProperties(Map properties);
 
+    /**
+     * Returns the changed properties or properties provided by the properties editor.
+     * @return
+     */
     public Map getProperties();
 
+    /**
+     * 
+     * @param listener
+     */
     public void addPropertiesListener(PropertiesListener listener);
 
     public void removePropertiesListener(PropertiesListener listener);

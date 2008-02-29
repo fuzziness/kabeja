@@ -41,10 +41,10 @@ public class ServiceContainer implements ServiceManager, Application {
         this.components.add(c);
     }
 
-    public Object[] getServiceComponents(String service) {
+    public Component[] getServiceComponents(String service) {
         List l = this.getServiceComponentsByServiceField(service);
 
-        return l.toArray();
+        return (Component[])l.toArray(new Component[l.size()]);
     }
 
     protected List getServiceComponentsByServiceField(String service) {
