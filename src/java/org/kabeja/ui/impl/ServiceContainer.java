@@ -34,7 +34,7 @@ public class ServiceContainer implements ServiceManager, Application {
     protected ProcessingManager manager;
 
     public ServiceContainer() {
-        this.components.add(this);
+        this.addComponent(this);
     }
 
     public void addComponent(Component c) {
@@ -43,7 +43,6 @@ public class ServiceContainer implements ServiceManager, Application {
 
     public Component[] getServiceComponents(String service) {
         List l = this.getServiceComponentsByServiceField(service);
-
         return (Component[])l.toArray(new Component[l.size()]);
     }
 

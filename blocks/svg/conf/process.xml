@@ -12,6 +12,8 @@
 		<filters>
 			<filter class="org.kabeja.batik.tools.ImageBase64Encoder" name="image"/>
 			<filter class="org.kabeja.svg.FixedStrokeWidthFilter" name="fixed-stroke-width"/>
+			<filter class="org.kabeja.svg.RootLayerFilter" name="rootlayer.filter"/>
+			<filter class="org.kabeja.svg.StyleAttributeFilter" name="styleattribute.filter"/>
 		</filters>
 		
 		<serializers>

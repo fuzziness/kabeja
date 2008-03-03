@@ -23,6 +23,8 @@
 			<!-- removes invisible entities -->		
 			<postprocessor class="org.kabeja.processing.VisibilityFilter" name="visibility.filter"/>
 
+			
+
 		</postprocessors>
 		
 		<filters>

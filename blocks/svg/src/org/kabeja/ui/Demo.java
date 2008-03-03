@@ -23,8 +23,9 @@ import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
-import org.kabeja.svg.action.HighlightAction;
 import org.kabeja.svg.ui.SVGViewUIComponent;
+
+import dk.abj.svg.action.HighlightAction;
 
 
 public class Demo {

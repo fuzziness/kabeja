@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<processing xmlns="http://kabeja.org/processing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+	<!--+
+	    | The processing pipelines 
+	    +-->
+	
+	<pipelines>
+	
+
+
+
+		<pipeline name="Inkscape" description="Converts the draft to SVG using the inkscape import filter settings.">
+		    <generate name="svg"/>
+		    <filter name="rootlayer.filter" />
+		    <filter name="styleattribute.filter"/>
+		    <serialize name="svg"/>
+		</pipeline>
+	
+		
+	</pipelines>
+</processing>

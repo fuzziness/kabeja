@@ -38,7 +38,7 @@ import org.kabeja.processing.PolylineConverter;
 import org.kabeja.processing.PostProcessor;
 import org.kabeja.svg.RootLayerFilter;
 import org.kabeja.svg.SVGGenerator;
-import org.kabeja.svg.StyleAttributeGenerationFilter;
+import org.kabeja.svg.StyleAttributeFilter;
 import org.kabeja.xml.ConsoleSerializer;
 import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
@@ -85,7 +85,7 @@ public class DXFImportFilter {
 			filter1.setProperties(noprops);
 
 			// fix problems width percent width values
-			SAXFilter filter2 = new StyleAttributeGenerationFilter();
+			SAXFilter filter2 = new StyleAttributeFilter();
 
 			filter2.setProperties(noprops);
 			// chain the filters

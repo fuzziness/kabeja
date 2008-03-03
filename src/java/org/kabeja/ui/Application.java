@@ -20,7 +20,7 @@ package org.kabeja.ui;
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
  *
  */
-public interface Application {
+public interface Application extends Component{
     public final static String SERVICE = Application.class.getName();
 
     /**

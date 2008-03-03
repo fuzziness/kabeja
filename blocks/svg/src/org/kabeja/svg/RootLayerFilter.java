@@ -54,11 +54,13 @@ public class RootLayerFilter extends AbstractSAXFilter {
 
     public void startElement(String uri, String localName, String qName,
         Attributes atts) throws SAXException {
+  
         if (uri.equals(SVGConstants.SVG_NAMESPACE) &&
                 localName.equals(SVGConstants.SVG_GROUP)) {
             String id = atts.getValue(SVGConstants.XML_ID);
 
             if (((id != null) && id.equals("draft")) || this.inDraftSection) {
+      
                 switch (groupDepth) {
                 case 0:
                     // the root group

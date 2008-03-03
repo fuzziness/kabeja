@@ -5,7 +5,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-public class StyleAttributeGenerationFilter extends AbstractSAXFilter {
+public class StyleAttributeFilter extends AbstractSAXFilter {
 
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
