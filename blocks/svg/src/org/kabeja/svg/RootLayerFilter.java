@@ -61,7 +61,7 @@ public class RootLayerFilter extends AbstractSAXFilter {
 
             if (((id != null) && id.equals("draft")) || this.inDraftSection) {
       
-                switch (groupDepth) {
+            	switch (groupDepth) {
                 case 0:
                     // the root group
                     this.transformValue = atts.getValue(SVGConstants.SVG_ATTRIBUTE_TRANSFORM);

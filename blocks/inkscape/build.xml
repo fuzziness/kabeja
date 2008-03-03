@@ -83,8 +83,27 @@
 		<if>
 			<equals arg1="${inkscape.importfilter.type}" arg2="native" />
 			<then>
-				<copy file="${dist}/${name.binary}" todir="${kabeja.home}/${dist}/inkscape-extension" />
-				<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" perm="+rx" />
+				<if>
+					<available file="${dist}/${name.binary}.exe" />
+					<then>
+						<exec executable="strip">
+							<arg line="${dist}/${name.binary}.exe" />
+						</exec>
+						<copy file="${dist}/${name.binary}.exe" todir="${kabeja.home}/${dist}/inkscape-extension" />
+						<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}.exe" perm="+rx" />
+					</then>
+					<else>
+						<exec executable="strip">
+							<arg line="${dist}/${name.binary}" />
+						</exec>
+						<copy file="${dist}/${name.binary}" todir="${kabeja.home}/${dist}/inkscape-extension" />
+						<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" perm="+rx" />
+					</else>
+
+
+
+				</if>
+
 				<copy file="${conf}/kabeja-native.inx" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
 			</then>
 		</if>
@@ -133,7 +152,7 @@
 			<fileset dir="${kabeja.home}/${build}/${classes}">
 				<exclude name="org/kabeja/ui/**/*" />
 				<exclude name="org/kabeja/*" />
-			<!--	  -->
+				<!--	  -->
 				<include name="**/*" />
 			</fileset>
 			<fileset dir="${build}/${classes}">
@@ -143,6 +162,7 @@
 				<exclude name="org/kabeja/svg/tools/**/*" />
 				<exclude name="org/kabeja/processing/**/*" />
 				<exclude name="org/kabeja/ui/**/*" />
+				<exclude name="dk/**/*" />
 			</fileset>
 		</jar>
 	</target>
