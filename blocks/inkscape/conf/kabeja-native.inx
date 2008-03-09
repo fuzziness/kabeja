@@ -11,7 +11,7 @@
     </param>
     <input>
         <extension>.dxf</extension>
-        <mimetype>image/x-svgz</mimetype>
+        <mimetype>image/vnd.dxf</mimetype>
         <_filetypename>Kabeja-AutoCAD DXF (*.dxf)</_filetypename>
         <_filetypetooltip>Import AutoCAD's Document Exchange Format</_filetypetooltip>
         <output_extension>org.inkscape.output.svg</output_extension>

@@ -1,8 +1,7 @@
 <inkscape-extension>
-    <_name>Kabeja DXF Input</_name>
+    <name>Kabeja DXF Input</name>
     <id>org.kabeja.inkscape.import.dxf</id>
     <dependency type="extension">org.inkscape.input.svg</dependency>
-    <dependency type="executable">java</dependency>
     <param name="description" type="description">Choose the layout for the import.</param>
     <param name="bounds-rule" gui-text="Layout" type="enum">
          <item>Modelspace</item>
@@ -12,12 +11,12 @@
     </param>
     <input>
         <extension>.dxf</extension>
-        <mimetype>image/x-svgz</mimetype>
-        <_filetypename>Kabeja-AutoCAD DXF (*.dxf)</_filetypename>
-        <_filetypetooltip>Import AutoCAD's Document Exchange Format</_filetypetooltip>
+        <mimetype>image/vnd.dxf</mimetype>
+        <filetypename>Kabeja-AutoCAD DXF (*.dxf)</filetypename>
+        <filetypetooltip>Import AutoCAD's Document Exchange Format</filetypetooltip>
         <output_extension>org.inkscape.output.svg</output_extension>
     </input>
     <script>
-        <command reldir="extensions" interpreter="java" >kabeja</command>
+        <command reldir="extensions" >kabeja</command>
     </script>
 </inkscape-extension>
