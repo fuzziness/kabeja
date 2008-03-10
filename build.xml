@@ -56,12 +56,16 @@
 		<mkdir dir="${build}/${classes}/${icons}" />
 		<mkdir dir="${dist}" />
 		<mkdir dir="${dist}/${libs}" />
+		<mkdir dir="${dist}/${legal}" />
 		<mkdir dir="${dist}/${conf}" />
+		<mkdir dir="${dist}/${doc}" />
+		<mkdir dir="${dist}/${samples}" />
 		<mkdir dir="${packages}" />
 
 	</target>
 
 	<target name="compile" depends="init">
+		
 		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}" debug="${debug}" debuglevel="lines,var,source">
 			<classpath>
 				<pathelement path="${classpath}" />
@@ -73,11 +77,36 @@
 	</target>
 
 	<target name="config" depends="compile">
+		
+		<copy todir="${dist}">
+				<fileset file="kabeja.exe" />
+				<fileset file="kabeja.sh" />
+		</copy>
+		
 		<copy todir="${dist}/${conf}" >
 			<fileset dir="${conf}" excludes="process.xml,ui.xml,**/*~,**/*manifest*">
 			</fileset>
 		</copy>
 
+		<copy todir="${dist}/${docs}">
+			<fileset dir="${docs}">
+				<include name="**/*" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+		
+		
+		
+		   <copy todir="${dist}/${legal}">
+				<fileset dir="${legal}">
+					<include name="**/*" />
+					<exclude name="**/cvs/*" />
+					<exclude name="**/cvs" />
+				</fileset>
+			</copy>
+			
+		
 		<copy todir="${dist}/${libs}">
 			<fileset dir="${libs}">
 				<include name="**/*" />
@@ -85,6 +114,18 @@
 				<exclude name="**/cvs" />
 			</fileset>
 		</copy>
+		
+		
+		<copy todir="${dist}/${samples}">
+			<fileset dir="${samples}">
+				<include name="**/*" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+		
+		
+		
 		<copy todir="${build}/${classes}/${icons}">
 			<fileset dir="${icons}">
 				<include name="**/*" />
@@ -142,27 +183,13 @@
 		<delete dir="${tempdir}" />
 		<mkdir dir="${tempdir}/${releasename}-${version-number}" />
 		<copy todir="${tempdir}/${releasename}-${version-number}">
-			<fileset file="build.xml" />
 			<fileset file="font.xml" />
 			<fileset file="README" />
-			<fileset file="blocks.properties" />
 			<fileset file="INSTALL" />
 		</copy>
 
-		<mkdir dir="${tempdir}/${releasename}-${version-number}/${libs}" />
-
-		<mkdir dir="${tempdir}/${releasename}-${version-number}/${legal}" />
-		<copy todir="${tempdir}/${releasename}-${version-number}/${legal}">
-			<fileset dir="${legal}" />
-		</copy>
-		<!-- the samples -->
-		<mkdir dir="${tempdir}/${releasename}-${version-number}/${samples}" />
-		<copy todir="${tempdir}/${releasename}-${version-number}/${samples}">
-			<fileset dir="${samples}" />
-		</copy>
-
-		<mkdir dir="${tempdir}/${releasename}-${version-number}/${dist}" />
-		<copy todir="${tempdir}/${releasename}-${version-number}/${dist}">
+	
+		<copy todir="${tempdir}/${releasename}-${version-number}">
 			<fileset dir="${dist}" />
 		</copy>
 
