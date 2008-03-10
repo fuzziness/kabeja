@@ -1,8 +1,17 @@
 Binary-package:
 ---------------
 
-Go to the 'dist'-folder, there are all needed parts and read the README.
+Windows: 
+		* double-click "kabeja.exe"
 
+Linux/Unix: 
+   		* sh kabeja.sh
+   		or:
+   		* chmod a=rx kabeja.sh (only ones)
+   		* ./kabeja.sh
+
+Other:
+       * java -jar launcher.jar
 
 Buidling:
 ---------

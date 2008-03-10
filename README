@@ -39,11 +39,27 @@ Planned:
 
 You can use Kabeja from CLI (Command Line Interface) or embed in your application. 
 
+GUI:
+----
+Windows: 
+		* double-click "kabeja.exe"
+
+Linux: 
+   		* sh kabeja.sh
+   		
+   		or:
+   		
+   		* chmod a=rx kabeja.sh (only ones)
+   		* ./kabeja.sh
+   		
+Other:
+       * java -jar launcher.jar
+
 
 
 CLI:
 ----
-in the 'dist'-folder try:
+in the Kabeja-folder try:
 
   * Help and pipeline list
   
@@ -67,7 +83,7 @@ java -Xmx256m  -jar .....
   
 GUI-Viewer:
 -----------
-in the 'dist/lib'-folder try:
+in the 'lib'-folder try:
 
   java -jar kabeja-svgview.jar
   
