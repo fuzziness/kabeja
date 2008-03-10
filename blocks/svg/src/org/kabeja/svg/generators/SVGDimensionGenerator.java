@@ -23,6 +23,7 @@ import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
+import org.kabeja.svg.SVGContext;
 import org.kabeja.svg.SVGUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -61,6 +62,9 @@ public class SVGDimensionGenerator extends AbstractSVGSAXGenerator {
 
             super.setCommonAttributes(attr, svgContext, dimension);
 
+   
+            
+            
             SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
             attr = new AttributesImpl();
 
