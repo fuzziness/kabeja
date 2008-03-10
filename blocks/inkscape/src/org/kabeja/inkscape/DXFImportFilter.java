@@ -15,22 +15,9 @@
  */
 package org.kabeja.inkscape;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import org.kabeja.batik.tools.AbstractSAXSerializer;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
@@ -60,7 +47,7 @@ public class DXFImportFilter {
 			} else {
 				properties = new HashMap();
 				file = args[0];
-				//properties = getFromUI();
+				
 			}
 			// parse the dxf file
 			Parser parser = ParserBuilder.createDefaultParser();
@@ -126,19 +113,6 @@ public class DXFImportFilter {
 		return map;
 	}
 
-	protected Map getFromUI() {
-		String[] layout = new String[] {
-				SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_MODELSPACE_VALUE,
-				SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_MODELSPACE_LIMITS_VALUE,
-				SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_PAPERSPACE_VALUE,
-				SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_PAPERSPACE_LIMITS_VALUE };
-		Map map = new HashMap();
 
-		int index = JOptionPane.showOptionDialog(null, "Choose Layout",
-				"Layout Selection", JOptionPane.OK_OPTION,
-				JOptionPane.PLAIN_MESSAGE, null, layout, layout[0]);
-		map.put(SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE, layout[index]);
-		return map;
-	}
 
 }
