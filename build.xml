@@ -58,7 +58,7 @@
 		<mkdir dir="${dist}/${libs}" />
 		<mkdir dir="${dist}/${legal}" />
 		<mkdir dir="${dist}/${conf}" />
-		<mkdir dir="${dist}/${doc}" />
+		<mkdir dir="${dist}/${docs}" />
 		<mkdir dir="${dist}/${samples}" />
 		<mkdir dir="${packages}" />
 
@@ -81,6 +81,7 @@
 		<copy todir="${dist}">
 				<fileset file="kabeja.exe" />
 				<fileset file="kabeja.sh" />
+			    <fileset file="font.xml" />
 		</copy>
 		
 		<copy todir="${dist}/${conf}" >
