@@ -3,4 +3,5 @@
 JAVA_MEM=256m
 
 
-java -X$JAVA_MEM -jar launcher.jar $@
+
+java -Xmx$JAVA_MEM -jar launcher.jar $@

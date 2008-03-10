@@ -83,6 +83,7 @@
 				<fileset file="kabeja.sh" />
 			    <fileset file="font.xml" />
 		</copy>
+		<chmod file="${dist}/kabeja.sh" perm="+rxw" />
 		
 		<copy todir="${dist}/${conf}" >
 			<fileset dir="${conf}" excludes="process.xml,ui.xml,**/*~,**/*manifest*">

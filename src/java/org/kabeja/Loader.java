@@ -22,7 +22,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 
 /**
@@ -30,10 +34,26 @@ import java.util.List;
  *
  */
 public class Loader {
-    public String[] libs = { "lib", "classes" };
+	
+	
+	
+    public static final String OPTION_MAIN_CLASS="-main";
+    public static final String OPTION_LIB_FOLDER="-lib";
+    public static final String OPTION_CLASSES_FOLDER="-classes";
     public String mainClass = "org.kabeja.Main";
 
-    public static void main(String[] args) {
+    private Set classpathEntries = new HashSet();
+    
+    
+    
+    
+    public Loader() {
+		this.classpathEntries.add("lib");
+		this.classpathEntries.add("classes");
+
+	}
+
+	public static void main(String[] args) {
         Loader l = new Loader();
         l.launch(args);
     }
@@ -71,8 +91,9 @@ public class Loader {
     protected URL[] getClasspath() {
         List urls = new ArrayList();
 
-        for (int i = 0; i < libs.length; i++) {
-            File f = new File(libs[i]);
+         Iterator i = this.classpathEntries.iterator();
+         while(i.hasNext()){
+            File f = new File((String)i.next());
 
             try {
                 if (f.isDirectory() && f.exists()) {
@@ -100,14 +121,31 @@ public class Loader {
         List list = new ArrayList();
 
         for (int i = 0; i < args.length; i++) {
-            if ("-main".equals(args[i]) && ((i + 1) < args.length)) {
+            if (OPTION_MAIN_CLASS.equals(args[i]) && ((i + 1) < args.length)) {
                 i++;
                 this.mainClass = args[i];
-            } else {
+            }else if(OPTION_LIB_FOLDER.equals(args[i])){
+            	i++;
+            	this.addPathEntries(args[i]);
+            }else if(OPTION_CLASSES_FOLDER.equals(args[i])){
+            	i++;
+            	this.addPathEntries(args[i]);
+            }else {
                 list.add(args[i]);
             }
         }
 
         return (String[]) list.toArray(new String[list.size()]);
     }
+    
+    
+    protected void addPathEntries(String path){
+    	StringTokenizer st = new StringTokenizer(path,":");
+    
+    	while(st.hasMoreElements()){
+    		String el = (String)st.nextElement();
+    		this.classpathEntries.add(el);
+    	}
+    }
+    
 }
