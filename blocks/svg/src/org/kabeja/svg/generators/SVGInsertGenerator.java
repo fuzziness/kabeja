@@ -96,7 +96,7 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator {
                 super.setCommonAttributes(attr, svgContext, insert);
 
                 // fix the scale of stroke-width
-                if (((scale_x + scale_y) > 0) &&
+                if (((scale_x + scale_y) != 0.0) &&
                         svgContext.containsKey(SVGContext.LAYER_STROKE_WIDTH)) {
                     Double lw = (Double) svgContext.get(SVGContext.LAYER_STROKE_WIDTH);
                     double width = (lw.doubleValue() * 2) / (scale_x + scale_y);

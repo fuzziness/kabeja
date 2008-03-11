@@ -63,7 +63,12 @@ public class SVGDimensionGenerator extends AbstractSVGSAXGenerator {
             super.setCommonAttributes(attr, svgContext, dimension);
 
    
-            
+            if (svgContext.containsKey(SVGContext.LAYER_STROKE_WIDTH)) {
+    			Double lw = (Double) svgContext.get(SVGContext.LAYER_STROKE_WIDTH);
+    			SVGUtils.addAttribute(attr,
+    					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
+    							.formatNumberAttribute(lw.doubleValue()));
+    		}
             
             SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
             attr = new AttributesImpl();

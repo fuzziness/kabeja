@@ -106,7 +106,6 @@ public class ProcessPipeline {
 		try {
 			Map oldGenProps = this.generator.getProperties();
 			this.generator.setProperties(this.generatorProperties);
-			System.out.println("process  to ="+handler);
 			this.generator.generate(doc, handler, context);
 			// restore the old props
 			this.generator.setProperties(oldGenProps);
