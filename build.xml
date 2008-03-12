@@ -232,7 +232,10 @@
 			<fileset file="README" />
 			<fileset file="blocks.properties" />
 			<fileset file="INSTALL" />
+			<fileset file="kabeja.exe" />
+			<fileset file="kabeja.sh" />
 		</copy>
+
 
 		<mkdir dir="${tempdir}/${releasename}-${version-number}/${src}" />
 		<copy todir="${tempdir}/${releasename}-${version-number}/${src}">
@@ -270,15 +273,21 @@
 			<fileset dir="${legal}" />
 		</copy>
 
-
-
-		<!-- the legal -->
+      <!-- the docs  -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${docs}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${docs}">
+			<fileset dir="${docs}" />
+		</copy>
+		<!-- the conf  -->
 		<mkdir dir="${tempdir}/${releasename}-${version-number}/${conf}" />
 		<copy todir="${tempdir}/${releasename}-${version-number}/${conf}">
 			<fileset dir="${conf}" />
 		</copy>
-
-
+        <!-- the icons -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${icons}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${icons}">
+			<fileset dir="${icons}" />
+		</copy>
 
 		<mkdir dir="${packages}" />
 		<tar tarfile="${releasename}-src.tar" basedir="${tempdir}" />

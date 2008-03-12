@@ -117,7 +117,7 @@ public class ProcessingUI implements Serviceable, Startable,
  
       
         this.frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
-        this.frame.setSize(700, 580);
+        this.frame.setSize(700,620);
         this.frame.validate();
     }
 

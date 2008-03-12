@@ -135,7 +135,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
             sp2.setBottomComponent(p);
             sp2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            sp2.setDividerLocation(350);
+            sp2.setDividerLocation(400);
             this.view = sp2;
 
             DXFFileTransferHandler handler = new DXFFileTransferHandler(this);
