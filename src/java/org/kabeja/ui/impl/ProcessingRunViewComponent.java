@@ -85,7 +85,7 @@ public class ProcessingRunViewComponent implements ViewComponent, Serviceable,
     protected String processingPipeline;
     protected JTextArea logView;
     protected ProcessingManager manager;
-    protected String baseDir = "";
+    protected String baseDir = ".";
     protected File sourceFile;
     protected DXFDocument doc;
     protected boolean autogenerateOutput = false;
