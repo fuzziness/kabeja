@@ -133,7 +133,10 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<copy todir="${build}/${classes}">
+		
+		<mkdir dir="${tempdir}" />
+		
+		<copy todir="${tempdir}">
 			<fileset dir="${src}/${sources}">
 				<include name="**/*.properties" />
 			</fileset>
@@ -141,6 +144,10 @@
 		      <filter token="version" value="${releaseversion}"/>
 		    </filterset>
 		</copy>
+	<native2ascii dest="${build}/${classes}" 
+				encoding="UTF-8"
+				src="${tempdir}" includes="**/*.properties"/> 
+		
 	</target>
 
 	<target name="core.jars" depends="manifest">
