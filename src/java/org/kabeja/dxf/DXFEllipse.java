@@ -55,7 +55,7 @@ public class DXFEllipse extends DXFEntity {
 
             double start = this.startParameter;
             double major = this.getHalfMajorAxisLength();
-            double minor = major * this.ratio;
+    
 
             Vector minorAxis = MathUtils.crossProduct(this.getExtrusion()
                                                           .getNormal(),

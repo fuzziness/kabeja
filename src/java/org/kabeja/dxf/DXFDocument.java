@@ -32,7 +32,7 @@ import org.kabeja.dxf.objects.DXFObject;
  *
  */
 public class DXFDocument {
-    public static String PROPERTY_ENCODING = "encoding";
+    public static final String PROPERTY_ENCODING = "encoding";
     public static final double DEFAULT_MARGIN = 5;
     private Hashtable layers = new Hashtable();
     private Hashtable blocks = new Hashtable();

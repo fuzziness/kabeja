@@ -73,12 +73,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  */
 public class SAXParserBuilder implements ContentHandler {
-    public static String ELEMENT_PARSER = "parser";
-    public static String ELEMENT_HANDLER = "handler";
-    public static String ELEMENT_HANDLERS = "handlers";
-    public static String ATTRIBUTE_CLASS = "class";
-    public static String ATTRIBUTE_EXTENSIONS = "extensions";
-    public static String XMLNS_KABEJA_PARSER = "http://kabeja.org/parser/1.0";
+    public final static String ELEMENT_PARSER = "parser";
+    public final static String ELEMENT_HANDLER = "handler";
+    public final static String ELEMENT_HANDLERS = "handlers";
+    public final static String ATTRIBUTE_CLASS = "class";
+    public final static String ATTRIBUTE_EXTENSIONS = "extensions";
+    public final static String XMLNS_KABEJA_PARSER = "http://kabeja.org/parser/1.0";
     private Parser parser;
     private Stack stack = new Stack();
     private HandlerManager currentHandlerManager;

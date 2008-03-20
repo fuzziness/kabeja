@@ -133,10 +133,6 @@ public class DXFLayer {
                         (!onModelspace && !entity.isModelSpace())) {
                     Bounds b = entity.getBounds();
 
-                    if (b.getMaximumX() == Double.NaN) {
-                        System.out.println("NANA=" + entity);
-                    }
-
                     if (b.isValid()) {
                         bounds.addToBounds(b);
                     }

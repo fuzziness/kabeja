@@ -48,7 +48,7 @@ public class MLineConverter {
         }
 
         Vector v = new Vector();
-        Vector d = new Vector();
+        
         ParametricLine l = new ParametricLine();
         ParametricLine miter = new ParametricLine();
 
@@ -56,7 +56,7 @@ public class MLineConverter {
             DXFMLineSegment seg = mline.getDXFMLineSegment(i);
 
             v = seg.getDirection();
-            d = seg.getMiterDirection();
+            Vector  d = seg.getMiterDirection();
             miter.setStartPoint(seg.getStartPoint());
             miter.setDirectionVector(d);
 

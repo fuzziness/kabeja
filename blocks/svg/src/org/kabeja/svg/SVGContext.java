@@ -21,11 +21,11 @@ package org.kabeja.svg;
  *
  */
 public class SVGContext {
-    public static String USER_BOUNDS = "bounds.user";
-    public static String DRAFT_BOUNDS = "bounds.draft";
-    public static String DOT_LENGTH = "dot.length";
-    public static String STROKE_WIDTH = "stroke.width";
-    public static String STROKE_WIDTH_IGNORE = "stroke.width.ignore";
-    public static String LAYER_STROKE_WIDTH = "layer.stroke.width";
-    public static String SVGSAXGENERATOR_MANAGER = "svgsaxgenerator.manager";
+    public final static String USER_BOUNDS = "bounds.user";
+    public final static String DRAFT_BOUNDS = "bounds.draft";
+    public final static String DOT_LENGTH = "dot.length";
+    public final static String STROKE_WIDTH = "stroke.width";
+    public final static String STROKE_WIDTH_IGNORE = "stroke.width.ignore";
+    public final static String LAYER_STROKE_WIDTH = "layer.stroke.width";
+    public final static String SVGSAXGENERATOR_MANAGER = "svgsaxgenerator.manager";
 }

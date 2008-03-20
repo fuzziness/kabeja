@@ -69,7 +69,7 @@ public class ServiceContainer implements ServiceManager, Application {
     }
 
     public void setupComponents() {
-        List list = new ArrayList();
+       
         Iterator i = this.components.iterator();
 
         while (i.hasNext()) {

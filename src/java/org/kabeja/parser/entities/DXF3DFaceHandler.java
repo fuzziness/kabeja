@@ -24,15 +24,12 @@ import org.kabeja.dxf.DXFConstants;
  *
  */
 public class DXF3DFaceHandler extends DXFSolidHandler {
-    protected String ENTITY_NAME = "TRACE";
+  
 
     public String getDXFEntityName() {
         return DXFConstants.ENTITY_TYPE_3DFACE;
     }
 
-    /* (non-Javadoc)
-     * @see de.miethxml.kabeja.parser.entities.DXFEntityHandler#startDXFEntity()
-     */
     public void startDXFEntity() {
         solid = new DXF3DFace();
     }

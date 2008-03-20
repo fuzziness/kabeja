@@ -25,7 +25,7 @@ import org.kabeja.math.MathUtils;
  *
  */
 public class PolylineSegment {
-    public static double DELTA = 0.001;
+    public static final double DELTA = 0.001;
     private boolean bulged = false;
     private Point point1 = new Point();
     private Point point2 = new Point();

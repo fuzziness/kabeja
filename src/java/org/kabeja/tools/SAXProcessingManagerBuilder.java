@@ -45,7 +45,7 @@ import org.xml.sax.XMLReader;
  * 
  */
 public class SAXProcessingManagerBuilder implements ContentHandler {
-	public static String XMLNS_KABEJA_PROCESSING = "http://kabeja.org/processing/1.0";
+	public static final String XMLNS_KABEJA_PROCESSING = "http://kabeja.org/processing/1.0";
 	public static final String ELEMENT_CONFIGURATION = "configuration";
 	public static final String ELEMENT_PARSER = "parser";
 	public static final String ELEMENT_PARSERS = "parsers";

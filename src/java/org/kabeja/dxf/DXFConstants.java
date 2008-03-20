@@ -324,7 +324,7 @@ public class DXFConstants {
     public final static int PLOT_STYLE_LAYOUT = 5;
     public final static int PLOT_STYLE_SPECIFIECED_VIEW = 3;
     public final static int PLOT_STYLE_SPECIFIECED_WINDOW = 4;
-    public static double POINT_CONNECTION_RADIUS = 0.0001;
+    public final static double POINT_CONNECTION_RADIUS = 0.0001;
     public final static String SECTION_BLOCKS = "BLOCKS";
     public final static String SECTION_CLASSES = "CLASSES";
     public final static String SECTION_END = "ENDSEC";

@@ -70,9 +70,8 @@ public class FontManager {
                         fontProperties.put(font, svgFont);
                     }
                 }
-            } else {
-                // System.out.println("no font.properties");
-            }
+                in.close();
+            } 
         } catch (Exception e) {
             e.printStackTrace();
         }

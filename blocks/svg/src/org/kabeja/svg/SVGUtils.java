@@ -26,8 +26,8 @@ import org.xml.sax.helpers.AttributesImpl;
  *
  */
 public class SVGUtils {
-    public static String DEFAUL_ATTRIBUTE_TYPE = "CDATA";
-    public static String DEFAULT_ID_NAME_PREFIX = "ID_";
+    public final static String DEFAUL_ATTRIBUTE_TYPE = "CDATA";
+    public final static String DEFAULT_ID_NAME_PREFIX = "ID_";
     private static DecimalFormat format;
 
     static {
