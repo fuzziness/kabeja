@@ -33,6 +33,7 @@ public class DXFInsert extends DXFEntity {
     private double row_spacing = 0;
     private double column_spacing = 0;
     private String blockID = "";
+    private boolean attributes = false;
 
     /**
      *
@@ -277,5 +278,14 @@ public class DXFInsert extends DXFEntity {
 
     public double getLength() {
         return this.doc.getDXFBlock(this.blockID).getLength();
+    }
+    
+    
+    public boolean hasAttributes(){
+    	return this.attributes;
+    }
+    
+    public void setAttributes(boolean b){
+    	this.attributes=b;
     }
 }

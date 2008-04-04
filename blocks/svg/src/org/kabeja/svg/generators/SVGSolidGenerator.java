@@ -20,6 +20,7 @@ import java.util.Map;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFSolid;
 import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.ParametricPlane;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
@@ -35,43 +36,33 @@ public class SVGSolidGenerator extends AbstractSVGSAXGenerator {
         AttributesImpl attr = new AttributesImpl();
 
         StringBuffer points = new StringBuffer();
-
+        ParametricPlane plane = new ParametricPlane(solid.getExtrusion());
         // the sequence p1->p2->p4->p3 is defined
         // by the DXF specs
-        Point point1 = solid.getPoint1();
+       addPointToBuffer(points,plane.getPoint(solid.getPoint1()));
+       addPointToBuffer(points,plane.getPoint(solid.getPoint2()));
+       addPointToBuffer(points,plane.getPoint(solid.getPoint4()));
+       addPointToBuffer(points,plane.getPoint(solid.getPoint3()));
 
-        points.append(point1.getX());
-        points.append(",");
-        points.append(point1.getY());
-        points.append(" ");
 
-        Point point2 = solid.getPoint2();
-        points.append(point2.getX());
-        points.append(",");
-        points.append(point2.getY());
-        points.append(" ");
-
-        Point point4 = solid.getPoint4();
-        points.append(point4.getX());
-        points.append(",");
-        points.append(point4.getY());
-        points.append(" ");
-
-        Point point3 = solid.getPoint3();
-        points.append(point3.getX());
-        points.append(",");
-        points.append(point3.getY());
-        points.append(" ");
-
-        SVGUtils.addAttribute(attr, "points", points.toString());
+        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_POINTS, points.toString());
 
         super.setCommonAttributes(attr, svgContext, solid);
 
         // if the fillmode attribute is non-zero the solid is filled
         if (solid.getDXFDocument().getDXFHeader().isFillMode()) {
-            SVGUtils.addAttribute(attr, "fill", "currentColor");
+            SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_FILL, SVGConstants.SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR);
         }
 
         SVGUtils.emptyElement(handler, SVGConstants.SVG_POLYGON, attr);
+    }
+    
+    
+    protected void addPointToBuffer(StringBuffer b,Point p){
+        b.append(SVGUtils.formatNumberAttribute(p.getX()));
+        b.append(SVGConstants.SVG_POLYGON_POINT_SEPARATOR);
+        b.append(SVGUtils.formatNumberAttribute(p.getY()));
+        b.append(SVGConstants.SVG_PATH_SEPARATOR);
+
     }
 }

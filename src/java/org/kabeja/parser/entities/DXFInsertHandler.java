@@ -35,6 +35,8 @@ public class DXFInsertHandler extends AbstractEntityHandler {
     public static final int COLUMN_SPACING = 44;
     public static final int ROW_SPACING = 45;
     public static final int BLOCK_NAME = 2;
+    public static final int HAS_ATTRIBUTES = 66;
+   
     private DXFInsert insert;
 
     /**
@@ -44,47 +46,25 @@ public class DXFInsertHandler extends AbstractEntityHandler {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.DXFEntityHandler#endDXFEntity()
-     */
     public void endDXFEntity() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.DXFEntityHandler#getDXFEntity()
-     */
+
     public DXFEntity getDXFEntity() {
         return insert;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.DXFEntityHandler#getDXFEntityName()
-     */
+ 
     public String getDXFEntityName() {
         return DXFConstants.ENTITY_TYPE_INSERT;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.DXFEntityHandler#isFollowSequence()
-     */
+   
     public boolean isFollowSequence() {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.DXFEntityHandler#parseGroup(int,
-     *      org.dxf2svg.parser.DXFValue)
-     */
+  
     public void parseGroup(int groupCode, DXFValue value) {
         switch (groupCode) {
         case GROUPCODE_START_X:
@@ -147,6 +127,8 @@ public class DXFInsertHandler extends AbstractEntityHandler {
 
             break;
 
+        case HAS_ATTRIBUTES:
+        	insert.setAttributes((value.getIntegerValue()&1)==1);
         default:
             super.parseCommonProperty(groupCode, value, insert);
         }

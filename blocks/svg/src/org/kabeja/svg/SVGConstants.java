@@ -86,6 +86,7 @@ public class SVGConstants {
     public static final String SVG_ATTRIBUTE_VERSION = "version";
     public static final String SVG_ATTRIBUTEVALUE_VISIBLE = "visible";
     public static final String SVG_ATTRIBUTE_VISIBILITY = "visibility";
+    public static final String SVG_ATTRIBUTE_POINTS = "points";
     public static final String SVG_ATTRIBUTE_VISIBILITY_VALUE_HIDDEN = "hidden";
     public static final String XML_ID = "id";
     public static final String XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
@@ -95,4 +96,8 @@ public class SVGConstants {
     public static final String SVGEVENT_MOUSEMOVE = "mousemove";
     public static final String SVGEVENT_MOUSEUP = "mouseup";
     public static final String SVGEVENT_CLICK = "click";
+   
+    public static final char SVG_PATH_SEPARATOR=' ';
+    public static final char SVG_POLYGON_POINT_SEPARATOR=',';
+
 }

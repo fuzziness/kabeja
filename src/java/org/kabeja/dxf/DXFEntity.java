@@ -24,6 +24,7 @@ package org.kabeja.dxf;
 public abstract class DXFEntity {
     protected DXFDocument doc;
     protected String id = "";
+    protected String ownerID="";
     protected String layerID = "";
     protected boolean visibile = true;
     protected String lineType = "";
@@ -237,4 +238,12 @@ public abstract class DXFEntity {
      * @return
      */
     public abstract double getLength();
+
+	public String getOwnerID() {
+		return ownerID;
+	}
+
+	public void setOwnerID(String ownerID) {
+		this.ownerID = ownerID;
+	}
 }

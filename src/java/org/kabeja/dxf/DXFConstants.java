@@ -40,6 +40,7 @@ public class DXFConstants {
     //Entity types
     public final static String ENTITY_TYPE_ARC = "ARC";
     public final static String ENTITY_TYPE_ATTRIB = "ATTRIB";
+    public final static String ENTITY_TYPE_ATTDEF = "ATTDEF";
     public final static String ENTITY_TYPE_BODY = "BODY";
     public final static String ENTITY_TYPE_CIRCLE = "CIRCLE";
     public final static String ENTITY_TYPE_DIMENSION = "DIMENSION";

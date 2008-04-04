@@ -23,6 +23,7 @@ import org.kabeja.dxf.DXFConstants;
 import org.kabeja.svg.generators.SVG3DFaceGenerator;
 import org.kabeja.svg.generators.SVG3DSolidGenerator;
 import org.kabeja.svg.generators.SVGArcGenerator;
+import org.kabeja.svg.generators.SVGAttribDefinitionGenerator;
 import org.kabeja.svg.generators.SVGAttribGenerator;
 import org.kabeja.svg.generators.SVGCircleGenerator;
 import org.kabeja.svg.generators.SVGDimensionGenerator;
@@ -86,6 +87,8 @@ public class SVGSAXGeneratorManager {
         this.generators.put(DXFConstants.ENTITY_TYPE_ATTRIB,
             new SVGAttribGenerator());
 
+        this.generators.put(DXFConstants.ENTITY_TYPE_ATTDEF,
+                new SVGAttribDefinitionGenerator());
         this.generators.put(DXFConstants.ENTITY_TYPE_CIRCLE,
             new SVGCircleGenerator());
         this.generators.put(DXFConstants.ENTITY_TYPE_DIMENSION,

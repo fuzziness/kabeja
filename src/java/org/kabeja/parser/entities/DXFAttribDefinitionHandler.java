@@ -1,5 +1,5 @@
 /*
-   Copyright 2005 Simon Mieth
+   Copyright 2008 Simon Mieth
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,17 +13,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package org.kabeja.dxf;
+package org.kabeja.parser.entities;
 
+import org.kabeja.dxf.DXFAttribDefinition;
+import org.kabeja.dxf.DXFConstants;
 
-/**
- * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
- */
-public class DXFAttrib extends DXFText {
-  
+public class DXFAttribDefinitionHandler extends DXFAttribHandler{
 
-    public String getType() {
-        return DXFConstants.ENTITY_TYPE_ATTRIB;
-    }
+	public String getDXFEntityName() {
+		return DXFConstants.ENTITY_TYPE_ATTDEF;
+	}
+
+	public void startDXFEntity() {
+		 this.text = new DXFAttribDefinition();
+	}
+	
+
 }

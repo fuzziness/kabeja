@@ -22,6 +22,8 @@ import java.io.InputStream;
 import org.kabeja.parser.entities.DXF3DFaceHandler;
 import org.kabeja.parser.entities.DXF3DSolidHandler;
 import org.kabeja.parser.entities.DXFArcHandler;
+import org.kabeja.parser.entities.DXFAttribDefinitionHandler;
+import org.kabeja.parser.entities.DXFAttribHandler;
 import org.kabeja.parser.entities.DXFBodyHandler;
 import org.kabeja.parser.entities.DXFCircleHandler;
 import org.kabeja.parser.entities.DXFDimensionHandler;
@@ -84,6 +86,12 @@ public class ParserBuilder {
         handlerManager.addHandler(h);
 
         h = new DXFArcHandler();
+        handlerManager.addHandler(h);
+        
+        h = new DXFAttribHandler();
+        handlerManager.addHandler(h);
+        
+        h = new DXFAttribDefinitionHandler();
         handlerManager.addHandler(h);
 
         h = new DXFPolylineHandler();
@@ -188,6 +196,12 @@ public class ParserBuilder {
         h = new DXFArcHandler();
         handlerManager.addHandler(h);
 
+        h = new DXFAttribHandler();
+        handlerManager.addHandler(h);
+        
+        h = new DXFAttribDefinitionHandler();
+        handlerManager.addHandler(h);
+          
         h = new DXFPolylineHandler();
         handlerManager.addHandler(h);
 

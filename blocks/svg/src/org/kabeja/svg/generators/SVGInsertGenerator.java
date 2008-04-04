@@ -120,5 +120,6 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator {
                 buf.delete(0, buf.length());
             }
         }
+        
     }
 }

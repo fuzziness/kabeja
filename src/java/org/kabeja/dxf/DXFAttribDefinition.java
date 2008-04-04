@@ -1,5 +1,5 @@
 /*
-   Copyright 2005 Simon Mieth
+   Copyright 2008 Simon Mieth
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -15,15 +15,10 @@
 */
 package org.kabeja.dxf;
 
+public class DXFAttribDefinition extends DXFAttrib{
 
-/**
- * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
- */
-public class DXFAttrib extends DXFText {
-  
+	public String getType() {
+		return DXFConstants.ENTITY_TYPE_ATTDEF;
+	}
 
-    public String getType() {
-        return DXFConstants.ENTITY_TYPE_ATTRIB;
-    }
 }

@@ -17,6 +17,7 @@ package org.kabeja.dxf;
 
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.MathUtils;
+import org.kabeja.math.ParametricPlane;
 
 
 /**
@@ -34,11 +35,11 @@ public class DXFSolid extends DXFEntity {
 
     public Bounds getBounds() {
         Bounds bounds = new Bounds();
-
-        bounds.addToBounds(point1);
-        bounds.addToBounds(point2);
-        bounds.addToBounds(point3);
-        bounds.addToBounds(point4);
+        ParametricPlane plane = new ParametricPlane(this.getExtrusion());
+        bounds.addToBounds(plane.getPoint(point1));
+        bounds.addToBounds(plane.getPoint(point2));
+        bounds.addToBounds(plane.getPoint(point3));
+        bounds.addToBounds(plane.getPoint(point4));
 
         return bounds;
     }
