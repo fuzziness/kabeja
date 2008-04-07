@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.inkscape.xml.SAXInkscapeLayerFilter;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
 import org.kabeja.processing.PolylineConverter;
@@ -73,20 +74,28 @@ public class DXFImportFilter {
 
 			// fix problems width percent width values
 			SAXFilter filter2 = new StyleAttributeFilter();
-
 			filter2.setProperties(noprops);
-			// chain the filters
-			filter1.setContentHandler(filter2);
-
+			
+			//add inkscape layer attributes
+			SAXFilter filter3 = new SAXInkscapeLayerFilter();
+			
+			
 			// output goes to stdout
 			SAXSerializer serializer = new ConsoleSerializer();
 			serializer.setOutput(null);
 			serializer.setProperties(noprops);
+			
+			// chain the filters
+			filter1.setContentHandler(filter2);
+            filter2.setContentHandler(filter3);
+        	filter3.setContentHandler(serializer);
+		
 
 			// setup the process pipeline
 			// and start the generation
-			filter2.setContentHandler(serializer);
+		
 			generator.generate(doc, filter1, null);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
