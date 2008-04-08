@@ -22,6 +22,7 @@ import org.kabeja.dxf.DXFDocument;
 import org.kabeja.inkscape.xml.SAXInkscapeLayerFilter;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
+import org.kabeja.processing.LayerFilter;
 import org.kabeja.processing.PolylineConverter;
 import org.kabeja.processing.PostProcessor;
 import org.kabeja.svg.RootLayerFilter;
@@ -38,6 +39,8 @@ import org.kabeja.xml.SAXSerializer;
  */
 public class DXFImportFilter {
 
+	protected boolean connectPolylines = true;
+
 	public void importFile(String[] args) {
 		try {
 			Map properties = null;
@@ -48,7 +51,7 @@ public class DXFImportFilter {
 			} else {
 				properties = new HashMap();
 				file = args[0];
-				
+
 			}
 			// parse the dxf file
 			Parser parser = ParserBuilder.createDefaultParser();
@@ -60,10 +63,16 @@ public class DXFImportFilter {
 			Map noprops = new HashMap();
 
 			// connect all entities, where possible
-			PostProcessor pp = new PolylineConverter();
-			pp.setProperties(noprops);
+			if (this.connectPolylines) {
+				PostProcessor pp = new PolylineConverter();
+				pp.setProperties(noprops);
+				pp.process(doc, noprops);
+			}
+			
+			PostProcessor pp = new LayerFilter();
+			pp.setProperties(properties);
 			pp.process(doc, noprops);
-
+			
 			// the processing and svg conversion
 			SAXGenerator generator = new SVGGenerator();
 			generator.setProperties(properties);
@@ -74,28 +83,26 @@ public class DXFImportFilter {
 
 			// fix problems width percent width values
 			SAXFilter filter2 = new StyleAttributeFilter();
-			filter2.setProperties(noprops);
-			
-			//add inkscape layer attributes
+			filter2.setProperties(properties);
+
+			// add inkscape layer attributes
 			SAXFilter filter3 = new SAXInkscapeLayerFilter();
-			
-			
+
 			// output goes to stdout
 			SAXSerializer serializer = new ConsoleSerializer();
 			serializer.setOutput(null);
 			serializer.setProperties(noprops);
-			
+
 			// chain the filters
 			filter1.setContentHandler(filter2);
-            filter2.setContentHandler(filter3);
-        	filter3.setContentHandler(serializer);
-		
+			filter2.setContentHandler(filter3);
+			filter3.setContentHandler(serializer);
 
 			// setup the process pipeline
 			// and start the generation
-		
+
 			generator.generate(doc, filter1, null);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -121,7 +128,5 @@ public class DXFImportFilter {
 
 		return map;
 	}
-
-
 
 }

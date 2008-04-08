@@ -29,8 +29,11 @@ import org.kabeja.dxf.DXFLayer;
 public class LayerFilter extends AbstractPostProcessor {
     public final static String PROPERTY_REMOVE_LAYERS = "layers.remove";
     public final static String PROPERTY_MERGE_LAYERS = "layers.merge";
+    public final static String PROPERTY_REMOVE_EMPTY_LAYERS = "remove.empty.layers";
     public final static String MERGED_LAYER_NAME = "ALL";
     protected boolean merge = false;
+    protected boolean removeEmptyLayer=false;
+    
     protected Set removableLayers = new HashSet();
 
     public void setProperties(Map properties) {
@@ -50,6 +53,10 @@ public class LayerFilter extends AbstractPostProcessor {
             while (st.hasMoreTokens()) {
                 this.removableLayers.add(st.nextToken());
             }
+        }
+        if (properties.containsKey(PROPERTY_REMOVE_EMPTY_LAYERS)) {
+            this.removeEmptyLayer = Boolean.valueOf((String) properties.get(
+                        PROPERTY_REMOVE_EMPTY_LAYERS)).booleanValue();
         }
     }
 
@@ -100,6 +107,8 @@ public class LayerFilter extends AbstractPostProcessor {
                     // remove the layer
                     i.remove();
                 }
+            }else if(this.removeEmptyLayer && layer.isEmpty()){
+            	i.remove();
             }
         }
     }

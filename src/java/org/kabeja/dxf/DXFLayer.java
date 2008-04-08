@@ -253,4 +253,9 @@ public class DXFLayer {
     public void setPlotStyle(String plotStyle) {
         this.plotStyle = plotStyle;
     }
+    
+    
+    public boolean isEmpty(){
+    	return this.entities.isEmpty();
+    }
 }

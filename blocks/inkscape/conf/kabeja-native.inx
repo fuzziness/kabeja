@@ -9,6 +9,10 @@
          <item>Paperspace</item>
          <item>Paperspace-Limits</item> 
     </param>
+    <param name="style.default.color" type="string" gui-text="Default Color" >#000000</param>
+    <param name="remove.empty.layers"  type="boolean" gui-text="Remove Empty Layers" >true</param>
+    <param name="layers.merge" type="boolean" gui-text="Merge Layers">false</param>
+    <param name="polyline.connect" type="boolean" gui-text="Connect Broken Lines">true</param>
     <input>
         <extension>.dxf</extension>
         <mimetype>image/vnd.dxf</mimetype>

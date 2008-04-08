@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Inkscape-ImportFilter" default="dist" basedir=".">
 	<property name="homepath" value="" />
-	<property name="block.releasename" value="kabeja-dxf2svg" />
-	<property name="releaseversion" value="0.3" />
+	<property name="block.releasename" value="kabeja-inkscape" />
+	<property name="releaseversion" value="0.4" />
 	<property name="src" value="src" />
 	<property name="sources" value="java" />
 	<property name="classes" value="classes" />
@@ -127,6 +127,14 @@
 				<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" perm="+rx" />
 			</then>
 		</if>
+		
+		<jar jarfile="${kabeja.home}/${dist}/${libs}/${block.releasename}-${releaseversion}.jar" manifest="${manifest}">
+				<fileset dir="${build}/${classes}">
+					<include name="**/*" />
+				</fileset>
+	    </jar>
+		
+		
 	</target>
 
 
@@ -143,7 +151,8 @@
 			<exclude name="**/CVS/*" />
 		</javac>
 
-		<unjar dest="${build}/${classes}">
+		<mkdir dir="${build}/svg"/>
+		<unjar dest="${build}/svg">
 			<fileset dir="${kabeja.home}/${dist}/${libs}">
 				<include name="**/kabeja-svg*.jar" />
 			</fileset>
@@ -155,7 +164,7 @@
 				<!--	  -->
 				<include name="**/*" />
 			</fileset>
-			<fileset dir="${build}/${classes}">
+			<fileset dir="${build}/svg">
 				<exclude name="org/kabeja/batik/**/*" />
 				<exclude name="org/kabeja/svg/ui/**/*" />
 				<exclude name="org/kabeja/svg/action/**/*" />
@@ -163,6 +172,9 @@
 				<exclude name="org/kabeja/processing/**/*" />
 				<exclude name="org/kabeja/ui/**/*" />
 				<exclude name="dk/**/*" />
+			</fileset>
+			<fileset dir="${build}/${classes}">
+	
 			</fileset>
 		</jar>
 	</target>

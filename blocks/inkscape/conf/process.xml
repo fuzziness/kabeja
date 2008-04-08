@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <processing xmlns="http://kabeja.org/processing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <configuration>
+            <filters>
+			   <filter class="org.kabeja.inkscape.xml.SAXInkscapeLayerFilter" name="inkscape.layer.filter"/>
+			</filters>
+   </configuration>
+
+
 	<!--+
 	    | The processing pipelines 
 	    +-->
@@ -11,9 +18,12 @@
 
 
 		<pipeline name="Inkscape" description="Converts the draft to SVG using the inkscape import filter settings.">
+		    <postprocess name="layer.filter"/>
+		    <postprocess name="polyline.converter"/>
 		    <generate name="svg"/>
 		    <filter name="rootlayer.filter" />
 		    <filter name="styleattribute.filter"/>
+		    <filter name="inkscape.layer.filter"/>
 		    <serialize name="svg"/>
 		</pipeline>
 	

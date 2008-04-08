@@ -53,10 +53,12 @@ public class SVGConstants {
     public static final String SVG_ATTRIBUTE_DISPLAY_VALUE_NONE = "none";
     public static final String SVG_ATTRIBUTE_STROKE_DASHARRAY = "stroke-dasharray";
     public static final String SVG_ATTRIBUTE_FILL = "fill";
+    public static final String SVG_ATTRIBUTE_FILL_OPASITY = "fill-opacity";
     public static final String SVG_ATTRIBUTE_FILL_VALUE_NONE = "none";
     public static final String SVG_ATTRIBUTE_OVERFLOW = "overflow";
     public static final String SVG_ATTRIBUTE_STYLE = "style";
     public static final String SVG_ATTRIBUTE_STROKE = "stroke";
+    public static final String SVG_ATTRIBUTE_STROKE_OPACITY = "stroke-opacity";
     public static final String SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR = "currentColor";
     public static final String SVG_ATTRIBUTE_STROKE_WITDH = "stroke-width";
     public static final String SVG_ATTRIBUTE_TEXT_DECORATION = "text-decoration";

@@ -133,7 +133,7 @@ public class SVGUtils {
                     // normally we have to check all id to garante it will be a
                     // unique,
                     // but we convert the current char to a int with "_"-prefix
-                    buf.append("_#");
+                    buf.append("_$");
                     buf.append((int) c);
                     buf.append('_');
                 }
@@ -181,7 +181,7 @@ public class SVGUtils {
                 } else if (marker) {
                     if (Character.isDigit(c) && start) {
                         number.append(c);
-                    } else if (c != '#') {
+                    } else if (c != '$') {
                         marker = false;
                         buf.append('_');
                         buf.append(c);
