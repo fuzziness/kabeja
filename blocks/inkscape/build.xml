@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Inkscape-ImportFilter" default="dist" basedir=".">
 	<property name="homepath" value="" />
-	<property name="block.releasename" value="kabeja-inkscape" />
+	<property name="block.releasename" value="kabeja-inkscape-dxf2svg" />
 	<property name="releaseversion" value="0.4" />
 	<property name="src" value="src" />
 	<property name="sources" value="java" />
@@ -16,7 +16,7 @@
 	<property name="libs" value="lib" />
 	<property name="sample" value="sample" />
 	<property name="manifest" value="inkscape.manifestfile" />
-	<property name="version" value="0.3" />
+	<property name="version" value="0.4" />
 	<property name="packages" value="packages" />
 	<property name="samples" value="samples" />
 	<property name="apidocs" value="javadoc" />
@@ -132,9 +132,7 @@
 				<fileset dir="${build}/${classes}">
 					<include name="**/*" />
 				</fileset>
-	    </jar>
-		
-		
+	    </jar>	
 	</target>
 
 
@@ -174,7 +172,6 @@
 				<exclude name="dk/**/*" />
 			</fileset>
 			<fileset dir="${build}/${classes}">
-	
 			</fileset>
 		</jar>
 	</target>
