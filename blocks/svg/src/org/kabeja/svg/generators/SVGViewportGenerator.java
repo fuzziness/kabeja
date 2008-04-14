@@ -209,7 +209,7 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
         SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_COLOR,
             "rgb(" + DXFColor.getRGBString(Math.abs(layer.getColor())) + ")");
         SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE,
-            SVGConstants.SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR);
+            SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR);
 
         SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_FILL,
             SVGConstants.SVG_ATTRIBUTE_FILL_VALUE_NONE);

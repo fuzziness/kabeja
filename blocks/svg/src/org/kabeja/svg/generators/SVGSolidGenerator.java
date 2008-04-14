@@ -51,7 +51,7 @@ public class SVGSolidGenerator extends AbstractSVGSAXGenerator {
 
         // if the fillmode attribute is non-zero the solid is filled
         if (solid.getDXFDocument().getDXFHeader().isFillMode()) {
-            SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_FILL, SVGConstants.SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR);
+            SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_FILL, SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR);
         }
 
         SVGUtils.emptyElement(handler, SVGConstants.SVG_POLYGON, attr);

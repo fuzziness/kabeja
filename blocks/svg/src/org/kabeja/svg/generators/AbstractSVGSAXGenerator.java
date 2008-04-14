@@ -30,6 +30,26 @@ import org.xml.sax.helpers.AttributesImpl;
 public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 	public void setCommonAttributes(AttributesImpl atts, Map context,
 			DXFEntity entity) {
+		
+		setVisibilityAttribute(atts, entity);
+		setXMLIDAttribute(atts, entity);
+		setColorAttribute(atts, entity);
+		setStrokeAttribute(atts, context, entity);
+		
+	}
+	
+	
+	
+	public void setCommonTextAttributes(AttributesImpl atts, Map context,
+			DXFEntity entity){
+		setVisibilityAttribute(atts, entity);
+		setXMLIDAttribute(atts, entity);
+		setColorAttribute(atts, entity);
+		SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FILL,SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR );
+	}
+	
+	
+	protected void setVisibilityAttribute(AttributesImpl atts,	DXFEntity entity){
 		// a negative color indicates the layer is off
 		if (!entity.isVisibile()) {
 			// we calculate the bounds self so they must not
@@ -40,6 +60,10 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 					SVGConstants.SVG_ATTRIBUTE_DISPLAY_VALUE_NONE);
 		}
 
+	}
+	
+	
+	protected void setColorAttribute(AttributesImpl atts,	DXFEntity entity){
 		// color 256 indicates color by layer
 		int color = entity.getColor();
 
@@ -47,14 +71,24 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_COLOR,
 					"rgb(" + DXFColor.getRGBString(color) + ")");
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE,
-					SVGConstants.SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR);
+					SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR);
 		}
 
+	
+	}
+	
+	
+	protected void setXMLIDAttribute(AttributesImpl atts,	DXFEntity entity){
 		if (entity.getID().length() > 0) {
 			SVGUtils.addAttribute(atts, SVGConstants.XML_ID, SVGUtils
 					.validateID(entity.getID()));
 		}
-
+	}
+	
+	
+	
+	protected void setStrokeAttribute(AttributesImpl atts, Map context,
+			DXFEntity entity){
 		if ((entity.getLineWeight() > 0)
 				&& !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)) {
 			SVGUtils.addAttribute(atts,
@@ -74,10 +108,11 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 			DXFLineType ltype = doc.getDXFLineType(lineType);
 
 			gscale = gscale * entity.getLinetypeScaleFactor();
-
 			SVGUtils.addStrokeDashArrayAttribute(atts, ltype, gscale);
+			
+			
 		} else if (!entity.isOmitLineType()) {
-			// get the linetype from layer
+			// get the line type from layer
 			DXFLineType ltype = doc.getDXFLineType(doc.getDXFLayer(
 					entity.getLayerName()).getLineType());
 

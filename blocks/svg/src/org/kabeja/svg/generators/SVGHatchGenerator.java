@@ -53,7 +53,7 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
             if (hatch.isSolid()) {
                 super.setCommonAttributes(attr, svgContext, hatch);
 
-                SVGUtils.addAttribute(attr, "fill", "currentColor");
+                SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_FILL, SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR);
                 SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
 
                 Iterator i = hatch.getBoundaryLoops();
@@ -79,7 +79,7 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
                     SVGUtils.addAttribute(attr,
                         SVGConstants.SVG_ATTRIBUTE_CLIP_PATH,
                         "url(#" + SVGUtils.validateID(hatch.getID()) +
-                        "_clip)");
+                        "-clip)");
                 }
 
                 SVGUtils.startElement(handler, SVGConstants.SVG_CLIPPING_PATH,
@@ -121,7 +121,7 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
         SVGSAXGeneratorManager manager) throws SAXException {
         AttributesImpl attr = new AttributesImpl();
         SVGUtils.addAttribute(attr, SVGConstants.XML_ID,
-            SVGUtils.validateID(hatch.getID() + "_clip"));
+            SVGUtils.validateID(hatch.getID() + "-clip"));
         SVGUtils.startElement(handler, SVGConstants.SVG_CLIPPING_PATH, attr);
 
         // we will draw a rectangle with the pattern and use then the

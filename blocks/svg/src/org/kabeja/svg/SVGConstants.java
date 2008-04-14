@@ -59,7 +59,7 @@ public class SVGConstants {
     public static final String SVG_ATTRIBUTE_STYLE = "style";
     public static final String SVG_ATTRIBUTE_STROKE = "stroke";
     public static final String SVG_ATTRIBUTE_STROKE_OPACITY = "stroke-opacity";
-    public static final String SVG_ATTRIBUTE_STROKE_VALUE_CURRENTCOLOR = "currentColor";
+    public static final String SVG_ATTRIBUTE_VALUE_CURRENTCOLOR = "currentColor";
     public static final String SVG_ATTRIBUTE_STROKE_WITDH = "stroke-width";
     public static final String SVG_ATTRIBUTE_TEXT_DECORATION = "text-decoration";
     public static final String SVG_ATTRIBUTE_TEXT_ALIGNMENT_BASELINE = "alignment-baseline";
