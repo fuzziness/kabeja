@@ -44,7 +44,7 @@ public final class DXFValue {
      * @param value The value to set.
      */
     private void setValue(String value) {
-        this.value = value.trim();
+        this.value = value;
     }
 
     public double getDoubleValue() {
@@ -52,13 +52,13 @@ public final class DXFValue {
     }
 
     public int getIntegerValue() {
-        return Integer.parseInt(value);
+        return Integer.parseInt(value.trim());
     }
 
     /**
      * Convert the DXF value to boolean
-     * 0 -> false
-     * 1 -> true
+     * 0 -> true
+     * 1 -> false
      * @return
      */
     public boolean getBooleanValue() {

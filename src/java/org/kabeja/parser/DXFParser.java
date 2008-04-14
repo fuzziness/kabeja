@@ -138,7 +138,7 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
                 } else {
                     int keyCode = Integer.parseInt(currentKey.trim());
                     //the filter chain
-                    filter.parseGroup(keyCode, new DXFValue(line.trim()));
+                    filter.parseGroup(keyCode, new DXFValue(line));
                     // parseGroup(currentKey, line);
                     key = true;
                 }

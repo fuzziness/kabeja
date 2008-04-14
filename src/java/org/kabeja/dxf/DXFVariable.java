@@ -46,7 +46,7 @@ public class DXFVariable {
     }
 
     public int getIntegerValue(String name) {
-        return Integer.parseInt((String) values.get(name));
+        return Integer.parseInt(((String) values.get(name)).trim());
     }
 
     public double getDoubleValue(String name) {

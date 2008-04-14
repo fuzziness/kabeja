@@ -36,13 +36,13 @@ public class Demo {
         Parser p = ParserBuilder.createDefaultParser();
 
         try {
-            p.parse("/home/simon/Desktop/kabeja/problemDXF/t6.dxf");
+            p.parse("/home/simon/Desktop/kabeja/problemDXF/p1.dxf");
 
             DXFDocument doc = p.getDocument();
-            DXFEntity e = doc.getDXFEntityByID("406F");
+            DXFEntity e = doc.getDXFEntityByID("1D7C");
 
             //  Bounds b = e.getBounds();
-            System.out.println("e=" + e);
+            //System.out.println("e=" + e);
 
             SVGViewUIComponent ui = new SVGViewUIComponent();
             ui.addAction(new HighlightAction("GG"));
