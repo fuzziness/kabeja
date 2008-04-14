@@ -67,7 +67,6 @@
 			<equals arg1="${inkscape.importfilter.type}" arg2="mono" />
 			<then>
 				<echo>Mono DotNet import filter</echo>
-                <echo message="-target:winexe -main:${main.class} -out:&quot;${basedir}/${dist}/${name.binary}.exe&quot; ${basedir}/${dist}/${block.releasename}.jar"/>
 				<exec executable="ikvmc"> 
 					<arg line="-target:exe -main:${main.class} -out:&quot;${basedir}/${dist}/${name.binary}.exe&quot;  &quot;${basedir}/${dist}/${block.releasename}.jar&quot;" />
 				</exec>
