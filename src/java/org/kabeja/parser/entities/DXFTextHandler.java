@@ -28,7 +28,7 @@ import org.kabeja.parser.DXFValue;
 public class DXFTextHandler extends AbstractEntityHandler {
     public static final int TEXT_VALUE = 1;
     public static final int TEXT_HEIGHT = 40;
-    public static final int TEXT_SCALEX = 41;
+    public static final int TEXT_SCALE_X = 41;
     public static final int TEXT_GENERATION_FLAG = 71;
     public static final int TEXT_ALIGN = 72;
     public static final int TEXT_VALIGN = 73;
@@ -176,7 +176,7 @@ public class DXFTextHandler extends AbstractEntityHandler {
 
             break;
 
-        case TEXT_SCALEX:
+        case TEXT_SCALE_X:
             text.setScaleX(value.getDoubleValue());
 
             break;

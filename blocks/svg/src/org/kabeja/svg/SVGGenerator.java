@@ -379,7 +379,6 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
             try {
                 SVGSAXGenerator gen = manager.getSVGGenerator(entity.getType());
-
                 gen.toSAX(handler, this.context, entity, transformContext);
             } catch (SVGGenerationException e) {
                 e.printStackTrace();

@@ -139,9 +139,9 @@ public class SVGMTextGenerator extends AbstractSVGSAXGenerator {
                 break;
             }
         }
+        SVGUtils.addAttribute(attr,SVGConstants.SVG_ATTRIBUTE_X , SVGUtils.formatNumberAttribute(alignmentPoint.getX()));
+        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_Y, SVGUtils.formatNumberAttribute(alignmentPoint.getY()));
 
-        SVGUtils.addAttribute(attr, "x", "" + alignmentPoint.getX());
-        SVGUtils.addAttribute(attr, "y", "" + alignmentPoint.getY());
 
         // given text-entity-height
         double height = mText.getHeight();
@@ -167,22 +167,22 @@ public class SVGMTextGenerator extends AbstractSVGSAXGenerator {
 
         if (angle != 0.0) {
             transform.append(" rotate(");
-            transform.append((-1 * angle));
+            transform.append( SVGUtils.formatNumberAttribute((-1 * angle)));
             transform.append(' ');
-            transform.append(alignmentPoint.getX());
+            transform.append( SVGUtils.formatNumberAttribute(alignmentPoint.getX()));
             transform.append(' ');
-            transform.append(alignmentPoint.getY());
+            transform.append( SVGUtils.formatNumberAttribute(alignmentPoint.getY()));
             transform.append(" )");
         }
 
         if (mText.getObliqueAngle() != 0.0) {
             transform.append(" skewX(");
-            transform.append(-1 * mText.getObliqueAngle());
+            transform.append( SVGUtils.formatNumberAttribute(-1 * mText.getObliqueAngle()));
             transform.append(')');
 
             transform.append(" translate( ");
-            transform.append(alignmentPoint.getY() * Math.tan(Math.toRadians(
-                        1 * mText.getObliqueAngle())));
+            transform.append( SVGUtils.formatNumberAttribute(alignmentPoint.getY() * Math.tan(Math.toRadians(
+                        1 * mText.getObliqueAngle()))));
             transform.append(')');
         }
 
