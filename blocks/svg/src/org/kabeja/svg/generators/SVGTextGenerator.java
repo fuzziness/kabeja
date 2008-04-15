@@ -171,6 +171,10 @@ public class SVGTextGenerator extends AbstractSVGSAXGenerator {
         SVGUtils.addAttribute(attr, "y", "" + alignmentPoint.getY());
 
         super.setCommonTextAttributes(attr, svgContext, text);
+        
+        if(entity.isBlockEntity()){
+        	System.out.println("fd");
+        }
         SVGUtils.startElement(handler, SVGConstants.SVG_TEXT, attr);
         SVGUtils.textDocumentToSAX(handler, text.getTextDocument());
         SVGUtils.endElement(handler, SVGConstants.SVG_TEXT);

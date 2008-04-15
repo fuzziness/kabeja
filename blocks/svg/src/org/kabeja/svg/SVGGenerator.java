@@ -379,6 +379,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
             try {
                 SVGSAXGenerator gen = manager.getSVGGenerator(entity.getType());
+
                 gen.toSAX(handler, this.context, entity, transformContext);
             } catch (SVGGenerationException e) {
                 e.printStackTrace();
@@ -553,6 +554,14 @@ public class SVGGenerator extends AbstractSAXGenerator {
             }
         }
 
+        //last check if nothing is correct
+        //this happens on empty drafts
+        //or only drafts with blocks
+        if(!bounds.isValid()){
+        	bounds.addToBounds(0, 0, 0);
+        }
+        
+        
         // set a margin
         double[] margin = this.getMargin(bounds);
         bounds.setMinimumX(bounds.getMinimumX() - margin[3]);

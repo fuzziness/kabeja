@@ -40,8 +40,7 @@ public abstract class AbstractDimensionOutputter extends AbstractSVGSAXGenerator
     protected void outputText(ContentHandler handler) throws SAXException {
         if ((dim.getDimensionText().length() > 0) &&
                 (dim.getDimensionText().indexOf("<>") < 0)) {
-            System.out.println("Textdim:" + dim.getDimensionText());
-
+       
             AttributesImpl attr = new AttributesImpl();
             SVGUtils.addAttribute(attr, "x", "" + dim.getTextPoint().getX());
             SVGUtils.addAttribute(attr, "y", "" + dim.getTextPoint().getY());
@@ -80,7 +79,7 @@ public abstract class AbstractDimensionOutputter extends AbstractSVGSAXGenerator
             if ((style != null) &&
                     style.hasProperty(DXFDimensionStyle.PROPERTY_DIMTXT)) {
                 double height = style.getDoubleProperty(DXFDimensionStyle.PROPERTY_DIMTXT);
-                System.out.println("height from style:" + height);
+               
                 SVGUtils.addAttribute(attr, "font-size", "" + height);
             } else {
                 //try from dxf header
@@ -88,8 +87,6 @@ public abstract class AbstractDimensionOutputter extends AbstractSVGSAXGenerator
                                      .getVariable("$DIMTXT");
 
                 if ((var != null) && (var.getDoubleValue("40") != 0.0)) {
-                    System.out.println("height from doc:" +
-                        var.getDoubleValue("40"));
                     SVGUtils.addAttribute(attr, "font-size",
                         "" + var.getDoubleValue("40"));
                 }

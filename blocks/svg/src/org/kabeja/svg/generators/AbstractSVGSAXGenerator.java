@@ -28,6 +28,8 @@ import org.kabeja.svg.SVGUtils;
 import org.xml.sax.helpers.AttributesImpl;
 
 public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
+
+	
 	public void setCommonAttributes(AttributesImpl atts, Map context,
 			DXFEntity entity) {
 		
@@ -45,6 +47,8 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 		setVisibilityAttribute(atts, entity);
 		setXMLIDAttribute(atts, entity);
 		setColorAttribute(atts, entity);
+		SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE,
+				SVGConstants.SVG_ATTRIBUTE_FILL_VALUE_NONE);
 		SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FILL,SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR );
 	}
 	
@@ -70,8 +74,7 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 		if ((color != 0) && (color != 256)) {
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_COLOR,
 					"rgb(" + DXFColor.getRGBString(color) + ")");
-			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE,
-					SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR);
+			
 		}
 
 	
@@ -89,6 +92,12 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 	
 	protected void setStrokeAttribute(AttributesImpl atts, Map context,
 			DXFEntity entity){
+		
+		
+		
+		SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE,
+				SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR);
+		
 		if ((entity.getLineWeight() > 0)
 				&& !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)) {
 			SVGUtils.addAttribute(atts,
