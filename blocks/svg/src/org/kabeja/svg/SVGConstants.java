@@ -25,6 +25,7 @@ public class SVGConstants {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
     public static final String SVG_PREFIX = "svg";
     public static final String XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
+    public static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
     public static final String SVG_ROOT = "svg";
     public static final String SVG_GROUP = "g";
     public static final String SVG_DEFS = "defs";

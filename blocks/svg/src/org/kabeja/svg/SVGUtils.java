@@ -273,7 +273,10 @@ public class SVGUtils {
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_SIZE,
 					"" + formatNumberAttribute(para.getFontHeight()));
 		}
-		SVGUtils.addAttribute(atts, "xml:space", "preserve");
+		
+         atts.addAttribute(SVGConstants.XML_NAMESPACE, "space",
+                "xml:space", "CDATA", "preserve");
+	
 
 		SVGUtils.startElement(handler, SVGConstants.SVG_TSPAN, atts);
 		SVGUtils.characters(handler, para.getText());
