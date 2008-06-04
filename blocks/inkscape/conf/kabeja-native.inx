@@ -1,4 +1,4 @@
-<inkscape-extension>
+<inkscape-extension  xmlns="http://www.inkscape.org/namespace/inkscape/extension">
     <_name>Kabeja DXF Input</_name>
     <id>org.kabeja.inkscape.import.dxf</id>
     <dependency type="extension">org.inkscape.input.svg</dependency>

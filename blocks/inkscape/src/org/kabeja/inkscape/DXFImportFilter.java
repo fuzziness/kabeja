@@ -15,6 +15,9 @@
  */
 package org.kabeja.inkscape;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,6 +112,8 @@ public class DXFImportFilter {
 	}
 
 	public static void main(String[] args) {
+		
+
 		if (args.length >= 1) {
 			DXFImportFilter filter = new DXFImportFilter();
 			filter.importFile(args);
