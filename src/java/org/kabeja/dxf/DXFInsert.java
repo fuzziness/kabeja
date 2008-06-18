@@ -315,7 +315,7 @@ public class DXFInsert extends DXFEntity {
     }
     
     
-    public Iterator getDXFAttributeIterator(){
+    public Iterator getAttributeIterator(){
     	return this.attributes.iterator();
     }
 }
