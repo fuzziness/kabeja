@@ -344,4 +344,10 @@ public class DXFConstants {
     public final static String TABLE_KEY_UCS = "UCS";
     public final static String TABLE_KEY_VIEW = "VIEW";
     public final static String TABLE_KEY_VPORT = "VPORT";
+    
+    
+    
+    public static final int END_SEQUENCE_CODE = -2;
+    public static final String END_SEQUENCE = "SEQEND";
+    public static final int GROUPCODE_ENTITY_START = 0;
 }

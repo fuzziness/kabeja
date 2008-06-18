@@ -15,6 +15,24 @@
 */
 package org.kabeja.svg.generators;
 
-public class SVGAttribDefinitionGenerator  extends SVGAttribGenerator{
+import java.util.Map;
 
+import org.kabeja.dxf.DXFAttrib;
+import org.kabeja.dxf.DXFAttribDefinition;
+import org.kabeja.dxf.DXFEntity;
+import org.kabeja.math.TransformContext;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+
+public class SVGAttribDefinitionGenerator  extends SVGAttribGenerator {
+
+	
+	 public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity,
+		        TransformContext transformContext) throws SAXException {
+		        DXFAttribDefinition attDef= (DXFAttribDefinition) entity;
+
+		        DXFAttrib attrib = attDef.generateDXFAttrib();
+				super.toSAX(handler, svgContext, attrib, transformContext);
+		       
+		    }
 }

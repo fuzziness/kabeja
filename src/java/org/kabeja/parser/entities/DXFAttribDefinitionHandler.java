@@ -20,12 +20,17 @@ import org.kabeja.dxf.DXFConstants;
 
 public class DXFAttribDefinitionHandler extends DXFAttribHandler{
 
+	
+	
+
 	public String getDXFEntityName() {
 		return DXFConstants.ENTITY_TYPE_ATTDEF;
 	}
 
 	public void startDXFEntity() {
-		 this.text = new DXFAttribDefinition();
+		 this.attrib= new DXFAttribDefinition();
+		 this.text =this.attrib;
+		 this.text.setDXFDocument(this.doc);
 	}
 	
 

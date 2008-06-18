@@ -97,6 +97,7 @@ public class DXFBlock {
 
     public void addDXFEntity(DXFEntity entity) {
         entities.add(entity);
+        entity.setBlockEntity(true);
     }
 
     /**

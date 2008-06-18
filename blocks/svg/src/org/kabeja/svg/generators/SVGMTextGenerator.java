@@ -139,6 +139,7 @@ public class SVGMTextGenerator extends AbstractSVGSAXGenerator {
                 break;
             }
         }
+        
         SVGUtils.addAttribute(attr,SVGConstants.SVG_ATTRIBUTE_X , SVGUtils.formatNumberAttribute(alignmentPoint.getX()));
         SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_Y, SVGUtils.formatNumberAttribute(alignmentPoint.getY()));
 

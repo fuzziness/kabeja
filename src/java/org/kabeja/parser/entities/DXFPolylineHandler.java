@@ -52,50 +52,27 @@ public class DXFPolylineHandler extends AbstractEntityHandler {
     public DXFPolylineHandler() {
         super();
 
-        // TODO Auto-generated constructor stub
+      
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.EntityHandler#endParsing()
-     */
     public void endDXFEntity() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.EntityHandler#getEntity()
-     */
+ 
     public DXFEntity getDXFEntity() {
         return polyline;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.EntityHandler#getEntityName()
-     */
     public String getDXFEntityName() {
         return DXFConstants.ENTITY_TYPE_POLYLINE;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.EntityHandler#isFollowSequence()
-     */
+   
     public boolean isFollowSequence() {
         return follow;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.dxf2svg.parser.entities.EntityHandler#parseGroup(int,
-     *      org.dxf2svg.parser.DXFValue)
-     */
+
     public void parseGroup(int groupCode, DXFValue value) {
         if ((groupCode == END_SEQUENCE_CODE) ||
                 END_SEQUENCE.equals(value.getValue())) {

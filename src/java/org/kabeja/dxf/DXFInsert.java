@@ -15,6 +15,10 @@
 */
 package org.kabeja.dxf;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.kabeja.dxf.helpers.Point;
 
 
@@ -33,7 +37,7 @@ public class DXFInsert extends DXFEntity {
     private double row_spacing = 0;
     private double column_spacing = 0;
     private String blockID = "";
-    private boolean attributes = false;
+    private List attributes = new ArrayList();
 
     /**
      *
@@ -202,7 +206,7 @@ public class DXFInsert extends DXFEntity {
     }
 
     /**
-     * @return Returns the rows.
+     * @return Returns the rows count.
      */
     public int getRows() {
         return rows;
@@ -210,7 +214,7 @@ public class DXFInsert extends DXFEntity {
 
     /**
      * @param rows
-     *            The rows to set.
+     *            The rows count to set.
      */
     public void setRows(int rows) {
         this.rows = rows;
@@ -282,10 +286,36 @@ public class DXFInsert extends DXFEntity {
     
     
     public boolean hasAttributes(){
-    	return this.attributes;
+    	return this.attributes.size()>0;
     }
     
-    public void setAttributes(boolean b){
-    	this.attributes=b;
+/**
+ * Add a associated block attribute
+ * @param attrib
+ */
+    public void addAttribute(DXFAttrib attrib){
+    	this.attributes.add(attrib);
+    }
+    /**
+     * Get the associated block attributes count
+     * @return
+     */
+    public int getAttributeCount(){
+    	return this.attributes.size();
+    }
+    
+    
+    /**
+     * Get the associated block attribute with given index
+     * @param index of the associated attribute
+     * @return the associated attribute for the given index or null
+     */
+    public DXFAttrib getAttribute(int index){
+    	return (DXFAttrib)this.attributes.get(index);
+    }
+    
+    
+    public Iterator getDXFAttributeIterator(){
+    	return this.attributes.iterator();
     }
 }

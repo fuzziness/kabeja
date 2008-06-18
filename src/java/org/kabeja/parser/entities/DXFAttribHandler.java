@@ -25,9 +25,14 @@ import org.kabeja.parser.DXFValue;
  *
  */
 public class DXFAttribHandler extends DXFTextHandler {
-    public static final int ATTRIB_VERTICAL_ALIGN = 74;
-    public static final int ATTRIB_TEXT_LENGTH = 73;
+    public static final int GROUPCODE_ATTRIB_VERTICAL_ALIGN = 74;
+    public static final int GROUPCODE_ATTRIB_TEXT_LENGTH = 73;
+    public static final int GROUPCODE_ATTRIB_PROMPT=3;
+    public static final int GROUPCODE_ATTRIB_TAG=2;
 
+    
+    protected DXFAttrib attrib;
+    
     public DXFAttribHandler() {
         super();
     }
@@ -36,16 +41,28 @@ public class DXFAttribHandler extends DXFTextHandler {
      * @see de.miethxml.kabeja.parser.entities.DXFEntityHandler#parseGroup(int, de.miethxml.kabeja.parser.DXFValue)
      */
     public void parseGroup(int groupCode, DXFValue value) {
-        switch (groupCode) {
-        case ATTRIB_TEXT_LENGTH:
+       
+    	switch (groupCode) {
+        case GROUPCODE_ATTRIB_TEXT_LENGTH:
 
-            //ignore not used by
+            //ignore not used by attrib
             break;
 
-        case ATTRIB_VERTICAL_ALIGN:
+        case GROUPCODE_ATTRIB_VERTICAL_ALIGN:
             text.setValign(value.getIntegerValue());
 
             break;
+            
+        case GROUPCODE_ATTRIB_PROMPT:
+            attrib.setPrompt(value.getValue());
+
+            break;
+
+        case GROUPCODE_ATTRIB_TAG:
+            attrib.setTag(value.getValue());
+
+            break;
+
 
         default:
             super.parseGroup(groupCode, value);
@@ -53,7 +70,9 @@ public class DXFAttribHandler extends DXFTextHandler {
     }
 
     public void startDXFEntity() {
-        text = new DXFAttrib();
+    	this.attrib = new DXFAttrib();
+    	this.text = this.attrib;
+    	this.text.setDXFDocument(this.doc);
     }
 
     /* (non-Javadoc)

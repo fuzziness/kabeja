@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.kabeja.dxf.objects.DXFDictionary;
 import org.kabeja.dxf.objects.DXFObject;
@@ -50,7 +52,10 @@ public class DXFDocument {
     private HashMap objects = new HashMap();
     private HashMap patterns = new HashMap();
     private List views = new ArrayList();
+    
     private DXFDictionary rootDictionary = new DXFDictionary();
+    private Map entities = new TreeMap();
+    
 
     public DXFDocument() {
         // the defalut layer
@@ -115,11 +120,21 @@ public class DXFDocument {
     public Iterator getDXFLayerIterator() {
         return layers.values().iterator();
     }
+    
+    /**
+     * Adds a line type to this document
+     * @param ltype - the line type to add
+     */
 
     public void addDXFLineType(DXFLineType ltype) {
         lineTypes.put(ltype.getName(), ltype);
     }
 
+    /**
+     * Gets the line type by name
+     * @param name
+     * @return
+     */
     public DXFLineType getDXFLineType(String name) {
         return (DXFLineType) lineTypes.get(name);
     }
@@ -133,15 +148,22 @@ public class DXFDocument {
     }
 
     public void addDXFEntity(DXFEntity entity) {
-        entity.setDXFDocument(this);
-
+        
+    	entity.setDXFDocument(this);
         DXFLayer layer = this.getDXFLayer(entity.getLayerName());
         layer.addDXFEntity(entity);
+        this.entities.put(entity.getID(), entity);
     }
 
     public void addDXFBlock(DXFBlock block) {
         block.setDXFDocument(this);
         this.blocks.put(block.getName(), block);
+        //add all block entities to entities map
+        Iterator i = block.getDXFEntitiesIterator();
+        while(i.hasNext()){
+        	DXFEntity e =(DXFEntity)i.next();
+        	this.entities.put(e.getID(), e);
+        }
     }
 
     public DXFBlock getDXFBlock(String name) {
@@ -373,26 +395,28 @@ public class DXFDocument {
      * @see DXFEntity with the specified ID
      */
     public DXFEntity getDXFEntityByID(String id) {
-        DXFEntity entity = null;
-        Iterator i = this.getDXFLayerIterator();
-
-        while (i.hasNext()) {
-            DXFLayer layer = (DXFLayer) i.next();
-
-            if ((entity = layer.getDXFEntityByID(id)) != null) {
-                return entity;
-            }
-        }
-
-        i = this.getDXFBlockIterator();
-
-        while (i.hasNext()) {
-            DXFBlock block = (DXFBlock) i.next();
-
-            if ((entity = block.getDXFEntityByID(id)) != null) {
-                return entity;
-            }
-        }
+        DXFEntity entity = (DXFEntity)entities.get(id);
+       
+        
+//        Iterator i = this.getDXFLayerIterator();
+//
+//        while (i.hasNext()) {
+//            DXFLayer layer = (DXFLayer) i.next();
+//
+//            if ((entity = layer.getDXFEntityByID(id)) != null) {
+//                return entity;
+//            }
+//        }
+//
+//        i = this.getDXFBlockIterator();
+//
+//        while (i.hasNext()) {
+//            DXFBlock block = (DXFBlock) i.next();
+//
+//            if ((entity = block.getDXFEntityByID(id)) != null) {
+//                return entity;
+//            }
+//        }
 
         return entity;
     }

@@ -32,20 +32,8 @@ public class SVGAttribGenerator extends SVGTextGenerator {
      */
     public void toSAX(ContentHandler handler, Map svgContext, DXFEntity entity,
         TransformContext transformContext) throws SAXException {
-        DXFAttrib attrib = (DXFAttrib) entity;
-
-        switch (attrib.getFlags()) {
-        case 1:
-            attrib.setVisibile(false);
-
-            break;
-
-        case 4:
-            // userinput
-            attrib.setVisibile(false);
-
-            break;
-        }
+     
+    	DXFAttrib attrib = (DXFAttrib) entity;
 
         super.toSAX(handler, svgContext, attrib, transformContext);
     }

@@ -15,10 +15,38 @@
 */
 package org.kabeja.dxf;
 
-public class DXFAttribDefinition extends DXFAttrib{
+public class DXFAttribDefinition extends DXFAttrib implements Cloneable{
 
+	
+	
+	
+	
 	public String getType() {
 		return DXFConstants.ENTITY_TYPE_ATTDEF;
 	}
 
+
+
+	
+	public DXFAttrib generateDXFAttrib(){
+
+		DXFAttrib attrib=null;
+		try {
+			attrib = (DXFAttrib)this.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//we have to set the right Text 
+		//content
+		if(this.isBlockEntity() && this.isConstant() && !this.isInvisible()){
+			attrib.setText(this.getText());
+		}else if(!this.isBlockEntity()){
+			attrib.setText(this.getTag());
+		}
+		return attrib;
+	}
+
+
+	
 }

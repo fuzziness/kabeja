@@ -284,7 +284,7 @@ public class SVGUtils {
 	}
 
 	public static String formatNumberAttribute(double v) {
-		return format.format(v);
+		return format.format((float)v);
 	}
 
 	public static String fileToURI(File file) {
