@@ -136,7 +136,7 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator {
 			}
 		}
 		// handle block attriubtes
-		Iterator i = insert.getDXFAttributeIterator();
+		Iterator i = insert.getAttributeIterator();
 		SVGSAXGeneratorManager manager = (SVGSAXGeneratorManager) svgContext
 				.get(SVGContext.SVGSAXGENERATOR_MANAGER);
 		try {
