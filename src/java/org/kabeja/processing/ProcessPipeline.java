@@ -97,8 +97,9 @@ public class ProcessPipeline {
 		}
 
 		Map oldProbs = this.serializer.getProperties();
-		this.serializer.setProperties(new MergeMap(this.serializerProperties,
-				context));
+		
+		this.serializer.setProperties(new MergeMap(oldProbs,new MergeMap(this.serializerProperties,
+				context)));
 
 		// invoke the filter and serializer
 		this.serializer.setOutput(out);

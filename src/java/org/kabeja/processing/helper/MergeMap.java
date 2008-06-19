@@ -16,9 +16,16 @@
 package org.kabeja.processing.helper;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This is a helper Map which does not support all methods of 
+ * a Map.
+ * @author simon
+ *
+ */
 
 public class MergeMap implements Map {
     private Map base;
@@ -49,17 +56,19 @@ public class MergeMap implements Map {
     }
 
     public Set entrySet() {
-        return null;
+    	Set set = new HashSet(this.base.entrySet());
+    	set.addAll(this.override.entrySet());
+        return set;
+        
     }
 
     public Object get(Object key) {
-        Object obj = this.override.get(key);
-
-        if (obj == null) {
-            obj = this.base.get(key);
+    	
+    	if(this.override.containsKey(key)){
+           return this.override.get(key);
+    	}else{       
+           return  this.base.get(key);
         }
-
-        return obj;
     }
 
     public boolean isEmpty() {
@@ -71,7 +80,9 @@ public class MergeMap implements Map {
     }
 
     public Set keySet() {
-        return null;
+    	Set set = new HashSet(this.base.keySet());
+    	set.addAll(this.override.keySet());
+        return set;
     }
 
     public Object put(Object arg0, Object arg1) {

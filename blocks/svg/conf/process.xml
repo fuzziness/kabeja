@@ -18,7 +18,15 @@
 		
 		<serializers>
 			
-			<serializer class="org.kabeja.batik.tools.SAXJPEGSerializer" name="jpeg"/>
+			<serializer class="org.kabeja.batik.tools.SAXJPEGSerializer" name="jpeg">
+			               <!--+
+                               | * support for the batik transcoder hints, the type is needed
+                               |   for a correct configuration 
+                               |   
+                               |   <property name="KEY_BACKGROUND_COLOR" value="#00FF00"/>  
+                               |   <property name="KEY_BACKGROUND_COLOR_type" value="color"/>  
+                               +-->  			            
+            </serializer>
 			<serializer class="org.kabeja.batik.tools.SAXPNGSerializer" name="png"/>
 			<serializer class="org.kabeja.batik.tools.SAXTIFFSerializer" name="tiff"/>
 		    <serializer class="org.kabeja.batik.tools.SAXPDFSerializer" name="pdf">
@@ -36,8 +44,8 @@
                                |   <property name="dpi" value="300"/>    
                                |
                                | * change the orientation
-                               |   <property name="orientation" value="landscape"/>
-                               +-->  
+                               |   <property name="orientation" value="landscape"/> 
+                               +-->              
                         </serializer>
 		</serializers>
 		
@@ -158,7 +166,7 @@
                 <generate name="svg"/>
                 <postprocess name="js">
                     <property name="src" value="scripts/layoutDebug.js"/>
-                 </postprocess>
+                </postprocess>
                 <serialize name="pdf"/>
           </pipeline>
 		
