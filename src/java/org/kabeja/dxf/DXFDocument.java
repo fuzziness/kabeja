@@ -36,18 +36,18 @@ import org.kabeja.dxf.objects.DXFObject;
 public class DXFDocument {
     public static final String PROPERTY_ENCODING = "encoding";
     public static final double DEFAULT_MARGIN = 5;
-    private Hashtable layers = new Hashtable();
-    private Hashtable blocks = new Hashtable();
+    private HashMap layers = new HashMap();
+    private HashMap blocks = new HashMap();
     private HashMap lineTypes = new HashMap();
     private HashMap dimensionStyles = new HashMap();
     private HashMap textStyles = new HashMap();
 
     // the user coordinate systems
     private Hashtable ucs = new Hashtable();
-    private Hashtable properties = new Hashtable();
+    private HashMap properties = new HashMap();
     private List viewports = new ArrayList();
     private Bounds bounds = new Bounds();
-    private double margin;
+
     private DXFHeader header = new DXFHeader();
     private HashMap objects = new HashMap();
     private HashMap patterns = new HashMap();
@@ -64,8 +64,6 @@ public class DXFDocument {
         defaultLayer.setName(DXFConstants.DEFAULT_LAYER);
         this.layers.put(DXFConstants.DEFAULT_LAYER, defaultLayer);
 
-        // setup the margin
-        this.margin = DEFAULT_MARGIN;
 
         // setup the root Dictionary
         this.rootDictionary = new DXFDictionary();
@@ -183,7 +181,7 @@ public class DXFDocument {
     }
 
     public String getProperty(String key) {
-        if (properties.contains(key)) {
+        if (properties.containsKey(key)) {
             return (String) properties.get(key);
         }
 
@@ -202,10 +200,10 @@ public class DXFDocument {
     public Bounds getBounds() {
         this.bounds = new Bounds();
 
-        Enumeration e = this.layers.elements();
+        Iterator i = this.layers.values().iterator();
 
-        while (e.hasMoreElements()) {
-            DXFLayer layer = (DXFLayer) e.nextElement();
+        while (i.hasNext()) {
+            DXFLayer layer = (DXFLayer) i.next();
 
             if (!layer.isFrozen()) {
                 Bounds b = layer.getBounds();
@@ -227,11 +225,10 @@ public class DXFDocument {
     public Bounds getBounds(boolean onModelspace) {
         Bounds bounds = new Bounds();
 
-        Enumeration e = this.layers.elements();
+        Iterator i = this.layers.values().iterator();
 
-        while (e.hasMoreElements()) {
-            DXFLayer layer = (DXFLayer) e.nextElement();
-
+        while (i.hasNext()) {
+        	DXFLayer layer = (DXFLayer) i.next();
             if (!layer.isFrozen()) {
                 Bounds b = layer.getBounds(onModelspace);
 

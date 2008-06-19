@@ -23,11 +23,16 @@ import org.kabeja.dxf.helpers.Vector;
  *
  */
 public class DXFConstants {
+	public final static String BLOCK_MODELSPACE="*MODEL_SPACE";
+	public final static String BLOCK_PAPERSPACE="*PAPER_SPACE";
+	
     public final static int COMMAND_CODE = 0;
     public static final String DEFAULT_LAYER = "0";
     public final static Vector DEFAULT_X_AXIS_VECTOR = new Vector(1.0, 0.0, 0.0);
     public final static Vector DEFAULT_Y_AXIS_VECTOR = new Vector(0.0, 1.0, 0.0);
     public final static Vector DEFAULT_Z_AXIS_VECTOR = new Vector(0.0, 0.0, 1.0);
+    
+    
     public final static String DICTIONARY_KEY_GROUP = "ACAD_GROUP";
     public final static String DICTIONARY_KEY_LAYOUT = "ACAD_LAYOUT";
     public final static String DICTIONARY_KEY_MLINESTYLE = "ACAD_MLINESTYLE";
