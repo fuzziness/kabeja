@@ -25,7 +25,7 @@ public class SVGContext {
     public final static String DRAFT_BOUNDS = "bounds.draft";
     public final static String DOT_LENGTH = "dot.length";
     public final static String STROKE_WIDTH = "stroke.width";
-    public final static String STROKE_WIDTH_IGNORE = "stroke.width.ignore";
+    public final static String DRAFT_STROKE_WIDTH_IGNORE = "stroke.width.ignore";
     public final static String LAYER_STROKE_WIDTH = "layer.stroke.width";
     public final static String SVGSAXGENERATOR_MANAGER = "svgsaxgenerator.manager";
 }

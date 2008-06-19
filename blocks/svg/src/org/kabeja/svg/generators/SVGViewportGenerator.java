@@ -233,7 +233,7 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
         Double lw = null;
 
         if ((lineWeight > 0) &&
-                !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)) {
+                !context.containsKey(SVGContext.DRAFT_STROKE_WIDTH_IGNORE)) {
             lw = new Double(lineWeight);
             SVGUtils.addAttribute(attr,
                 SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,

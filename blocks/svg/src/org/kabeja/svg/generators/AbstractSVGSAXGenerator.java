@@ -99,7 +99,7 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 				SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR);
 		
 		if ((entity.getLineWeight() > 0)
-				&& !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)) {
+				&& !context.containsKey(SVGContext.DRAFT_STROKE_WIDTH_IGNORE)) {
 			SVGUtils.addAttribute(atts,
 					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
 							.lineWeightToStrokeWidth(entity.getLineWeight()));

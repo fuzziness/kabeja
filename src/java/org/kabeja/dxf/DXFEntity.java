@@ -246,4 +246,7 @@ public abstract class DXFEntity {
 	public void setOwnerID(String ownerID) {
 		this.ownerID = ownerID;
 	}
+	
+	
+	
 }

@@ -117,9 +117,9 @@ public class SVGGenerator extends AbstractSAXGenerator {
 
         if (this.properties.containsKey(PROPERTY_STROKE_WIDTH)) {
             this.context.put(SVGContext.STROKE_WIDTH,
-                this.properties.get(PROPERTY_STROKE_WIDTH));
+               new Double( Double.parseDouble((String)this.properties.get(PROPERTY_STROKE_WIDTH))));
             // set to ignore the draft stroke width
-            this.context.put(SVGContext.STROKE_WIDTH_IGNORE, "");
+            this.context.put(SVGContext.DRAFT_STROKE_WIDTH_IGNORE, "");
         }
 
         if (this.properties.containsKey(PROPERTY_DOCUMENT_BOUNDS_RULE)) {
@@ -609,7 +609,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
         Double lw = null;
 
         if ((lineWeight > 0) &&
-                !context.containsKey(SVGContext.STROKE_WIDTH_IGNORE)) {
+                !context.containsKey(SVGContext.DRAFT_STROKE_WIDTH_IGNORE)) {
             lw = new Double(lineWeight);
             SVGUtils.addAttribute(attr,
                 SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
