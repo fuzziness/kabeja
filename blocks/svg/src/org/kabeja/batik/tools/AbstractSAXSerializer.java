@@ -15,7 +15,10 @@
 */
 package org.kabeja.batik.tools;
 
+import java.awt.Color;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,6 +33,7 @@ import org.apache.batik.transcoder.Transcoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.TranscodingHints.Key;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.kabeja.xml.AbstractSAXFilter;
 import org.kabeja.xml.SAXSerializer;
@@ -39,7 +43,10 @@ import org.xml.sax.SAXException;
 
 public abstract class AbstractSAXSerializer extends AbstractSAXFilter
     implements SAXSerializer {
-    public static final String SUFFIX_JPEG = "jpg";
+    public static final String TRANSCODER_HINT_TYPE_COLOR = "color";
+	public static final String TRANSCODER_HINT_TYPE_INTEGER = "integer";
+	public static final String TRANSCODER_HINT_TYPE_FLOAT = "float";
+	public static final String SUFFIX_JPEG = "jpg";
     public static final String SUFFIX_PNG = "png";
     public static final String SUFFIX_TIFF = "tif";
     public static final String SUFFIX_PDF = "pdf";
@@ -47,6 +54,8 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter
     public static final String MIME_TYPE_PNG = "image/png";
     public static final String MIME_TYPE_TIFF = "image/tiff";
     public static final String MIME_TYPE_PDF = "application/pdf";
+    public static final String TRANSCODER_HINT_TYPE_SUFFIX = "_type";
+    public static final String TRANSCODER_HINT_PREFIX = "KEY";
 
     /**
      * Allows you to setup a width in px,inch,mm,cm,pt. This property overrides the PAPER_PROPERTY.
@@ -124,6 +133,7 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter
                 this.height = w;
             }
         }
+        this.properties = properties;
     }
 
     /*
@@ -165,18 +175,57 @@ public abstract class AbstractSAXSerializer extends AbstractSAXFilter
      * @param t
      */
     protected void setupTranscoder(Transcoder t) {
+
+        
+        //setup the transcoder hints
+        Iterator i = this.properties.keySet().iterator();
+        while(i.hasNext()){
+        	String key = (String)i.next();
+        	
+			if(key.startsWith(TRANSCODER_HINT_PREFIX)){
+        		Field[] fields = transcoder.getClass().getFields();
+        		for(int x=0;x<fields.length;x++){
+        			if(fields[x].getName().equals(key)){
+        				try {
+							Key k = (Key)fields[x].get(null);
+							
+							String type = (String)this.properties.get((key+TRANSCODER_HINT_TYPE_SUFFIX));
+							Object value=null;
+							if(TRANSCODER_HINT_TYPE_FLOAT.equals(type)){
+								value = new Float(Float.parseFloat((String)this.properties.get(key)));
+							}else if(TRANSCODER_HINT_TYPE_INTEGER.equals(type)){
+								value = new Integer(Integer.parseInt((String)this.properties.get(key)));
+							}else if(TRANSCODER_HINT_TYPE_COLOR.equals(type)){
+								
+							    value = Color.decode((String)this.properties.get(key));
+							
+							}else{
+								value = (String)this.properties.get(key);
+							}
+							transcoder.addTranscodingHint(k,value);
+						} catch (Exception e) {
+							
+							e.printStackTrace();
+						} 
+        				
+        			}
+        		}
+        		
+        	}
+        }
+        
         transcoder.addTranscodingHint(ImageTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER,
-            new Float(this.PIXEL_UNIT_TO_MM));
+                new Float(this.PIXEL_UNIT_TO_MM));
 
-        if (this.width > 0.0) {
-            transcoder.addTranscodingHint(ImageTranscoder.KEY_WIDTH,
-                new Float(this.width));
-        }
+            if (this.width > 0.0) {
+                transcoder.addTranscodingHint(ImageTranscoder.KEY_WIDTH,
+                    new Float(this.width));
+            }
 
-        if (this.height > 0.0) {
-            transcoder.addTranscodingHint(ImageTranscoder.KEY_HEIGHT,
-                new Float(this.height));
-        }
+            if (this.height > 0.0) {
+                transcoder.addTranscodingHint(ImageTranscoder.KEY_HEIGHT,
+                    new Float(this.height));
+            }
     }
 
     /*
