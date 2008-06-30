@@ -12,7 +12,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 package org.kabeja.xml;
 
 import java.util.HashMap;
@@ -20,23 +20,25 @@ import java.util.Map;
 
 import org.xml.sax.helpers.XMLFilterImpl;
 
-
 /**
  * @author <a href="mailto:simon.mieth@gmx.de">Simon Mieth</a>
- *
+ * 
  */
-public abstract class AbstractSAXFilter extends XMLFilterImpl
-    implements SAXFilter {
-    protected Map properties = new HashMap();
+public abstract class AbstractSAXFilter extends XMLFilterImpl implements
+		SAXFilter {
+	protected Map properties = new HashMap();
 
-    /* (non-Javadoc)
-     * @see org.kabeja.xml.SAXFilter#setProperties(java.util.Map)
-     */
-    public void setProperties(Map properties) {
-        this.properties = properties;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.kabeja.xml.SAXFilter#setProperties(java.util.Map)
+	 */
+	public void setProperties(Map properties) {
+		this.properties = properties;
+	}
 
-    public Map getProperties() {
-        return this.properties;
-    }
+	public Map getProperties() {
+		return this.properties;
+	}
+
 }

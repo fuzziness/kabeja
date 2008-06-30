@@ -77,29 +77,27 @@ public class ProcessPipeline {
 			saxFilterProperties
 					.add(new MergeMap(first.getProperties(), context));
 
-			first.setContentHandler(this.serializer);
 			handler = first;
 			first.setProperties(sc.getProperties());
-           
+
 			while (i.hasNext()) {
 				sc = (SAXFilterConfig) i.next();
 				SAXFilter f = this.manager.getSAXFilter(sc.getFilterName());
-				f.setContentHandler(first);
+				first.setContentHandler(f);
 				saxFilterProperties.add(f.getProperties());
 				f.setProperties(sc.getProperties());
 				first = f;
-			
 			}
-
+			first.setContentHandler(this.serializer);
 		} else {
 			// no filter
 			handler = this.serializer;
 		}
 
 		Map oldProbs = this.serializer.getProperties();
-		
-		this.serializer.setProperties(new MergeMap(oldProbs,new MergeMap(this.serializerProperties,
-				context)));
+
+		this.serializer.setProperties(new MergeMap(oldProbs, new MergeMap(
+				this.serializerProperties, context)));
 
 		// invoke the filter and serializer
 		this.serializer.setOutput(out);
