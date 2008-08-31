@@ -29,6 +29,8 @@ import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFLineType;
 import org.kabeja.dxf.DXFStyle;
 import org.kabeja.dxf.DXFVariable;
+import org.kabeja.dxf.helpers.DXFUtils;
+import org.kabeja.dxf.helpers.LineWidth;
 import org.kabeja.dxf.objects.DXFDictionary;
 import org.kabeja.dxf.objects.DXFLayout;
 import org.kabeja.math.TransformContext;
@@ -40,6 +42,10 @@ import org.xml.sax.helpers.AttributesImpl;
 public class SVGGenerator extends AbstractSAXGenerator {
 	public final static String PROPERTY_MARGIN = "margin";
 	public final static String PROPERTY_STROKE_WIDTH = "stroke-width";
+	public final static String PROPERTY_STROKE_WIDTH_TYPE = "stroke-width-type";
+	public final static String PROPERTY_STROKE_WIDTH_TYPE_VALUE_PERCENT = "percent";
+	public final static String PROPERTY_STROKE_WIDTH_TYPE_VALUE_LINEWEIGHT = "lineweight";
+	public final static String PROPERTY_STROKE_WIDTH_TYPE_VALUE_LINEWIDTH = "linewidth";
 	public final static String PROPERTY_DOCUMENT_BOUNDS = "useBounds";
 
 	/**
@@ -117,17 +123,28 @@ public class SVGGenerator extends AbstractSAXGenerator {
 					.booleanValue();
 		}
 
+		//parse the line width property
 		if (this.properties.containsKey(PROPERTY_STROKE_WIDTH)) {
+			LineWidth lw = new LineWidth();
 			String strokeWidth = (String) this.properties
 					.get(PROPERTY_STROKE_WIDTH);
-			if (strokeWidth.endsWith("%")) {
-				this.context.put(SVGContext.STROKE_WIDTH_PERCENT, strokeWidth);
-			} else {
-				this.context.put(SVGContext.STROKE_WIDTH, new Double(Double
-						.parseDouble(strokeWidth)));
+			lw.setValue(Double
+					.parseDouble(strokeWidth));
+		
+			String linewidthType=(String)this.properties.get(PROPERTY_STROKE_WIDTH_TYPE);
+			if (PROPERTY_STROKE_WIDTH_TYPE_VALUE_PERCENT.equals(linewidthType)) {
+				lw.setType(LineWidth.TYPE_PERCENT);
+				
+			} else if (PROPERTY_STROKE_WIDTH_TYPE_VALUE_LINEWEIGHT.equals(linewidthType)){
+				lw.setType(LineWidth.TYPE_LINE_WEIGHT);
+				
+				
+			}else{
+				lw.setType(LineWidth.TYPE_LINE_WIDTH);
 			}
+			this.context.put(SVGContext.LINE_WIDTH, lw);
 			// set to ignore the draft stroke width
-			this.context.put(SVGContext.DRAFT_STROKE_WIDTH_IGNORE, "");
+			//this.context.put(SVGContext.DRAFT_STROKE_WIDTH_IGNORE, "");
 		}
 
 		if (this.properties.containsKey(PROPERTY_DOCUMENT_BOUNDS_RULE)) {
@@ -338,17 +355,10 @@ public class SVGGenerator extends AbstractSAXGenerator {
 			SVGUtils.addAttribute(attr, "transform", "matrix(1 0 0 -1 0 0)");
 
 			// the stroke-width
-			if (this.context.containsKey(SVGContext.STROKE_WIDTH)) {
+			if (this.context.containsKey(SVGContext.LINE_WIDTH)) {
 				// the user has setup a stroke-width
 				SVGUtils.addAttribute(attr,
-						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, ""
-								+ this.context.get(SVGContext.STROKE_WIDTH));
-			} else if (this.context
-					.containsKey(SVGContext.STROKE_WIDTH_PERCENT)) {
-				SVGUtils.addAttribute(attr,
-						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, ""
-								+ this.context
-										.get(SVGContext.STROKE_WIDTH_PERCENT));
+						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWidthToStrokeWidth((LineWidth)this.context.get(SVGContext.LINE_WIDTH)));
 			} else {
 				double sw = (bounds.getWidth() + bounds.getHeight()) / 2
 						* SVGConstants.DEFAULT_STROKE_WIDTH_PERCENT;
@@ -358,10 +368,16 @@ public class SVGGenerator extends AbstractSAXGenerator {
 					sw = defaultSW;
 				}
 
+				LineWidth lw = new LineWidth();
+				lw.setType(LineWidth.TYPE_LINE_WIDTH);
+				lw.setValue(sw);
+				
+
 				SVGUtils.addAttribute(attr,
-						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
-								.formatNumberAttribute(sw));
-				this.context.put(SVGContext.STROKE_WIDTH, new Double(sw));
+						SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWidthToStrokeWidth(lw));
+				
+				
+				this.context.put(SVGContext.LINE_WIDTH, lw);
 			}
 
 			SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
@@ -377,7 +393,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 			} else {
 
 				// the layers as container g-elements
-				i = this.doc.getDXFLayerIterator();
+				i = DXFUtils.sortedLayersByZIndexIterator(this.doc.getDXFLayerIterator());
 				while (i.hasNext()) {
 					DXFLayer layer = (DXFLayer) i.next();
 
@@ -597,7 +613,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 			}
 		}
 
-		// check for the paperspace block
+		// check for the paper space block
 		if (!bounds.isValid()) {
 			DXFBlock block = this.doc
 					.getDXFBlock(DXFConstants.BLOCK_PAPERSPACE);
@@ -659,21 +675,18 @@ public class SVGGenerator extends AbstractSAXGenerator {
 		int lineWeight = layer.getLineWeight();
 
 		// the stroke-width
-		Double lw = null;
-
+        LineWidth lw = new LineWidth();
 		if ((lineWeight > 0)
 				&& !context.containsKey(SVGContext.DRAFT_STROKE_WIDTH_IGNORE)) {
-			lw = new Double(lineWeight);
-			SVGUtils.addAttribute(attr,
-					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
-							.lineWeightToStrokeWidth(lineWeight));
+			lw.setType(LineWidth.TYPE_LINE_WEIGHT);
+			lw.setValue(lineWeight);
+			
 		} else {
-			lw = (Double) context.get(SVGContext.STROKE_WIDTH);
-			SVGUtils.addAttribute(attr,
-					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
-							.formatNumberAttribute(lw.doubleValue()));
+			lw = (LineWidth) context.get(SVGContext.LINE_WIDTH);	
 		}
-
+		SVGUtils.addAttribute(attr,
+				SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
+						.lineWidthToStrokeWidth(lw));
 		context.put(SVGContext.LAYER_STROKE_WIDTH, lw);
 
 		SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);

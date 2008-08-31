@@ -17,22 +17,30 @@ package org.kabeja.ui;
 
 import java.awt.Dimension;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JFrame;
 
-import org.kabeja.batik.tools.SAXJPEGSerializer;
+import org.apache.batik.bridge.BridgeContext;
+import org.apache.batik.bridge.GVTBuilder;
+import org.apache.batik.bridge.UserAgentAdapter;
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.gvt.GraphicsNode;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.swing.JSVGCanvas;
+import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
-import org.kabeja.svg.SVGContext;
-import org.kabeja.svg.SVGGenerator;
 import org.kabeja.svg.action.LayoutSwitchAction;
+import org.kabeja.svg.tools.DXFSAXDocumentFactory;
 import org.kabeja.svg.ui.SVGViewUIComponent;
-import org.kabeja.xml.SAXPrettyOutputter;
-import org.kabeja.xml.SAXSerializer;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.svg.SVGDocument;
 
 import dk.abj.svg.action.HighlightAction;
 
@@ -41,45 +49,108 @@ public class Demo {
     /**
      * @param args
      */
+	
+	 static JSVGCanvas canvas;
     public static void main(String[] args) {
         Parser p = ParserBuilder.createDefaultParser();
 
         try {
-            p.parse("/home/simon/Desktop/Kabeja-Repo/Drafts/dxf/examples/my/D1.dxf");
+            p.parse("/home/simon/Desktop/C1.dxf");
 
+            
+            
             DXFDocument doc = p.getDocument();
-       
-            SVGGenerator gen = new SVGGenerator();
             
-            SAXSerializer ser = new SAXJPEGSerializer();
-            Map map = new HashMap();
-            map.put("KEY_BACKGROUND_COLOR","#e59e45");
-            map.put("KEY_BACKGROUND_COLOR_type","color");
-            map.put("KEY_WIDTH","2000");
-            map.put("KEY_WIDTH_type","float");
-            map.put("KEY_HEIGHT","2000");
-            map.put("KEY_HEIGHT_type","float");
-            ser.setProperties(map);
-            ser.setOutput(new FileOutputStream("/home/simon/Desktop/muh.jpg"));
-            Map props = new HashMap();
-            props.put(SVGContext.STROKE_WIDTH, new Double(30));
-            props.put(SVGContext.DRAFT_STROKE_WIDTH_IGNORE, "");
-            gen.generate(doc,ser, props);
             
-//            DXFEntity e = doc.getDXFEntityByID("181");
+            
+            
+            DXFSAXDocumentFactory factory = new DXFSAXDocumentFactory();
+//            SVGDocument svgDoc = factory.createDocument(doc,new HashMap());
+//       
+//            
+//            UserAgentAdapter userAgent = new UserAgentAdapter();
+//            BridgeContext ctx = new BridgeContext(userAgent);
+//            ctx.setDynamicState(BridgeContext.DYNAMIC); 
+//            GVTBuilder builder = new GVTBuilder();
+//           
+//            GraphicsNode node = builder.build(ctx, svgDoc);
 //
+//			DOMImplementation impl =
+//			      GenericDOMImplementation.getDOMImplementation();
+//			  String svgNS = "http://www.w3.org/2000/svg";
+//			  Document myFactory = impl.createDocument(svgNS, "svg", null);
 //
-//            SVGViewUIComponent ui = new SVGViewUIComponent();
-//            ui.addAction(new HighlightAction("GG"));
-//            ui.addAction(new LayoutSwitchAction());
-//
-//            JFrame f = new JFrame("Demo");
-//            f.add(ui.getView());
-//            f.setSize(new Dimension(640, 480));
-//            f.setVisible(true);
-//            ui.showDXFDocument(doc);
+//			  SVGGraphics2D g2d = new SVGGraphics2D(myFactory);
+//			  Writer out = new OutputStreamWriter(new FileOutputStream("/home/simon/Desktop/foo.svg"), "UTF-8");
+//			
+//			node.paint(g2d);
+//			g2d.stream(out, false);
+            
+
+            
+
+    
+            SVGViewUIComponent ui = new SVGViewUIComponent();
+            ui.addAction(new HighlightAction("GG"));
+            ui.addAction(new LayoutSwitchAction());
+
+            JFrame f = new JFrame("Demo");
+            f.add(ui.getView());
+            f.setSize(new Dimension(640, 480));
+            f.setVisible(true);
+            ui.showDXFDocument(doc);
+            System.out.println("DD");
+
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    
+    public void doIt(DXFDocument doc){
+   
+
+            try{
+          
+            
+            DXFSAXDocumentFactory factory = new DXFSAXDocumentFactory();
+            SVGDocument svgDoc = factory.createDocument(doc,new HashMap());
+       
+            
+            UserAgentAdapter userAgent = new UserAgentAdapter();
+            BridgeContext ctx = new BridgeContext(userAgent);
+            ctx.setDynamicState(BridgeContext.DYNAMIC); 
+            GVTBuilder builder = new GVTBuilder();
+           
+            GraphicsNode node = builder.build(ctx, svgDoc);
+
+			DOMImplementation impl =
+			      GenericDOMImplementation.getDOMImplementation();
+			  String svgNS = "http://www.w3.org/2000/svg";
+			  Document myFactory = impl.createDocument(svgNS, "svg", null);
+
+			  SVGGraphics2D g2d = new SVGGraphics2D(myFactory);
+			  Writer out = new OutputStreamWriter(new FileOutputStream("/home/simon/Desktop/foo.svg"), "UTF-8");
+			
+			node.paint(g2d);
+			g2d.stream(out, false);
+            
+
+	
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public class SvgConcreteTranscoder extends SVGAbstractTranscoder
+    {
+
+        public GraphicsNode getGraphicsNode()
+        {
+            return root;
+        }
+
     }
 }

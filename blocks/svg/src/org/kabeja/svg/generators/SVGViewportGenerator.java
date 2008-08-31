@@ -27,6 +27,7 @@ import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFLineType;
 import org.kabeja.dxf.DXFViewport;
+import org.kabeja.dxf.helpers.LineWidth;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
@@ -156,9 +157,10 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
                 // the stroke-width
                 double width = 0;
 
-                if (svgContext.containsKey(SVGContext.STROKE_WIDTH)) {
-                    Double lw = (Double) svgContext.get(SVGContext.LAYER_STROKE_WIDTH);
-                    width = lw.doubleValue() / zoomXP;
+                LineWidth lw = null;
+                if (svgContext.containsKey(SVGContext.LINE_WIDTH)) {
+                    lw = (LineWidth) svgContext.get(SVGContext.LAYER_STROKE_WIDTH);
+                    lw.setValue(lw.getValue() / zoomXP);
                 } else {
                     width = (viewBounds.getWidth() + viewBounds.getHeight()) / 2 * SVGConstants.DEFAULT_STROKE_WIDTH_PERCENT;
 
@@ -167,12 +169,15 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
                     if (width > defaultSW) {
                         width = defaultSW;
                     }
+                    lw = new LineWidth();
+                    lw.setValue(width);
                 }
 
                 SVGUtils.addAttribute(attr,
                     SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
                     SVGUtils.formatNumberAttribute(width));
-                svgContext.put(SVGContext.STROKE_WIDTH, new Double(width));
+                
+                svgContext.put(SVGContext.LINE_WIDTH, lw);
 
                 // reference the clip path
                 SVGUtils.addAttribute(attr,
@@ -230,19 +235,19 @@ public class SVGViewportGenerator extends AbstractSVGSAXGenerator {
         int lineWeight = layer.getLineWeight();
 
         // the stroke-width
-        Double lw = null;
+       LineWidth lw = null;
 
         if ((lineWeight > 0) &&
                 !context.containsKey(SVGContext.DRAFT_STROKE_WIDTH_IGNORE)) {
-            lw = new Double(lineWeight);
+            lw = new LineWidth(LineWidth.TYPE_LINE_WEIGHT,lineWeight);
             SVGUtils.addAttribute(attr,
                 SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
-                SVGUtils.lineWeightToStrokeWidth(lineWeight));
+                SVGUtils.lineWidthToStrokeWidth(lw));
         } else {
-            lw = (Double) context.get(SVGContext.STROKE_WIDTH);
+            lw = (LineWidth) context.get(SVGContext.LINE_WIDTH);
             SVGUtils.addAttribute(attr,
                 SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
-                SVGUtils.formatNumberAttribute(lw.doubleValue()));
+                SVGUtils.lineWidthToStrokeWidth(lw));
         }
 
         context.put(SVGContext.LAYER_STROKE_WIDTH, lw);

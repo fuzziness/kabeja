@@ -32,6 +32,8 @@ public class RootLayerFilter extends AbstractSAXFilter {
     private int groupDepth = 0;
     private String transformValue = "";
     private String strokeWidth = "";
+    
+
 
     public void endElement(String uri, String localName, String qName)
         throws SAXException {

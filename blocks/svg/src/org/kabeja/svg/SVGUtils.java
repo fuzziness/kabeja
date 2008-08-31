@@ -11,6 +11,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Iterator;
 
 import org.kabeja.dxf.DXFLineType;
+import org.kabeja.dxf.helpers.LineWidth;
 import org.kabeja.dxf.helpers.StyledTextParagraph;
 import org.kabeja.dxf.helpers.TextDocument;
 import org.xml.sax.Attributes;
@@ -27,7 +28,7 @@ import org.xml.sax.helpers.AttributesImpl;
 public class SVGUtils {
 	public final static String DEFAUL_ATTRIBUTE_TYPE = "CDATA";
 	public final static String DEFAULT_ID_NAME_PREFIX = "ID";
-	public final static char DEFAULT_CONVERT_MARKER_CHAR='_';
+	public final static char DEFAULT_CONVERT_MARKER_CHAR = '_';
 	private static DecimalFormat format;
 
 	static {
@@ -122,7 +123,7 @@ public class SVGUtils {
 			StringBuffer buf = new StringBuffer();
 			char first = id.charAt(0);
 
-			if (!Character.isLetter(first)  && (first != ':')) {
+			if (!Character.isLetter(first) && (first != ':')) {
 				buf.append(DEFAULT_ID_NAME_PREFIX);
 			}
 
@@ -131,12 +132,14 @@ public class SVGUtils {
 
 				// TODO we have to allow here CombinigChar and Extender too
 				if (Character.isLetter(c) || Character.isDigit(c) || (c == '-')
-					 || (c == '.') || (c == ':')) {
+						|| (c == '.') || (c == ':')) {
 					buf.append(c);
 				} else {
-					// normally we have to check all id to guarantee it will be a
+					// normally we have to check all id to guarantee it will be
+					// a
 					// unique,
-					// but we convert the current char to a integer with "_"-prefix and "_" suffix
+					// but we convert the current char to a integer with
+					// "_"-prefix and "_" suffix
 					buf.append(DEFAULT_CONVERT_MARKER_CHAR);
 					buf.append((int) c);
 					buf.append(DEFAULT_CONVERT_MARKER_CHAR);
@@ -159,7 +162,7 @@ public class SVGUtils {
 		if (id.length() > 0) {
 			StringBuffer buf = new StringBuffer();
 			boolean marker = false;
-			
+
 			StringBuffer number = new StringBuffer();
 			for (int i = 0; i < id.length(); i++) {
 				char c = id.charAt(i);
@@ -170,7 +173,7 @@ public class SVGUtils {
 							int x = Integer.parseInt(number.toString());
 							buf.append((char) x);
 							number.delete(0, number.length());
-						} 
+						}
 						marker = false;
 					} else {
 						marker = true;
@@ -178,17 +181,17 @@ public class SVGUtils {
 				} else if (marker) {
 					if (Character.isDigit(c)) {
 						number.append(c);
-					} 
+					}
 				} else {
 					buf.append(c);
 				}
 			}
-			
+
 			if (buf.toString().startsWith(DEFAULT_ID_NAME_PREFIX)) {
 				buf.delete(0, DEFAULT_ID_NAME_PREFIX.length());
 			}
 			return buf.toString();
-			
+
 		} else {
 			return id;
 		}
@@ -273,10 +276,9 @@ public class SVGUtils {
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_SIZE,
 					"" + formatNumberAttribute(para.getFontHeight()));
 		}
-		
-         atts.addAttribute(SVGConstants.XML_NAMESPACE, "space",
-                "xml:space", "CDATA", "preserve");
-	
+
+		atts.addAttribute(SVGConstants.XML_NAMESPACE, "space", "xml:space",
+				"CDATA", "preserve");
 
 		SVGUtils.startElement(handler, SVGConstants.SVG_TSPAN, atts);
 		SVGUtils.characters(handler, para.getText());
@@ -284,7 +286,7 @@ public class SVGUtils {
 	}
 
 	public static String formatNumberAttribute(double v) {
-		return format.format((float)v);
+		return format.format((float) v);
 	}
 
 	public static String fileToURI(File file) {
@@ -338,6 +340,23 @@ public class SVGUtils {
 	public static String lineWeightToStrokeWidth(int lineWeight) {
 		double w = (double) lineWeight / 100.0;
 
-		return "" + w + "mm";
+		return "" + w + " mm";
+	}
+
+	public static String lineWidthToStrokeWidth(LineWidth lw) {
+		switch (lw.getType()) {
+		case LineWidth.TYPE_LINE_WEIGHT:
+			double w = lw.getValue() / 100.0;
+			return formatNumberAttribute(w) + " mm";
+
+		case LineWidth.TYPE_LINE_WIDTH:
+			return formatNumberAttribute(lw.getValue());
+
+		case LineWidth.TYPE_PERCENT:
+			return formatNumberAttribute(lw.getValue()) + "%";
+		default:
+			return "0.02%";
+
+		}
 	}
 }

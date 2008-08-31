@@ -23,6 +23,7 @@ import org.kabeja.dxf.DXFBlock;
 import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFInsert;
+import org.kabeja.dxf.helpers.LineWidth;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
@@ -112,12 +113,12 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator {
 				if ((s != 0.0)
 						&& svgContext
 								.containsKey(SVGContext.LAYER_STROKE_WIDTH)) {
-					Double lw = (Double) svgContext
+					LineWidth lw = (LineWidth) svgContext
 							.get(SVGContext.LAYER_STROKE_WIDTH);
-					double width = (lw.doubleValue() * 2) / s;
+				
+					lw.setValue((lw.getValue() * 2) / s);
 					SVGUtils.addAttribute(attr,
-							SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
-									.formatNumberAttribute(width));
+							SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWidthToStrokeWidth(lw));
 				}
 
 				// SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);

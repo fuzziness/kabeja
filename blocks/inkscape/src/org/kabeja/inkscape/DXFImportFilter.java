@@ -42,6 +42,8 @@ import org.kabeja.xml.SAXSerializer;
  */
 public class DXFImportFilter {
 
+	public final static String PARAM_POLYLINE_CONNECT="polyline.connect";
+	
 	protected boolean connectPolylines = true;
 
 	public void importFile(String[] args) {
@@ -66,7 +68,7 @@ public class DXFImportFilter {
 			Map noprops = new HashMap();
 
 			// connect all entities, where possible
-			if (this.connectPolylines) {
+			if (properties.containsKey(PARAM_POLYLINE_CONNECT) && Boolean.getBoolean((String)properties.get(PARAM_POLYLINE_CONNECT))) {
 				PostProcessor pp = new PolylineConverter();
 				pp.setProperties(noprops);
 				pp.process(doc, noprops);

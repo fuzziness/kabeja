@@ -32,6 +32,7 @@ import javax.swing.ImageIcon;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFEntity;
+import org.kabeja.dxf.DXFLayer;
 import org.kabeja.svg.SVGUtils;
 import org.kabeja.svg.action.DXFDocumentAction;
 import org.kabeja.svg.action.SVGDocumentAction;
@@ -198,6 +199,7 @@ public class HighlightAction extends AbstractAction implements SVGDocumentAction
         //			 
         String handle = SVGUtils.reverseID(el.getAttribute("id"));
         DXFEntity entity = this.dxfDocument.getDXFEntityByID(handle);
+        DXFLayer layer = this.dxfDocument.getDXFLayer(entity.getLayerName());
         System.out.println("Selected Entity=" + handle);
 
         if (entity != null) {

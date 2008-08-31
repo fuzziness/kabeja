@@ -26,6 +26,7 @@ import org.kabeja.dxf.helpers.HatchBoundaryLoop;
 import org.kabeja.dxf.helpers.HatchLineFamily;
 import org.kabeja.dxf.helpers.HatchLineIterator;
 import org.kabeja.dxf.helpers.HatchLineSegment;
+import org.kabeja.dxf.helpers.LineWidth;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
@@ -241,10 +242,10 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
             attr = new AttributesImpl();
 
             if (context.containsKey(SVGContext.LAYER_STROKE_WIDTH)) {
-                Double lw = (Double) context.get(SVGContext.LAYER_STROKE_WIDTH);
+                LineWidth lw = (LineWidth) context.get(SVGContext.LAYER_STROKE_WIDTH);
                 SVGUtils.addAttribute(attr,
                     SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH,
-                    SVGUtils.formatNumberAttribute(lw.doubleValue()));
+                    SVGUtils.lineWidthToStrokeWidth(lw));
             }
 
             SVGUtils.addAttribute(attr, "d",

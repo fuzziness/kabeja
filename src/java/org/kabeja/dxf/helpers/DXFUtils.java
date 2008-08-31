@@ -16,7 +16,13 @@
 package org.kabeja.dxf.helpers;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import org.kabeja.dxf.DXFDocument;
+import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFLine;
 import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;
@@ -145,5 +151,20 @@ public class DXFUtils {
         // return Math.abs(p1.getZ() - p2.getZ()) <= radius;
 
         // return false;
+    }
+
+    /**
+     * Converts the default iterator to a sorted iterator by the
+     * z-index of layers
+     * @param i
+     * @return
+     */
+    
+    public static Iterator sortedLayersByZIndexIterator(Iterator i){
+    	TreeSet set = new TreeSet(new DXFLayerComparator());
+    	while(i.hasNext()){
+    		set.add(i.next());
+    	}
+    	return set.iterator();
     }
 }

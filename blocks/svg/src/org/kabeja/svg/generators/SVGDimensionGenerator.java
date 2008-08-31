@@ -20,6 +20,7 @@ import java.util.Map;
 import org.kabeja.dxf.DXFBlock;
 import org.kabeja.dxf.DXFDimension;
 import org.kabeja.dxf.DXFEntity;
+import org.kabeja.dxf.helpers.LineWidth;
 import org.kabeja.dxf.helpers.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
@@ -64,10 +65,10 @@ public class SVGDimensionGenerator extends AbstractSVGSAXGenerator {
 
    
             if (svgContext.containsKey(SVGContext.LAYER_STROKE_WIDTH)) {
-    			Double lw = (Double) svgContext.get(SVGContext.LAYER_STROKE_WIDTH);
+    			LineWidth lw = (LineWidth) svgContext.get(SVGContext.LAYER_STROKE_WIDTH);
     			SVGUtils.addAttribute(attr,
     					SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils
-    							.formatNumberAttribute(lw.doubleValue()));
+    							.lineWidthToStrokeWidth(lw));
     		}
             
             SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);

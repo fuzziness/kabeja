@@ -89,7 +89,7 @@ public class DXFLayerTableHandler extends AbstractTableHandler {
      * @see org.dxf2svg.parser.table.TableHandler#endParsing()
      */
     public void endParsing() {
-        doc.addDXFLayer(layer);
+        this.doc.addDXFLayer(layer);
     }
 
     /*
@@ -99,6 +99,6 @@ public class DXFLayerTableHandler extends AbstractTableHandler {
      */
     public void startParsing() {
         layer = new DXFLayer();
-        layer.setDXFDocument(doc);
+        layer.setDXFDocument(this.doc);
     }
 }

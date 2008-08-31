@@ -36,6 +36,7 @@ public class DXFLayer {
     private int flags = 0;
     private int lineWeight = 0;
     private String plotStyle = "";
+    private int zIndex=0;
 
     public DXFLayer() {
     }
@@ -258,4 +259,18 @@ public class DXFLayer {
     public boolean isEmpty(){
     	return this.entities.isEmpty();
     }
+
+	/**
+	 * @return the zIndex
+	 */
+	public int getZIndex() {
+		return zIndex;
+	}
+
+	/**
+	 * @param index the zIndex to set
+	 */
+	public void setZIndex(int index) {
+		zIndex = index;
+	}
 }

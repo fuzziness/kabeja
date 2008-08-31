@@ -72,7 +72,7 @@
                                 | this will override the draft line weight
                                 | <property name="stroke-width" value="0.02%"/>
                                 +-->
-                         </generator>
+               </generator>
 		</generators>
 		
 	</configuration>
@@ -101,7 +101,9 @@
 		
 		
 		<pipeline name="jpeg">
-			<generate name="svg"/>
+			<generate name="svg">
+			    <property name="stroke-width" value="22"/>
+			</generate>
 			<serialize name="jpeg">
 			   <property name="width" value="1024"/>
 			   <property name="height" value="768"/>
