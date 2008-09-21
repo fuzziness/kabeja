@@ -28,8 +28,11 @@ import java.util.List;
  *
  */
 public class DXFLayer {
-    private Hashtable entities = new Hashtable();
+  
+	private Hashtable entities = new Hashtable();
     private String name = "";
+    private String id="";
+    
     private int color = 7;
     private DXFDocument doc;
     private String ltype = "";
@@ -38,6 +41,8 @@ public class DXFLayer {
     private String plotStyle = "";
     private int zIndex=0;
 
+    
+    
     public DXFLayer() {
     }
 
@@ -257,7 +262,7 @@ public class DXFLayer {
     
     
     public boolean isEmpty(){
-    	return this.entities.isEmpty();
+    	return this.entities.size()==0;
     }
 
 	/**
@@ -273,4 +278,15 @@ public class DXFLayer {
 	public void setZIndex(int index) {
 		zIndex = index;
 	}
+	
+	
+	public String getID(){
+		return this.id;
+	}
+	
+	
+	public void setID(String id){
+		this.id =id;
+	}
+	
 }

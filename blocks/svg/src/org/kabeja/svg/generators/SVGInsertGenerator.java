@@ -126,9 +126,11 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator {
 				attr.addAttribute(SVGConstants.XMLNS_NAMESPACE, "xlink",
 						"xmlns:xlink", "CDATA", SVGConstants.XLINK_NAMESPACE);
 
+			
+			
 				attr.addAttribute(SVGConstants.XLINK_NAMESPACE, "href",
 						"xlink:href", "CDATA", "#"
-								+ SVGUtils.validateID(insert.getBlockID()));
+								+ SVGUtils.validateID(block.getID()));
 
 				SVGUtils.emptyElement(handler, SVGConstants.SVG_USE, attr);
 

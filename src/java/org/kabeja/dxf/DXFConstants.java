@@ -73,9 +73,7 @@ public class DXFConstants {
     public final static String ENTITY_TYPE_VIEWPORT = "VIEWPORT";
     public final static String ENTITY_TYPE_XLINE = "XLINE";
     public final static int ENVIRONMENT_VARIABLE_LWDEFAULT = 25;
-    public final static int GROUPCODE_STANDARD_FLAGS = 70;
-    public final static int GROUPCODE_STANDARD_LAYER = 8;
-    public final static int GROUPCODE_SUBCLASS_MARKER = 100;
+
     public static final String HEADER_VARIABLE_ACADMAINTVER = "$ACADMAINTVER";
     public static final String HEADER_VARIABLE_ACADVER = "$ACADVER";
     public static final String HEADER_VARIABLE_ANGBASE = "$ANGBASE";
@@ -355,4 +353,10 @@ public class DXFConstants {
     public static final int END_SEQUENCE_CODE = -2;
     public static final String END_SEQUENCE = "SEQEND";
     public static final int GROUPCODE_ENTITY_START = 0;
+    
+    public final static int GROUPCODE_STANDARD_FLAGS = 70;
+    public final static int GROUPCODE_STANDARD_LAYER = 8;
+    public final static int GROUPCODE_SUBCLASS_MARKER = 100;
+    
+    public static final int GROUPCODE_HANDLE=5;
 }

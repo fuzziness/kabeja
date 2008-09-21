@@ -74,8 +74,9 @@ public class DXFBlocksSectionHandler extends DXFEntitiesSectionHandler {
             } else if (BLOCK_END.equals(value.getValue())) {
                 // handle
                 endEntity();
-
+                parseBlockHeader = true;
                 doc.addDXFBlock(block);
+              
             } else {
                 // an entity
                 parseBlockHeader = false;
@@ -153,6 +154,15 @@ public class DXFBlocksSectionHandler extends DXFEntitiesSectionHandler {
 
             break;
 
+        case DXFConstants.GROUPCODE_HANDLE:
+        	
+        	if(parseBlockHeader){   	
+        		block.setID(value.getValue());   		
+        	}else{
+        		super.parseGroup(groupCode, value);
+        	}
+        	break;
+        	
         default:
             super.parseGroup(groupCode, value);
         }

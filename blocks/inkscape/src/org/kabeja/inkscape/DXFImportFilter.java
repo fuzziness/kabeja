@@ -17,11 +17,15 @@ package org.kabeja.inkscape;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.dxf.DXFLayer;
 import org.kabeja.inkscape.xml.SAXInkscapeLayerFilter;
 import org.kabeja.parser.Parser;
 import org.kabeja.parser.ParserBuilder;
@@ -34,6 +38,7 @@ import org.kabeja.svg.StyleAttributeFilter;
 import org.kabeja.xml.ConsoleSerializer;
 import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
+import org.kabeja.xml.SAXPrettyOutputter;
 import org.kabeja.xml.SAXSerializer;
 
 /**
@@ -42,8 +47,8 @@ import org.kabeja.xml.SAXSerializer;
  */
 public class DXFImportFilter {
 
-	public final static String PARAM_POLYLINE_CONNECT="polyline.connect";
-	
+	public final static String PARAM_POLYLINE_CONNECT = "polyline.connect";
+
 	protected boolean connectPolylines = true;
 
 	public void importFile(String[] args) {
@@ -68,15 +73,18 @@ public class DXFImportFilter {
 			Map noprops = new HashMap();
 
 			// connect all entities, where possible
-			if (properties.containsKey(PARAM_POLYLINE_CONNECT) && Boolean.getBoolean((String)properties.get(PARAM_POLYLINE_CONNECT))) {
+			if (properties.containsKey(PARAM_POLYLINE_CONNECT)
+					&& Boolean.getBoolean((String) properties
+							.get(PARAM_POLYLINE_CONNECT))) {
 				PostProcessor pp = new PolylineConverter();
 				pp.setProperties(noprops);
 				pp.process(doc, noprops);
 			}
-			
+
 			PostProcessor pp = new LayerFilter();
 			pp.setProperties(properties);
 			pp.process(doc, noprops);
+
 			
 			// the processing and svg conversion
 			SAXGenerator generator = new SVGGenerator();
@@ -84,7 +92,7 @@ public class DXFImportFilter {
 
 			// remove the root group
 			SAXFilter filter1 = new RootLayerFilter();
-			filter1.setProperties(noprops);
+			filter1.setProperties(properties);
 
 			// fix problems width percent width values
 			SAXFilter filter2 = new StyleAttributeFilter();
@@ -94,9 +102,9 @@ public class DXFImportFilter {
 			SAXFilter filter3 = new SAXInkscapeLayerFilter();
 
 			// output goes to stdout
-			SAXSerializer serializer = new ConsoleSerializer();
-			serializer.setOutput(null);
-			serializer.setProperties(noprops);
+			SAXSerializer serializer = new SAXPrettyOutputter();
+			serializer.setOutput(System.out);
+			serializer.setProperties(properties);
 
 			// chain the filters
 			filter1.setContentHandler(filter2);
@@ -106,7 +114,7 @@ public class DXFImportFilter {
 			// setup the process pipeline
 			// and start the generation
 
-			generator.generate(doc, filter1, null);
+			generator.generate(doc, filter1, new HashMap());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +122,6 @@ public class DXFImportFilter {
 	}
 
 	public static void main(String[] args) {
-		
 
 		if (args.length >= 1) {
 			DXFImportFilter filter = new DXFImportFilter();
@@ -123,17 +130,22 @@ public class DXFImportFilter {
 	}
 
 	protected Map parseParameters(String[] args) {
+
 		Map map = new HashMap();
 		for (int i = 0; i < args.length; i++) {
+
 			if (args[i].startsWith("--")) {
 				int pos = args[i].indexOf('=');
 				String param = args[i].substring(2, pos);
 				String value = args[i].substring(pos + 1);
 				map.put(param, value);
+
 			}
+
 		}
 
 		return map;
+
 	}
 
 }

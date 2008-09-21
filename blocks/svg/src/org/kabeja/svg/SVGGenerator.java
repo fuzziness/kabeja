@@ -36,6 +36,8 @@ import org.kabeja.dxf.objects.DXFLayout;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.generators.SVGStyleGenerator;
 import org.kabeja.xml.AbstractSAXGenerator;
+import org.kabeja.xml.XMLConstants;
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -128,6 +130,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 			LineWidth lw = new LineWidth();
 			String strokeWidth = (String) this.properties
 					.get(PROPERTY_STROKE_WIDTH);
+	
 			lw.setValue(Double
 					.parseDouble(strokeWidth));
 		
@@ -306,6 +309,11 @@ public class SVGGenerator extends AbstractSAXGenerator {
 						SVGConstants.SVG_ATTRIBUTE_OVERFLOW,
 						SVGConstants.SVG_ATTRIBUTEVALUE_VISIBLE);
 			}
+			
+			//add Kabeja namespace for additional kabeja output
+			attr.addAttribute(SVGConstants.XMLNS_NAMESPACE, XMLConstants.KABEJA_NAMESPACE_PREFIX ,
+					"xmlns:"+XMLConstants.KABEJA_NAMESPACE_PREFIX , "CDATA", XMLConstants.KABEJA_NAMESPACE);
+			
 
 			SVGUtils.startElement(this.handler, SVGConstants.SVG_ROOT, attr);
 
@@ -396,8 +404,7 @@ public class SVGGenerator extends AbstractSAXGenerator {
 				i = DXFUtils.sortedLayersByZIndexIterator(this.doc.getDXFLayerIterator());
 				while (i.hasNext()) {
 					DXFLayer layer = (DXFLayer) i.next();
-
-					if (this.boundsRule == PROPERTY_DOCUMENT_BOUNDS_RULE_PAPERSPACE) {
+                  if (this.boundsRule == PROPERTY_DOCUMENT_BOUNDS_RULE_PAPERSPACE) {
 						// out put only the paper space maybe with views to
 						// model space
 						this.layerToSAX(layer, false);
@@ -419,11 +426,14 @@ public class SVGGenerator extends AbstractSAXGenerator {
 	protected void blockToSAX(DXFBlock block, TransformContext transformContext)
 			throws SAXException {
 		AttributesImpl attr = new AttributesImpl();
+//		SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
+//				.validateID(block.getName()));
 		SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
-				.validateID(block.getName()));
+				.validateID(block.getID()));
+
 
 		SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-
+			
 		Iterator i = block.getDXFEntitiesIterator();
 
 		while (i.hasNext()) {
@@ -647,10 +657,15 @@ public class SVGGenerator extends AbstractSAXGenerator {
 	protected void layerToSAX(DXFLayer layer, boolean onModelspace)
 			throws SAXException {
 		AttributesImpl attr = new AttributesImpl();
-
-		SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
-				.validateID(layer.getName()));
-
+		
+		attr.addAttribute(XMLConstants.KABEJA_NAMESPACE, XMLConstants.KABEJA_ATTRIBUTE_LAYER_NAME,
+				XMLConstants.KABEJA_QNAME_ATTRIBUTE_LAYER_NAME,
+				"CDATA", layer.getName());
+		
+		//the layer name may not be a valid ID, so we omit this part now
+		//SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
+		//		.validateID(layer.getName()));
+		
 		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_COLOR, "rgb("
 				+ DXFColor.getRGBString(Math.abs(layer.getColor())) + ")");
 		SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE,
@@ -690,7 +705,9 @@ public class SVGGenerator extends AbstractSAXGenerator {
 		context.put(SVGContext.LAYER_STROKE_WIDTH, lw);
 
 		SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
-
+		SVGUtils.startElement(handler, SVGConstants.SVG_TITLE, new AttributesImpl());
+		SVGUtils.characters(handler, layer.getName());
+		SVGUtils.endElement(handler, SVGConstants.SVG_TITLE);
 		Iterator types = layer.getDXFEntityTypeIterator();
 
 		while (types.hasNext()) {

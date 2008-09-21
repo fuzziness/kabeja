@@ -53,33 +53,32 @@ public class DXFLayerTableHandler extends AbstractTableHandler {
         switch (groupCode) {
         case GROUPCODE_LAYER_NAME:
             layer.setName(value.getValue());
-
             break;
 
         case GROUPCODE_LAYER_COLORNUMBER:
             layer.setColor(value.getIntegerValue());
-
             break;
 
         case GROUPCODE_LAYER_LINETYPE:
             layer.setLineType(value.getValue());
-
             break;
 
         case DXFConstants.GROUPCODE_STANDARD_FLAGS:
             layer.setFlags(value.getIntegerValue());
-
             break;
 
         case GROUPCODE_LAYER_LINEWEIGHT:
             layer.setLineWeight(value.getIntegerValue());
-
             break;
 
         case GROUPCODE_LAYER_PLOTSTYLENAME:
             layer.setPlotStyle(value.getValue());
-
             break;
+            
+        case DXFConstants.GROUPCODE_HANDLE:
+        	layer.setID(value.getValue());
+        	break;
+        	
         }
     }
 

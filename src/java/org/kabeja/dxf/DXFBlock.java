@@ -32,6 +32,7 @@ public class DXFBlock {
     private String name = "";
     private String description = "";
     private ArrayList entities;
+    private String id="";
     private DXFDocument doc;
 
     /**
@@ -197,5 +198,15 @@ public class DXFBlock {
         }
 
         return entity;
+    }
+    
+    
+    public String getID(){
+    	return this.id;
+    }
+    
+    public void setID(String id){
+    	this.id=id;
+    	id="";
     }
 }

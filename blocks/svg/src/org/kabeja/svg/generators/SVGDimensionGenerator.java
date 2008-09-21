@@ -36,9 +36,10 @@ public class SVGDimensionGenerator extends AbstractSVGSAXGenerator {
         TransformContext transformContext) throws SAXException {
         DXFDimension dimension = (DXFDimension) entity;
 
-        if (dimension.getDXFDocument().getDXFBlock(dimension.getDimensionBlock()) != null) {
-            DXFBlock block = dimension.getDXFDocument()
-                                      .getDXFBlock(dimension.getDimensionBlock());
+        DXFBlock block = dimension.getDXFDocument()
+        .getDXFBlock(dimension.getDimensionBlock());
+        if (block != null) {
+           
             AttributesImpl attr = new AttributesImpl();
             StringBuffer buf = new StringBuffer();
 
@@ -78,7 +79,7 @@ public class SVGDimensionGenerator extends AbstractSVGSAXGenerator {
                 "xmlns:xlink", "CDATA", SVGConstants.XLINK_NAMESPACE);
             attr.addAttribute(SVGConstants.XLINK_NAMESPACE, "href",
                 "xlink:href", "CDATA",
-                "#" + SVGUtils.validateID(dimension.getDimensionBlock()));
+                "#" + SVGUtils.validateID(block.getID()));
 
             SVGUtils.emptyElement(handler, SVGConstants.SVG_USE, attr);
 

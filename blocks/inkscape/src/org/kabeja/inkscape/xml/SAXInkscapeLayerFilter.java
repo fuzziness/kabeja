@@ -19,6 +19,7 @@ import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGUtils;
 import org.kabeja.xml.AbstractSAXFilter;
+import org.kabeja.xml.XMLConstants;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -37,6 +38,7 @@ public class SAXInkscapeLayerFilter extends AbstractSAXFilter {
 	public final static String INKSCAPE_ATTRIBUTE_GROUPMODE = "groupmode";
 	public final static String INKSCAPE_ATTRIBUTE_GROUPMODE_VALUE = "layer";
 	public final static String INKSCAPE_ATTRIBUTE_LABEL = "label";
+	public final static String KABEJA_QNAME_LAYER_NAME = XMLConstants.KABEJA_NAMESPACE_PREFIX+":"+XMLConstants.KABEJA_ATTRIBUTE_LAYER_NAME;
 	protected int indent = 0;
 	protected int mode = 0;
 
@@ -70,7 +72,7 @@ public class SAXInkscapeLayerFilter extends AbstractSAXFilter {
 			if (indent == 2 && this.mode == MODE_DRAFT_GROUP) {
 				attr = this.addInkscapeLayerAttributes(atts);
 			} else if (indent == 1
-					&& atts.getValue(SVGConstants.XML_ID).equals("draft")) {
+					&& atts.getIndex(SVGConstants.XML_ID)>-1 && atts.getValue(SVGConstants.XML_ID).equals("draft")) {
 				this.mode = MODE_DRAFT_GROUP;
 			} else if (indent == 1 && this.mode == MODE_DEFAULT) {
 				attr = this.addInkscapeLayerAttributes(atts);
@@ -90,7 +92,7 @@ public class SAXInkscapeLayerFilter extends AbstractSAXFilter {
 				"CDATA", INKSCAPE_ATTRIBUTE_GROUPMODE_VALUE);
 		attr.addAttribute(INKSCAPE_NAMESPACE, INKSCAPE_ATTRIBUTE_LABEL,
 				INKSCAPE_NAMESPACE_PREFIX + ':' + INKSCAPE_ATTRIBUTE_LABEL,
-				"CDATA", SVGUtils.reverseID(atts.getValue(SVGConstants.XML_ID)));
+				"CDATA", atts.getValue( KABEJA_QNAME_LAYER_NAME));
 
 		return attr;
 	}

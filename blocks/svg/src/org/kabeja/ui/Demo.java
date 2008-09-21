@@ -55,7 +55,7 @@ public class Demo {
         Parser p = ParserBuilder.createDefaultParser();
 
         try {
-            p.parse("/home/simon/Desktop/C1.dxf");
+            p.parse("/home/simon/Desktop/A2.dxf");
 
             
             
@@ -99,7 +99,7 @@ public class Demo {
             f.setSize(new Dimension(640, 480));
             f.setVisible(true);
             ui.showDXFDocument(doc);
-            System.out.println("DD");
+  
 
             
         } catch (Exception e) {
