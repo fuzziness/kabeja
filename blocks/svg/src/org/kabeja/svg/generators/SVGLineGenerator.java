@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFLine;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGPathBoundaryGenerator;

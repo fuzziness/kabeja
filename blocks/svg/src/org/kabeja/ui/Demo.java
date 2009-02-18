@@ -55,7 +55,7 @@ public class Demo {
         Parser p = ParserBuilder.createDefaultParser();
 
         try {
-            p.parse("/home/simon/Desktop/A2.dxf");
+            p.parse("/home/simon/Desktop/sample.DXF");
 
             
             

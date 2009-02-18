@@ -23,9 +23,9 @@ import java.util.Map;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;
-import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.helpers.PolylineSegment;
 import org.kabeja.math.MathUtils;
+import org.kabeja.math.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGPathBoundaryGenerator;
@@ -425,7 +425,7 @@ public class SVGPolylineGenerator extends AbstractSVGSAXGenerator
                 if (buf.length() > 0) {
                     AttributesImpl attr = new AttributesImpl();
                     SVGUtils.addAttribute(attr, "d", buf.toString());
-                    super.setCommonAttributes(attr, svgContext, v);
+                    super.setCommonAttributes(attr, svgContext,v);
                     // fillmode ????????
                     SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, attr);
                     buf.delete(0, buf.length());

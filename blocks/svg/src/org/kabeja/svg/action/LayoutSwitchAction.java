@@ -58,8 +58,8 @@ public class LayoutSwitchAction extends AbstractPropertiesEditor
 
             ButtonGroup group = new ButtonGroup();
             JCheckBoxMenuItem item = new JCheckBoxMenuItem(SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_MODELSPACE_VALUE);
-            item.setIcon(new ImageIcon(UIUtils.resourceToBytes(
-                        this.getClass(), "/icons/layout_ms.png")));
+//            item.setIcon(new ImageIcon(UIUtils.resourceToBytes(
+//                        this.getClass(), "/icons/layout_ms.png")));
 
             item.addItemListener(l);
             group.add(item);
@@ -68,21 +68,21 @@ public class LayoutSwitchAction extends AbstractPropertiesEditor
             this.defaultItem = item;
 
             item = new JCheckBoxMenuItem(SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_MODELSPACE_LIMITS_VALUE);
-            item.addItemListener(l);
-            item.setIcon(new ImageIcon(UIUtils.resourceToBytes(
-                        this.getClass(), "/icons/layout_ms_l.png")));
+//            item.addItemListener(l);
+//            item.setIcon(new ImageIcon(UIUtils.resourceToBytes(
+//                        this.getClass(), "/icons/layout_ms_l.png")));
             group.add(item);
             menu.add(item);
             item = new JCheckBoxMenuItem(SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_PAPERSPACE_VALUE);
             item.addItemListener(l);
-            item.setIcon(new ImageIcon(UIUtils.resourceToBytes(
-                        this.getClass(), "/icons/layout_ps.png")));
+//            item.setIcon(new ImageIcon(UIUtils.resourceToBytes(
+//                        this.getClass(), "/icons/layout_ps.png")));
             group.add(item);
             menu.add(item);
             item = new JCheckBoxMenuItem(SVGGenerator.PROPERTY_DOCUMENT_BOUNDS_RULE_PAPERSPACE_LIMITS_VALUE);
             item.addItemListener(l);
-            item.setIcon(new ImageIcon(UIUtils.resourceToBytes(
-                        this.getClass(), "/icons/layout_ps_l.png")));
+//            item.setIcon(new ImageIcon(UIUtils.resourceToBytes(
+//                        this.getClass(), "/icons/layout_ps_l.png")));
             group.add(item);
             menu.add(item);
             this.button = new PopUpButton(menu, "");

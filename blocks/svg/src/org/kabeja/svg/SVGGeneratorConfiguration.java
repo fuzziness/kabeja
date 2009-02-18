@@ -13,17 +13,37 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package org.kabeja.svg.action;
+package org.kabeja.svg;
 
-import org.kabeja.tools.Component;
+public class SVGGeneratorConfiguration {
 
 
-/**
- * This is a marker interface for svg viewer action  services.
- *
- * @author simon
- *
- */
-public interface ViewerAction extends Component {
-    public static final String SERVICE = ViewerAction.class.getName();
+	private int dpi=72;
+	
+	
+	
+	public void setDPI(int dpi){
+		
+	}
+	
+	public void setUnit(String unit){
+		
+	}
+	
+	public void setPaper(String paperName){
+		
+	}
+	
+	public String getSVGWidth(){
+		return "";
+	}
+	
+	public String getSVGHeight(){
+		return "";
+	}
+	
+	public String getSVGViewBox(){
+		return "";
+	}
+	
 }

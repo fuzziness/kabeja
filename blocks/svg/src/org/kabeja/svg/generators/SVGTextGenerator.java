@@ -21,7 +21,7 @@ import org.kabeja.dxf.Bounds;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.dxf.DXFStyle;
 import org.kabeja.dxf.DXFText;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;

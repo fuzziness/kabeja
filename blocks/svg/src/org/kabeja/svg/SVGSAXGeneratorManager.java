@@ -61,6 +61,8 @@ public class SVGSAXGeneratorManager {
         throws SVGGenerationException {
         SVGSAXGenerator gen = (SVGSAXGenerator) this.generators.get(entityType);
 
+
+        
         if (gen == null) {
             throw new SVGGenerationException("EntityType:" + entityType +
                 " not supported");

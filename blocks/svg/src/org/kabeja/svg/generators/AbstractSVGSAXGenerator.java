@@ -72,8 +72,16 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 		int color = entity.getColor();
 
 		if ((color != 0) && (color != 256)) {
+		    //check RGB color first
+		    byte[] b = entity.getColorRGB();
+		    if(b.length==3){
+		        SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_COLOR,
+	                    "rgb(" + DXFColor.getRGBString(b) + ")");
+		    }else{
+		    
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_COLOR,
 					"rgb(" + DXFColor.getRGBString(color) + ")");
+		    }
 			
 		}
 
@@ -106,6 +114,8 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 		} 
 
 		DXFDocument doc = entity.getDXFDocument();
+	
+
 
 		double gscale = doc.getDXFHeader().getLinetypeScale();
 

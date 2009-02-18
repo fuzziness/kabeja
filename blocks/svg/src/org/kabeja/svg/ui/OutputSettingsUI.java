@@ -40,8 +40,8 @@ import javax.swing.SwingUtilities;
 
 import org.kabeja.batik.tools.AbstractSAXSerializer;
 import org.kabeja.svg.SVGGenerator;
+import org.kabeja.tools.Component;
 import org.kabeja.ui.ApplicationToolBar;
-import org.kabeja.ui.Component;
 import org.kabeja.ui.ServiceManager;
 import org.kabeja.ui.Serviceable;
 import org.kabeja.ui.impl.AbstractPropertiesEditor;

@@ -27,7 +27,7 @@ import org.kabeja.dxf.helpers.HatchLineFamily;
 import org.kabeja.dxf.helpers.HatchLineIterator;
 import org.kabeja.dxf.helpers.HatchLineSegment;
 import org.kabeja.dxf.helpers.LineWidth;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;

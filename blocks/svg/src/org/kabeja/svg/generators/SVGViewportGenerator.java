@@ -28,7 +28,7 @@ import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFLineType;
 import org.kabeja.dxf.DXFViewport;
 import org.kabeja.dxf.helpers.LineWidth;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 import org.kabeja.math.TransformContext;
 import org.kabeja.svg.SVGConstants;
 import org.kabeja.svg.SVGContext;
