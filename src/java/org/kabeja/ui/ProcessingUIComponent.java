@@ -16,6 +16,7 @@
 package org.kabeja.ui;
 
 import org.kabeja.processing.ProcessingManager;
+import org.kabeja.tools.Component;
 /**
  * A ProcessingUIComponent gets access to the current Processing Manager of 
  * the application. 

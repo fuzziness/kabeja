@@ -15,7 +15,7 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Vector;
+import org.kabeja.math.Vector;
 
 
 /**
@@ -345,6 +345,9 @@ public class DXFConstants {
     public final static String TABLE_KEY_LTYPE = "LTYPE";
     public final static String TABLE_KEY_STYLE = "STYLE";
     public final static String TABLE_KEY_UCS = "UCS";
+    
+    public final static String TABLES_END="ENDTAB";
+   
     public final static String TABLE_KEY_VIEW = "VIEW";
     public final static String TABLE_KEY_VPORT = "VPORT";
     
@@ -359,4 +362,35 @@ public class DXFConstants {
     public final static int GROUPCODE_SUBCLASS_MARKER = 100;
     
     public static final int GROUPCODE_HANDLE=5;
+    
+   
+    public static final String SUBCLASS_MARKER_ENTITY="AcDbEntity";
+    public static final String SUBCLASS_MARKER_ENTITY_3DFACE="AcDbFace";
+    public static final String SUBCLASS_MARKER_ENTITY_ARC="AcDbArc";
+    public static final String SUBCLASS_MARKER_ENTITY_POLYLINE="AcDbPolyline";
+    public static final String SUBCLASS_MARKER_ENTITY_CIRCLE="AcDbCircle";
+    public static final String SUBCLASS_MARKER_ENTITY_ELLIPSE="AcDbEllipse";
+    public static final String SUBCLASS_MARKER_ENTITY_LINE="AcDbLine";
+    
+    public static final String SUBCLASS_MARKER_ENTITY_TEXT="AcDbText";
+    public static final String SUBCLASS_MARKER_ENTITY_ATTRIB_DEF="AcDbAttributeDefinition";
+    public static final String SUBCLASS_MARKER_ENTITY_INSERT="AcDbBlockReference";
+    public static final String SUBCLASS_MARKER_ENTITY_MTEXT="AcDbMText";
+    public static final String SUBCLASS_MARKER_ENTITY_POINT = "AcDbPoint";
+    public static final String SUBCLASS_MARKER_ENTITY_SOLID = "AcDbTrace";
+    public static final String SUBCLASS_MARKER_ENTITY_TRACE="AcDbTrace";
+    public static final String SUBCLASS_MARKER_ENTITY_VERTEX="AcDbVertex";
+    public static final String SUBCLASS_MARKER_ENTITY_VERTEX_2D="AcDb2dVertex";
+    public static final String SUBCLASS_MARKER_ENTITY_VERTEX_3D="AcDb3dPolylineVertex";
+    
+    public static final String SUBCLASS_MARKER_TABLE="AcDbSymbolTable";
+    public static final String SUBCLASS_MARKER_TABLE_RECORD="AcDbSymbolTableRecord";
+    
+    public static final String SUBCLASS_MARKER_TABLE_RECORD_LAYER="AcDbLayerTableRecord";
+    public static final String SUBCLASS_MARKER_TABLE_RECORD_LINETYPE="AcDbLineTypeTableRecord";
+    
+    public static final String BLOCK_ENTRY="BLOCK";
+    public static final String BLOCK_ENTRY_END="ENDBLK";
+  
+
 }

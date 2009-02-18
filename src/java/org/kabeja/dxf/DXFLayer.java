@@ -40,7 +40,7 @@ public class DXFLayer {
     private int lineWeight = 0;
     private String plotStyle = "";
     private int zIndex=0;
-
+    private boolean plottable=true;
     
     
     public DXFLayer() {
@@ -287,6 +287,20 @@ public class DXFLayer {
 	
 	public void setID(String id){
 		this.id =id;
+	}
+
+	/**
+	 * @return the plottable
+	 */
+	public boolean isPlottable() {
+		return plottable;
+	}
+
+	/**
+	 * @param plottable the plottable to set
+	 */
+	public void setPlottable(boolean plottable) {
+		this.plottable = plottable;
 	}
 	
 }

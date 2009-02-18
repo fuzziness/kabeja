@@ -28,7 +28,7 @@ import org.kabeja.dxf.DXFLWPolyline;
 import org.kabeja.dxf.DXFLayer;
 import org.kabeja.dxf.DXFLine;
 import org.kabeja.dxf.DXFPolyline;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 import org.kabeja.processing.helper.PolylineQueue;
 
 

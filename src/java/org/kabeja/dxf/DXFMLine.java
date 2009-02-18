@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.kabeja.dxf.helpers.DXFMLineSegment;
 import org.kabeja.dxf.helpers.MLineConverter;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 
 
 /**

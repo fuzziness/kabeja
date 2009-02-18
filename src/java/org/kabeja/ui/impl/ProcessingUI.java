@@ -39,7 +39,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
 import org.kabeja.processing.ProcessingManager;
-import org.kabeja.ui.Application;
+import org.kabeja.tools.Application;
 import org.kabeja.ui.ApplicationMenuBar;
 import org.kabeja.ui.ApplicationToolBar;
 import org.kabeja.ui.ProcessingUIComponent;
@@ -153,7 +153,7 @@ public class ProcessingUI implements Serviceable, Startable,
     public void setServiceManager(ServiceManager manager) {
         this.serviceManager = manager;
 
-        org.kabeja.ui.Component[] objects = this.serviceManager.getServiceComponents(Application.SERVICE);
+        org.kabeja.tools.Component[] objects = this.serviceManager.getServiceComponents(Application.SERVICE);
         this.application = (Application) objects[0];
 
         this.initialize();

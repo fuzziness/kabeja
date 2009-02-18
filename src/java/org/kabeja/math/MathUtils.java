@@ -15,8 +15,6 @@
 */
 package org.kabeja.math;
 
-import org.kabeja.dxf.helpers.Point;
-import org.kabeja.dxf.helpers.Vector;
 
 
 /**
@@ -280,9 +278,9 @@ public class MathUtils {
         double[][] c = new double[a.length][b[0].length];
 
         for (int i = 0; i < a.length; i++) {
-            for (int x = 0; x < b[0].length; x++) {
-                for (int y = 0; y < b.length; y++) {
-                    c[i][x] += (a[i][y] * b[x][y]);
+            for (int x = 0; x < b.length; x++) {
+                for (int y = 0; y < a[i].length; y++) {
+                    c[i][x] += (a[i][y] * b[y][x]);
                 }
             }
         }

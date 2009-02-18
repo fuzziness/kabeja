@@ -131,19 +131,19 @@ public class DXFMTextHandler extends AbstractEntityHandler {
             break;
 
         case TEXT_ALIGN_X:
-            mtext.setAlignX(value.getDoubleValue());
+            mtext.getAlignmentPoint().setX(value.getDoubleValue());
             mtext.setRotation(0.0);
 
             break;
 
         case TEXT_ALIGN_Y:
-            mtext.setAlignY(value.getDoubleValue());
+            mtext.getAlignmentPoint().setY(value.getDoubleValue());
             mtext.setRotation(0.0);
 
             break;
 
         case TEXT_ALIGN_Z:
-            mtext.setAlignZ(value.getDoubleValue());
+            mtext.getAlignmentPoint().setZ(value.getDoubleValue());
             mtext.setRotation(0.0);
 
             break;
@@ -191,12 +191,10 @@ public class DXFMTextHandler extends AbstractEntityHandler {
 
         case TEXT_OBLIQUEANGLE:
             mtext.setObliqueAngle(value.getDoubleValue());
-
             break;
 
         default:
             super.parseCommonProperty(groupCode, value, mtext);
-
             break;
         }
     }

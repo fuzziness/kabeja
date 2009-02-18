@@ -15,6 +15,7 @@
 */
 package org.kabeja.parser.table;
 
+import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFLineType;
 import org.kabeja.parser.DXFValue;
 
@@ -63,6 +64,7 @@ public class DXFLineTypeTableHandler extends AbstractTableHandler {
      */
     public void parseGroup(int groupCode, DXFValue value) {
         switch (groupCode) {
+        
         case GROUPCODE_LTYPE_NAME:
             ltype.setName(value.getValue());
 
@@ -100,6 +102,9 @@ public class DXFLineTypeTableHandler extends AbstractTableHandler {
         case GROUPCODE_LTYPE_SCALE:
             ltype.setScale(value.getDoubleValue());
 
+            
+        case DXFConstants.GROUPCODE_STANDARD_FLAGS:
+            ltype.setFlags(value.getIntegerValue());
             break;
 
         default:

@@ -27,7 +27,7 @@ import org.kabeja.dxf.DXFLine;
 import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;
 import org.kabeja.dxf.helpers.DXFUtils;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 
 
 public class PolylineQueue {

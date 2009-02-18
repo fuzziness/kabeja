@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 
 
 /**
@@ -36,7 +36,7 @@ public class DXFInsert extends DXFEntity {
     private int columns = 1;
     private double row_spacing = 0;
     private double column_spacing = 0;
-    private String blockID = "";
+    private String blockName = "";
     private List attributes = new ArrayList();
 
     /**
@@ -117,17 +117,19 @@ public class DXFInsert extends DXFEntity {
 
     /**
      * @return Returns the blockID.
+     *  @deprecated @see getBlockName
      */
     public String getBlockID() {
-        return blockID;
+        return blockName;
     }
 
     /**
      * @param blockID
      *            The blockID to set.
+     *             @deprecated @see setBlockName
      */
     public void setBlockID(String blockID) {
-        this.blockID = blockID;
+        this.blockName = blockID;
     }
 
     /**
@@ -162,6 +164,7 @@ public class DXFInsert extends DXFEntity {
 
     /**
      * @return Returns the p.
+     * @deprecated @see getInsertPoint
      */
     public Point getPoint() {
         return insertPoint;
@@ -169,7 +172,7 @@ public class DXFInsert extends DXFEntity {
 
     /**
      * @param p
-     *            The p to set.
+     *    @deprecated @see setInsertPoint
      */
     public void setPoint(Point p) {
         this.insertPoint = p;
@@ -281,7 +284,7 @@ public class DXFInsert extends DXFEntity {
     }
 
     public double getLength() {
-        return this.doc.getDXFBlock(this.blockID).getLength();
+        return this.doc.getDXFBlock(this.blockName).getLength();
     }
     
     
@@ -317,5 +320,33 @@ public class DXFInsert extends DXFEntity {
     
     public Iterator getAttributeIterator(){
     	return this.attributes.iterator();
+    }
+
+    /**
+     * @return the insertPoint
+     */
+    public Point getInsertPoint() {
+        return insertPoint;
+    }
+
+    /**
+     * @param insertPoint the insertPoint to set
+     */
+    public void setInsertPoint(Point insertPoint) {
+        this.insertPoint = insertPoint;
+    }
+
+    /**
+     * @return the blockName
+     */
+    public String getBlockName() {
+        return blockName;
+    }
+
+    /**
+     * @param blockName the blockName to set
+     */
+    public void setBlockName(String blockName) {
+        this.blockName = blockName;
     }
 }

@@ -17,7 +17,7 @@ package org.kabeja.dxf.objects;
 
 import org.kabeja.dxf.Bounds;
 import org.kabeja.dxf.DXFConstants;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 
 
 public class DXFPlotSettings extends DXFObject {

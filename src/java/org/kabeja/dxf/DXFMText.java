@@ -71,12 +71,12 @@ public class DXFMText extends DXFText {
     public double getRotation() {
         if (rotation != 0.0) {
             return rotation;
-        } else if ((align_p1.getX() != 0.0) || (align_p1.getY() != 0.0) ||
-                (align_p1.getZ() != 0.0)) {
+        } else if ((alignmentPoint.getX() != 0.0) || (alignmentPoint.getY() != 0.0) ||
+                (alignmentPoint.getZ() != 0.0)) {
             // the align point as direction vector here
             // calculate the angle between the x-axis and the direction-vector
-            double[] x = { align_p1.getX(), align_p1.getY(), align_p1.getZ() };
-            double v = align_p1.getX() / DXFUtils.vectorValue(x);
+            double[] x = { alignmentPoint.getX(), alignmentPoint.getY(), alignmentPoint.getZ() };
+            double v = alignmentPoint.getX() / DXFUtils.vectorValue(x);
             v = Math.toDegrees(Math.acos(v));
 
             return v;

@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+
 import org.kabeja.parser.entities.DXF3DFaceHandler;
 import org.kabeja.parser.entities.DXF3DSolidHandler;
 import org.kabeja.parser.entities.DXFArcHandler;
@@ -36,6 +37,7 @@ import org.kabeja.parser.entities.DXFLeaderHandler;
 import org.kabeja.parser.entities.DXFLineHandler;
 import org.kabeja.parser.entities.DXFMLineHandler;
 import org.kabeja.parser.entities.DXFMTextHandler;
+import org.kabeja.parser.entities.DXFPointHandler;
 import org.kabeja.parser.entities.DXFPolylineHandler;
 import org.kabeja.parser.entities.DXFRayHandler;
 import org.kabeja.parser.entities.DXFRegionHandler;
@@ -137,6 +139,9 @@ public class ParserBuilder {
         handlerManager.addHandler(h);
 
         h = new DXFRegionHandler();
+        handlerManager.addHandler(h);
+        
+        h = new DXFPointHandler();
         handlerManager.addHandler(h);
 
         h = new DXFBodyHandler();
@@ -268,6 +273,9 @@ public class ParserBuilder {
         h = new DXFViewportHandler();
         handlerManager.addHandler(h);
 
+        h = new DXFPointHandler();
+        handlerManager.addHandler(h);
+        
         // the OBJECTS section
         handlerManager = new DXFObjectsSectionHandler();
 

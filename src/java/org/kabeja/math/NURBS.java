@@ -15,7 +15,6 @@
 */
 package org.kabeja.math;
 
-import org.kabeja.dxf.helpers.Point;
 
 
 public class NURBS {

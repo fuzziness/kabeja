@@ -18,6 +18,8 @@ package org.kabeja.dxf.helpers;
 import org.kabeja.dxf.DXFPolyline;
 import org.kabeja.dxf.DXFVertex;
 import org.kabeja.math.MathUtils;
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
 
 
 /**

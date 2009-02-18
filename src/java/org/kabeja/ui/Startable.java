@@ -14,6 +14,9 @@
    limitations under the License.
 */
 package org.kabeja.ui;
+
+import org.kabeja.tools.Component;
+
 /**
  * A Startable component will started at Application starts and stopped at the application stop.
  * 

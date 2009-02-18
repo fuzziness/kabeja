@@ -128,21 +128,16 @@ public class DXFTextHandler extends AbstractEntityHandler {
             break;
 
         case TEXT_ALIGN_X:
-            text.setAlignX(value.getDoubleValue());
+            text.getAlignmentPoint().setX(value.getDoubleValue());
             text.setAlignmentPoint(true);
-
             break;
 
         case TEXT_ALIGN_Y:
-            text.setAlignY(value.getDoubleValue());
-            text.setAlignmentPoint(true);
-
+            text.getAlignmentPoint().setY(value.getDoubleValue());
             break;
 
         case TEXT_ALIGN_Z:
-            text.setAlignZ(value.getDoubleValue());
-            text.setAlignmentPoint(true);
-
+            text.getAlignmentPoint().setZ(value.getDoubleValue());
             break;
 
         case TEXT_HEIGHT:
@@ -152,18 +147,7 @@ public class DXFTextHandler extends AbstractEntityHandler {
 
         case TEXT_GENERATION_FLAG:
 
-            switch (value.getIntegerValue()) {
-            case 2:
-                text.setBackward(true);
-
-                break;
-
-            case 4:
-                text.setUpsideDown(true);
-
-                break;
-            }
-
+            text.setTextGenerationFlag(value.getIntegerValue());
             break;
 
         case TEXT_STYLE:

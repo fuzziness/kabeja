@@ -108,6 +108,20 @@ public class DXFColor {
         };
     private static final String DEFAULT_COLOR = "0,0,0";
 
+    
+    
+    
+    
+    
+    /**
+     * Converts DXF color code to RGB String like 0,0,0 for black 
+     * @param dxfColorCode
+     * @return
+     */
+    
+    
+    
+    
     public static String getRGBString(int dxfColorCode) {
         if ((dxfColorCode > 0) && ((dxfColorCode - 1) <= (rgbs.length - 1))) {
             // the StringBuffer is faster then the String concat
@@ -123,5 +137,20 @@ public class DXFColor {
 
         // default is black
         return DEFAULT_COLOR;
+    }
+    
+    
+    
+    public static String getRGBString(byte[] b){
+        
+        StringBuffer buf = new StringBuffer();
+        buf.append((int)b[0]);
+        buf.append(",");
+        buf.append((int)b[1]);
+        buf.append(",");
+        buf.append((int)b[2]);
+
+        return buf.toString();
+     
     }
 }

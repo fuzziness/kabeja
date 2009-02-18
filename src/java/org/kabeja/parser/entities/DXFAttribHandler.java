@@ -43,11 +43,7 @@ public class DXFAttribHandler extends DXFTextHandler {
     public void parseGroup(int groupCode, DXFValue value) {
        
     	switch (groupCode) {
-        case GROUPCODE_ATTRIB_TEXT_LENGTH:
-
-            //ignore not used by attrib
-            break;
-
+   
         case GROUPCODE_ATTRIB_VERTICAL_ALIGN:
             text.setValign(value.getIntegerValue());
 

@@ -18,6 +18,9 @@ package org.kabeja.dxf.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
+
 
 public class DXFMLineSegment {
     protected Point startPoint = new Point();

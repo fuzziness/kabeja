@@ -45,6 +45,7 @@ public interface StreamGenerator {
      * Output the generation result to the given stream.
      * @param doc the @see DXFDocument to  output
      * @param out
+     * @throws DXFGenerationException TODO
      */
-    public void generate(DXFDocument doc, OutputStream out);
+    public void generate(DXFDocument doc, OutputStream out) throws DXFGenerationException;
 }

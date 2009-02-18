@@ -29,6 +29,10 @@ public class DXFHeader {
     private Hashtable variables = new Hashtable();
 
     public DXFHeader() {
+       //init last free ID 
+       DXFVariable v = new DXFVariable(DXFConstants.HEADER_VARIABLE_HANDSEED);
+       v.setValue("5", "1");
+       this.variables.put(v.getName(), v);
     }
 
     public void setVariable(DXFVariable v) {
@@ -48,8 +52,8 @@ public class DXFHeader {
     }
 
     public boolean isFillMode() {
-        if (hasVariable("$FILLMODE") &&
-                (getVariable("$FILLMODE").getDoubleValue("70") > 0)) {
+        if (hasVariable(DXFConstants.HEADER_VARIABLE_FILLMODE) &&
+                (getVariable(DXFConstants.HEADER_VARIABLE_FILLMODE).getDoubleValue("70") > 0)) {
             return true;
         }
 

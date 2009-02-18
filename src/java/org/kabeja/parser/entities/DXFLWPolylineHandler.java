@@ -115,7 +115,7 @@ public class DXFLWPolylineHandler extends AbstractEntityHandler {
             break;
 
         case ELEVATION:
-            lwpolyline.setElevation(value.getDoubleValue());
+            lwpolyline.getElevation().setZ(value.getDoubleValue());
 
             break;
 

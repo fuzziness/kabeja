@@ -18,7 +18,7 @@ package org.kabeja.dxf;
 public class DXFAttribDefinition extends DXFAttrib implements Cloneable{
 
 	
-	
+	protected int textLength=200;
 	
 	
 	public String getType() {
@@ -46,6 +46,26 @@ public class DXFAttribDefinition extends DXFAttrib implements Cloneable{
 		}
 		return attrib;
 	}
+
+
+
+
+    /**
+     * @return the textLength
+     */
+    public int getTextFieldLength() {
+        return textLength;
+    }
+
+
+
+
+    /**
+     * @param textLength the textLength to set
+     */
+    public void setTextFieldLength(int textLength) {
+        this.textLength = textLength;
+    }
 
 
 	

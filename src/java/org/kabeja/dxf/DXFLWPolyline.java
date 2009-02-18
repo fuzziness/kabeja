@@ -24,20 +24,9 @@ public class DXFLWPolyline extends DXFPolyline {
         return this.constantwidth;
     }
 
-    /**
-     * @return Returns the elevation.
-     */
-    public double getElevation() {
-        return elevation;
-    }
 
-    /**
-     * @param elevation
-     *            The elevation to set.
-     */
-    public void setElevation(double elevation) {
-        this.elevation = elevation;
-    }
+
+
 
     /* (non-Javadoc)
      * @see de.miethxml.kabeja.dxf.DXFEntity#getType()

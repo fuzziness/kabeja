@@ -25,14 +25,15 @@ public abstract class DXFEntity {
     protected DXFDocument doc;
     protected String id = "";
     protected String ownerID="";
-    protected String layerID = "";
+    protected String layerID = "0";
     protected boolean visibile = true;
-    protected String lineType = "";
+    protected String lineType = "BYLAYER";
     protected int flags = 0;
     protected boolean block = false;
     protected double linetypeScaleFactor = 1.0;
-    protected int color = 0;
-    protected byte[] colorRGB;
+    //by layer
+    protected int color = 256;
+    protected byte[] colorRGB=new byte[0];
     protected int lineWeight;
     protected double transparency;
     protected double thickness = 0.0;
@@ -157,6 +158,7 @@ public abstract class DXFEntity {
 
     public void setColorRGB(byte[] colorRGB) {
         this.colorRGB = colorRGB;
+        this.color=-1;
     }
 
     public int getLineWeight() {

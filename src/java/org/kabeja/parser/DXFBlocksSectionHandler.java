@@ -163,6 +163,15 @@ public class DXFBlocksSectionHandler extends DXFEntitiesSectionHandler {
         	}
         	break;
         	
+        	
+        case DXFConstants.GROUPCODE_STANDARD_FLAGS:
+            if(parseBlockHeader){       
+                block.setFlags(value.getIntegerValue());  
+            }else{
+                super.parseGroup(groupCode, value);
+            }
+            break;
+        	
         default:
             super.parseGroup(groupCode, value);
         }

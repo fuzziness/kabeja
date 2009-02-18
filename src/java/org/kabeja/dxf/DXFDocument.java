@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.kabeja.dxf.helpers.DXFLayerComparator;
+import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.dxf.objects.DXFDictionary;
 import org.kabeja.dxf.objects.DXFObject;
 
@@ -34,6 +35,7 @@ import org.kabeja.dxf.objects.DXFObject;
  * 
  */
 public class DXFDocument {
+
 	public static final String PROPERTY_ENCODING = "encoding";
 	public static final double DEFAULT_MARGIN = 5;
 	private Map layers = new HashMap();
@@ -61,6 +63,7 @@ public class DXFDocument {
 		DXFLayer defaultLayer = new DXFLayer();
 		defaultLayer.setDXFDocument(this);
 		defaultLayer.setName(DXFConstants.DEFAULT_LAYER);
+		defaultLayer.setID(DXFUtils.generateNewID(this));
 		this.layers.put(DXFConstants.DEFAULT_LAYER, defaultLayer);
 
 		// setup the root Dictionary
@@ -119,6 +122,15 @@ public class DXFDocument {
 		return layers.values().iterator();
 	}
 
+	
+	/**
+	 * Get the count of the DXFLayer in this DXFDocument.
+	 * @return the count of the DXFLayer
+	 */
+	
+	public int getDXFLayerCount(){
+		return this.layers.size();
+	}
 	/**
 	 * Adds a line type to this document
 	 * 
@@ -148,6 +160,11 @@ public class DXFDocument {
 		return lineTypes.values().iterator();
 	}
 
+	
+	public int getDXFLineTypeCount(){
+		return this.lineTypes.size();
+	}
+	
 	public void addDXFEntity(DXFEntity entity) {
 
 		entity.setDXFDocument(this);

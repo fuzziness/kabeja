@@ -14,6 +14,9 @@
    limitations under the License.
 */
 package org.kabeja.ui;
+
+import org.kabeja.tools.Component;
+
 /**
  * The Service Manager provides access to services of the application.
  * You can query the Service Manager for service.

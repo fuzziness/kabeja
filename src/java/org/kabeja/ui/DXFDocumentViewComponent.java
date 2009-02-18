@@ -18,6 +18,7 @@ package org.kabeja.ui;
 import javax.swing.JComponent;
 
 import org.kabeja.dxf.DXFDocument;
+import org.kabeja.tools.Component;
 
 /**
  * A DXFDocumentViewComponent provides a view of the current DXFDocument.

@@ -17,7 +17,7 @@ package org.kabeja.dxf;
 
 import java.util.Map;
 
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 import org.kabeja.math.TransformContext;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;

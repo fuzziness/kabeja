@@ -22,6 +22,8 @@ import java.util.List;
 import org.kabeja.dxf.Bounds;
 import org.kabeja.dxf.DXFHatch;
 import org.kabeja.math.MathUtils;
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
 
 
 /**

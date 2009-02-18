@@ -15,6 +15,9 @@
 */
 package org.kabeja.dxf.helpers;
 
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
+
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>

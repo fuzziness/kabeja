@@ -15,7 +15,7 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 
 
 /**
@@ -24,6 +24,7 @@ import org.kabeja.dxf.helpers.Point;
  */
 public class DXFPoint extends DXFEntity {
     protected Point p = new Point();
+    protected double angle=0.0;
 
     public DXFPoint() {
     }
@@ -106,4 +107,20 @@ public class DXFPoint extends DXFEntity {
         // a point has no length
         return 0;
     }
+
+    /**
+     * @return the angle
+     */
+    public double getAngle() {
+        return angle;
+    }
+
+    /**
+     * @param angle the angle to set
+     */
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
+    
+   
 }

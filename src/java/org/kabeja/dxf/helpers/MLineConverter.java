@@ -21,6 +21,8 @@ import org.kabeja.dxf.DXFVertex;
 import org.kabeja.dxf.objects.DXFMLineStyle;
 import org.kabeja.dxf.objects.DXFMLineStyleElement;
 import org.kabeja.math.MathUtils;
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
 
 
 public class MLineConverter {

@@ -21,7 +21,7 @@ import java.io.InputStream;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.kabeja.ui.Component;
+import org.kabeja.tools.Component;
 import org.kabeja.ui.impl.ServiceContainer;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;

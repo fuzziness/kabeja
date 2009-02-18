@@ -29,6 +29,7 @@ import org.kabeja.dxf.DXFDocument;
  *
  */
 public interface Handler {
+	
     public void setDXFDocument(DXFDocument doc);
 
     public void releaseDXFDocument();

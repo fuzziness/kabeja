@@ -15,7 +15,7 @@
 */
 package org.kabeja.dxf;
 
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 
 
 /**

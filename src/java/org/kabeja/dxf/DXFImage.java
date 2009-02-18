@@ -6,8 +6,8 @@ package org.kabeja.dxf;
 
 import java.util.ArrayList;
 
-import org.kabeja.dxf.helpers.Point;
 import org.kabeja.dxf.objects.DXFImageDefObject;
+import org.kabeja.math.Point;
 
 
 /**

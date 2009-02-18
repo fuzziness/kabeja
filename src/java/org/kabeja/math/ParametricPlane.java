@@ -16,8 +16,6 @@
 package org.kabeja.math;
 
 import org.kabeja.dxf.DXFExtrusion;
-import org.kabeja.dxf.helpers.Point;
-import org.kabeja.dxf.helpers.Vector;
 
 
 public class ParametricPlane {

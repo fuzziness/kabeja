@@ -30,9 +30,12 @@ public class DXFLineType {
     private int elementCount = 0;
     private int[] offsetX;
     private int[] offsetY;
-    private int alignment;
+    private int alignment=65;
     protected double scale = 1.0;
-
+    protected int flags=0;
+    
+    
+    
     public String getDescritpion() {
         return descritpion;
     }
@@ -42,7 +45,7 @@ public class DXFLineType {
     }
 
     public int getSegmentCount() {
-        return elementCount;
+        return pattern.length;
     }
 
     public void setSegmentCount(int elementCount) {
@@ -108,5 +111,19 @@ public class DXFLineType {
         }
 
         return false;
+    }
+
+    /**
+     * @return the flags
+     */
+    public int getFlags() {
+        return flags;
+    }
+
+    /**
+     * @param flags the flags to set
+     */
+    public void setFlags(int flags) {
+        this.flags = flags;
     }
 }

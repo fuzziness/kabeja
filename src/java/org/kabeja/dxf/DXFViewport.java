@@ -19,10 +19,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.kabeja.dxf.helpers.Point;
-import org.kabeja.dxf.helpers.Vector;
 import org.kabeja.math.MathUtils;
 import org.kabeja.math.ParametricPlane;
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
 
 
 /**

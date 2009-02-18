@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 
 
 /**

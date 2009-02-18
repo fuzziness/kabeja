@@ -16,6 +16,8 @@
 package org.kabeja.dxf.helpers;
 
 import org.kabeja.math.MathUtils;
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
 
 
 public class ParametricLine {

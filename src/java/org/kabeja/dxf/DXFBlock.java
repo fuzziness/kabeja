@@ -18,22 +18,30 @@ package org.kabeja.dxf;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.kabeja.dxf.helpers.Point;
-
+import org.kabeja.math.Point;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class DXFBlock {
     public static String TYPE = "BLOCK";
+
     private Point referencePoint;
-    private String layerID = DXFConstants.DEFAULT_LAYER;
+
+    private String layerName = DXFConstants.DEFAULT_LAYER;
+
     private String name = "";
+
     private String description = "";
+
     private ArrayList entities;
-    private String id="";
+
+    private String id = "";
+
     private DXFDocument doc;
+
+    private int flags = 0;
 
     /**
      *
@@ -102,7 +110,7 @@ public class DXFBlock {
     }
 
     /**
-     *
+     * 
      * @return a iterator over all entities of this block
      */
     public Iterator getDXFEntitiesIterator() {
@@ -111,17 +119,19 @@ public class DXFBlock {
 
     /**
      * @return Returns the layerID.
+     * @deprecated @see getLayerName
      */
     public String getLayerID() {
-        return layerID;
+        return layerName;
     }
 
     /**
      * @param layerID
      *            The layerID to set.
+     * @deprecated @see setLayerName
      */
     public void setLayerID(String layerID) {
-        this.layerID = layerID;
+        this.layerName = layerID;
     }
 
     /**
@@ -155,7 +165,7 @@ public class DXFBlock {
     }
 
     /**
-     *
+     * 
      * @return the parent document
      */
     public DXFDocument getDXFDocument() {
@@ -176,7 +186,7 @@ public class DXFBlock {
 
     /**
      * Gets the
-     *
+     * 
      * @see DXFEntity with the specified ID.
      * @param id
      *            of the
@@ -199,14 +209,43 @@ public class DXFBlock {
 
         return entity;
     }
-    
-    
-    public String getID(){
-    	return this.id;
+
+    public String getID() {
+        return this.id;
     }
-    
-    public void setID(String id){
-    	this.id=id;
-    	id="";
+
+    public void setID(String id) {
+        this.id = id;
+        id = "";
+    }
+
+    /**
+     * @return the flags
+     */
+    public int getFlags() {
+        return flags;
+    }
+
+    /**
+     * @param flags
+     *            the flags to set
+     */
+    public void setFlags(int flags) {
+        this.flags = flags;
+    }
+
+    /**
+     * @return the layerName
+     */
+    public String getLayerName() {
+        return layerName;
+    }
+
+    /**
+     * @param layerName
+     *            the layerName to set
+     */
+    public void setLayerName(String layerName) {
+        this.layerName = layerName;
     }
 }

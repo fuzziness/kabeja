@@ -161,8 +161,6 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
 
     public void parseGroup(int keyCode, DXFValue value)
         throws ParseException {
-        //System.out.println(""+keyCode);
-        //System.out.println(" "+value.getValue());
         try {
             if (sectionstarts) {
                 sectionstarts = false;
@@ -198,9 +196,8 @@ public class DXFParser implements HandlerManager, Handler, Parser, DXFHandler {
             if (parse) {
                 currentHandler.parseGroup(keyCode, value);
             }
-
             return;
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ParseException("Line: " + linecount +
                 " unsupported groupcode: " + key + " for value:" + value, e);

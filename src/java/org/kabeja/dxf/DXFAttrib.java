@@ -25,6 +25,7 @@ public class DXFAttrib extends DXFText {
 	protected String prompt = "";
 	protected String tag = "";
 
+	
 	public String getType() {
 		return DXFConstants.ENTITY_TYPE_ATTRIB;
 	}

@@ -78,7 +78,9 @@ public class DXFLayerTableHandler extends AbstractTableHandler {
         case DXFConstants.GROUPCODE_HANDLE:
         	layer.setID(value.getValue());
         	break;
-        	
+        case GROUPCODE_LAYER_PLOTTINGFLAG:
+        	layer.setPlottable(!value.getBooleanValue());
+        	break;
         }
     }
 

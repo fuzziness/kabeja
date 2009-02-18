@@ -15,6 +15,7 @@
 */
 package org.kabeja.parser.entities;
 
+import org.kabeja.dxf.DXFColor;
 import org.kabeja.dxf.DXFDocument;
 import org.kabeja.dxf.DXFEntity;
 import org.kabeja.parser.DXFValue;
@@ -118,6 +119,15 @@ public abstract class AbstractEntityHandler implements DXFEntityHandler {
             break;
 
         case COLOR_24BIT:
+             String hexString = Integer.toHexString(value.getIntegerValue());
+             if(hexString.length()==6){
+             byte[] b = new byte[3];
+             b[0] = (byte)Integer.parseInt(hexString.substring(0,2),16);
+             b[1] = (byte)Integer.parseInt(hexString.substring(2,4),16);
+             b[2] = (byte)Integer.parseInt(hexString.substring(4,6),16);
+             System.out.println("b="+b.length+" color"+DXFColor.getRGBString(b)+" type="+entity.getType());
+             entity.setColorRGB(b);
+            }
             break;
 
         case COLOR_TRANSPARENCY:

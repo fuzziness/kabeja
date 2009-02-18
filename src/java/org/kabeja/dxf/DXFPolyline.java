@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.kabeja.dxf.helpers.Point;
-import org.kabeja.dxf.helpers.Vector;
 import org.kabeja.math.MathUtils;
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
 
 
 /**
@@ -28,6 +28,7 @@ public class DXFPolyline extends DXFEntity {
     protected int surefaceDensityColumns = 0;
     protected int rows = 0;
     protected int columns = 0;
+    protected Point elevation = new Point(0,0,0);
 
     /**
      *
@@ -71,7 +72,7 @@ public class DXFPolyline extends DXFEntity {
 
     public void addVertex(DXFVertex vertex) {
         vertices.add(vertex);
-
+        vertex.setDXFDocument(this.doc);
         if (!vertex.isConstantWidth()) {
             constantWidth = false;
         }
@@ -687,4 +688,26 @@ public class DXFPolyline extends DXFEntity {
 
         return length;
     }
+    
+    public void setClosed(boolean b){
+    	if(b){
+    		this.flags = this.flags | 1;
+    	}else if(this.isClosed()){
+    		this.flags = this.flags ^ 1;
+    	}
+    }
+
+	/**
+	 * @return the elevation
+	 */
+	public Point getElevation() {
+		return elevation;
+	}
+
+	/**
+	 * @param elevation the elevation to set
+	 */
+	public void setElevation(Point elevation) {
+		this.elevation = elevation;
+	}
 }

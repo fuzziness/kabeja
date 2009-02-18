@@ -119,6 +119,8 @@ public class DXFPolylineHandler extends AbstractEntityHandler {
 
             if (parse_vertex) {
                 vertex.setZ(value.getDoubleValue());
+            }else{
+            	polyline.getElevation().setZ(value.getDoubleValue());
             }
 
             break;

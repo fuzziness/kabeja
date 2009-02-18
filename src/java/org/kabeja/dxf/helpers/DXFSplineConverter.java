@@ -23,6 +23,7 @@ import org.kabeja.dxf.DXFSpline;
 import org.kabeja.dxf.DXFVertex;
 import org.kabeja.math.NURBS;
 import org.kabeja.math.NURBSFixedNTELSPointIterator;
+import org.kabeja.math.Point;
 
 
 public class DXFSplineConverter {

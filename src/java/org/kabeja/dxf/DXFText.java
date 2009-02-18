@@ -16,64 +16,98 @@
 package org.kabeja.dxf;
 
 import org.kabeja.dxf.helpers.DXFTextParser;
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.dxf.helpers.DXFUtils;
 import org.kabeja.dxf.helpers.TextDocument;
-
+import org.kabeja.math.Point;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class DXFText extends DXFEntity {
     public static final double DEFAULT_FONT_SIZE = 8;
+
     public static final int VALIGN_BASELINE = 0;
+
     public static final int VALIGN_BOTTOM = 1;
+
     public static final int VALIGN_CENTER = 2;
+
     public static final int VALIGN_TOP = 3;
+
     public static final int ALIGN_LEFT = 0;
+
     public static final int ALIGN_CENTER = 1;
+
     public static final int ALIGN_RIGHT = 2;
+
     public static final int ALIGN_ALIGNED = 3;
+
     public static final int ALIGN_MIDDLE = 4;
+
     public static final int ALIGN_FIT = 5;
+
     protected double rotation = 0.0;
+
     protected double height = 0.0;
+
     protected double scale_x = 1.0;
+
     protected double oblique_angle = 0.0;
+
     protected double align_x = 0.0;
+
     protected double align_y = 0.0;
+
     protected double align_z = 0.0;
+    
+ 
 
     // the horizontal align
     protected int align = 0;
 
     // the vertical align
     protected int valign = 0;
+
     protected String text = "";
+
     protected String textStyle = "";
-    protected Point p;
-    protected Point align_p1;
+
+    protected Point p = new Point();
+
+    protected Point alignmentPoint = new Point();
+
     protected Point align_p2;
+
     protected boolean upsideDown = false;
+
     protected boolean backward = false;
+
     protected boolean alignmentPointSet = false;
+
     protected boolean top = false;
+
     protected boolean bottom = false;
+
     protected boolean vertical_center = false;
+
     protected TextDocument textDoc = new TextDocument();
+
+    protected int textGenerationFlag = 0;
 
     /**
      *
      */
     public DXFText() {
-        this.p = new Point();
-        this.align_p1 = new Point();
+       
+      
     }
 
     /*
      * (non-Javadoc)
-     *
-     * @see org.dxf2svg.dxf.DXFEntity#setDXFDocument(org.dxf2svg.dxf.DXFDocument)
+     * 
+     * @see
+     * org.dxf2svg.dxf.DXFEntity#setDXFDocument(org.dxf2svg.dxf.DXFDocument)
      */
     public void setDXFDocument(DXFDocument doc) {
         super.setDXFDocument(doc);
@@ -81,7 +115,7 @@ public class DXFText extends DXFEntity {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.dxf2svg.dxf.DXFEntity#updateViewPort()
      */
     public Bounds getBounds() {
@@ -185,47 +219,52 @@ public class DXFText extends DXFEntity {
 
     /**
      * @return Returns the align_x.
+     * @deprecated use getAlignmentPoint() instead
      */
     public double getAlignX() {
-        return align_p1.getX();
+        return alignmentPoint.getX();
     }
 
     /**
      * @param align_x
      *            The align_x to set.
+     *  @deprecated use getAlignmentPoint() instead
      */
     public void setAlignX(double align_x) {
-        align_p1.setX(align_x);
+        alignmentPoint.setX(align_x);
     }
 
     /**
      * @return Returns the align_y.
+     *   @deprecated use getAlignmentPoint() instead
      */
     public double getAlignY() {
-        return align_p1.getY();
+        return alignmentPoint.getY();
     }
 
     /**
      * @param align_y
      *            The align_y to set.
+     *   @deprecated use getAlignmentPoint() instead
      */
     public void setAlignY(double align_y) {
-        align_p1.setY(align_y);
+        alignmentPoint.setY(align_y);
     }
 
     /**
      * @return Returns the align_z.
+     *  @deprecated use getAlignmentPoint() instead
      */
     public double getAlignZ() {
-        return align_p1.getZ();
+        return alignmentPoint .getZ();
     }
 
     /**
      * @param align_z
-     *            The align_z to set.
+     *  @deprecated use getAlignmentPoint() instead
      */
     public void setAlignZ(double align_z) {
-        align_p1.setZ(align_z);
+        alignmentPoint .setZ(align_z);
     }
 
     /**
@@ -353,19 +392,23 @@ public class DXFText extends DXFEntity {
     }
 
     public boolean isBackward() {
-        return backward;
+        return DXFUtils.isBitEnabled(textGenerationFlag, 3);
     }
 
     public void setBackward(boolean backward) {
-        this.backward = backward;
+        if (backward) {
+            DXFUtils.enableFlag(textGenerationFlag, 3);
+        }
     }
 
     public boolean isUpsideDown() {
-        return upsideDown;
+        return DXFUtils.isBitEnabled(textGenerationFlag, 2);
     }
 
     public void setUpsideDown(boolean upsideDown) {
-        this.upsideDown = upsideDown;
+        if (upsideDown) {
+            DXFUtils.enableFlag(textGenerationFlag, 2);
+        }
     }
 
     public String getType() {
@@ -396,18 +439,18 @@ public class DXFText extends DXFEntity {
     }
 
     public Point getAlignmentPoint() {
-        return align_p1;
+        return alignmentPoint;
     }
 
     public Point calculateAlignmentPoint() {
-        Point alignmentPoint = new Point(p.getX(), p.getY(), p.getZ());
+        Point aPoint = new Point(p.getX(), p.getY(), p.getZ());
 
         if (!isUpsideDown()) {
             switch (align) {
             case 1:
 
                 if (alignmentPointSet) {
-                    alignmentPoint.setX(align_p1.getX());
+                    aPoint.setX(alignmentPoint.getX());
                 }
 
                 break;
@@ -415,7 +458,7 @@ public class DXFText extends DXFEntity {
             case 2:
 
                 if (alignmentPointSet) {
-                    alignmentPoint.setX(align_p1.getX());
+                    aPoint.setX(alignmentPoint .getX());
                 }
 
                 break;
@@ -423,7 +466,7 @@ public class DXFText extends DXFEntity {
             case 3:
 
                 if (alignmentPointSet) {
-                    alignmentPoint.setX(align_p1.getX());
+                    aPoint.setX(alignmentPoint.getX());
                 }
 
                 break;
@@ -431,7 +474,7 @@ public class DXFText extends DXFEntity {
             case 4:
 
                 if (alignmentPointSet) {
-                    alignmentPoint.setX(align_p1.getX());
+                    aPoint.setX(alignmentPoint.getX());
                 }
 
                 break;
@@ -439,18 +482,18 @@ public class DXFText extends DXFEntity {
             case 5:
 
                 if (alignmentPointSet) {
-                    alignmentPoint.setX(align_p1.getX());
+                    aPoint.setX(alignmentPoint.getX());
                 }
 
                 break;
             }
 
             if (alignmentPointSet) {
-                alignmentPoint.setY(align_p1.getY());
+                aPoint.setY(alignmentPoint .getY());
             }
         }
 
-        return alignmentPoint;
+        return aPoint;
     }
 
     public boolean isOmitLineType() {
@@ -459,5 +502,20 @@ public class DXFText extends DXFEntity {
 
     public double getLength() {
         return 0;
+    }
+
+    /**
+     * @return the textGenerationFlag
+     */
+    public int getTextGenerationFlag() {
+        return textGenerationFlag;
+    }
+
+    /**
+     * @param textGenerationFlag
+     *            the textGenerationFlag to set
+     */
+    public void setTextGenerationFlag(int textGenerationFlag) {
+        this.textGenerationFlag = textGenerationFlag;
     }
 }

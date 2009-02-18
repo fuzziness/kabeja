@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.kabeja.processing.ProcessingManager;
-import org.kabeja.ui.Application;
+import org.kabeja.tools.Application;
+import org.kabeja.tools.Component;
 import org.kabeja.ui.ApplicationMenuBar;
-import org.kabeja.ui.Component;
 import org.kabeja.ui.ProcessingUIComponent;
 import org.kabeja.ui.ServiceManager;
 import org.kabeja.ui.Serviceable;

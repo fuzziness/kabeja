@@ -17,23 +17,27 @@ package org.kabeja.dxf.helpers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.kabeja.dxf.DXFConstants;
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.dxf.DXFLayer;
+import org.kabeja.dxf.DXFHeader;
 import org.kabeja.dxf.DXFLine;
 import org.kabeja.dxf.DXFPolyline;
+import org.kabeja.dxf.DXFVariable;
 import org.kabeja.dxf.DXFVertex;
 import org.kabeja.math.MathUtils;
-
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
 
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class DXFUtils {
+
+  
+
     /**
      *
      */
@@ -43,8 +47,8 @@ public class DXFUtils {
 
     public static double distance(Point start, Point end) {
         double length;
-        length = Math.sqrt(Math.pow((end.getX() - start.getX()), 2) +
-                Math.pow((end.getY() - start.getY()), 2));
+        length = Math.sqrt(Math.pow((end.getX() - start.getX()), 2)
+                + Math.pow((end.getY() - start.getY()), 2));
 
         return length;
     }
@@ -80,7 +84,7 @@ public class DXFUtils {
     }
 
     public static Point getPointFromParameterizedLine(Point basePoint,
-        Vector direction, double parameter) {
+            Vector direction, double parameter) {
         Point r = scalePoint(direction, parameter);
 
         r.setX(r.getX() + basePoint.getX());
@@ -109,7 +113,7 @@ public class DXFUtils {
                 v.setBulge(0);
             }
 
-            //the predecessor becomes the reversed bulge
+            // the predecessor becomes the reversed bulge
             if (bulge != 0.0) {
                 v.setBulge(bulge * (-1.0));
             }
@@ -137,7 +141,7 @@ public class DXFUtils {
     /**
      * Tests if the two points are the same for a given radius. In other words
      * the distance between the two points is lower then the radius.
-     *
+     * 
      * @param p1
      * @param p2
      * @param radius
@@ -154,17 +158,56 @@ public class DXFUtils {
     }
 
     /**
-     * Converts the default iterator to a sorted iterator by the
-     * z-index of layers
+     * Converts the default iterator to a sorted iterator by the z-index of
+     * layers
+     * 
      * @param i
      * @return
      */
-    
-    public static Iterator sortedLayersByZIndexIterator(Iterator i){
-    	TreeSet set = new TreeSet(new DXFLayerComparator());
-    	while(i.hasNext()){
-    		set.add(i.next());
-    	}
-    	return set.iterator();
+
+    public static Iterator sortedLayersByZIndexIterator(Iterator i) {
+        TreeSet set = new TreeSet(new DXFLayerComparator());
+        while (i.hasNext()) {
+            set.add(i.next());
+        }
+        return set.iterator();
     }
+
+    /**
+     * Set the give bit on the int.
+     * 
+     * @param flags
+     * @param bitPos
+     * @return
+     */
+
+    public static int enableFlag(int flags, int bitPos) {
+
+        int v = (int) Math.pow(2, bitPos);
+
+        return flags | v;
+    }
+    
+    public static boolean isBitEnabled(int flags, int bitPosition) {
+        int mask = (int) Math.pow(2.0, bitPosition);
+        return (flags & mask) == mask;
+
+    }
+    
+    
+
+    public static String generateNewID(DXFDocument doc) {
+        DXFHeader header = doc.getDXFHeader();
+        DXFVariable v = header
+                .getVariable(DXFConstants.HEADER_VARIABLE_HANDSEED);
+        String hex = v.getValue("5");
+        int lastFreeID = Long.decode("#"+hex).intValue();
+        int id = ++lastFreeID;
+        String currentID = Integer.toHexString(id).toUpperCase();
+        v.setValue("5", currentID);
+        return currentID;
+    }
+
+
+
 }

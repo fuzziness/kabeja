@@ -17,7 +17,6 @@ package org.kabeja.math;
 
 import java.util.Iterator;
 
-import org.kabeja.dxf.helpers.Point;
 
 
 public class NURBSFixedNTELSPointIterator implements Iterator {

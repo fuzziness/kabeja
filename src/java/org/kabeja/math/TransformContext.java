@@ -12,35 +12,33 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 package org.kabeja.math;
-
-import org.kabeja.dxf.helpers.Point;
-import org.kabeja.dxf.helpers.Vector;
-
 
 public class TransformContext {
     private double[][] transformMatrix;
+
     private double rotationAngle = 0.0;
+
     private double scaleX = 1.0;
+
     private double scaleY = 1.0;
+
     private double scaleZ = 1.0;
+
     private Vector translation = new Vector(1.0, 1.0, 1.0);
 
     public TransformContext() {
-        transformMatrix = new double[][] {
-                { 1.0, 0.0, 0.0, 0.0 },
-                { 0.0, 1.0, 0.0, 0.0 },
-                { 0.0, 0.0, 1.0, 0.0 },
-                { 0.0, 0.0, 0.0, 1.0 }
-            };
+        transformMatrix = new double[][] { { 1.0, 0.0, 0.0, 0.0 },
+                { 0.0, 1.0, 0.0, 0.0 }, { 0.0, 0.0, 1.0, 0.0 },
+                { 0.0, 0.0, 0.0, 1.0 } };
     }
 
     public TransformContext(double[][] transformMatrix)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         if ((transformMatrix.length != 4) && (transformMatrix[0].length != 4)) {
             throw new IllegalArgumentException(
-                "Not a valid tranformation matrix.");
+                    "Not a valid tranformation matrix.");
         }
 
         this.transformMatrix = transformMatrix;
@@ -58,19 +56,28 @@ public class TransformContext {
         this.setScale(s, s, s);
     }
 
+    public void appendScale(double x, double y, double z) {
+        this.scaleX = x;
+        this.scaleY = y;
+        this.scaleZ = z;
+
+        double[][] m = new double[][] { { x, 0.0, 0.0, 0.0 },
+                { 0.0, y, 0.0, 0.0 }, { 0.0, 0.0, z, 0.0 },
+                { 0.0, 0.0, 0.0, 1.0 } };
+        this.transformMatrix = MathUtils.multiplyMatrixByMatrix(m,
+                this.transformMatrix);
+    }
+
     public void setScale(double x, double y, double z) {
         this.scaleX = x;
         this.scaleY = y;
         this.scaleZ = z;
 
-        double[][] m = new double[][] {
-                { x, 0.0, 0.0, 0.0 },
-                { 0.0, y, 0.0, 0.0 },
-                { 0.0, 0.0, z, 0.0 },
-                { 0.0, 0.0, 0.0, 1.0 }
-            };
-        this.transformMatrix = MathUtils.multiplyMatrixByMatrix(this.transformMatrix,
-                m);
+        double[][] m = new double[][] { { x, 0.0, 0.0, 0.0 },
+                { 0.0, y, 0.0, 0.0 }, { 0.0, 0.0, z, 0.0 },
+                { 0.0, 0.0, 0.0, 1.0 } };
+        this.transformMatrix = MathUtils.multiplyMatrixByMatrix(
+                this.transformMatrix, m);
     }
 
     public double getScaleX() {
@@ -112,14 +119,20 @@ public class TransformContext {
     public void setTranslation(Vector translation) {
         this.translation = translation;
 
-        double[][] m = new double[][] {
-                { 1.0, 0.0, 0.0, translation.getX() },
+        double[][] m = new double[][] { { 1.0, 0.0, 0.0, translation.getX() },
                 { 0.0, 1.0, 0.0, translation.getY() },
-                { 0.0, 0.0, 1.0, translation.getZ() },
-                { 0.0, 0.0, 0.0, 1.0 }
-            };
-        this.transformMatrix = MathUtils.multiplyMatrixByMatrix(this.transformMatrix,
-                m);
+                { 0.0, 0.0, 1.0, translation.getZ() }, { 0.0, 0.0, 0.0, 1.0 } };
+        this.transformMatrix = MathUtils.multiplyMatrixByMatrix(
+                this.transformMatrix, m);
+    }
+    
+    public void appendTranslation(Vector translation){
+
+        double[][] m = new double[][] { { 1.0, 0.0, 0.0, translation.getX() },
+                { 0.0, 1.0, 0.0, translation.getY() },
+                { 0.0, 0.0, 1.0, translation.getZ() }, { 0.0, 0.0, 0.0, 1.0 } };
+        this.transformMatrix = MathUtils.multiplyMatrixByMatrix(
+                 m,this.transformMatrix);
     }
 
     public Point transform(Point a) {
@@ -129,5 +142,27 @@ public class TransformContext {
         Point p = new Point(v[0], v[1], v[2]);
 
         return p;
+    }
+
+    public void debug() {
+        System.out.println("TransformMatrix");
+        System.out.println(this.transformMatrix[0][0] + "\t"
+                + this.transformMatrix[0][1] + "\t"
+                + this.transformMatrix[0][2] + "\t"
+                + this.transformMatrix[0][3]);
+        System.out.println(this.transformMatrix[1][0] + "\t"
+                + this.transformMatrix[1][1] + "\t"
+                + this.transformMatrix[1][2] + "\t"
+                + this.transformMatrix[1][3]);
+        System.out.println(this.transformMatrix[2][0] + "\t"
+                + this.transformMatrix[2][1] + "\t"
+                + this.transformMatrix[2][2] + "\t"
+                + this.transformMatrix[2][3]);
+        System.out.println(this.transformMatrix[3][0] + "\t"
+                + this.transformMatrix[3][1] + "\t"
+                + this.transformMatrix[3][2] + "\t"
+                + this.transformMatrix[3][3]);
+        System.out.println();
+
     }
 }
