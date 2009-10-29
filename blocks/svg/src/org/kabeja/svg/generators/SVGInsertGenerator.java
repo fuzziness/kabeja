@@ -117,8 +117,17 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator {
 							.get(SVGContext.LAYER_STROKE_WIDTH);
 				
 					lw.setValue((lw.getValue() * 2) / s);
-					SVGUtils.addAttribute(attr,
-							SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWidthToStrokeWidth(lw));
+					
+				    int index = attr.getIndex(SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH);
+					if(index>-1){
+					   attr.removeAttribute(index);   
+					}
+						SVGUtils.addAttribute(attr,
+								SVGConstants.SVG_ATTRIBUTE_STROKE_WITDH, SVGUtils.lineWidthToStrokeWidth(lw));
+					
+				
+					
+					
 				}
 
 				// SVGUtils.startElement(handler, SVGConstants.SVG_GROUP, attr);
