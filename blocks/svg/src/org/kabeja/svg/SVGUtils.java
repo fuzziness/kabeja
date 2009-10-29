@@ -61,6 +61,10 @@ public class SVGUtils {
 		// attr.addAttribute(SVGConstants.SVG_NAMESPACE, name,
 		// SVGConstants.SVG_PREFIX+":"+name , DEFAUL_ATTRIBUTE_TYPE,
 		// value);
+		int index = attr.getIndex(name);
+		if(index>-1){
+			attr.removeAttribute(index);
+		}
 		attr.addAttribute("", name, name, DEFAUL_ATTRIBUTE_TYPE, value);
 	}
 
