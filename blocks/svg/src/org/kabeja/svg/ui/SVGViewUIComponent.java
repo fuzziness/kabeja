@@ -258,7 +258,7 @@ public class SVGViewUIComponent implements DXFDocumentViewComponent,
     }
 
     public void setServiceManager(ServiceManager manager) {
-        Object[] obj = manager.getServiceComponents(DXFDocumentChangeEventProvider.SERVICE);
+        org.kabeja.tools.Component[] obj = manager.getServiceComponents(DXFDocumentChangeEventProvider.SERVICE);
 
         for (int i = 0; i < obj.length; i++) {
             ((DXFDocumentChangeEventProvider) obj[i]).addDXFDocumentChangeListener(this);
