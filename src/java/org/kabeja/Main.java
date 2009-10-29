@@ -153,6 +153,7 @@ public class Main {
 		} else {
               try {
                 Application app = (Application)(this.getClass().getClassLoader().loadClass("org.kabeja.ui.UIApplication")).newInstance();
+                app.start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
