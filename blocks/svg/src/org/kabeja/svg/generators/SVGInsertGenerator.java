@@ -110,7 +110,7 @@ public class SVGInsertGenerator extends AbstractSVGSAXGenerator {
 
 				// fix the scale of stroke-width
 				double s = Math.abs(scale_x) + Math.abs(scale_y);
-				if ((s > 0.00000001 && s<0.0000001)
+				if ((s > 0.00000001 || s <0.0000001)
 						&& svgContext
 								.containsKey(SVGContext.LAYER_STROKE_WIDTH)) {
 					LineWidth lw = (LineWidth) svgContext
