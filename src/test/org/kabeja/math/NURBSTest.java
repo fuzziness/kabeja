@@ -17,7 +17,7 @@ package org.kabeja.math;
 
 import junit.framework.TestCase;
 
-import org.kabeja.dxf.helpers.Point;
+import org.kabeja.math.Point;
 
 
 public class NURBSTest extends TestCase {

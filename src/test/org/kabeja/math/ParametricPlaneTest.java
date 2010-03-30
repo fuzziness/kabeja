@@ -17,8 +17,8 @@ package org.kabeja.math;
 
 import junit.framework.TestCase;
 
-import org.kabeja.dxf.helpers.Point;
-import org.kabeja.dxf.helpers.Vector;
+import org.kabeja.math.Point;
+import org.kabeja.math.Vector;
 
 
 public class ParametricPlaneTest extends TestCase {
