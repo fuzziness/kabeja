@@ -79,17 +79,17 @@ public class DXFText extends DXFEntity {
 
     protected Point align_p2;
 
-    protected boolean upsideDown = false;
-
-    protected boolean backward = false;
+//    protected boolean upsideDown = false;
+//
+//    protected boolean backward = false;
 
     protected boolean alignmentPointSet = false;
-
-    protected boolean top = false;
-
-    protected boolean bottom = false;
-
-    protected boolean vertical_center = false;
+//
+//    protected boolean top = false;
+//
+//    protected boolean bottom = false;
+//
+//    protected boolean vertical_center = false;
 
     protected TextDocument textDoc = new TextDocument();
 
