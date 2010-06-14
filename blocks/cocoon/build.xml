@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="dxf2svg" default="dist" basedir=".">
+	<property name="homepath" value="" />
+	<property name="block.releasename" value="kabeja-dxf2svg-cocoon-${releaseversion}" />
+	<property name="src" value="src" />
+	<property name="sources" value="java" />
+	<property name="classes" value="classes" />
+	<property name="test" value="test" />
+	<property name="build" value="build" />
+	<property name="dist" value="dist" />
+	<property name="help" value="doc" />
+	<property name="icons" value="icons" />
+	<property name="lang" value="lang" />
+	<property name="conf" value="conf" />
+	<property name="libs" value="lib" />
+	<property name="sample" value="sample" />
+	<property name="manifest" value="manifestfile" />
+
+	<property name="packages" value="packages" />
+	<property name="samples" value="samples" />
+	<property name="apidocs" value="javadoc" />
+	<property name="docs" value="doc" />
+	<property name="JarClassPath" value="" />
+	<property name="tempdir" value="tmp" />
+	<property name="tools" value="tools" />
+	<property name="kabeja.home" value="../.." />
+	<property name="cocoon.webapp" value="${cocoon.libs}/../.." />
+
+
+	<description>
+	</description>
+
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/${libs}" />
+
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}"
+			target="${java.target.version}" source="${java.target.version}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${cocoon.libs}/">
+					<include name="**/*.jar" />
+				</fileset>
+				<dirset dir="${kabeja.home}/${build}/${classes}" />
+				<fileset dir="${kabeja.home}/${dist}/${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+
+
+
+	<target name="dist" depends="compile,manifest">
+		<jar jarfile="${kabeja.home}/${dist}/${libs}/${block.releasename}.jar"
+			basedir="${build}/${classes}" includes="**/*" manifest="${manifest}" />
+		<delete file="${manifest}" />
+	</target>
+
+
+
+
+
+
+
+
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${packages}" />
+		<delete dir="${tempdir}" />
+		<delete dir="subsitemap-demo/kabeja/dxf" />
+	</target>
+
+	<target name="javadoc">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${apidocs}" />
+		<javadoc packagenames="*.*.*" sourcepath="${src}/${sources}"
+			destdir="${kabeja.home}/${build}/${apidocs}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${build}/${classes}" />
+			</classpath>
+		</javadoc>
+	</target>
+
+
+	<!-- new manifest section here -->
+	<target name="manifest">
+		<fileset dir="${libs}" id="jar.files">
+			<include name="*.jar" />
+		</fileset>
+		<pathconvert pathsep=" " property="jars" refid="jar.files">
+			<map from="${basedir}/" to="" />
+		</pathconvert>
+		<manifest file="${manifest}">
+			<attribute name="Main-Class" value="${MainClass}" />
+			<attribute name="Class-Path" value="${jars}" />
+		</manifest>
+	</target>
+
+
+	<!-- for direct deploy -->
+	<target name="deploy" depends="dist" if="cocoon.webapp">
+		<jar jarfile="${cocoon.libs}/${block.releasename}.jar">
+			<fileset dir="${build}/${classes}" />
+			<fileset dir="${kabeja.home}/${build}/${classes}" />
+		</jar>
+		<copy todir="subsitemap-demo/kabeja/dxf">
+			<fileset dir="${kabeja.home}/samples/dxf">
+				<include name="*.dxf" />
+			</fileset>
+		</copy>
+		<mkdir dir="${cocoon.webapp}/kabeja" />
+		<copy todir="${cocoon.webapp}/kabeja">
+			<fileset dir="subsitemap-demo/kabeja">
+				<include name="**/*" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+		<copy todir="${cocoon.webapp}/WEB-INF/lib">
+			<fileset dir="${kabeja.home}/${dist}/${libs}">
+				<include name="kabeja*.jar" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+
+	</target>
+
+</project>
+

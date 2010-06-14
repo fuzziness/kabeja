@@ -1,0 +1,64 @@
+<project name="dxf" default="dist" basedir=".">
+	<property name="blockname" value="dxf" />
+	<property name="jar.name" value="kabeja-dxf-${releaseversion}" />
+	<property name="kabeja.home" value="" />
+	<property name="build" value="build" />
+	<property name="classes" value="classes" />
+
+
+
+
+	<target name="init">
+		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${build}/${blockname}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="src/java" destdir="${build}/${classes}" debug="${debug}"
+			debuglevel="lines,var,source">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${kabeja.home}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${kabeja.home}/${dist}/${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile">
+		<mkdir dir="${build}/${classes}/conf" />
+		<copy todir="${build}/${classes}/conf">
+			<fileset dir="conf">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<jar jarfile="${build}/${blockname}/${jar.name}.jar" basedir="${build}/${classes}"
+			includes="**/*" />
+
+		<copy todir="${kabeja.home}/dist/lib">
+			<fileset dir="${build}/${blockname}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<!-- the libs -->
+		<copy todir="${kabeja.home}/dist/lib">
+			<fileset dir="lib" />
+		</copy>
+		<copy todir="${kabeja.home}/dist/conf">
+			<fileset dir="conf" />
+		</copy>
+	</target>
+
+
+
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+</project>

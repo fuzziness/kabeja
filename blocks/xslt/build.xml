@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="dxf2svg" default="dist" basedir=".">
+	<property name="homepath" value="" />
+	<property name="block.releasename" value="kabeja-xslt" />
+	<property name="releaseversion" value="0.1" />
+	<property name="src" value="src" />
+	<property name="sources" value="java" />
+	<property name="test" value="test" />
+	<property name="dist" value="dist" />
+	<property name="help" value="doc" />
+	<property name="icons" value="icons" />
+	<property name="lang" value="lang" />
+	<property name="conf" value="conf" />
+	<property name="block.libs" value="lib" />
+	<property name="sample" value="sample" />
+	<property name="block.manifest" value="manifestfile" />
+	<property name="version" value="0.1" />
+	<property name="packages" value="packages" />
+	<property name="samples" value="samples" />
+	<property name="apidocs" value="javadoc" />
+	<property name="docs" value="doc" />
+	<property name="JarClassPath" value="" />
+	<property name="tempdir" value="tmp" />
+	<property name="tools" value="tools" />
+	<property name="block.mainclass" value="" />
+
+
+
+
+	<description>
+	</description>
+
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/${help}" />
+		<mkdir dir="${dist}/${lang}" />
+		<mkdir dir="${dist}/${libs}" />
+		<mkdir dir="${dist}/${conf}" />
+
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}/${classes}" target="${java.target.version}"
+			source="${java.target.version}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${block.libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<dirset dir="${kabeja.home}/${build}/${classes}" />
+
+			</classpath>
+		</javac>
+	</target>
+
+
+
+
+	<target name="dist" depends="compile, manifest">
+		<copy todir="${kabeja.home}/${dist}/${libs}">
+			<fileset dir="${libs}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<jar jarfile="${kabeja.home}/${dist}/${libs}/${block.releasename}.jar"
+			basedir="${build}/${classes}" includes="**/*" manifest="${block.manifest}" />
+	</target>
+
+
+
+
+
+
+
+
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+
+		<delete dir="${tempdir}" />
+	</target>
+
+	<target name="javadoc">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${apidocs}" />
+		<javadoc packagenames="*.*.*" sourcepath="${src}/${sources}"
+			destdir="${build}/${apidocs}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${build}/${sources}" />
+			</classpath>
+		</javadoc>
+	</target>
+
+	<!-- unit test section -->
+	<target name="test-init" depends="init">
+		<mkdir dir="${build}/${test}" />
+	</target>
+	<target name="test-build" depends="test-init">
+		<javac srcdir="${src}/${test}" destdir="${build}/${test}">
+			<classpath>
+				<pathelement path="{$classpath}" />
+				<pathelement path="${build}/${sources}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${tools}/${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="test" depends="compile,test-build">
+		<java classname="junit.swingui.TestRunner" fork="yes">
+			<arg value="" />
+			<classpath>
+				<pathelement path="{$classpath}" />
+				<pathelement path="${build}/${sources}" />
+				<pathelement path="${build}/${test}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${tools}/${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+
+	<!-- new manifest section here -->
+	<target name="manifest">
+		<fileset dir="${block.libs}" id="jar.files">
+			<include name="*.jar" />
+		</fileset>
+		<pathconvert pathsep=" " property="block.jars" refid="jar.files">
+			<map from="${basedir}/" to="" />
+		</pathconvert>
+		<manifest file="${block.manifest}">
+			<attribute name="Main-Class" value="${block.mainclass}" />
+			<attribute name="Class-Path" value="${block.jars} ${releasename}.jar" />
+		</manifest>
+	</target>
+
+
+
+</project>
+

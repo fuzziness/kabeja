@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2010 simon
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+    http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<processing xmlns="http://kabeja.org/processing/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<!--+
+	    | The processing configuration  
+	    +-->
+	<configuration>
+	   <parser key="dxf" name="DXF-Parser" parser-factory="org.kabeja.dxf.parser.DXFParserFactory"/>
+	
+	    <!--+
+	        | If you want to configure the parser you can change the parser.xml and use it here or
+                | register your own parser for other input formats
+                |  <parsers>
+	        |   <xi:include href="conf/parser.xml"/>
+	        |  </parsers>
+	        +-->
+		<postprocessors>
+			<postprocessor class="org.kabeja.processing.BoundsDebugger" name="bounds.debugger"/>
+			<!--  removes all image entities if the images file does not exists -->
+			<postprocessor class="org.kabeja.processing.ImageFilter" name="image.filter"/>
+			<postprocessor class="org.kabeja.processing.BoundsFilter" name="bounds.filter"/>
+			 <!-- allows you to remove layers from the draft and merge all layers to one -->
+			<postprocessor class="org.kabeja.processing.LayerFilter" name="layer.filter"/>
+                         <!--  converts lines,arcs and polylines to a single polyline, if they have the same points -->
+			<postprocessor class="org.kabeja.processing.PolylineConverter" name="polyline.converter"/>
+			<!-- removes invisible entities -->		
+			<postprocessor class="org.kabeja.processing.VisibilityFilter" name="visibility.filter"/>
+		</postprocessors>
+		
+		<filters>
+        	<filter class="org.kabeja.batik.tools.ImageBase64Encoder" name="image"/>
+			<filter class="org.kabeja.svg.FixedStrokeWidthFilter" name="fixed-stroke-width"/>
+			<filter class="org.kabeja.svg.RootLayerFilter" name="rootlayer.filter"/>
+			<filter class="org.kabeja.svg.StyleAttributeFilter" name="styleattribute.filter"/>
+	    </filters>
+		
+		<serializers>
+			<serializer class="org.kabeja.xml.SAXPrettyOutputter" name="svg"/>
+			
+			<serializer class="org.kabeja.batik.tools.SAXJPEGSerializer" name="jpeg">
+			               <!--+
+                               | * support for the batik transcoder hints, the type is needed
+                               |   for a correct configuration 
+                               |   
+                               |   <property name="KEY_BACKGROUND_COLOR" value="#00FF00"/>  
+                               |   <property name="KEY_BACKGROUND_COLOR_type" value="color"/>  
+                               +-->  			            
+            </serializer>
+			<serializer class="org.kabeja.batik.tools.SAXPNGSerializer" name="png"/>
+			<serializer class="org.kabeja.batik.tools.SAXTIFFSerializer" name="tiff"/>
+		    <serializer class="org.kabeja.batik.tools.SAXPDFSerializer" name="pdf">
+                           <!--+
+                               | *example configuration works with jpeg/png/tiff also
+                               | 
+                               | * setup a paper sizes A0-A6
+                               |   <property name="paper" value="A1"/>
+                               |
+                               | * setup own paper size by mm/in/px/cm
+                               |   <property name="width" value="100mm"/>
+                               |   <property name="height" value="50mm"/> 
+                               |
+                               | * dpi setting
+                               |   <property name="dpi" value="300"/>    
+                               |
+                               | * change the orientation
+                               |   <property name="orientation" value="landscape"/> 
+                               +-->              
+                        </serializer>
+			
+		</serializers>
+		
+		<generators>
+	   
+	      	<saxgenerator class="org.kabeja.svg.SVGGenerator" name="svg">
+                            <!--+
+                                | possible values are:
+                                | *) modelspace
+                                | *) paperspace
+                                | *) kabeja   -> the default
+                                +--> 
+                            <property name="bounds-rule" value="kabeja"/>
+
+                            <!--+
+                                | * you can choose a layout
+                                |   by name:
+                                |   <property name="output-style-name" value="myLayout2"/>
+                                |   or the default "Model"-layout will be used
+                                +-->
+			    <property name="output-style" value="layout"/>
+
+                            <!--+
+                                | you can setup an own stroke width for the draft
+                                | this will override the draft line weight
+                                | <property name="stroke-width" value="0.02%"/>
+                                +-->
+               </saxgenerator>
+		</generators>
+		
+	</configuration>
+	
+	<!--+
+	    | The processing pipelines 
+	    +-->
+	
+	<pipelines>
+	  <pipeline name="test">
+	  	  <saxgenerate name="svg">
+			<property name="stroke-width" value="22"/>
+			<serialize name="jpeg">
+			   <property name="width" value="1024"/>
+			   <property name="height" value="768"/>
+			</serialize>
+		  </saxgenerate>	
+	  </pipeline>
+	
+	</pipelines>
+</processing>

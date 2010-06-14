@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    
+    <map:generators default="file">
+      <map:generator name="dxf2svg" src="org.kabeja.cocoon.generation.DXF2SVGGenerator"/>
+    </map:generators>
+    
+    <map:transformers default="xslt">
+      <map:transformer name="write-source" src="org.apache.cocoon.transformation.SourceWritingTransformer" logger="sitemap.transformer.filewriter">
+        <serializer>myxml</serializer>
+      </map:transformer>
+       <map:transformer name="firefox_fix" src="org.kabeja.cocoon.transformation.SAXFilter2TransformerAdapter" logger="sitemap.transformer.kabeja.filter">
+             <parameter name="filter.class" value="org.kabeja.xml.FixedStrokeWidthFilter"/>
+      </map:transformer>
+    </map:transformers>
+    
+    
+    <map:serializers default="html">
+      <map:serializer mime-type="text/xml" name="myxml" src="org.apache.cocoon.serialization.XMLSerializer" logger="sitemap.serializer.myxml">
+        <encoding>iso-8859-1</encoding>
+      </map:serializer>
+      <map:serializer mine-type="application/msexel" name="xls" src="org.apache.cocoon.serialization.HSSFSerializer"/>
+    </map:serializers>
+
+    <map:selectors>
+  		<map:selector name="browser" src="org.apache.cocoon.selection.BrowserSelector" logger="sitemap.selector.browser">
+	      <browser name="explorer" useragent="MSIE"/>
+	      <browser name="pocketexplorer" useragent="MSPIE"/>
+      	  <browser name="handweb" useragent="HandHTTP"/>
+      	  <browser name="avantgo" useragent="AvantGo"/>
+	      <browser name="imode" useragent="DoCoMo"/>
+    	  <browser name="opera" useragent="Opera"/>
+	      <browser name="lynx" useragent="Lynx"/>
+	      <browser name="java" useragent="Java"/>
+          <browser name="wap" useragent="Nokia"/>
+          <browser name="wap" useragent="UP"/>
+          <browser name="wap" useragent="Wapalizer"/>
+          <browser name="firefox1" useragent="Firefox/1."/>
+          <browser name="mozilla5" useragent="Mozilla/5"/>
+          <browser name="mozilla5" useragent="Netscape6/"/>
+          <browser name="netscape" useragent="Mozilla"/>
+      </map:selector>
+    
+  </map:selectors>
+  </map:components>
+
+  
+  
+  
+  
+  
+  <map:pipelines>
+  
+
+<!-- demo here -->
+
+   <map:pipeline>
+ 
+   <map:match pattern="index.html">
+       <map:generate src="index.xhtml"/>
+       <map:serialize />   
+   </map:match>
+   
+   
+ 
+ 
+   <map:match pattern="sample.html">
+       <map:generate type="directory" src="dxf"/>
+       <map:transform src="xsl/dir2html.xsl">
+            <map:parameter name="kabeja-samples" value="{realpath:/kabeja/dxf}"/> 
+       </map:transform>
+       <map:serialize/>
+   </map:match>
+
+    <map:match pattern="demo/*.svg">
+         <map:generate type="dxf2svg" src="dxf/{1}.dxf"/>
+         <map:select type="browser">
+            <map:when test="firefox1">
+               <map:transform type="firefox_fix"/>
+            </map:when>       
+         </map:select>
+         <map:serialize type="svgxml"/>
+    </map:match>
+
+    <map:match pattern="demo/*.xml">
+         <map:generate type="dxf2svg" src="dxf/{1}.dxf"/>
+         <map:serialize type="xml"/>
+    </map:match>
+     
+     
+
+   <map:match pattern="demo/*.pdf">
+          <map:generate type="dxf2svg" src="dxf/{1}.dxf"/>
+          <map:transform src="xsl/svg2fo.xsl"/>
+          <map:serialize type="fo2pdf"/>
+   </map:match>
+     
+
+
+    <map:match pattern="demo/*.jpg">
+         <map:generate type="dxf2svg" src="dxf/{1}.dxf"/>
+         <map:serialize type="svg2jpeg"/>
+    </map:match>
+     
+    <map:match pattern="demo/hl-*/*.jpg">
+         <map:generate type="dxf2svg" src="dxf/{2}.dxf"/>
+           <map:transform src="xsl/hlsvg.xsl">
+	     <map:parameter name="highlight" value="{1}"/>
+	  </map:transform>
+    	  <map:serialize type="svg2jpeg"/>
+    </map:match>
+
+     
+     
+    <map:match pattern="demo/info/*/*.html">
+          <map:generate type="dxf2svg" src="dxf/{2}.dxf"/>
+	  <map:transform src="xsl/svg2html.xsl">
+	     <map:parameter name="file" value="{2}"/>
+	     <map:parameter name="highlight" value="{1}"/>
+	  </map:transform>
+	  <map:serialize/> 
+    </map:match>
+ 
+ 
+    <map:match pattern="demo/splitt/*/*/*.jpg">
+        <map:generate type="dxf2svg" src="dxf/{3}.dxf"/>
+	<map:transform src="xsl/splitsvg.xsl">   
+	     <map:parameter name="row" value="{1} "/>
+	     <map:parameter name="column" value="{2}"/>
+	     <map:parametrt name="size" value="'4'"/>
+	</map:transform>
+	<map:serialize type="svg2jpeg"/> 
+    </map:match>
+     
+   </map:pipeline>
+ 
+ 
+  </map:pipelines>
+</map:sitemap>
+<!-- end of file -->

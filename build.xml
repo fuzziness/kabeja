@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="kabeja" default="dist" basedir=".">
+	<property name="releasename" value="kabeja" />
+	<property name="releaseversion" value="0.5-dev" />
+	<property name="src" value="src" />
+	<property name="sources" value="java" />
+	<property name="classes" value="classes" />
+	<property name="test" value="test" />
+	<property name="build" value="build" />
+	<property name="dist" value="dist" />
+	<property name="help" value="doc" />
+	<property name="icons" value="icons" />
+	<property name="lang" value="lang" />
+	<property name="conf" value="conf" />
+	<property name="libs" value="lib" />
+	<property name="sample" value="sample" />
+	<property name="legal" value="legal" />
+	<property name="manifest" value="manifestfile" />
+	<property name="packages" value="packages" />
+	<property name="samples" value="samples" />
+	<property name="apidocs" value="javadoc" />
+	<property name="docs" value="doc" />
+	<property name="JarClassPath" value="" />
+	<property name="tempdir" value="tmp" />
+	<property name="MainClass" value="org.kabeja.Loader" />
+	<property name="tools" value="tools" />
+	<property name="blocks" value="blocks" />
+	<property name="java.target.version" value="1.6" />
+	<property name="debug" value="on" />
+
+	<!-- first the local settings -->
+	<property file="local.blocks.properties" />
+	<property file="blocks.properties" />
+
+	<description>
+		This is a small library for parsing DXF and converting to
+		SVG.
+	</description>
+
+	<!-- tools -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="tools/lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	<taskdef classname="org.kabeja.ant.BlockTask" name="blockbuild">
+		<classpath>
+			<pathelement location="tools/anttask/build" />
+		</classpath>
+	</taskdef>
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${build}/${classes}/${icons}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/${libs}" />
+		<mkdir dir="${dist}/${legal}" />
+		<mkdir dir="${dist}/${conf}" />
+		<mkdir dir="${dist}/${docs}" />
+		<mkdir dir="${dist}/${samples}" />
+		<mkdir dir="${packages}" />
+
+	</target>
+
+	<target name="compile" depends="init">
+
+		<javac srcdir="${src}/${sources}" destdir="${build}/${classes}" target="${java.target.version}" source="${java.target.version}" debug="${debug}" debuglevel="lines,var,source">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="config" depends="compile">
+
+		<copy todir="${dist}">
+			<fileset file="kabeja.exe" />
+			<fileset file="kabeja.sh" />
+			<fileset file="font.xml" />
+		</copy>
+		<chmod file="${dist}/kabeja.sh" perm="+rxw" />
+
+		<copy todir="${dist}/${conf}">
+			<fileset dir="${conf}" excludes="process.xml,ui.xml,**/*~,**/*manifest*">
+			</fileset>
+		</copy>
+
+		<copy todir="${dist}/${docs}">
+			<fileset dir="${docs}">
+				<include name="**/*" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+
+
+
+		<copy todir="${dist}/${legal}">
+			<fileset dir="${legal}">
+				<include name="**/*" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+
+
+		<copy todir="${dist}/${libs}">
+			<fileset dir="${libs}">
+				<include name="**/*" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+
+
+		<copy todir="${dist}/${samples}">
+			<fileset dir="${samples}">
+				<include name="**/*" />
+				<exclude name="**/cvs/*" />
+				<exclude name="**/cvs" />
+			</fileset>
+		</copy>
+
+
+
+		<copy todir="${build}/${classes}/${icons}">
+			<fileset dir="${icons}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${tempdir}" />
+
+		<copy todir="${tempdir}">
+			<fileset dir="${src}/${sources}">
+				<include name="**/*.properties" />
+			</fileset>
+			<filterset>
+				<filter token="version" value="${releaseversion}" />
+			</filterset>
+		</copy>
+		<native2ascii dest="${build}/${classes}" encoding="UTF-8" src="${tempdir}" includes="**/*.properties" />
+
+	</target>
+
+	<target name="core.jars" depends="manifest">
+		<jar jarfile="${dist}/${libs}/${releasename}-${releaseversion}.jar" basedir="${build}/${classes}" excludes="org/kabeja/Loader.class" includes="**/*" manifest="${manifest}" />
+		<jar jarfile="${dist}/launcher.jar" basedir="${build}/${classes}" includes="org/kabeja/Loader.class" manifest="${manifest}" />
+		<delete file="${manifest}" />
+	</target>
+
+
+	<target name="dist" depends="config,core.jars,build-blocks,blocks2ui,blocks2processing,blocks2configuration" description="Building  Kabeja (default).">
+
+	</target>
+
+
+	<target name="complete-release" depends="clean">
+		<antcall target="source-release" />
+		<antcall target="binary-release" />
+	</target>
+
+	<target name="complete-snapshot" depends="clean">
+		<antcall target="source-release" />
+		<antcall target="binary-release" />
+	</target>
+
+
+	<target name="binary-release" description="Creates a full source realease.">
+		<antcall target="binary-dist">
+			<param name="version-number" value="${releaseversion}" />
+		</antcall>
+	</target>
+
+	<target name="binary-snapshot" description="Creates a full source realease.">
+		<tstamp />
+		<antcall target="binary-dist">
+			<param name="version-number" value="${DSTAMP}" />
+		</antcall>
+	</target>
+
+	<target name="binary-dist" depends="dist" if="version-number">
+		<delete dir="${tempdir}" />
+		<mkdir dir="${tempdir}/${releasename}-${version-number}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}">
+			<fileset file="font.xml" />
+			<fileset file="README" />
+			<fileset file="INSTALL" />
+		</copy>
+
+
+		<copy todir="${tempdir}/${releasename}-${version-number}">
+			<fileset dir="${dist}" />
+		</copy>
+
+		<zip zipfile="${packages}/${releasename}-${version-number}.zip">
+			<zipfileset dir="${tempdir}" />
+		</zip>
+		<tar tarfile="${packages}/${releasename}.tar" basedir="${tempdir}" />
+		<gzip zipfile="${packages}/${releasename}-${version-number}.tar.gz" src="${packages}/${releasename}.tar" />
+		<delete file="${packages}/${releasename}.tar" />
+		<delete dir="${tempdir}" />
+	</target>
+
+
+
+	<target name="source-release" description="Creates a full source realease.">
+		<antcall target="source-dist">
+			<param name="version-number" value="${releaseversion}" />
+		</antcall>
+	</target>
+
+	<target name="source-snapshot" description="Creates a full source snapshot.">
+		<tstamp />
+		<antcall target="source-dist">
+			<param name="version-number" value="${DSTAMP}" />
+		</antcall>
+	</target>
+
+
+
+	<target name="source-dist" depends="" if="version-number">
+		<delete dir="${tempdir}" />
+
+
+		<mkdir dir="${tempdir}/${releasename}-${version-number}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}">
+			<fileset file="build.xml" />
+			<fileset file="build.sh" />
+			<fileset file="font.xml" />
+			<fileset file="pom.xml" />
+			<fileset file="README" />
+			<fileset file="blocks.properties" />
+			<fileset file="INSTALL" />
+			<fileset file="kabeja.exe" />
+			<fileset file="kabeja.sh" />
+		</copy>
+
+
+
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${src}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${src}">
+			<fileset dir="${src}" />
+		</copy>
+
+		<!-- the libs -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${libs}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${libs}">
+			<fileset dir="${libs}" />
+		</copy>
+
+		<!-- the blocks -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${blocks}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${blocks}">
+			<fileset dir="${blocks}" />
+		</copy>
+
+
+		<!-- the tools -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${tools}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${tools}">
+			<fileset dir="${tools}" />
+		</copy>
+
+		<!-- the samples -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${samples}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${samples}">
+			<fileset dir="${samples}" />
+		</copy>
+
+		<!-- the legal -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${legal}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${legal}">
+			<fileset dir="${legal}" />
+		</copy>
+
+		<!-- the docs -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${docs}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${docs}">
+			<fileset dir="${docs}" />
+		</copy>
+		<!-- the conf -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${conf}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${conf}">
+			<fileset dir="${conf}" />
+		</copy>
+		<!-- the icons -->
+		<mkdir dir="${tempdir}/${releasename}-${version-number}/${icons}" />
+		<copy todir="${tempdir}/${releasename}-${version-number}/${icons}">
+			<fileset dir="${icons}" />
+		</copy>
+
+		<chmod perm="777">
+			<fileset dir="${tempdir}/${releasename}-${version-number}">
+				<include name="**/*.sh" />
+			</fileset>
+		</chmod>
+		<mkdir dir="${packages}" />
+		<tar tarfile="${packages}/${releasename}-${version-number}-src.tar.gz" basedir="${tempdir}" compression="gzip" longfile="gnu">
+			  <tarfileset dir="${tempdir}" filemode="777" username="ant" group="ant">
+			    <include name="**/*.sh"/>
+			  </tarfileset>
+			  <tarfileset dir="${tempdir}" username="ant" group="ant">
+			    <exclude name="**/*.sh"/>
+			  </tarfileset>	
+		</tar>
+		<zip zipfile="${packages}/${releasename}-${version-number}-src.zip">
+			<zipfileset dir="${tempdir}" />
+		</zip>
+	</target>
+
+	<target name="clean" depends="clean-blocks">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${packages}" />
+		<delete dir="${tempdir}" />
+	</target>
+
+	<target name="javadoc" description="Generate the Javadocs">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${apidocs}" />
+		<javadoc packagenames="*.*.*" sourcepath="${src}/${sources}" destdir="${build}/${apidocs}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${build}/${sources}" />
+			</classpath>
+		</javadoc>
+	</target>
+
+
+
+
+	<!-- new manifest section here -->
+	<target name="manifest">
+		<fileset dir="${libs}" id="jar.files">
+			<include name="*.jar" />
+		</fileset>
+		<pathconvert pathsep=" " property="jars" refid="jar.files">
+			<map from="${basedir}${file.separator}" to="" />
+		</pathconvert>
+		<manifest file="${manifest}">
+			<attribute name="Main-Class" value="${MainClass}" />
+			<attribute name="Class-Path" value="${jars}" />
+		</manifest>
+	</target>
+
+
+	<target name="eclipse-project" description="create the project-files for Eclipse">
+		<!-- the project file -->
+		<copy file="tools/template/eclipse-project.xml" tofile="${basedir}${file.separator}.project">
+			<filterset>
+				<filter token="VERSION" value="${releaseversion}" />
+				<filter token="NAME" value="${releasename}" />
+			</filterset>
+		</copy>
+		<!-- the classpath file -->
+		<echo file=".classpath">&lt;?xml version="1.0"
+			encoding="UTF-8"?&gt;${line.separator}&lt;classpath&gt;${line.separator}
+			&lt;classpathentry kind=&quot;src&quot; path=&quot;src/java&quot;
+			/&gt;${line.separator}</echo>
+		<for param="blocksrc">
+			<path>
+				<dirset dir="${blocks}" includes="**/src" />
+				<dirset dir="${blocks}">
+					<include name="**/src/java" />
+					<include name="**/src/test" />
+				</dirset>
+			</path>
+
+			<sequential>
+
+				<!-- filter out the source path with java folder inside -->
+				<if>
+					<bool>
+						<not>
+							<available file="@{blocksrc}/java" />
+						</not>
+					</bool>
+					<then>
+
+						<echo file=".classpath" append="true"> &lt;classpathentry
+							kind=&quot;src&quot; path=&quot;@{blocksrc}&quot;
+							/&gt;${line.separator}</echo>
+					</then>
+
+				</if>
+			</sequential>
+		</for>
+		<echo file=".classpath" append="true"> &lt;classpathentry
+			kind=&quot;con&quot;
+			path=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot;
+			/&gt;${line.separator}</echo>
+
+		<!-- the libs -->
+		<for param="jarfile">
+			<path>
+				<fileset dir="lib" includes="**/*.jar" />
+				<fileset dir="${blocks}" includes="**/lib/**/*.jar" />
+				<fileset dir="tools" includes="**/*.jar" />
+			</path>
+			<sequential>
+				<echo file=".classpath" append="true"> &lt;classpathentry
+					kind=&quot;lib&quot; path=&quot;@{jarfile}&quot;
+					/&gt;${line.separator}</echo>
+			</sequential>
+		</for>
+
+
+		<echo file=".classpath" append="true"> &lt;classpathentry
+			kind=&quot;output&quot; path=&quot;build/java&quot;
+			/&gt;${line.separator}&lt;/classpath&gt;${line.separator}</echo>
+		<!-- filtering to relative pathes -->
+
+		<replace file=".classpath" token="path=&quot;${basedir}${file.separator}" value="path=&quot;" />
+	</target>
+
+	<target name="blocks">
+		<for param="file">
+			<path>
+				<dirset dir="${blocks}" includes="*" />
+			</path>
+			<sequential>
+				<var name="current.block" unset="true" />
+				<basename file="@{file}" property="current.block" />
+
+				<if>
+					<isset property="block.${current.block}" />
+					<then>
+						<propertycopy property="block.build" from="block.${current.block}" override="true" />
+						<if>
+							<equals arg1="${block.build}" arg2="true" />
+							<then>
+								<echo message="Build block ${current.block}" />
+
+								<ant dir="@{file}">
+									<property name="kabeja.home" value="${basedir}" />
+								</ant>
+							</then>
+							<else>
+								<echo message="Omit block ${current.block}" />
+							</else>
+
+						</if>
+					</then>
+					<else>
+						<echo message="Omit block ${current.block}" />
+					</else>
+				</if>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="blocks-clean">
+		<for param="file">
+			<path>
+				<dirset dir="${blocks}" includes="*" />
+			</path>
+			<sequential>
+				<var name="current.block" unset="true" />
+				<basename file="@{file}" property="current.block" />
+
+				<if>
+					<isset property="block.${current.block}" />
+					<then>
+						<propertycopy property="block.build" from="block.${current.block}" override="true" />
+						<if>
+							<equals arg1="${block.build}" arg2="true" />
+							<then>
+								<echo message="Clean block ${current.block}" />
+
+								<ant dir="@{file}" target="clean">
+									<property name="kabeja.home" value="${basedir}" />
+								</ant>
+							</then>
+							<else>
+								<echo message="Omit block ${current.block}" />
+							</else>
+
+						</if>
+					</then>
+					<else>
+						<echo message="Omit block ${current.block}" />
+					</else>
+				</if>
+			</sequential>
+		</for>
+	</target>
+
+
+	<target name="block" if="block.name" description="Let you build a single block(set: -Dblock.name=myblock).">
+		<if>
+			<isset property="block.target" />
+			<then>
+				<ant dir="${blocks}/${block.name}" target="${block.target}">
+					<property name="kabeja.home" value="${basedir}" />
+				</ant>
+			</then>
+			<else>
+				<ant dir="${blocks}/${block.name}">
+					<property name="kabeja.home" value="${basedir}" />
+				</ant>
+			</else>
+		</if>
+	</target>
+
+
+
+	<target name="build-blocks" description="build all blocks">
+		<blockbuild blockdir="blocks" />
+	</target>
+
+	<target name="clean-blocks" description="clean all blocks">
+		<blockbuild blockdir="blocks" target="clean" />
+	</target>
+
+	<target name="create-block" if="block.name" description="Create initial buildsystem for a new block. You have to use -Dblock.name=MyBlock. After all you will find your new block inside the blocks folder.">
+		<mkdir dir="${blocks}${file.separator}${file.separator}${block.name}" />
+		<mkdir dir="${blocks}${file.separator}${file.separator}${block.name}${file.separator}lib" />
+		<mkdir dir="${blocks}${file.separator}${file.separator}${block.name}${file.separator}src" />
+		<copy file="tools/template/block.template" tofile="${blocks}${file.separator}${file.separator}${block.name}${file.separator}build.xml">
+			<filterset>
+				<filter token="block.name" value="${block.name}" />
+			</filterset>
+		</copy>
+		<echo file="blocks.properties" append="true">
+			#The ${block.name} block
+			#block.${block.name}=true
+   	    </echo>
+		<echo file="local.blocks.properties" append="true">
+			#The ${block.name} block
+			block.${block.name}=true
+   	    </echo>
+	</target>
+
+
+	<target name="blocks2configuration">
+		<antcall target="blockXSLMerge">
+			<param name="source.xml.file" value="configuration" />
+		</antcall>
+	</target>
+
+
+
+
+	<target name="blocks2processing">
+		<antcall target="blockXSLMerge">
+			<param name="source.xml.file" value="process" />
+		</antcall>
+	</target>
+
+
+
+	<target name="blocks2ui">
+		<antcall target="blockXSLMerge">
+			<param name="source.xml.file" value="ui" />
+		</antcall>
+	</target>
+
+
+	<target name="blockXSLMerge" if="source.xml.file">
+		<mkdir dir="${build}/${classes}/${conf}" />
+		<delete file="${build}/${classes}/${conf}/${source.xml.file}.xml" />
+		<mkdir dir="${tempdir}" />
+		<copy file="${conf}/${source.xml.file}.xml" todir="${build}/${classes}/${conf}" />
+		<for param="file">
+			<path>
+				<dirset dir="${blocks}" includes="*" />
+			</path>
+			<sequential>
+				<var name="current.block" unset="true" />
+				<basename file="@{file}" property="current.block" />
+
+				<if>
+					<isset property="block.${current.block}" />
+					<then>
+
+						<propertycopy property="block.build" from="block.${current.block}" override="true" />
+
+						<if>
+							<and>
+								<equals arg1="${block.build}" arg2="true" />
+								<available file="@{file}/conf/${source.xml.file}.xml" />
+							</and>
+							<then>
+								<echo message="include block processing ${current.block}" />
+								<xslt in="${build}/${classes}/${conf}/${source.xml.file}.xml" out="${tempdir}/${source.xml.file}.xml" style="tools/xsl/block2${source.xml.file}.xsl">
+									<param name="fragment" expression="@{file}/conf/${source.xml.file}.xml" />
+								</xslt>
+
+
+								<delete file="${build}/${classes}/${conf}/${source.xml.file}.xml" />
+								<copy file="${tempdir}/${source.xml.file}.xml" todir="${build}/${classes}/${conf}" />
+								<delete file="${tempdir}/${source.xml.file}.xml" />
+							</then>
+
+
+							<else>
+								<echo message="Omit block ${current.block}" />
+							</else>
+
+						</if>
+					</then>
+					<else>
+						<echo message="Omit block ${current.block}" />
+					</else>
+				</if>
+			</sequential>
+		</for>
+
+		<copy file="${build}/${classes}/${conf}/${source.xml.file}.xml" todir="${dist}/${conf}" />
+
+	</target>
+
+</project>
+

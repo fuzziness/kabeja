@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Inkscape-ImportFilter" default="dist" basedir=".">
+	<property name="homepath" value="" />
+	<property name="block.releasename" value="kabeja-inkscape-dxf2svg" />
+	<property name="src" value="src" />
+	<property name="sources" value="java" />
+	<property name="classes" value="classes" />
+	<property name="test" value="test" />
+	<property name="build" value="build" />
+	<property name="dist" value="dist" />
+	<property name="help" value="doc" />
+	<property name="icons" value="icons" />
+	<property name="lang" value="lang" />
+	<property name="conf" value="conf" />
+	<property name="libs" value="lib" />
+	<property name="sample" value="sample" />
+	<property name="manifest" value="inkscape.manifestfile" />
+	<property name="version" value="0.4" />
+	<property name="packages" value="packages" />
+	<property name="samples" value="samples" />
+	<property name="apidocs" value="javadoc" />
+	<property name="docs" value="doc" />
+	<property name="JarClassPath" value="" />
+	<property name="tempdir" value="tmp" />
+	<property name="tools" value="tools" />
+	<property name="kabeja.home" value="../.." />
+	<property name="inkscape.java.compiler.properties" value=" -findirect-dispatch -Wl,-Bsymbolic -O3" />
+	<property name="inkscape.java.compiler" value="gcj" />
+	<property name="main.class" value="org.kabeja.inkscape.DXFImportFilter" />
+	<property name="name.binary" value="kabeja-dxf2svg" />
+	<property name="inkscape.importfilter.install.path" value="${kabeja.home}/dist" />
+	<property name="inkscape.importfilter.type" value="java" />
+	<property name="install.dir" value="${user.home}/.inkscape/extensions" />
+
+	<description>
+		This is a kabeja-based import filter
+	</description>
+
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${classes}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/${libs}" />
+	</target>
+
+	<target name="compile" depends="init,manifest,extension-jar">
+		<if>
+			<equals arg1="${inkscape.importfilter.type}" arg2="native" />
+			<then>
+				<echo>Native import filter</echo>
+
+				<exec executable="gcj">
+					<arg
+						line=" ${inkscape.java.compiler.properties} --main=${main.class} -o ${basedir}/${dist}/${name.binary} ${basedir}/${dist}/${block.releasename}.jar" />
+				</exec>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${inkscape.importfilter.type}" arg2="java" />
+			<then>
+				<echo>Java import filter</echo>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${inkscape.importfilter.type}" arg2="mono" />
+			<then>
+				<echo>Mono DotNet import filter</echo>
+				<exec executable="ikvmc">
+					<arg
+						line="-target:exe -main:${main.class} -out:&quot;${basedir}/${dist}/${name.binary}.exe&quot;  &quot;${basedir}/${dist}/${block.releasename}.jar&quot;" />
+				</exec>
+			</then>
+		</if>
+	</target>
+
+
+
+
+	<target name="dist" depends="compile">
+		<mkdir dir="${kabeja.home}/${dist}/inkscape-extension" />
+		<if>
+			<equals arg1="${inkscape.importfilter.type}" arg2="native" />
+			<then>
+				<if>
+					<available file="${dist}/${name.binary}.exe" />
+					<then>
+						<exec executable="strip">
+							<arg line="${dist}/${name.binary}.exe" />
+						</exec>
+						<copy file="${dist}/${name.binary}.exe" todir="${kabeja.home}/${dist}/inkscape-extension" />
+						<chmod
+							file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}.exe"
+							perm="+rx" />
+					</then>
+					<else>
+						<exec executable="strip">
+							<arg line="${dist}/${name.binary}" />
+						</exec>
+						<copy file="${dist}/${name.binary}" todir="${kabeja.home}/${dist}/inkscape-extension" />
+						<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}"
+							perm="+rx" />
+					</else>
+
+
+
+				</if>
+
+				<copy file="${conf}/kabeja-native.inx"
+					tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${inkscape.importfilter.type}" arg2="java" />
+			<then>
+				<copy file="${dist}/${block.releasename}.jar" todir="${kabeja.home}/${dist}/inkscape-extension" />
+				<copy file="${conf}/kabeja.sh" tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja" />
+				<chmod file="${kabeja.home}/${dist}/inkscape-extension/kabeja"
+					perm="+rx" />
+				<copy file="${conf}/kabeja.bat" todir="${kabeja.home}/${dist}/inkscape-extension" />
+				<copy file="${conf}/kabeja-java.inx"
+					tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
+			</then>
+		</if>
+		<if>
+			<equals arg1="${inkscape.importfilter.type}" arg2="mono" />
+			<then>
+				<copy file="${dist}/${name.binary}.exe" todir="${kabeja.home}/${dist}/inkscape-extension" />
+				<chmod
+					file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}.exe"
+					perm="+rx" />
+				<copy file="${conf}/kabeja-mono.inx"
+					tofile="${kabeja.home}/${dist}/inkscape-extension/kabeja.inx" />
+				<copy file="${conf}/kabeja-mono.sh"
+					tofile="${kabeja.home}/${dist}/inkscape-extension/${name.binary}" />
+				<chmod file="${kabeja.home}/${dist}/inkscape-extension/${name.binary}"
+					perm="+rx" />
+			</then>
+		</if>
+
+		<jar
+			jarfile="${kabeja.home}/${dist}/${libs}/${block.releasename}-${releaseversion}.jar"
+			manifest="${manifest}">
+			<fileset dir="${build}/${classes}">
+				<include name="**/*" />
+			</fileset>
+		</jar>
+	</target>
+
+
+	<target name="extension-jar">
+		<javac destdir="${build}/${classes}" target="1.3" source="1.3">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${kabeja.home}/${dist}/${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<src path="${src}" />
+			<include name="**/*.java" />
+			<exclude name="**/CVS/*" />
+		</javac>
+
+		<mkdir dir="${build}/svg" />
+		<unjar dest="${build}/svg">
+			<fileset dir="${kabeja.home}/${dist}/${libs}">
+				<include name="**/kabeja-svg*.jar" />
+			</fileset>
+		</unjar>
+		<jar jarfile="${dist}/${block.releasename}.jar" manifest="${manifest}">
+			<fileset dir="${kabeja.home}/${build}/${classes}">
+				<exclude name="org/kabeja/ui/**/*" />
+				<exclude name="org/kabeja/*" />
+				<!-- -->
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${build}/svg">
+				<exclude name="org/kabeja/batik/**/*" />
+				<exclude name="org/kabeja/svg/ui/**/*" />
+				<exclude name="org/kabeja/svg/action/**/*" />
+				<exclude name="org/kabeja/svg/tools/**/*" />
+				<exclude name="org/kabeja/processing/**/*" />
+				<exclude name="org/kabeja/ui/**/*" />
+				<exclude name="dk/**/*" />
+			</fileset>
+			<fileset dir="${build}/${classes}">
+			</fileset>
+		</jar>
+	</target>
+
+
+
+
+	<target name="manifest">
+		<fileset dir="${libs}" id="jar.files">
+			<include name="*.jar" />
+		</fileset>
+		<manifest file="${manifest}">
+			<attribute name="Main-Class" value="${main.class}" />
+		</manifest>
+	</target>
+
+
+
+	<target name="install" depends="compile">
+		<if>
+			<equals arg1="${inkscape.importfilter.type}" arg2="native" />
+			<then>
+				<copy file="${dist}/${name.binary}" todir="${install.dir}" />
+				<chmod file="${install.dir}/${name.binary}" perm="+rx" />
+				<copy file="${conf}/kabeja-native.inx" tofile="${install.dir}/kabeja.inx" />
+			</then>
+			<else>
+				<jar jarfile="${install.dir}/${block.releasename}.jar" basedir="${build}/${classes}"
+					includes="**/*" manifest="${manifest}" />
+				<if>
+					<os family="windows" />
+					<then>
+						<copy file="${conf}/kabeja.bat" todir="${install.dir}" />
+					</then>
+					<else>
+						<copy file="${conf}/kabeja.sh" tofile="${install.dir}/kabeja" />
+						<chmod file="${install.dir}/kabeja" perm="+rx" />
+					</else>
+				</if>
+				<copy file="${conf}/kabeja-java.inx" tofile="${install.dir}/kabeja.inx" />
+			</else>
+		</if>
+	</target>
+
+
+	<target name="remove">
+		<delete file="${install.dir}/${name.binary}" />
+		<delete file="${install.dir}/kabeja.inx" />
+	</target>
+
+
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${packages}" />
+		<delete dir="${tempdir}" />
+	</target>
+
+
+	<target name="javadoc">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${apidocs}" />
+		<javadoc packagenames="*.*.*" sourcepath="${src}/${sources}"
+			destdir="${kabeja.home}/${build}/${apidocs}">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${build}/${classes}" />
+			</classpath>
+		</javadoc>
+	</target>
+
+
+
+
+</project>
+
