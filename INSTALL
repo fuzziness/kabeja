@@ -1,0 +1,31 @@
+Binary-package:
+---------------
+
+Windows: 
+		* double-click "kabeja.exe"
+
+Linux/Unix: 
+   		* sh kabeja.sh
+   		or:
+   		* chmod a=rx kabeja.sh (only ones)
+   		* ./kabeja.sh
+
+Other:
+       * java -jar launcher.jar
+
+Building:
+---------
+
+ 
+
+unix/linux: 
+    
+    ./build.sh
+
+
+IDE like Eclipse/Netbeans:
+   
+    open build.xml in the procject root
+    and invoke the "dist" target
+
+
