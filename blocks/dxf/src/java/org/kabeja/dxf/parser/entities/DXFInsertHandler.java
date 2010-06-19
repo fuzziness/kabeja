@@ -109,17 +109,17 @@ public class DXFInsertHandler extends AbstractEntityHandler {
 		switch (groupCode) {
 
 		case GROUPCODE_START_X:
-			insert.getPoint().setX(value.getDoubleValue());
+			insert.getInsertPoint().setX(value.getDoubleValue());
 
 			break;
 
 		case GROUPCODE_START_Y:
-			insert.getPoint().setY(value.getDoubleValue());
+			insert.getInsertPoint().setY(value.getDoubleValue());
 
 			break;
 
 		case GROUPCODE_START_Z:
-			insert.getPoint().setZ(value.getDoubleValue());
+			insert.getInsertPoint().setZ(value.getDoubleValue());
 
 			break;
 

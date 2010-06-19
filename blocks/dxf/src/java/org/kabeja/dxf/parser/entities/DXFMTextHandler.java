@@ -70,7 +70,7 @@ public class DXFMTextHandler extends AbstractEntityHandler {
 
 
     public boolean isFollowSequence() {
-        // TODO Auto-generated method stub
+       
         return false;
     }
 
