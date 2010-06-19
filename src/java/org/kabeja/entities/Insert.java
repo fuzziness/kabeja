@@ -146,21 +146,9 @@ public class Insert extends Entity {
         this.columns = columns;
     }
 
-    /**
-     * @return Returns the p.
-     * @deprecated @see getInsertPoint
-     */
-    public Point3D getPoint() {
-        return insertPoint;
-    }
 
-    /**
-     * @param p
-     *    @deprecated @see setInsertPoint
-     */
-    public void setPoint(Point3D p) {
-        this.insertPoint = p;
-    }
+
+
 
     /**
      * @return Returns the rotate.
