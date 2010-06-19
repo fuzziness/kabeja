@@ -162,21 +162,9 @@ public class DXFInsert extends DXFEntity {
         this.columns = columns;
     }
 
-    /**
-     * @return Returns the p.
-     * @deprecated @see getInsertPoint
-     */
-    public Point getPoint() {
-        return insertPoint;
-    }
 
-    /**
-     * @param p
-     *    @deprecated @see setInsertPoint
-     */
-    public void setPoint(Point p) {
-        this.insertPoint = p;
-    }
+
+
 
     /**
      * @return Returns the rotate.
