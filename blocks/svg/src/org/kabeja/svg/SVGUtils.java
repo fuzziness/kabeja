@@ -49,58 +49,48 @@ public class SVGUtils {
 	static {
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
 		symbols.setDecimalSeparator('.');
-		format = new DecimalFormat("###.###################################",
-				symbols);
+		format = new DecimalFormat("###.###################################", symbols);
 	}
 
-	public static void startElement(ContentHandler handler, String element,
-			Attributes attr) throws SAXException {
+	public static void startElement(ContentHandler handler, String element, Attributes attr) throws SAXException {
 		// handler
 		// .startElement(SVGConstants.SVG_NAMESPACE,
 		// element,SVGConstants.SVG_PREFIX+":"+element,
 		// attr);
-		handler
-				.startElement(SVGConstants.SVG_NAMESPACE, element, element,
-						attr);
+		handler.startElement(SVGConstants.SVG_NAMESPACE, element, element, attr);
 	}
 
-	public static void endElement(ContentHandler handler, String element)
-			throws SAXException {
+	public static void endElement(ContentHandler handler, String element) throws SAXException {
 		// handler.endElement(SVGConstants.SVG_NAMESPACE,
 		// element,SVGConstants.SVG_PREFIX+":"+element);
 		handler.endElement(SVGConstants.SVG_NAMESPACE, element, element);
 	}
 
-	public static void addAttribute(AttributesImpl attr, String name,
-			String value) {
+	public static void addAttribute(AttributesImpl attr, String name, String value) {
 
-		//we have remove to override
+		// we have remove to override
 		int index = attr.getIndex(name);
-		if(index>-1){
+		if (index > -1) {
 			attr.removeAttribute(index);
 		}
 		attr.addAttribute("", name, name, DEFAUL_ATTRIBUTE_TYPE, value);
 	}
 
-	public static void characters(ContentHandler handler, String text)
-			throws SAXException {
+	public static void characters(ContentHandler handler, String text) throws SAXException {
 		char[] data = text.toCharArray();
 		handler.characters(data, 0, data.length);
 	}
 
-	public static void emptyElement(ContentHandler handler, String element,
-			Attributes attr) throws SAXException {
+	public static void emptyElement(ContentHandler handler, String element, Attributes attr) throws SAXException {
 		startElement(handler, element, attr);
 		endElement(handler, element);
 	}
 
-	public static void addStrokeDashArrayAttribute(AttributesImpl attr,
-			LineType ltype) {
+	public static void addStrokeDashArrayAttribute(AttributesImpl attr, LineType ltype) {
 		addStrokeDashArrayAttribute(attr, ltype, 1.0);
 	}
 
-	public static void addStrokeDashArrayAttribute(AttributesImpl attr,
-			LineType ltype, double scale) {
+	public static void addStrokeDashArrayAttribute(AttributesImpl attr, LineType ltype, double scale) {
 		if (ltype != null) {
 			double[] pattern = ltype.getPattern();
 
@@ -109,8 +99,7 @@ public class SVGUtils {
 
 				for (int i = 0; i < pattern.length; i++) {
 					if (pattern[i] != 0.0) {
-						buf.append(format
-								.format(Math.abs((pattern[i] * scale))));
+						buf.append(format.format(Math.abs((pattern[i] * scale))));
 					} else {
 						// that means a dot
 						buf.append("0.05%");
@@ -121,74 +110,65 @@ public class SVGUtils {
 
 				buf.deleteCharAt(buf.length() - 2);
 
-				SVGUtils.addAttribute(attr,
-						SVGConstants.SVG_ATTRIBUTE_STROKE_DASHARRAY, buf
-								.toString());
+				SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE_DASHARRAY, buf.toString());
 			}
 		}
 	}
 
 	/**
 	 * SVG is XML and needs valid id attributes look at <a
-	 * href="http://www.w3.org/TR/2000/REC-xml-20001006#sec-common-syn">XML-Recommandation
-	 * </a>.
+	 * href="http://www.w3.org/TR/2000/REC-xml-20001006#sec-common-syn"
+	 * >XML-Recommandation </a>.
 	 * 
 	 * @param id
 	 * @return a id which should be valid, but may be not unique.
 	 */
 	public static String toValidateID(long id) {
-		return DEFAULT_ID_NAME_PREFIX+id;
+		return DEFAULT_ID_NAME_PREFIX + id;
 	}
 
-	   /**
-     * SVG is XML and needs valid id attributes look at <a
-     * href="http://www.w3.org/TR/2000/REC-xml-20001006#sec-common-syn">XML-Recommandation
-     * </a>.
-     * 
-     * @param id
-     * @return a id which should be valid, but may be not unique.
-     */
-    public static String validateID(String id) {
-        if (id.length() > 0) {
-            StringBuffer buf = new StringBuffer();
-            char first = id.charAt(0);
+	/**
+	 * SVG is XML and needs valid id attributes look at <a
+	 * href="http://www.w3.org/TR/2000/REC-xml-20001006#sec-common-syn"
+	 * >XML-Recommandation </a>.
+	 * 
+	 * @param id
+	 * @return a id which should be valid, but may be not unique.
+	 */
+	public static String validateID(String id) {
+		if (id.length() > 0) {
+			StringBuffer buf = new StringBuffer();
+			char first = id.charAt(0);
 
-            if (!Character.isLetter(first) && (first != ':')) {
-                buf.append(DEFAULT_ID_NAME_PREFIX);
-            }
+			if (!Character.isLetter(first) && (first != ':')) {
+				buf.append(DEFAULT_ID_NAME_PREFIX);
+			}
 
-            for (int i = 0; i < id.length(); i++) {
-                char c = id.charAt(i);
+			for (int i = 0; i < id.length(); i++) {
+				char c = id.charAt(i);
 
-                // TODO we have to allow here CombinigChar and Extender too
-                if (Character.isLetter(c) || Character.isDigit(c) || (c == '-')
-                        || (c == '.') || (c == ':')) {
-                    buf.append(c);
-                } else {
-                    // normally we have to check all id to guarantee it will be
-                    // a
-                    // unique,
-                    // but we convert the current char to a integer with
-                    // "_"-prefix and "_" suffix
-                    buf.append(DEFAULT_CONVERT_MARKER_CHAR);
-                    buf.append((int) c);
-                    buf.append(DEFAULT_CONVERT_MARKER_CHAR);
-                }
-            }
+				// TODO we have to allow here CombinigChar and Extender too
+				if (Character.isLetter(c) || Character.isDigit(c) || (c == '-') || (c == '.') || (c == ':')) {
+					buf.append(c);
+				} else {
+					// normally we have to check all id to guarantee it will be
+					// a
+					// unique,
+					// but we convert the current char to a integer with
+					// "_"-prefix and "_" suffix
+					buf.append(DEFAULT_CONVERT_MARKER_CHAR);
+					buf.append((int) c);
+					buf.append(DEFAULT_CONVERT_MARKER_CHAR);
+				}
+			}
 
-            return buf.toString();
-        } else {
-            return id;
-        }
-	
-	
-    }
-	
-	
-	
-	
-	
-	
+			return buf.toString();
+		} else {
+			return id;
+		}
+
+	}
+
 	/**
 	 * This will reverse a validated ID back to DXF id.
 	 * 
@@ -198,25 +178,21 @@ public class SVGUtils {
 	public static long reverseID(String id) {
 		if (id.length() > 0) {
 			if (id.startsWith(DEFAULT_ID_NAME_PREFIX)) {
-			    try{
-			       return Long.parseLong(id.substring(DEFAULT_ID_NAME_PREFIX.length()-1));
-			    }catch(Exception e){
-			        //no dxf generated id
-			        e.printStackTrace();
-			        
-			    }
+				try {
+					return Long.parseLong(id.substring(DEFAULT_ID_NAME_PREFIX.length() - 1));
+				} catch (Exception e) {
+					// no dxf generated id
+					e.printStackTrace();
+
+				}
 			}
 
-		} 
+		}
 		return -1;
 	}
 
-	public static void textDocumentToSAX(ContentHandler handler,
-			TextDocument doc) throws SAXException {
-		Iterator i = doc.getStyledParagraphIterator();
-
-		while (i.hasNext()) {
-			StyledTextParagraph para = (StyledTextParagraph) i.next();
+	public static void textDocumentToSAX(ContentHandler handler, TextDocument doc) throws SAXException {
+		for (StyledTextParagraph para : doc.getStyledParagraphs()) {
 			styledTextToSAX(handler, para);
 		}
 	}
@@ -228,8 +204,7 @@ public class SVGUtils {
 	 *            the StyledTextParagraph
 	 * @throws SAXException
 	 */
-	public static void styledTextToSAX(ContentHandler handler,
-			StyledTextParagraph para) throws SAXException {
+	public static void styledTextToSAX(ContentHandler handler, StyledTextParagraph para) throws SAXException {
 		AttributesImpl atts = new AttributesImpl();
 		String decoration = "";
 
@@ -242,8 +217,7 @@ public class SVGUtils {
 		}
 
 		if (decoration.length() > 0) {
-			SVGUtils.addAttribute(atts,
-					SVGConstants.SVG_ATTRIBUTE_TEXT_DECORATION, decoration);
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_TEXT_DECORATION, decoration);
 		}
 
 		if (para.getLineIndex() > 0) {
@@ -256,43 +230,34 @@ public class SVGUtils {
 		}
 
 		if (para.getValign() == StyledTextParagraph.VERTICAL_ALIGNMENT_TOP) {
-			SVGUtils.addAttribute(atts,
-					SVGConstants.SVG_ATTRIBUTE_TEXT_BASELINE_SHIFT, "-100%");
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_TEXT_BASELINE_SHIFT, "-100%");
 		} else if (para.getValign() == StyledTextParagraph.VERTICAL_ALIGNMENT_BOTTOM) {
-			SVGUtils.addAttribute(atts,
-					SVGConstants.SVG_ATTRIBUTE_TEXT_BASELINE_SHIFT, "sub");
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_TEXT_BASELINE_SHIFT, "sub");
 		} else if (para.getValign() == StyledTextParagraph.VERTICAL_ALIGNMENT_CENTER) {
-			SVGUtils.addAttribute(atts,
-					SVGConstants.SVG_ATTRIBUTE_TEXT_BASELINE_SHIFT, "-40%");
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_TEXT_BASELINE_SHIFT, "-40%");
 		}
 
 		if (para.getWidth() > 0.0) {
-			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_TEXT_LENGTH,
-					"" + para.getWidth());
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_TEXT_LENGTH, "" + para.getWidth());
 		}
 
 		if (para.isBold()) {
-			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_WEIGHT,
-					"bold");
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_WEIGHT, "bold");
 		}
 
 		if (para.isItalic()) {
-			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_STYLE,
-					"italic");
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_STYLE, "italic");
 		}
 
 		if (para.getFont().length() > 0) {
-			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_FAMILY,
-					para.getFont());
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_FAMILY, para.getFont());
 		}
 
 		if (para.getFontHeight() > 0) {
-			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_SIZE,
-					"" + formatNumberAttribute(para.getFontHeight()));
+			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FONT_SIZE, "" + formatNumberAttribute(para.getFontHeight()));
 		}
 
-		atts.addAttribute(SVGConstants.XML_NAMESPACE, "space", "xml:space",
-				"CDATA", "preserve");
+		atts.addAttribute(SVGConstants.XML_NAMESPACE, "space", "xml:space", "CDATA", "preserve");
 
 		SVGUtils.startElement(handler, SVGConstants.SVG_TSPAN, atts);
 		SVGUtils.characters(handler, para.getText());

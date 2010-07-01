@@ -20,86 +20,80 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 /**
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
- *
+ * 
  */
 public class TextDocument {
-	
-    protected List paragraphs = new ArrayList();
 
-    /**
-     * Return the pure text content.
-     *
-     * @return the text content
-     */
-    public String getText() {
-        Iterator i = this.paragraphs.iterator();
-        StringBuffer buf = new StringBuffer();
+	protected List<StyledTextParagraph> paragraphs = new ArrayList<StyledTextParagraph>();
 
-        while (i.hasNext()) {
-            StyledTextParagraph para = (StyledTextParagraph) i.next();
-            buf.append(para.getText());
+	/**
+	 * Return the pure text content.
+	 * 
+	 * @return the text content
+	 */
+	public String getText() {
 
-            if (para.isNewline()) {
-                buf.append('\n');
-            }
-        }
+		StringBuffer buf = new StringBuffer();
 
-        return buf.toString();
-    }
+		for (StyledTextParagraph para : this.paragraphs) {
+			buf.append(para.getText());
 
-    public void addStyledParagraph(StyledTextParagraph para) {
-        this.paragraphs.add(para);
-    }
+			if (para.isNewline()) {
+				buf.append('\n');
+			}
+		}
 
-    public Iterator getStyledParagraphIterator() {
-        return this.paragraphs.iterator();
-    }
+		return buf.toString();
+	}
 
-    public int getParagraphCount() {
-        return this.paragraphs.size();
-    }
+	public void addStyledParagraph(StyledTextParagraph para) {
+		this.paragraphs.add(para);
+	}
 
-    public StyledTextParagraph getStyleTextParagraph(int i) {
-        return (StyledTextParagraph) this.paragraphs.get(i);
-    }
+	public List<StyledTextParagraph> getStyledParagraphs() {
+		return this.paragraphs;
+	}
 
-    public int getLineCount() {
-        int count = 1;
-        Iterator i = this.paragraphs.iterator();
+	public int getParagraphCount() {
+		return this.paragraphs.size();
+	}
 
-        while (i.hasNext()) {
-            StyledTextParagraph para = (StyledTextParagraph) i.next();
+	public StyledTextParagraph getStyleTextParagraph(int i) {
+		return (StyledTextParagraph) this.paragraphs.get(i);
+	}
 
-            if (para.isNewline()) {
-                count++;
-            }
-        }
+	public int getLineCount() {
+		int count = 1;
+		for (StyledTextParagraph para : this.paragraphs) {
 
-        return count;
-    }
+			if (para.isNewline()) {
+				count++;
+			}
+		}
 
-    public int getMaximumLineLength() {
-        int count = 0;
-        int max = 0;
-        Iterator i = paragraphs.iterator();
+		return count;
+	}
 
-        while (i.hasNext()) {
-            StyledTextParagraph para = (StyledTextParagraph) i.next();
-
-            if (!para.isNewline()) {
-                count += para.getLength();
-            } else {
-                if (count > max) {
-                    max = count;
-                }
-
-                count = para.getLength();
-            }
-        }
-
-        return max;
-    }
+	public int getMaximumLineLength() {
+		int count = 0;
+		int max = 0;
+		for (StyledTextParagraph para : this.paragraphs) {
+			if (!para.isNewline()) {
+				count += para.getLength();
+			} else {
+				if (count > max) {
+					max = count;
+				}
+				count = para.getLength();
+			}
+		}
+		//last check for single lines
+		if (count > max) {
+			max = count;
+		}
+		
+		return max;
+	}
 }
