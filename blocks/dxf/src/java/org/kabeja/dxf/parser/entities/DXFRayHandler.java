@@ -83,7 +83,7 @@ public class DXFRayHandler extends AbstractEntityHandler {
             break;
 
         case GROUPCODE_START_Z:
-            this.ray.getBasePoint().setY(value.getDoubleValue());
+            this.ray.getBasePoint().setZ(value.getDoubleValue());
 
             break;
 
