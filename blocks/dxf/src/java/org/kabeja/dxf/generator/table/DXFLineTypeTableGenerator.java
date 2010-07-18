@@ -22,77 +22,85 @@ import org.kabeja.dxf.generator.DXFGenerationContext;
 import org.kabeja.dxf.generator.DXFOutput;
 import org.kabeja.dxf.generator.DXFTableGenerator;
 import org.kabeja.dxf.generator.conf.DXFProfile;
+import org.kabeja.dxf.generator.conf.DXFSubType;
+import org.kabeja.dxf.generator.conf.DXFType;
+import org.kabeja.entities.util.Utils;
 import org.kabeja.io.GenerationException;
 import org.kabeja.util.Constants;
 
 public class DXFLineTypeTableGenerator implements DXFTableGenerator {
 
-    public String getTableType() {
-        return Constants.TABLE_KEY_LTYPE;
-    }
+	protected String tableID;
 
-    public void output(DraftDocument doc, DXFOutput output,
-            DXFGenerationContext context, DXFProfile type) throws GenerationException {
+	public String getTableType() {
+		return Constants.TABLE_KEY_LTYPE;
+	}
 
-//        if (context.hasDXFProfile("LTYPE_ENTRY")) {
-//            DXFProfile profile = context.getDXFProfile("LTYPE_ENTRY");
-//            output.output(70, doc.getLineTypeCount());
-//            Iterator i = doc.getLineTypeIterator();
-//            while (i.hasNext()) {
-//               LineType ltype = (LineType)i.next();
-//               outputLinetypeEntry(ltype, profile, output);
-//            }
-//        }
+	public void output(DraftDocument doc, DXFOutput output, DXFGenerationContext context, DXFProfile type) throws GenerationException {
 
-    }
+		if (type.hasDXFType(Constants.TABLE_KEY_LAYER)) {
+			DXFType tableType = type.getDXFType(Constants.TABLE_KEY_LAYER);
+			this.tableID = Utils.generateNewID(doc);
+			for (DXFSubType subType : tableType.getDXFSubTypes()) {
+				if (subType.getName().equals("AcDbLTypeEntry")) {
+					int[] groupCodes = subType.getGroupCodes();
+					for (LineType ltype : doc.getLineTypes()) {
+						for (int i = 0; i < groupCodes.length; i++) {
+							outputLinetypeEntry(ltype, groupCodes[i], output);
+						}
+					}
+				}
 
-    protected void outputLinetypeEntry(LineType ltype, DXFProfile profile,
-            DXFOutput output) throws GenerationException {
-//        int[] groupCodes = profile.getGroupCodeProfile();
-//        for (int i = 0; i < groupCodes.length; i++) {
-//            outputLinetypeEntry(ltype, groupCodes[i], output);
-//        }
-    }
+			}
+		}
 
-    protected void outputLinetypeEntry(LineType ltype, int groupCode,
-            DXFOutput out) throws GenerationException {
-        switch (groupCode) {
-        case 0:
-            out.output(0, Constants.TABLE_KEY_LTYPE);
-            break;
-        case 2:
-            out.output(2, ltype.getName());
-            break;
-        case 3:
-            out.output(3, ltype.getDescritpion());
-            break;
-        case 40:
-            out.output(40, ltype.getPatternLength());
-            break;
-        case 70:
-            out.output(70, ltype.getFlags());
-            break;  
-        case 72:
-            out.output(72, ltype.getAlignment());
-            break;
-        case 73:
-            out.output(73, ltype.getSegmentCount());
-            break;
-        case 100:
-            out.output(100, Constants.SUBCLASS_MARKER_TABLE_RECORD);
-            break;
-        case DXFGenerationConstants.DXF_ENITY_TYPE_SUBCLASS_MARKER_1:
-            out.output(100, Constants.SUBCLASS_MARKER_TABLE_RECORD_LINETYPE);
-            break;
-            
-        case DXFGenerationConstants.DXF_CHILDREN_INSERT_MARK:
+	}
 
-            double[] pattern = ltype.getPattern();
-            for (int p = 0; p < pattern.length; p++) {
-                out.output(49, pattern[p]);
-            }
-            break;
-        }
+	protected void outputLinetypeEntry(LineType ltype, DXFProfile profile, DXFOutput output) throws GenerationException {
+		// int[] groupCodes = profile.getGroupCodeProfile();
+		// for (int i = 0; i < groupCodes.length; i++) {
+		// outputLinetypeEntry(ltype, groupCodes[i], output);
+		// }
+	}
 
-    }
+	protected void outputLinetypeEntry(LineType ltype, int groupCode, DXFOutput out) throws GenerationException {
+		switch (groupCode) {
+		case 0:
+			out.output(0, Constants.TABLE_KEY_LTYPE);
+			break;
+		case 2:
+			out.output(2, ltype.getName());
+			break;
+		case 3:
+			out.output(3, ltype.getDescritpion());
+			break;
+		case 40:
+			out.output(40, ltype.getPatternLength());
+			break;
+		case 70:
+			out.output(70, ltype.getFlags());
+			break;
+		case 72:
+			out.output(72, ltype.getAlignment());
+			break;
+		case 73:
+			out.output(73, ltype.getSegmentCount());
+			break;
+		case 100:
+			out.output(100, Constants.SUBCLASS_MARKER_TABLE_RECORD);
+			break;
+		case DXFGenerationConstants.DXF_ENITY_TYPE_SUBCLASS_MARKER_1:
+			out.output(100, Constants.SUBCLASS_MARKER_TABLE_RECORD_LINETYPE);
+			break;
+
+		case DXFGenerationConstants.DXF_CHILDREN_INSERT_MARK:
+
+			double[] pattern = ltype.getPattern();
+			for (int p = 0; p < pattern.length; p++) {
+				out.output(49, pattern[p]);
+			}
+			break;
+		}
+
+	}
 }

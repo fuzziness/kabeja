@@ -32,7 +32,7 @@ import org.kabeja.math.Vector;
  * @author <a href="mailto:simon.mieth@gmx.de>Simon Mieth</a>
  *
  */
-public class HatchLineIterator implements Iterator {
+public class HatchLineIterator implements Iterator<HatchLineSegment>{
     public static final double LIMIT = 0.00001;
     protected double angle;
     protected Bounds hatchBounds;
@@ -209,7 +209,7 @@ public class HatchLineIterator implements Iterator {
         return v;
     }
 
-    public Object next() {
+    public HatchLineSegment next() {
         Point3D p = this.patternLine.getPointAt(this.currentWalkingStep);
         ParametricLine line = new ParametricLine(p, this.v);
 

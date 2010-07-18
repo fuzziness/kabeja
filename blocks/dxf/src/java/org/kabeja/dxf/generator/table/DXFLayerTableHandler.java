@@ -39,13 +39,13 @@ public class DXFLayerTableHandler implements DXFTableGenerator {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.kabeja.dxf.generator.DXFTableGenerator#output(org.kabeja.dxf.DXFDocument,
-	 *      org.kabeja.dxf.generator.DXFOutput)
+	 * @see
+	 * org.kabeja.dxf.generator.DXFTableGenerator#output(org.kabeja.dxf.DXFDocument
+	 * , org.kabeja.dxf.generator.DXFOutput)
 	 */
-	public void output(DraftDocument doc, DXFOutput output, DXFGenerationContext context, DXFProfile type)
-			throws GenerationException {
+	public void output(DraftDocument doc, DXFOutput output, DXFGenerationContext context, DXFProfile type) throws GenerationException {
 		output.output(70, doc.getLayers().size());
-	for(Layer layer :doc.getLayers()){
+		for (Layer layer : doc.getLayers()) {
 			output.output(2, layer.getName());
 			output.output(70, layer.getFlags());
 			output.output(62, layer.getColor());

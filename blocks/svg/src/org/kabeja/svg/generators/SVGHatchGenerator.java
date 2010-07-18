@@ -264,11 +264,11 @@ public class SVGHatchGenerator extends AbstractSVGSAXGenerator {
 			HatchLineFamily pattern, double dotlength) {
 		StringBuffer buf = new StringBuffer();
 
-		Iterator li = new HatchLineIterator(hatch, pattern);
+		Iterator<HatchLineSegment> li = new HatchLineIterator(hatch, pattern);
 
 		while (li.hasNext()) {
-			HatchLineSegment segment = (HatchLineSegment) li.next();
 
+			HatchLineSegment segment =  li.next();
 			// double angle = Math.toRadians(pattern.getRotationAngle());
 			Point3D startPoint = segment.getStartPoint();
 			double x = startPoint.getX();

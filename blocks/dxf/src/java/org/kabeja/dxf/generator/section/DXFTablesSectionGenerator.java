@@ -30,37 +30,48 @@ import org.kabeja.util.Constants;
 public class DXFTablesSectionGenerator implements DXFSectionGenerator {
 
 	protected final static String[] tables = new String[] { Constants.TABLE_KEY_VPORT, Constants.TABLE_KEY_LTYPE, Constants.TABLE_KEY_LAYER, Constants.TABLE_KEY_STYLE, Constants.TABLE_KEY_VIEW,
-	        Constants.TABLE_KEY_DIMSTYLE, Constants.TABLE_KEY_UCS, Constants.TABLE_KEY_APPID, Constants.TABLE_KEY_BLOCK_RECORD };
+			Constants.TABLE_KEY_DIMSTYLE, Constants.TABLE_KEY_UCS, Constants.TABLE_KEY_APPID, Constants.TABLE_KEY_BLOCK_RECORD };
 
 	public String getSectionName() {
 		return Constants.SECTION_TABLES;
 	}
 
 	public void generate(DXFOutput output, DraftDocument doc, DXFGenerationContext context, DXFProfile profile) throws GenerationException {
-		Iterator<DXFSubType> it = profile.getDXFType(Constants.SECTION_TABLES).getDXFSubTypes().iterator();
-		while (it.hasNext()) {
-			DXFSubType subtype = it.next();
-			int[] groupCodes = subtype.getGroupCodes();
-			for (int i = 0; i < tables.length; i++) {
-				if (context.getDXFGeneratorManager().hasDXFTableGenerator(tables[i]) && profile.hasDXFType(tables[i])) {
-					boolean first = true;
-					for (int index = 0; index < groupCodes.length; index++) {
-						switch (groupCodes[index]) {
-						case 0:
-							if (first) {
-								output.output(0, "TABLE");
-								first = false;
-							} else {
-								output.output(0, Constants.TABLES_END);
+
+		for (DXFSubType subtype : profile.getDXFType(Constants.SECTION_TABLES).getDXFSubTypes()) {
+			//we only deal with table entries here
+			if (subtype.getName().equals("AcDbTableEntry")) {
+				int[] groupCodes = subtype.getGroupCodes();
+				for (int i = 0; i < tables.length; i++) {
+					if (context.getDXFGeneratorManager().hasDXFTableGenerator(tables[i]) && profile.hasDXFType(tables[i])) {
+						boolean first = true;
+						for (int index = 0; index < groupCodes.length; index++) {
+							switch (groupCodes[index]) {
+							case 0:
+								if (first) {
+									output.output(0, "TABLE");
+									first = false;
+								} else {
+									output.output(0, Constants.TABLES_END);
+								}
+								break;
+							case 2:
+								if (profile.hasDXFType(tables[i])) {
+									output.output(2, tables[i]);
+									DXFTableGenerator tableGenerator = context.getDXFGeneratorManager().getDXFTableGenerator(tables[i]);
+									tableGenerator.output(doc, output, context, profile);
+								}
+								break;
+
+							case 5:
+								// handle
+								break;
+
+							case 70:
+								// max entry count of table
+								break;
+
 							}
-							break;
-						case 2:
-							if (profile.hasDXFType(tables[i])) {
-								output.output(2, tables[i]);
-								DXFTableGenerator tableGenerator = (DXFTableGenerator) context.getDXFGeneratorManager().getDXFTableGenerator(tables[i]);
-								tableGenerator.output(doc, output, context, profile);
-							}
-							break;
 						}
 					}
 				}

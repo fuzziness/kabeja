@@ -15,8 +15,6 @@
  ******************************************************************************/
 package org.kabeja.dxf.generator.table;
 
-import java.util.Iterator;
-
 import org.kabeja.DraftDocument;
 import org.kabeja.common.Layer;
 import org.kabeja.dxf.generator.DXFGenerationConstants;
@@ -32,125 +30,86 @@ import org.kabeja.util.Constants;
 
 public class DXFLayerTableGenerator implements DXFTableGenerator {
 
-    protected String tableID;
+	protected String tableID;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.kabeja.dxf.generator.DXFTableGenerator#getTableType()
-     */
-    public String getTableType() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.kabeja.dxf.generator.DXFTableGenerator#getTableType()
+	 */
+	public String getTableType() {
 
-        return Constants.TABLE_KEY_LAYER;
-    }
+		return Constants.TABLE_KEY_LAYER;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.kabeja.dxf.generator.DXFTableGenerator#output(org.kabeja.dxf.DXFDocument
-     * , org.kabeja.dxf.generator.DXFOutput)
-     */
-    public void output(DraftDocument doc, DXFOutput output,
-            DXFGenerationContext dxfContext, DXFProfile type) throws GenerationException {
+	public void output(DraftDocument doc, DXFOutput output, DXFGenerationContext dxfContext, DXFProfile type) throws GenerationException {
 
-        if (type.hasDXFType(Constants.TABLE_KEY_LAYER)) {
-            DXFType tableType = type.getDXFType(Constants.TABLE_KEY_LAYER);
-            this.tableID = Utils.generateNewID(doc);        
-            Iterator<DXFSubType>  i  = tableType.getDXFSubTypes().iterator();
-//            for (int i = 0; i < groupCodes.length; i++) {
-//                output(groupCodes[i], output, doc, dxfContext);
-//            }
+		if (type.hasDXFType(Constants.TABLE_KEY_LAYER)) {
+			DXFType tableType = type.getDXFType(Constants.TABLE_KEY_LAYER);
+			this.tableID = Utils.generateNewID(doc);
+			for (DXFSubType subType : tableType.getDXFSubTypes()) {
+				if (subType.getName().equals("AcDbLayerEntry")) {
+					int[] groupCodes = subType.getGroupCodes();
+					for (Layer layer : doc.getLayers()) {
+						for (int i = 0; i < groupCodes.length; i++) {
+							outputLayer(layer, groupCodes[i], output);
+						}
+					}
+				}
 
-        }
-    }
+			}
 
-    protected void output(int groupCode, DXFOutput output, DraftDocument doc,
-            DXFGenerationContext context) throws GenerationException {
-        switch (groupCode) {
-        case 0:
-            output.output(0, Constants.TABLE_KEY_LAYER);
-            break;
-        case 5:
-            output.output(5, tableID);
-            break;
-        case 70:
-            output.output(70, doc.getLayers().size());
-            break;
-        case 100:
-            output.output(100, Constants.SUBCLASS_MARKER_TABLE);
-            break;
-        case 330:
-            output.output(330, 0);
-            break;
-        case DXFGenerationConstants.DXF_CHILDREN_INSERT_MARK:
-//            if (context.hasDXFProfile("LAYER_ENTRY")) {
-//                DXFProfile profile = context.getDXFProfile("LAYER_ENTRY");
-//                int[] groupCodes = profile.getGroupCodeProfile();
-//
-//                Iterator i = doc.getLayerIterator();
-//
-//                while (i.hasNext()) {
-//                    Layer layer = (Layer) i.next();
-//                    for (int index = 0; index < groupCodes.length; index++) {
-//                        outputLayer(groupCodes[index], layer, output);
-//                    }
-//
-//                }
-//            }
-            break;
-        }
-    }
+		}
+	}
 
-    protected void outputLayer(int groupCode, Layer layer, DXFOutput output)
-            throws GenerationException {
-        switch (groupCode) {
-        case 0:
-            output.output(0, Constants.TABLE_KEY_LAYER);
-            break;
-        case 2:
-            output.output(2, layer.getName());
-            break;
-        case 5:
+	protected void outputLayer(Layer layer, int groupCode, DXFOutput output) throws GenerationException {
+		switch (groupCode) {
+		case 0:
+			output.output(0, Constants.TABLE_KEY_LAYER);
+			break;
+		case 2:
+			output.output(2, layer.getName());
+			break;
+		case 5:
 
-            output.output(5, layer.getID());
-            break;
-        case 6:
-            output.output(6, layer.getLineType().getName());
-            break;
-        case 62:
-            output.output(62, layer.getColor());
-            break;
+			output.output(5, layer.getID());
+			break;
+		case 6:
+			output.output(6, layer.getLineType().getName());
+			break;
+		case 62:
+			output.output(62, layer.getColor());
+			break;
 
-        case 70:
-            output.output(70, layer.getFlags());
-            break;
-        case 100:
-            output.output(100, Constants.SUBCLASS_MARKER_TABLE_RECORD);
-            break;
-        case DXFGenerationConstants.DXF_ENITY_TYPE_SUBCLASS_MARKER_1:
-            output.output(100, Constants.SUBCLASS_MARKER_TABLE_RECORD_LAYER);
-            break;
-        case 290:
-            if (!layer.isPlottable()) {
-                output.output(290, 0);
-            } else {
-                output.output(290, 1);
-            }
-            break;
+		case 70:
+			output.output(70, layer.getFlags());
+			break;
+		case 100:
+			output.output(100, Constants.SUBCLASS_MARKER_TABLE_RECORD);
+			break;
+		case DXFGenerationConstants.DXF_ENITY_TYPE_SUBCLASS_MARKER_1:
+			output.output(100, Constants.SUBCLASS_MARKER_TABLE_RECORD_LAYER);
+			break;
+		case 290:
+			if (!layer.isPlottable()) {
+				output.output(290, 0);
+			} else {
+				output.output(290, 1);
+			}
+			break;
 
-        case 330:
-            output.output(330, tableID);
-            break;
+		case 330:
+			output.output(330, tableID);
+			break;
 
-        case 370:
-            output.output(370, layer.getLineWeight());
-            break;
-        case 390:
-            output.output(390, layer.getPlotStyle());
-            break;
-        }
+		case 370:
+			output.output(370, layer.getLineWeight());
+			break;
+		case 390:
+			output.output(390, layer.getPlotStyle());
+			break;
+		}
 
-    }
+	}
 
 }

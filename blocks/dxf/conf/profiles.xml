@@ -68,12 +68,18 @@
 		    <type name="HEADER"/>
 			<type name="BLOCKS">
 			   <subtype id="acdbblockentry" name="AcDbBlockEntry" groupCodes="0,8,2,70,10,20,30,3"/>
-			   <subtype id="acdbblockentry" name="AcDbBlockEntryEnd" groupCodes="0,8"/> 
+			   <subtype id="acdbblockentryend" name="AcDbBlockEntryEnd" groupCodes="0,8"/> 
 			</type>
 			<type name="TABLES">
-			
+			    <subtype id="acdbtableentry" name="AcDbTableEntry" groupCodes="0,2,5,70,0" />		    
 			</type>
-			
+			<type name="LAYER">
+			     <subtype id="acdblayerentry" name="AcDbLayerEntry" groupCodes="0,2,70,62,6"/>
+			</type>
+			<type name="LTYPE">
+			     <subtype id="acdbltypeentry" name="AcDbLTypeEntry" groupCodes="0,2,70,3,72,73,40"/>
+			</type>
+						
 			<type name="ENTITIES"/>
 		</profile>
 	</profiles>
@@ -94,14 +100,12 @@
         <typehandler name="TEXT" 		class="org.kabeja.dxf.generator.entities.DXFTextGenerator" />
         <typehandler name="TRACE" 		class="org.kabeja.dxf.generator.entities.DXFTraceGenerator" />
      
-        
-        
-       <typehandler name="ENTITIES" 		class="org.kabeja.dxf.generator.section.DXFEntitiesSectionGenerator" />
+       <typehandler name="ENTITIES" 	class="org.kabeja.dxf.generator.section.DXFEntitiesSectionGenerator" />
        <typehandler name="BLOCKS" 		class="org.kabeja.dxf.generator.section.DXFBlocksSectionGenerator" />
        <typehandler name="HEADER" 		class="org.kabeja.dxf.generator.section.DXFHeaderSectionGenerator" />
        <typehandler name="TABLES" 		class="org.kabeja.dxf.generator.section.DXFTablesSectionGenerator" />  
-
-
-
+ 	   <typehandler name="LAYER"        class="org.kabeja.dxf.generator.table.DXFLayerTableGenerator"/>
+ 	   <typehandler name="LTYPE"        class="org.kabeja.dxf.generator.table.DXFLineTypeTableGenerator" />
+	   
 	</typehandlers>
 </config>
