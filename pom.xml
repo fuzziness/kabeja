@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.kabeja</groupId>
     <artifactId>kabeja</artifactId>
-    <name>Kabeja</name>
+    <name>kabeja</name>
     <version>0.4.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>Kabeja is a java library for parsing DXF and converting to SVG
