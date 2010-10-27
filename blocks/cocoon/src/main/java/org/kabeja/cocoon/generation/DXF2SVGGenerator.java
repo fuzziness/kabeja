@@ -35,7 +35,7 @@ import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.validity.TimeStampValidity;
 import org.kabeja.dxf.DXFDocument;
-import org.kabeja.parser.DXFParser;
+import org.kabeja.dxf.parser.DXFParser;
 import org.kabeja.parser.Handler;
 import org.kabeja.parser.ParseException;
 import org.kabeja.parser.Parser;

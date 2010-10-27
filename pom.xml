@@ -30,6 +30,7 @@ to jpeg, tiff, png and pdf are included.
                 <module>blocks/ui</module>
                 <module>blocks/svg</module>
                 <module>blocks/xslt</module>
+                <!-- module>blocks/cocoon</module -->
             </modules>
         </profile>
     </profiles>
