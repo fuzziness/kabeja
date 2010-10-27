@@ -216,12 +216,6 @@ public class DXFParser implements DXFHandlerManager, Parser, DXFHandler {
     /*
      * (non-Javadoc)
      *
-     * @see de.miethxml.kabeja.parser.Handler#releaseDXFDocument()
-     */
-
-    /*
-     * (non-Javadoc)
-     *
      * @see org.kabeja.parser.Parser#releaseDXFDocument()
      */
     public void releaseDocument() {

@@ -15,34 +15,34 @@
  ******************************************************************************/
 package org.kabeja.parser;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import org.kabeja.dxf.parser.DXFValue;
 
-public class DXFValueTest extends TestCase {
+public class DXFValueTest {
 
-	
-	public void testParseDouble(){
-		double d = 3.1314151617;
-		DXFValue value = new DXFValue("  "+d+"   ");
-		double r = value.getDoubleValue();
-		assertEquals(d, r, 0.000001);
-	}
-	
-	
-	public void testParseInteger(){
-		int i = 4;
-		DXFValue value = new DXFValue("  "+i+"   ");
-		int r = value.getIntegerValue();
-		assertEquals(i, r);
-	}
+    @Test
+    public void parseDouble() {
+        double d = 3.1314151617;
+        DXFValue value = new DXFValue("  " + d + "   ");
+        double r = value.getDoubleValue();
+        assertEquals(d, r, 0.000001);
+    }
 
-	public void testParseBoolean(){
-		int i = 1;
-		DXFValue value = new DXFValue("  "+i+"   ");
-		boolean b = value.getBooleanValue();
-		assertEquals(false, b);
-	}
+    @Test
+    public void parseInteger() {
+        int i = 4;
+        DXFValue value = new DXFValue("  " + i + "   ");
+        int r = value.getIntegerValue();
+        assertEquals(i, r);
+    }
 
-	
+    @Test
+    public void parseBoolean() {
+        int i = 1;
+        DXFValue value = new DXFValue("  " + i + "   ");
+        boolean b = value.getBooleanValue();
+        assertFalse(b);
+    }
 }

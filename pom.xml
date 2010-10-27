@@ -21,6 +21,15 @@ to jpeg, tiff, png and pdf are included.
         <module>core</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>blocks</id>
+            <modules>
+                <module>blocks/dxf</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <issueManagement>
         <system>Bugzilla</system>
         <url>
@@ -109,6 +118,18 @@ to jpeg, tiff, png and pdf are included.
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <version>2.3.1</version>
             </plugin>
         </plugins>
     </build>
