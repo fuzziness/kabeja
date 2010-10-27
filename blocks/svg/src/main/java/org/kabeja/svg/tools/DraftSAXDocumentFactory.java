@@ -65,8 +65,8 @@ public class DraftSAXDocumentFactory extends SAXDocumentFactory {
                 "org.apache.crimson.parser.XMLReaderImpl");
         }
 
-        XMLReader myReader = XMLReaderFactory.createXMLReader();
-        parser = myReader;
+//        XMLReader myReader = XMLReaderFactory.createXMLReader();
+//        parser = myReader;
 
         SAXGenerator gen = new SVGGenerator();
         gen.setProperties(properties);
@@ -78,9 +78,9 @@ public class DraftSAXDocumentFactory extends SAXDocumentFactory {
         return (SVGDocument) res;
     }
 
-    public void startDocument() throws SAXException {
-        super.startDocument();
-        // fix for java 1.5 bundled xerces
-        inProlog = false;
-    }
+//    public void startDocument() throws SAXException {
+//        super.startDocument();
+//        // fix for java 1.5 bundled xerces
+//        inProlog = false;
+//    }
 }

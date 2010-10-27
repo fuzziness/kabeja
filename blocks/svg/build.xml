@@ -125,42 +125,6 @@
 		</javadoc>
 	</target>
 
-	<!-- unit test section -->
-	<target name="test-init" depends="init">
-		<mkdir dir="${build}/${test}" />
-	</target>
-	<target name="test-build" depends="test-init">
-		<javac srcdir="${src}/${test}" destdir="${build}/${test}">
-			<classpath>
-				<pathelement path="{$classpath}" />
-				<pathelement path="${build}/${sources}" />
-				<fileset dir="${libs}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${tools}/${libs}">
-					<include name="**/*.jar" />
-				</fileset>
-			</classpath>
-		</javac>
-	</target>
-
-	<target name="test" depends="compile,test-build">
-		<java classname="junit.swingui.TestRunner" fork="yes">
-			<arg value="" />
-			<classpath>
-				<pathelement path="{$classpath}" />
-				<pathelement path="${build}/${sources}" />
-				<pathelement path="${build}/${test}" />
-				<fileset dir="${libs}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${tools}/${libs}">
-					<include name="**/*.jar" />
-				</fileset>
-			</classpath>
-		</java>
-	</target>
-
 	<!-- new manifest section here -->
 	<target name="manifest">
 		<fileset dir="${block.libs}" id="jar.files">
