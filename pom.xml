@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                        http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.kabeja</groupId>
     <artifactId>kabeja</artifactId>
@@ -19,7 +21,9 @@ to jpeg, tiff, png and pdf are included.
             http://sourceforge.net/tracker/?group_id=152775&amp;atid=785363
         </url>
     </issueManagement>
+
     <inceptionYear>2005</inceptionYear>
+
     <developers>
         <developer>
             <id>simijhag</id>
@@ -32,6 +36,12 @@ to jpeg, tiff, png and pdf are included.
             <timezone>+1</timezone>
         </developer>
     </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <licenses>
         <license>
             <name>Apache License V2.0</name>
@@ -41,13 +51,13 @@ to jpeg, tiff, png and pdf are included.
     </licenses>
     <scm>
         <connection>
-            scm:cvs:pserver:anonymous@${pom.artifactId}.cvs.sourceforge.net:/cvsroot/${pom.artifactId}:${pom.artifactId}/
+            scm:cvs:pserver:anonymous@${project.artifactId}.cvs.sourceforge.net:/cvsroot/${project.artifactId}:${project.artifactId}/
         </connection>
         <developerConnection>
-            scm:cvs:ext:developername@${pom.artifactId}.cvs.sourceforge.net:/cvsroot/${pom.artifactId}:${pom.artifactId}/
+            scm:cvs:ext:developername@${project.artifactId}.cvs.sourceforge.net:/cvsroot/${project.artifactId}:${project.artifactId}/
         </developerConnection>
         <url>
-            http://${pom.artifactId}.cvs.sourceforge.net/${pom.artifactId}/${pom.artifactId}/
+            http://${project.artifactId}.cvs.sourceforge.net/${project.artifactId}/${project.artifactId}/
         </url>
     </scm>
     <build>
@@ -57,17 +67,18 @@ to jpeg, tiff, png and pdf are included.
                 <configuration>
                     <verbose>true</verbose>
                     <fork>true</fork>
-                    <encoding>utf-8</encoding>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                     <optimize>false</optimize>
                     <compilerVersion>1.6</compilerVersion>
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
+                <version>2.3.2</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.0</version>
+                <version>2.4</version>
                 <executions>
                     <execution>
                         <goals>
@@ -75,6 +86,14 @@ to jpeg, tiff, png and pdf are included.
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -99,18 +118,22 @@ to jpeg, tiff, png and pdf are included.
                         </link>
                     </links>
                 </configuration>
+                <version>2.7</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>surefire-report-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>changelog-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jxr-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -122,26 +145,30 @@ to jpeg, tiff, png and pdf are included.
                         <tag>@deprecated</tag>
                     </tags>
                 </configuration>
+                <version>2.4</version>
             </plugin>
             <plugin>
                 <artifactId>
                     maven-project-info-reports-plugin
                 </artifactId>
+                <version>2.0-beta-2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <configuration>
                     <targetJdk>1.5</targetJdk>
                 </configuration>
+                <version>2.5</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jdepend-maven-plugin</artifactId>
+                <version>2.0-beta-2</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.0</version>
+                <version>2.4</version>
             </plugin>
         </plugins>
     </reporting>
