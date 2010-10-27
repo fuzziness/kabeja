@@ -36,6 +36,15 @@ to jpeg, tiff, png and pdf are included.
             </roles>
             <timezone>+1</timezone>
         </developer>
+        <developer>
+            <id>michele</id>
+            <name>Michele Franzin</name>
+            <email>michele.franzin@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
     </developers>
 
     <properties>
