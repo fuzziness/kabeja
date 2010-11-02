@@ -52,8 +52,6 @@
 		</url>
 	</scm>
 	<build>
-		<sourceDirectory>${basedir}/src/java</sourceDirectory>
-		<testSourceDirectory>${basedir}/src/test</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
