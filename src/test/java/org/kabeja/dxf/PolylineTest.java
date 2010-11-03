@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 package org.kabeja.dxf;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import org.kabeja.entities.Polyline;
 import org.kabeja.entities.Vertex;
 import org.kabeja.math.Bounds;
 import org.kabeja.math.Point3D;
 
+public class PolylineTest {
 
-public class PolylineTest extends TestCase {
-    public final static double DELTA = 0.0000000001;
+    public static final double DELTA = 1.0E-7;
 
-    public void testBounds() {
+    @Test
+    public void bounds() {
         Polyline pl = new Polyline();
         pl.addVertex(new Vertex());
         pl.addVertex(new Vertex(new Point3D(100, 100, 0)));
@@ -37,7 +38,8 @@ public class PolylineTest extends TestCase {
         assertEquals(100, b.getHeight(), 0.0);
     }
 
-    public void testBulgedBoundsEqualsNegativeRadius() {
+    @Test
+    public void bulgedBoundsEqualsNegativeRadius() {
         Polyline pl = new Polyline();
         Vertex v = new Vertex(new Point3D(0, 0, 0));
         v.setBulge(1.0);
@@ -54,7 +56,8 @@ public class PolylineTest extends TestCase {
         assertEquals(-50, b.getMinimumY(), DELTA);
     }
 
-    public void testBulgedBoundsEqualsPositiveRadius() {
+    @Test
+    public void bulgedBoundsEqualsPositiveRadius() {
         Polyline pl = new Polyline();
         Vertex v = new Vertex(new Point3D(0, 0, 0));
         v.setBulge(-1.0);
@@ -71,7 +74,8 @@ public class PolylineTest extends TestCase {
         assertEquals(0, b.getMinimumY(), DELTA);
     }
 
-    public void testBulgedBoundsLowerPositiveRadius() {
+    @Test
+    public void bulgedBoundsLowerPositiveRadius() {
         Polyline pl = new Polyline();
         Vertex v = new Vertex(new Point3D(0, 0, 0));
         v.setBulge(-.5);
@@ -88,7 +92,8 @@ public class PolylineTest extends TestCase {
         assertEquals(0, b.getMinimumY(), DELTA);
     }
 
-    public void testBulgedBoundsLowerNegativeRadius() {
+    @Test
+    public void bulgedBoundsLowerNegativeRadius() {
         Polyline pl = new Polyline();
         Vertex v = new Vertex(new Point3D(0, 0, 0));
         v.setBulge(.5);
@@ -105,7 +110,8 @@ public class PolylineTest extends TestCase {
         assertEquals(-25, b.getMinimumY(), DELTA);
     }
 
-    public void testBulgedBoundsGreaterPositiveRadius() {
+    @Test
+    public void bulgedBoundsGreaterPositiveRadius() {
         Polyline pl = new Polyline();
         Vertex v = new Vertex(new Point3D(0, 0, 0));
         v.setBulge(-2.0);
@@ -124,7 +130,8 @@ public class PolylineTest extends TestCase {
         assertEquals(0, b.getMinimumY(), DELTA);
     }
 
-    public void testBulgedBoundsGreaterNegativeRadius() {
+    @Test
+    public void bulgedBoundsGreaterNegativeRadius() {
         Polyline pl = new Polyline();
         Vertex v = new Vertex(new Point3D(0, 0, 0));
         v.setBulge(2.0);
@@ -141,8 +148,5 @@ public class PolylineTest extends TestCase {
         assertEquals(100, b.getHeight(), DELTA);
         assertEquals(0, b.getMaximumY(), DELTA);
         assertEquals(-100, b.getMinimumY(), DELTA);
-    }
-
-    public void testBulgedLength() {
     }
 }

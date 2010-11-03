@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 package org.kabeja.dxf;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import org.kabeja.entities.Line;
 import org.kabeja.math.Extrusion;
 import org.kabeja.math.Point3D;
 import org.kabeja.math.Vector;
 
+public class ExtrusionTest {
 
-public class ExtrusionTest extends TestCase {
-    double DELTA = 0.0000000001;
+    public static final double DELTA = 1.0E-7;
 
-    public void testLineExtrusion() {
+    @Test
+    public void lineExtrusion() {
         Line line = new Line();
         line.setStartPoint(new Point3D(0, 0, 0));
         line.setEndPoint(new Point3D(100, 100, 0));
@@ -40,7 +41,8 @@ public class ExtrusionTest extends TestCase {
         assertEquals(10.0, p2.getZ(), DELTA);
     }
 
-    public void testLinePlaneExtrusion() {
+    @Test
+    public void linePlaneExtrusion() {
         Line line = new Line();
         line.setStartPoint(new Point3D(0, 0, 0));
         line.setEndPoint(new Point3D(100, 100, 0));

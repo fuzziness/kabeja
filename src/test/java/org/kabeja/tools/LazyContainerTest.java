@@ -15,30 +15,28 @@
  ******************************************************************************/
 package org.kabeja.tools;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class LazyContainerTest  extends TestCase{
+public class LazyContainerTest {
 
-	public void testAdd(){
-		LazyContainer con = new LazyContainer();
-		String s1 = "one";
-		String s2 = "two";
-		String s3 = "three";
-		
-		con.set(s1, 10);
-		
-		con.set(s2,5);
-		con.set(s3,1);
-		
-		
-		assertEquals(s1, (String)con.get(10));
-		assertEquals(s3, (String)con.get(1));
-		assertEquals(s2, (String)con.get(5));
-		assertEquals(false, con.contains(6));
-		
-		con.set(s1, 1);
-		assertEquals(s1, (String)con.get(1));
-		
-	}
-	
+    @Test
+    public void add() {
+        LazyContainer con = new LazyContainer();
+        String s1 = "one";
+        String s2 = "two";
+        String s3 = "three";
+
+        con.set(s1, 10);
+        con.set(s2, 5);
+        con.set(s3, 1);
+
+        assertEquals(s1, (String) con.get(10));
+        assertEquals(s3, (String) con.get(1));
+        assertEquals(s2, (String) con.get(5));
+        assertFalse(con.contains(6));
+
+        con.set(s1, 1);
+        assertEquals(s1, (String) con.get(1));
+    }
 }
