@@ -31,20 +31,13 @@
 package org.kabeja.inkscape;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.kabeja.DraftDocument;
 
 import org.kabeja.dxf.parser.DXFParserBuilder;
 import org.kabeja.inkscape.xml.SAXInkscapeLayerFilter;
-import org.kabeja.parser.ParseException;
 import org.kabeja.parser.Parser;
 import org.kabeja.processing.LayerFilter;
 import org.kabeja.processing.PolylineConverter;
@@ -52,7 +45,6 @@ import org.kabeja.processing.PostProcessor;
 import org.kabeja.svg.RootLayerFilter;
 import org.kabeja.svg.SVGGenerator;
 import org.kabeja.svg.StyleAttributeFilter;
-import org.kabeja.xml.ConsoleSerializer;
 import org.kabeja.xml.SAXFilter;
 import org.kabeja.xml.SAXGenerator;
 import org.kabeja.xml.SAXPrettyOutputter;

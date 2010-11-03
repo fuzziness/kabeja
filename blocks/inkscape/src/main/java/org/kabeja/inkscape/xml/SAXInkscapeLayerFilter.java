@@ -32,7 +32,6 @@ package org.kabeja.inkscape.xml;
 
 
 import org.kabeja.svg.SVGConstants;
-import org.kabeja.svg.SVGUtils;
 import org.kabeja.xml.AbstractSAXFilter;
 import org.kabeja.xml.XMLConstants;
 import org.xml.sax.Attributes;
