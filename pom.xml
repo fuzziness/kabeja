@@ -26,6 +26,7 @@ to jpeg, tiff, png and pdf are included.
             <id>blocks</id>
             <modules>
                 <module>blocks/dxf</module>
+                <module>blocks/ui</module>
                 <module>blocks/svg</module>
                 <module>blocks/xslt</module>
             </modules>
