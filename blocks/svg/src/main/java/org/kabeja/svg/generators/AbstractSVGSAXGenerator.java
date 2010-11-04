@@ -77,16 +77,14 @@ public abstract class AbstractSVGSAXGenerator implements SVGSAXGenerator {
 		    byte[] b = entity.getColorRGB();
 		    if(b.length==3){
 		        SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_COLOR,
-	                    "rgb(" + Color.getRGBString(b) + ")");
+	                                Color.getRGBString(b));
 		    }else{
 		    
 			SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_COLOR,
-					"rgb(" + Color.getRGBString(color) + ")");
+					Color.getRGBString(color));
 		    }
 			
 		}
-
-	
 	}
 	
 	

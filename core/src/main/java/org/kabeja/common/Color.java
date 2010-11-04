@@ -288,21 +288,17 @@ public class Color {
             dxfColorCode = 7;
         }
 
-        return rgbs[dxfColorCode];
+        return "rgb(" + rgbs[dxfColorCode] + ")";
     }
-    
-    
-    
-    public static String getRGBString(byte[] b){
-        
-        StringBuffer buf = new StringBuffer();
-        buf.append((int)b[0]);
-        buf.append(",");
-        buf.append((int)b[1]);
-        buf.append(",");
-        buf.append((int)b[2]);
 
+    public static String getRGBString(byte[] b) {
+        StringBuilder buf = new StringBuilder("rgb(");
+        buf.append((int) b[0]);
+        buf.append(",");
+        buf.append((int) b[1]);
+        buf.append(",");
+        buf.append((int) b[2]);
+        buf.append(")");
         return buf.toString();
-     
     }
 }

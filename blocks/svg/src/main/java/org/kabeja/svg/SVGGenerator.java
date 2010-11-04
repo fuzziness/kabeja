@@ -701,8 +701,8 @@ public class SVGGenerator extends AbstractSAXGenerator {
         // SVGUtils.addAttribute(attr, SVGConstants.XML_ID, SVGUtils
         // .validateID(layer.getName()));
 
-        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_COLOR, "rgb("
-                + Color.getRGBString(Math.abs(layer.getColor())) + ")");
+        SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_COLOR,
+                Color.getRGBString(Math.abs(layer.getColor())));
         SVGUtils.addAttribute(attr, SVGConstants.SVG_ATTRIBUTE_STROKE,
                 SVGConstants.SVG_ATTRIBUTE_VALUE_CURRENTCOLOR);
 

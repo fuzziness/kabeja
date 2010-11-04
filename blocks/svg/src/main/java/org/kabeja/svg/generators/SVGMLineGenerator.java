@@ -76,7 +76,7 @@ public class SVGMLineGenerator extends AbstractSVGSAXGenerator {
             SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_STROKE,
                 "none");
             SVGUtils.addAttribute(atts, SVGConstants.SVG_ATTRIBUTE_FILL,
-                "rgb(" + Color.getRGBString(style.getFillColor()) + ")");
+                Color.getRGBString(style.getFillColor()));
             SVGUtils.emptyElement(handler, SVGConstants.SVG_PATH, atts);
         }
 
