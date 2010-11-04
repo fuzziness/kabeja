@@ -43,7 +43,7 @@ public class Layer {
     private String name = "";
     private String id="";
     
-    private int color = 7;
+    private int color = 0;
     private DraftDocument doc;
     private LineType ltype;
     private int flags = 0;
