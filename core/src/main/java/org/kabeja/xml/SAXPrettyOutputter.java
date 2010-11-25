@@ -334,8 +334,8 @@ public class SAXPrettyOutputter extends AbstractSAXSerializer
         }
 
         if (properties.containsKey(PROPERTY_GZIP)) {
-            this.gzip = Boolean.getBoolean((String) properties.get(
-                        PROPERTY_GZIP));
+            this.gzip = Boolean.parseBoolean((String) properties.get(
+                    PROPERTY_GZIP));
         }
     }
 }
