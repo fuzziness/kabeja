@@ -21,6 +21,18 @@ to jpeg, tiff, png and pdf are included.
         <module>core</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>blocks</id>
+            <modules>
+                <module>blocks/svg</module>
+                <module>blocks/inkscape</module>
+                <module>blocks/xslt</module>
+                <!-- module>blocks/cocoon</module -->
+            </modules>
+        </profile>
+    </profiles>
+
     <issueManagement>
         <system>Bugzilla</system>
         <url>
