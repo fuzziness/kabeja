@@ -41,12 +41,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.kabeja.DraftDocument;
 import org.kabeja.dxf.parser.filter.DXFStreamFilter;
 import org.kabeja.parser.ParseException;
 import org.kabeja.parser.Parser;
 import org.kabeja.tools.CodePageParser;
+import org.kabeja.tools.IOUtils;
 
 
 /**
@@ -147,10 +150,6 @@ public class DXFParser implements DXFHandlerManager, Parser, DXFHandler {
                 }
             }
 
-            in.close();
-
-            in = null;
-
             // finish last parsing
             if (parse) {
                 currentHandler.endSection();
@@ -159,6 +158,12 @@ public class DXFParser implements DXFHandlerManager, Parser, DXFHandler {
             throw new ParseException(e.toString());
         } catch (IOException ioe) {
             throw new ParseException(ioe.toString());
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                // Nothing to do
+            }
         }
     }
 
